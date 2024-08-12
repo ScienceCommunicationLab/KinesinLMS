@@ -1,0 +1,2447 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="KinesinLMS, a simple, effective, easy-to-grok, Learning Management System for the overworked developer.">
+      
+      
+      
+        <link rel="canonical" href="https://kinesinelms.github.io/deployment/heroku/">
+      
+      
+        <link rel="prev" href="../overview/">
+      
+      
+        <link rel="next" href="../sentry/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.25">
+    
+    
+      
+        <title>Heroku - KinesinLMS Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/print-site-enum-headings1.css">
+    
+      <link rel="stylesheet" href="../../css/print-site-enum-headings2.css">
+    
+      <link rel="stylesheet" href="../../css/print-site-enum-headings3.css">
+    
+      <link rel="stylesheet" href="../../css/print-site-enum-headings4.css">
+    
+      <link rel="stylesheet" href="../../css/print-site-enum-headings5.css">
+    
+      <link rel="stylesheet" href="../../css/print-site-enum-headings6.css">
+    
+      <link rel="stylesheet" href="../../css/print-site.css">
+    
+      <link rel="stylesheet" href="../../css/print-site-material.css">
+    
+      <link rel="stylesheet" href="../../styles/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#heroku-deployment" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="KinesinLMS Documentation" class="md-header__button md-logo" aria-label="KinesinLMS Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            KinesinLMS Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Heroku
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="KinesinLMS Documentation" class="md-nav__button md-logo" aria-label="KinesinLMS Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    KinesinLMS Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Overview
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/quick_start/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/guiding_principles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Guiding Principles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/acknowledgements_and_attributions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Acknowledgements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/installation_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/local_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../development/running_tests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Running Tests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/architecture_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/database/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Database
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/env_variables/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Environment Variables
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/styles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Styles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/email/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Email
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/html_content_tags.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HTML Content Tags
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Courses
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Courses
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course/course_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Courses Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course/blocks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Blocks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course/block_resources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Block Resources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Groups and Permissions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Groups and Permissions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../groups_and_permissions/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Forum
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Forum
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../forum/forum_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../forum/provider_integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Production Setup & Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../forum/local_setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../forum/connecting_to_forum_service/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Connecting Forum
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../forum/forum_models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Forum Models
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Badges
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Badges
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../badges/badges_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Badges Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../badges/provider_integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Badge Provider Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../badges/creating_badge_classes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating Badge Classes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Surveys
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Surveys
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../surveys/surveys_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Surveys Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../surveys/survey_providers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Survey Providers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../surveys/survey_integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Survey Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Email
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Email
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/system_emails/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Emails
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/email_automation_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Email Automation Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../email/provider_integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Email Automation Provider Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Heroku
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Heroku
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    <span class="md-ellipsis">
+      Background
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heroku-pipelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Heroku Pipelines
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-heroku-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating Heroku Apps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configurating-heroku-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurating Heroku Apps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#postgresql-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      PostgreSQL Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      REDIS Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-veriables-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment Veriables Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aws-access-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      AWS Access Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-environment-variables-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Environment Variables Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-deploy-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-Deploy Steps
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-Deploy Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compile-stylesheets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compile Stylesheets
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#package-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      Package Javascript
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-to-heroku" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy to Heroku
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Post-deploy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#open-your-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open your app
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sentry/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sentry
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Marketing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Marketing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../marketing/marketing_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overivew
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../marketing/testimonials/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testimonials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Course Authoring Guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Course Authoring Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_authoring_guide/course_authoring_guide_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authoring Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_authoring_guide/creating_a_course/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating a Course
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_authoring_guide/course_contents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Course Contents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_authoring_guide/using_template_tags/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using Template Tags
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_authoring_guide/course_milestones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Course Milestones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_authoring_guide/course_badges/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Course Badges
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_authoring_guide/course_forum/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Course Forum
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../course_authoring_guide/course_surveys/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Course Surveys
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../license/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release_notes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Release Notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    <span class="md-ellipsis">
+      Background
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heroku-pipelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Heroku Pipelines
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-heroku-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating Heroku Apps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configurating-heroku-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurating Heroku Apps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#postgresql-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      PostgreSQL Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redis-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      REDIS Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-veriables-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment Veriables Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aws-access-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      AWS Access Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-environment-variables-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Environment Variables Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-deploy-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-Deploy Steps
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-Deploy Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compile-stylesheets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compile Stylesheets
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#package-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      Package Javascript
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-to-heroku" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy to Heroku
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Post-deploy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#open-your-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open your app
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="heroku-deployment">Heroku Deployment</h1>
+<h2 id="background">Background</h2>
+<p>Heroku is one of many Platform-as-a-Service (PaaS) providers you could choose from to host your KinesinLMS app,
+so make sure you look around at pricing and developer tools before selecting a service. Costs can run up quickly,
+so do your homework.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Heroku isn't free. Not even close. They used to have a free tier, but even that is gone. Nothing gold can stay.
+So make sure you investigate Heroku charges (of which there are many) before attempting to deploy to Heroku.
+This project certainly does not recommend Heroku as an affordable option, but it is (still) relatively easy to get
+started. So please do your research on other providers. We hope to include directions for setting up some others (Fly.io, Render.com, etc.) soon.</p>
+</div>
+<p>These instructions describe the basic steps for hosting your site on Heroku, but the steps should be similar
+for other services.</p>
+<p>These instructions assume you're using Heroku's native build packs, but if you want to use Docker, KinesinLMS
+includes a basic Dockerfile that should help you get started.</p>
+<h2 id="heroku-pipelines">Heroku Pipelines</h2>
+<p>In a typical deployment, you'll want different servers for testing new features, for doing final tests before pushing something
+to production, and an actual "live" production server. You can organize these three servers using a Heroku pipline:</p>
+<ul>
+<li>development -- for testing and debugging new features</li>
+<li>staging -- for team testing and validation of production-ready builds</li>
+<li>production -- the live server</li>
+</ul>
+<p>You can set the environment variable <code>HEROKU_PIPELINE</code>, so that KinesinLMS is
+made aware of which of these servers its running on. You can use this information to
+modify code accordingly. (E.g. when not running onthe <code>PRODUCTION</code> pipeline, perhaps you only
+want to emails if they're going to you or some test accounts you've configured.)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You don't have to set up three servers to get going. You could set up only one to limit cost.
+Using 'development', 'staging' and 'production' is a common pattern to help manage new features,
+product testing and production updates.</p>
+</div>
+<h2 id="creating-heroku-apps">Creating Heroku Apps</h2>
+<p>In this step we'll set up the Heroku apps for the three parts of our pipeline.
+We assume you are already familiar with Heroku, have a Heroku account, and have installed the
+Heroku CLI on your machine.</p>
+<p>These instructions are based on Heroku set up steps provided by Django Cookiecutter.
+You can read those instructions here:
+<a href="https://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html">https://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html</a></p>
+<p>Create the Heroku apps for each step in our pipeline. Use the name of your app in place of <code>(your app name)</code> in the
+following steps. For example, your app name might be <code>so-awesome-university</code>, because, what's up, it is.</p>
+<p>First step up the 'development' server:</p>
+<pre><code>heroku create --buildpack heroku/python --remote development --app (your app name)-development
+</code></pre>
+<p>After running this, you'll notice that Heroku created a new git remote on your local machine that
+points to your new 'development' server on Heroku. If you type <code>git remote -v</code> you should see that new remote:</p>
+<pre><code>❯ git remote -v
+development https://git.heroku.com/(your app name)-development.git (fetch)
+development https://git.heroku.com/(your app name)-development.git (push)
+</code></pre>
+<p>Next, create a staging and a production server:</p>
+<pre><code>heroku create --buildpack heroku/python --remote staging --app (your app name)-staging
+
+heroku create --buildpack heroku/python --remote production --app (your app name)
+</code></pre>
+<p>Next we'll configure a server in the pipeline, adding the resources we'll need, like a database and a cache.</p>
+<h2 id="configurating-heroku-apps">Configurating Heroku Apps</h2>
+<p>Once you've created your Heroku apps (servers), you'll need to configure them with the resources they need to operate --
+a PostgreSQL database, a Redis cache, and any other services you might need. We can do this using the Heroku CLI.</p>
+<p>The following instructions are for configuring the <code>development</code> app, but the same steps would apply for <code>staging</code> and <code>production</code>.</p>
+<p>Note that when you have your Heroku apps defined in your local git repository as git remotes, you can just refer to them with <code>--remote</code> when
+performing command line operations, for example <code>--remote development</code> to target the development server.</p>
+<h2 id="postgresql-setup">PostgreSQL Setup</h2>
+<p>KinesinLMS uses PostgreSQL as its database. We'll use the Heroku PostgreSQL add-on.</p>
+<p>Create a PostgreSQL database:</p>
+<pre><code>heroku addons:create heroku-postgresql:essential-0 --remote development
+</code></pre>
+<p>Schedule backups (since the 'essential-0' plan doesn't include automatic backups):</p>
+<pre><code>heroku pg:backups schedule --at '02:00 America/Los_Angeles' DATABASE_URL --remote development
+</code></pre>
+<p>...and then 'promote' the database to be our primary database (you might not need this step if Heroku already promoted your database in the previous step).</p>
+<pre><code>heroku pg:promote DATABASE_URL --remote development
+</code></pre>
+<h2 id="redis-setup">REDIS Setup</h2>
+<p>Parts of KinesinLMS use Redis for caching and other purposes, such as asynchronous tasks run by Celery. So we'll need a
+Redis cache available.</p>
+<p>Let's add the Heroku Redis add-on:</p>
+<pre><code>heroku addons:create heroku-redis:mini --remote development
+</code></pre>
+<p>KinesinLMS needs to know that Celery is to use this Redis service, so copy the Redis URL into the appropriate env variable:</p>
+<pre><code>heroku config:set CELERY_BROKER_URL=$(heroku config:get REDIS_TLS_URL) --remote development
+</code></pre>
+<h2 id="environment-veriables-setup">Environment Veriables Setup</h2>
+<p>Just a reminder that a conventional way to get system information into a web application is to use environment variables (see <a href="https://12factor.net/config">"III Config"</a> in
+"The Twelve-Factor App"[https://12factor.net/]). So in this part we set up all the env variables we'll need to configure our app in Heroku.</p>
+<p>Let's set up the various environment variables that a basic Django app like KinesinLMS expects. Run these one at a time, so you can see Heroku's response.</p>
+<pre><code>heroku config:set PYTHONHASHSEED=random  --remote development
+heroku config:set WEB_CONCURRENCY=4  --remote development
+heroku config:set DJANGO_DEBUG=False  --remote development
+heroku config:set DJANGO_SECRET_KEY="$(openssl rand -base64 64)"  --remote development
+</code></pre>
+<p>When we set the "admin" URL we'll use a random string...this adds another layer of security rather than just using 'admin'. Of course,
+you don't have to use a random string...you could just pick a slightly obfuscated name (e.g. 'so-special-admin').</p>
+<pre><code>heroku config:set DJANGO_ADMIN_URL="$(openssl rand -base64 4096 | tr -dc 'A-HJ-NP-Za-km-z2-9' | head -c 32)/" --remote development
+</code></pre>
+<p>Next let's set the Django settings module. Even though we're running in "development", we want the server to behave as if it's in production,
+so we're setting this variable to <code>config.settings.production</code>...</p>
+<pre><code>heroku config:set DJANGO_SETTINGS_MODULE=config.settings.production  --remote development
+</code></pre>
+<p>Finally, we should set the allowed hosts. This setting configures Django to only allow certain URLs
+to be the app host. If you get a domain name for your server in Heroku, you'll use that here. Until you do,
+Heroku will have given your app a generic URL. You can find it in the Heroku panel for your app, under "Settings".
+It will look something like this: <code>https://(your app name)-development-e6ad78551565.herokuapp.com/</code>.</p>
+<p>Use that domain for the DJANGO_ALLOWED_HOSTS variable:</p>
+<pre><code>heroku config:set DJANGO_ALLOWED_HOSTS=(your app name)-development-e6ad78551565.herokuapp.com  --remote development
+</code></pre>
+<h2 id="aws-access-setup">AWS Access Setup</h2>
+<p>By default, KinesinLMS expects to place static and media files in an AWS S3 bucket. However, you can configure it to store these
+files somwhere else, like Google Cloud Storage, Digital Ocean Spaces, and so on. Heroku even has some easy plugins you can
+use. <a href="https://dev.to/heroku/properly-managing-django-media-static-files-on-heroku-o2l">More on that here</a>.</p>
+<p>Since we're defaulting to AWS S3, you'll need to create a bucket on AWS S3 to hold these assets, as well as an AWS IAM user with
+access to that bucket. Describing how to create these in AWS is outside the scope of this document, but you can read more about it here:
+<a href="https://testdriven.io/blog/storing-django-static-and-media-files-on-amazon-s3/">https://testdriven.io/blog/storing-django-static-and-media-files-on-amazon-s3/</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use AWS S3, be really careful with your configuration. This is one of those places you can't avoid complexity and reading the docs.</p>
+</div>
+<p>Once you've created an S3 bucket for the KinesinLMS app and an IAM user with access to that bucket,
+create an access key and secret for that IAM user.</p>
+<p>Note that you'll have to do this setup process for each app in your pipeline, so you might name your S3 bucket's accordingly, probably using the
+same name as your app and pipelie (e.g. <code>so-awesome-university-development-s3</code> for development, <code>so-awesome-university-staging-s3</code> for staging, and so on).</p>
+<p>The use the AWS settings you've just created to set the following environment values in the Heroku environment ::</p>
+<pre><code>heroku config:set DJANGO_AWS_STORAGE_BUCKET_NAME=(your storage bucket name) --remote development
+heroku config:set DJANGO_AWS_ACCESS_KEY_ID=(your aws access key) --remote development
+heroku config:set DJANGO_AWS_SECRET_ACCESS_KEY=(some django aws secret access key) --remote development
+heroku config:set DJANGO_AWS_S3_REGION_NAME=us-west-1 --remote development
+</code></pre>
+<h2 id="custom-environment-variables-setup">Custom Environment Variables Setup</h2>
+<p>There are a few custom environment variables that KinesinLMS uses to configure the application.
+We'll set those now:</p>
+<pre><code>heroku config:set DJANGO_PIPELINE="DEVELOPMENT" --remote development
+</code></pre>
+<h2 id="pre-deploy-steps">Pre-Deploy Steps</h2>
+<p>You're now ready to push the app to heroku. But before you do, make sure you've compiled your
+stylesheets, packaged your javascript, and basically got everything ready to go.</p>
+<h3 id="compile-stylesheets">Compile Stylesheets</h3>
+<p>If there has been any changes to scss files, make sure they're compiled to css files.</p>
+<p>In an effort to keep things simple, there's a npm package.json command to watch scss files
+directly using sass. (You'll need sass installed on your machine.)</p>
+<p>To run sass in watch mode the 'watch-styles' npm command: ::</p>
+<pre><code>npm run watch-styles
+</code></pre>
+<p>When this command is run, all .sass files in the kinesinlms/static/sass directory will be watched
+and compiled to .css files in the kinesinlms/static/css directory any time you change something in a .scss file.</p>
+<h2 id="package-javascript">Package Javascript</h2>
+<p>Make sure all javascript-based components have been transpiled and packaged.
+(You'll need node and npm installed on your machine.)
+Note that this part of the build step is somewhat rudimentary and will be
+improved in the future.</p>
+<p>If you're pushing to the PRODUCTION server on the pipeline, that means building minified javascript files:</p>
+<pre><code>npm run build
+</code></pre>
+<p>But if you want to debug on DEVELOPMENT or STAGING, create javascript with source maps:</p>
+<pre><code>npm run dev
+</code></pre>
+<p>This will create compiled javascript files in kinesinlms/static/js.</p>
+<p>IMPORTANT: Make sure you add any new or updated files to GitHub before continuing.</p>
+<h2 id="deploy-to-heroku">Deploy to Heroku</h2>
+<p>IMPORTANT: Make sure you add any new or updated files from the previous steps to your git repository before continuing,
+otherwise they won't get pushed to Heroku in the next step.</p>
+<p>DOUBLY-IMPORTANT: Make sure all your tests are passing before pushing to production.</p>
+<p>Pushing your project to Heroku is as simple as pushing to GitHub.</p>
+<pre><code>git push development master
+</code></pre>
+<p>(If you were pushing to <code>staging</code> or <code>production</code> you'd just replace <code>development</code> with that target.)</p>
+<p>When you push your code, Heroku will automatically rebuild your app, including running any required migrations.</p>
+<h2 id="post-deploy">Post-deploy</h2>
+<p>If you're setting up a server for the first time (or just cleaned out DEVELOPMENT and
+want to set up initial data), run the following management to create a superuser for yourself:</p>
+<pre><code>heroku run python manage.py createsuperuser --remote development
+</code></pre>
+<p>Also, you may want to configure KinesinLMS with some initial data. There's a management command
+called <code>setup_all</code> that you can customize to set up your server with some initial users, or speakers,
+or whatever. The default implementation of this command simply sets up a Site instance.</p>
+<p>To run this command if you're setting up DEVELOPMENT:</p>
+<pre><code>heroku run python manage.py setup_all --remote development
+</code></pre>
+<h2 id="open-your-app">Open your app</h2>
+<p>At this point, if you navigate to your apps URL (or just type 'heroku open' in the project directory), you should see your site!</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../overview/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Overview
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../sentry/" class="md-footer__link md-footer__link--next" aria-label="Next: Sentry">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Sentry
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.footer"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.081f42fc.min.js"></script>
+      
+        <script src="../../js/print-site.js"></script>
+      
+    
+  </body>
+</html>
