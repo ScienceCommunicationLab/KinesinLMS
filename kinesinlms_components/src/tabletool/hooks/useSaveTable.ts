@@ -6,7 +6,7 @@ interface UseSaveTableOpts {
     canSave: boolean;
     submissionId: number | undefined;
     onBeforeSave?: () => void;
-    onSuccess?: (savedRows: TableToolSubmissionRow[], submissionId: number) => void;
+    onSuccess?: (savedRows: TableToolSubmissionRow[], submissionId: number, score:number) => void;
     onFailure?: (error: any) => void;
 }
 

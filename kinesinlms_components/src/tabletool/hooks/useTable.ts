@@ -22,6 +22,7 @@ interface UseTableParams {
     canAddRows: boolean;
     canRemoveRows: boolean;
     isReadOnly: boolean;
+    maxScore: number;
 }
 
 interface UseTableResult {
@@ -31,6 +32,7 @@ interface UseTableResult {
     addEmptyRow: () => void;
     canAddEmptyRow: boolean;
     isDirty: boolean;
+    maxScore: number;
 }
 
 interface EnrichtedTableToolSubmissionRow extends TableToolSubmissionRow {

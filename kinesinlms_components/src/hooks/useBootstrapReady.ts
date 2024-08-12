@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
+declare const window: any;
+
+
 /**
  * Utility to help you check if Bootstrap is ready to use.
  * Optionally can check for a specific feature (e.g., 'Tooltip') as well.
@@ -40,7 +43,7 @@ export default function useBootstrapReady(
             clearInterval(intervalId);
             if (!isBootstrapAvailable()) {
                 if (bootstrapFeature) {
-                    console.warn(`Could not enable Bootstrap and/or the required feature '${bootstrapFeature}' after 10 seconds...`);
+                    console.warn(`Could not enable Bootstrap and/or the required feature '${String(bootstrapFeature)}' after 10 seconds...`);
                 } else {
                     console.warn(`Could not enable Bootstrap after 10 seconds...`);
                 }

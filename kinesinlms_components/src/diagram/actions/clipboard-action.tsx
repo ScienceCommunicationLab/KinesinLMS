@@ -32,7 +32,6 @@ export default class ClipboardAction extends Action {
         };
         super({
             type: InputType.KEY_DOWN,
-            // @ts-expect-error TS does not realize we have a KeyboardEvent instead of a MouseEvent.
             fire: (event: ActionEvent<KeyboardEvent>) => {
                 const {code, ctrlKey, shiftKey, altKey, metaKey} = event.event;
                 console.log("event.event: ", event.event);

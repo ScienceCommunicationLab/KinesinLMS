@@ -2,6 +2,8 @@
 import React, { useEffect, VFC } from 'react';
 import { DeleteCellWrapper } from './DeleteCell.styles';
 
+declare const window: any;
+
 interface Props {
     canDelete: boolean;
     onClick: () => void;
