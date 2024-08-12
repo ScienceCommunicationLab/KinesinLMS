@@ -5,6 +5,7 @@ import {css, Global} from '@emotion/react';
 export interface CanvasWidgetProps {
     color?: string;
     background?: string;
+	children: any;
 }
 
 namespace S {
