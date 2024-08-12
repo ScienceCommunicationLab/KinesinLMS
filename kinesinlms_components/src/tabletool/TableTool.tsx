@@ -65,6 +65,7 @@ const TableTool: VFC<Props> = ({
         minRows: definition.initial_empty_rows,
         maxRows: definition.max_rows,
         isReadOnly: read_only,
+        maxScore: max_score,
     });
 
     const saveTable = useSaveTable({

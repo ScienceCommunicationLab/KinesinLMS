@@ -73,6 +73,7 @@ describe('useTable hook', () => {
                 minRows: 5,
                 isReadOnly: false,
                 maxRows: 100,
+                maxScore: 1
             }));
 
             // 2 -> the 2 initialSubmissionRows
@@ -109,6 +110,7 @@ describe('useTable hook', () => {
                 defaultRows: [],
                 isReadOnly: false,
                 maxRows: 100,
+                maxScore: 1
             }));
 
             expect(result.current.canAddEmptyRow).toBe(true);
@@ -140,6 +142,7 @@ describe('useTable hook', () => {
                 defaultRows: [],
                 isReadOnly: false,
                 maxRows: 5,
+                maxScore: 1
             }));
 
             expect(result.current.canAddEmptyRow).toBe(false);
@@ -218,6 +221,7 @@ describe('useTable hook', () => {
             minRows: 3,
             maxRows: 100,
             isReadOnly: false,
+            maxScore: 1
         }));
 
         expect(result.current.rows.length).toEqual(4);
