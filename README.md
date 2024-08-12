@@ -2,36 +2,34 @@
 
 KinesinLMS is a small learning management system (LMS). It's written in Python using the Django web application framework,
 with a focus on simplicity and the use of standard, conventional libraries and tools wherever possible. It's maybe halfway between a
-standard Django website and a fully featured LMS.
-
-This simplicity is a key focus of the project.
+standard Django website and a fully featured LMS. A primary goal of the project is to keep the code and related setup as simple as possible.
 
 **Simple to extend**: If you're looking to build something innovative and interesting,
 perhaps outside the bounds of the usual e-Learning course, you might not want to spend a lot of time
-refactoring a complex LMS to fit your vision. KinesinLMS might be for you! We try to keep things simple and straightforward,
-yet still compelling, for example using HTMX where possible for richer interations, rather than always relying on a full-blown
-JavaScript framework. Having said that, we do provide a couple interactive assessment components written in React (see the
+refactoring a complex LMS to fit your vision. KinesinLMS might be helpful in this case. We try to keep things simple and straightforward,
+yet still compelling, for example using HTMX where possible for richer interations, rather than always relying on a heavier
+JavaScript framework. Having said that, we do provide a couple of interactive assessment components written in React (see the
 DiagramTool and the TableTool) that demonstrate how to get these kind of rich interactive activities in a course. Either way,
 KinesinLMS might be a good starting point for you to create your next e-Learning experiment.
 
-**Simple to use**: You might also find this project's reduced feature set helpful if you're a single dev and just need to get some great
-content into an LMS-style format. You should be able to edit, manage, and build this site with little outside help,
-and the course authoring tools are rudimentary but serviceable.
+**Simple to use**: You might also find this project's reduced feature set helpful if you're a single dev and just need to get some
+content into an LMS-style format. You should be able to edit, manage, and build this site with little outside help. The course
+authoring tool, "Composer," is a bit rudimentary but serviceable and should probably do most of what you need.
 
 Either way, we hope you find this project a useful starting point for your own LMS-like project.
 
 Heads up: if you're looking to run more standard e-Learning courses for massive amounts of students across a number
-of large institutions, KinesinLMS is probably not for you. In fact, it's very likely not for you. You might look at something
+of large institutions, KinesinLMS is probably not for you. In fact, it's very very likely not for you. You might look at something
 like [Moodle](https://moodle.org/), [Open edX](https://openedx.org/), or [Canvas](https://www.instructure.com/canvas/). Those
-apps are engineered to scale wide and high and handle your millions of users. This one isn't...yet 😊.
+apps are engineered to scale wide and high and handle your millions of users.
 
 You'll need to be a Django developer to get this system up and running, but you shouldn't need more than one developer, and
-it shouldn't take loads of time to configure, deploy and maintain the site. That's a primary goal of this project. If
+it shouldn't take loads of time to configure, deploy and maintain the site. Again, that's a primary goal of this project. If
 you have trouble let us know, and we'll try to address any issues you encounter.
 
 If you're not a developer but can get one to behave and get a KinesinLMS site going for you, you'll probably be able to author and publish
-courses without much help. (But again things are still raw so keep their email handy.) At this point it's probably good for even the
-course content author to have a bit of tech-savvy, and at least somewhat familiar with HTML, and preferrably with Bootstrap classes.
+courses without much help. (But again things are still raw so keep that developer email handy.) At this point, it's probably for the
+course content author to be a bit tech-savvy, and at least somewhat familiar with HTML, and preferrably with Bootstrap css classes.
 That's because the "Composer" feature is especially raw at the moment, although we hope to make it a bit more useful in the near term.
 
 ## Background
@@ -46,15 +44,15 @@ post-graduate researchers become better scientists and enhance career and profes
 e-Learning platform was built from scratch after the team struggled to find a simple platform that could be managed by
 one person but flexible enough for SCL's unique e-learning research goals.
 
-In 2023, SCL was funded by a supplementary National Institute for General Medical Sciences grant to make this custom e-Learning platform open source and available
-to the broader scientific community. KinesinLMS is the result of that effort!
+In 2023, SCL was funded by a supplementary grant from the National Institute for General Medical Sciences to make this custom
+e-Learning platform open source and available to the broader scientific community. KinesinLMS is the result of that effort!
 
 ## Features
 
 Here's a quick list of some of the features KinesinLMS does give you:
 
 - Module, section, unit navigation
-- Clean UI based on Bootstrap 5
+- Clean UI based on Bootstrap 5, mobile-friendly layout (but at the moment a bit desktop-biased).
 - Components for videos and html text content
 - "Quick nav" for simple course navigation
 - Basic assessments: long-form text, multiple choice / poll , "Done" button
