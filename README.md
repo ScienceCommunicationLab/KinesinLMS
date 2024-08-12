@@ -28,7 +28,7 @@ it shouldn't take loads of time to configure, deploy and maintain the site. Agai
 you have trouble let us know, and we'll try to address any issues you encounter.
 
 If you're not a developer but can get one to behave and get a KinesinLMS site going for you, you'll probably be able to author and publish
-courses without much help. (But again things are still raw so keep that developer email handy.) At this point, it's probably for the
+courses without much help. (But again things are still raw so keep that developer email handy.) At this point, it's good for even the
 course content author to be a bit tech-savvy, and at least somewhat familiar with HTML, and preferrably with Bootstrap css classes.
 That's because the "Composer" feature is especially raw at the moment, although we hope to make it a bit more useful in the near term.
 
