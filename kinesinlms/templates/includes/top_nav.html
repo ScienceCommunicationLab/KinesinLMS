@@ -136,7 +136,7 @@
                             data-bs-toggle="dropdown"
                             aria-haspopup="true"
                             aria-expanded="false">{% trans "Management" %}</a>
-                            <div class="dropdown-menu" aria-labelledby="managementNavbarDropdown">
+                            <div class="dropdown-menu" aria-labelledby="managementNavbarDropdown" style="z-index:10000;">
                                 {% if request.user.is_superuser %}
 
                                     <a class="dropdown-item" href="{% url 'management:index' %}">{% trans "Management Overview" %}</a>
