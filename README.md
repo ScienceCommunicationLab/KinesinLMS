@@ -174,7 +174,3 @@ Then cd into /docs and then run:
 
 This will run a mkdocs server on your local machine where you can view the docs. Feel free to
 suggest changes and additions to the docs as you use KinesinLMS.
-
-## Websites
-
-- [KinesinLMS Test Site](https://kinesinlms.herokuapp.com)
