@@ -52,9 +52,10 @@ e-Learning platform open source and available to the broader scientific communit
 Here's a quick list of some of the features KinesinLMS does give you:
 
 - Module, section, unit navigation
-- Clean UI based on Bootstrap 5, mobile-friendly layout (but at the moment a bit desktop-biased).
-- Components for videos and html text content
+- Clean UI based on Bootstrap 5.3.
+- A mobile-friendly layout (e.g. most things render well on mobile, but some are a bit desktop-biased).
 - "Quick nav" for simple course navigation
+- Components for videos, html content, assessments, forum discussions, file downloads, etc.
 - Basic assessments: long-form text, multiple choice / poll , "Done" button
 - "Simple Interactive Tools": DiagramTool, TableTool
 - Badges
