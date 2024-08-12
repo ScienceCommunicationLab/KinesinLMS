@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import useTable from './useTable';
 import { Cell } from "../TableTool.types";
 import { JSXElementConstructor } from "react";
