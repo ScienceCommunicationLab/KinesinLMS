@@ -2,6 +2,7 @@ import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import '@testing-library/jest-dom'
 import TableTool from './TableTool';
 
 const server = setupServer();
@@ -46,6 +47,8 @@ describe('TableTool', () => {
                 existing_simple_interactive_tool_submission_id={undefined}
                 read_only={false}
                 simple_interactive_tool_id={1}
+                score={0}
+                max_score={1}
             />
         );
 
