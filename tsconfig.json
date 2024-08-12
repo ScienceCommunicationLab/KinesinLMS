@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
+  "include": ["kinesinlms_components/**/*"],
+  "exclude": ["node_modules"]
+}
