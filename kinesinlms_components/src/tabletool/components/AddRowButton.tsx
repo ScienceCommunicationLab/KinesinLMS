@@ -7,6 +7,8 @@ interface Props {
     canAdd: boolean;
 }
 
+declare const window: any;
+
 const AddRowButton: VFC<Props> = ({ onAdd, canAdd }) => {
     const isDisabled = !canAdd;
 

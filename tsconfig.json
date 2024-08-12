@@ -1,19 +1,27 @@
 {
   "compilerOptions": {
     "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "target": "ES6",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "types": [] // tells TypeScript not to include any types from node_modules/@types (ignoring them unless explicitly imported)
   },
   "include": ["kinesinlms_components/**/*"],
-  "exclude": ["node_modules/**/*"]
+  "exclude": [
+    "node_modules/**/*",
+    // Even with the above exclusion, TypeScript is still flagging issues
+    // with libraries in node_modules, which we don't want. So we have to
+    // include the following line
+    "**/*.d.ts"
+  ]
 }

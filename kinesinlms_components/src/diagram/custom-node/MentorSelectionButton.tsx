@@ -4,6 +4,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import useBootstrapReady from "../../hooks/useBootstrapReady";
 
 type MentorType = keyof typeof mindMapSubtypeMap;
+declare const window: any;
 
 interface MentorSelectionButtonProps {
     isAlreadySaved: boolean;

@@ -124,7 +124,7 @@ export class CustomNodeWidget extends React.Component<CustomNodeWidgetProps, Cus
                     className={`kn-custom-node-text ${isReadOnly ? 'readonly' : ''}`}
                     innerRef={this.contentEditable}
                     html={this.props.node.name || ''} // innerHTML of the editable div
-                    placeholder={placeholderText}
+                    // placeholder={placeholderText} // DMcQ: Seems like ContentEditable doesn't support placeholder how was this working before?
                     disabled={isReadOnly}
                     onChange={this.handleChange} // handle innerHTML change
                     tagName='article' // Use a custom HTML tag (uses a div by default)
