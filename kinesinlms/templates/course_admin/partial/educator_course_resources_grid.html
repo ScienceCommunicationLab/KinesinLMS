@@ -1,0 +1,65 @@
+{% comment %}
+List of educator resources for the current course (if any).
+"Educator" resources are resources that are intended for the educators of the course, not the students.
+{% endcomment %}
+
+<div id="educator-course-resources-list">
+
+    <div class="row">
+        <div class="col-12 col-lg-10">
+            <h3 class="mb-2">Educator Resources</h3>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-12">
+
+            {% if course.active_educator_resources.exists %}
+
+                <table class="table table-bordered resources-table">
+                    <thead>
+                        <tr>
+                            <th class="col-type">Type</th>
+                            <th class="col-name">Name</th>
+                            <th class="col-description">Overview</th>
+                            <th class="col-resource">File</th>
+                            <th class="col-resource">URL</th>
+                            <th class="col-resource">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for educator_resource in course.active_educator_resources.all %}
+
+                            <tr>
+                                <td>{{ educator_resource.get_type_display }}</td>
+                                <td>{{ educator_resource.name }}</td>
+                                <td>{{ educator_resource.overview }}</td>
+                                <td>
+                                    {% if educator_resource.file %}{{ educator_resource.overview }}{% endif %}
+                                </td>
+                                <td>
+                                    {% if educator_resource.url %}
+                                        <a href="{{ educator_resource.url }}" target="_blank">{{ educator_resource.url }}</a>
+                                    {% endif %}
+                                </td>
+                                <td></td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            {% else %}
+
+                <div class="no-items-box">
+                    <div class="no-items">No educator resources have been added to this course.</div>
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>

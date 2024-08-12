@@ -1,0 +1,16 @@
+{% load static core_tags %}
+<div class="signup-header">
+    <a href="{% educators_newsletter_signup_url %}">
+        <img class="news-icon" alt="Newspaper icon" src="{% static 'educator_resources/images/news.svg' %}"/>
+    </a>
+    <div>
+        Get Educator News!
+    </div>
+</div>
+<div class="signup-body">
+    <p>Want to keep up-to-date with the tools and
+        techniques we're developing for educators like you?</p>
+    <p>Click below and sign-up for our <b>{% site_name %} for Educators</b> newsletter
+        and stay in the loop!</p>
+    <a class="btn btn-dark" href="{% educators_newsletter_signup_url %}">Sign up today!</a>
+</div>

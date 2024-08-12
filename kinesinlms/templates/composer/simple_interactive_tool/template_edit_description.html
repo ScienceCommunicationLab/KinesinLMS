@@ -1,0 +1,48 @@
+{% extends "composer/composer_base.html" %}
+{% load tz %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+
+{% block header_javascript %}
+    {{ block.super }}
+{% endblock %}
+
+
+{% block main_content %}
+
+    <div class="container-fluid" style="min-height:800px;">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="d-flex flex-row align-items-center">
+                    <h2 class="w-100">Edit SimpleInteractiveTool Template Description</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4" style="margin-bottom:300px;">
+            <div class="col-12">
+                <form class="form"
+                      action="{% url 'composer:simple_interactive_tool_template_description' template_id=form.instance.id %}"
+                      method="post">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <a href="{% url 'composer:simple_interactive_tool_templates_list' %}"
+                       type="button"
+                       class="btn btn-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Save
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

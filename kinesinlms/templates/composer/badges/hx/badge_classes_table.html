@@ -1,0 +1,52 @@
+<table id="badge-classes-table" class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Type</th>
+            <th>Provider</th>
+            <th>Description</th>
+            <td style="width:3rem; text-align: center;"></td>
+            <td style="width:3rem; text-align: center;"></td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if badge_classes %}
+            {% for badge_class in badge_classes %}
+                <tr>
+                    <td>{{ badge_class.name }}</td>
+                    <td>{{ badge_class.slug }}</td>
+                    <td>{{ badge_class.type }}</td>
+                    <td>{{ badge_class.provider }}</td>
+                    <td style="width:3rem; text-align: center;">
+                        <td style="width:3rem;">
+                            <a class="btn btn-primary"
+                               href="{% url 'composer:course_badge_class_update' course_id=course.id pk=badge_class.id %}">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                        </td>
+                        <td style="width:3rem; text-align: center;">
+                            <a class="btn btn-danger"
+                               hx-confirm="Are you sure you want to the delete badge class '{{ badge_class.name }}'?"
+                               hx-target="#badge-classes-table"
+                               hx-trigger="click"
+                               hx-delete="{% url 'composer:course_badge_class_delete_hx' course_id=course.id pk=badge_class.id %}"
+                               hx-swap="outerHTML">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="7" class="w-100">
+                    <div class="d-flex flex-column w-100 justify-content-center align-items-center" style="height: 10rem;">
+                        <div class="alert alert-light">
+                            No badge classes have been added to this course.
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>

@@ -1,0 +1,58 @@
+<div class="card mb-4 card-narrow course-card">
+
+    <div class="card-header block-{{ library_item.type }}">
+        <div style="width:100%">
+            {{ library_item.type }}
+        </div>
+    </div>
+
+    <a href="{% url "learning_library:item-detail" item_type=library_item.type id=library_item.block.id %}">
+        <img alt="Screenshot from video"
+             class="card-img-top"
+             style="border-radius: 0"
+             src="https://i.ytimg.com/vi/{{ block.video_id }}/mqdefault.jpg"/>
+    </a>
+
+    <div class="card-body">
+        <div class="block-name">
+            {% if block.display_name %}
+                <b>{{ block.display_name }}</b>
+            {% else %}
+                ( No display name )
+            {% endif %}
+        </div>
+        <div class="block-description">
+            <div>
+                URL :
+                <a href="https://youtu.be/{{ block.video_id }}">
+                    https://youtu.be/{{ block.video_id }}
+                </a>
+            </div>
+            {% if block.short_description %}
+                {{ block.short_description }}
+            {% endif %}
+        </div>
+
+        <div class="block-tags">
+            <div class="tag-label">
+                Tags:
+            </div>
+            {% for tag in block.tags.all %}
+                <div class="block-tag">
+                    {{ tag }}
+                </div>
+            {% endfor %}
+        </div>
+        <small class="text-muted">
+            UUID: {{ library_item.uuid }}
+        </small>
+    </div>
+    <div class="card-footer">
+        {% if library_item.uuid %}
+            <a href="{% url "learning_library:item-detail" item_type=library_item.type id=library_item.block.id %}"
+               class="btn btn-dark">
+                View
+            </a>
+        {% endif %}
+    </div>
+</div>

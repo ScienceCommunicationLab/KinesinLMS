@@ -1,0 +1,115 @@
+{% extends "management/management_base.html" %}
+
+{% load static i18n core_tags %}
+
+{% load crispy_forms_tags %}
+
+{% block management_content %}
+
+    <style>
+      form {
+        align-items: flex-end;
+        margin-bottom: 1rem;
+      }
+
+      form div {
+        margin-right: 1rem;
+      }
+
+      .btn {
+        min-width: 180px;
+      }
+
+      li {
+        max-width: 300px !important;
+      }
+    </style>
+
+
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            <h2>Batch Enroll Students : Complete</h2>
+            <p>
+                The following enrollments were made. If any students were already enrolled, they're listed below in the
+                'Skipped' section.
+            </p>
+            <p>Students should receive a welcome email as if they had enrolled themselves.</p>
+            <p>If there were any errors when trying to enroll a student, they're reported below.</p>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom:2rem;">
+        <div class="col-12 col-lg-6 d-flex flex-column">
+            <h3>Cohort</h3>
+            <div class="mb-3">
+                <a href="{% url 'course:course_admin:cohorts:index' course_run=course.run course_slug=course.slug %}?slug={{ manual_enrollment.cohort.slug }}"
+                   class="btn btn-light">
+                    <i class="bi bi-collection me-3"></i>{{ manual_enrollment.cohort }}
+                </a>
+            </div>
+
+            <h3>Added</h3>
+            {% if enrolled_students %}
+                <div class="list-group">
+                    {% for student in enrolled_students %}
+                        <a class="list-group-item list-group-item-action"
+                           href="{% url 'course:course_admin:cohorts:cohort_student' course_run=course.run course_slug=course.slug cohort_id=manual_enrollment.cohort.id student_id=student.id %}">
+                            <i class="bi bi-file-person me-2"></i>{{ student }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-muted">( No students )</div>
+            {% endif %}
+
+            <h3 class="mt-4">Moved to Cohort</h3>
+            <p>Students already enrolled but moved from a different cohort:</p>
+            {% if moved_students %}
+                <div class="list-group">
+                    {% for student in moved_students %}
+                        <a class="list-group-item list-group-item-action"
+                           href="{% url 'course:course_admin:cohorts:cohort_student' course_run=course.run course_slug=course.slug cohort_id=manual_enrollment.cohort.id student_id=student.id %}">
+
+                            <i class="bi bi-file-person me-2"></i>{{ student }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-muted">( No students )</div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% if skipped_students %}
+        <div class="row" style="margin-bottom:2rem;">
+            <div class="col-12 col-lg-6 d-flex flex-column">
+                <h3>Skipped</h3>
+                <p class="text-muted">Students already enrolled in this course and cohort.</p>
+                <div class="list-group" style="max-width:30rem;">
+                    {% for student in skipped_students %}
+                        <a class="list-group-item list-group-item-action"
+                           href="{% url 'course:course_admin:cohorts:cohort_student' course_run=course.run course_slug=course.slug cohort_id=manual_enrollment.cohort.id student_id=student.id %}">
+
+                            <i class="bi bi-file-person me-2"></i>{{ student }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row" style="margin-bottom:6rem;">
+        <div class="col-12 col-lg-6 d-flex flex-column">
+            <h3>Errors</h3>
+            {% if form_errors %}
+                <ul class="list-group">
+                    {% for form_error in form_errors %}<li class="list-group-item">{{ form_error }}</li>{% endfor %}
+                </ul>
+            {% else %}
+                <div class="text-muted">( No errors. )</div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock management_content %}

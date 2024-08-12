@@ -1,0 +1,48 @@
+{% load core_tags unit_extras %}
+<div class="block discussion-container">
+
+    <div class="row">
+        <div class="col-12 col-xl-9">
+            <h2>
+                <span class="discussion-prefix">
+                    Discussion Forum:
+                </span>
+                {% if block.display_name %}
+                    {{ block.display_name }}
+                {% endif %}
+            </h2>
+            {% render_html_content block %}
+        </div>
+    </div>
+
+    <div class="discussion-subhead">
+        <h4>
+            <i class="bi bi-chat-quotes"></i>
+            The latest discussion:
+        </h4>
+    </div>
+
+    {% if block_view_context == "COMPOSER" %}
+        <div class="alert alert-light">
+            Comments will appear here.
+        </div>
+    {% else %}
+        {% get_forum_topic_id course block cohort as topic_id %}
+        {% if topic_id %}
+            <div id="topic-wrapper-{{ topic_id }}"
+                 class="topic-wrapper"
+                 hx-get="{% url 'course:forum_topic_posts_hx' course_slug=course.slug course_run=course.run forum_topic_id=topic_id %}"
+                 hx-trigger="load"
+                 hx-target="#topic-wrapper-{{ topic_id }}"
+                 hx-swap="innerHTML">
+                {% include 'course/blocks/forum_topic/forum_topic_posts.html' %}
+            </div>
+        {% else %}
+            <div class="alert alert-danger">
+                Could not load this forum topic. Please contact the course team.
+            </div>
+        {% endif %}
+    {% endif %}
+
+
+</div>

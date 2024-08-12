@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% block main_content %}
+
+    <div class="container dashboard-page">
+
+        <div class="course-list">
+            {% if courses_info %}
+                {% for course_info in courses_info %}
+
+                    {% if course_info.badge_assertion %}
+
+                        {% include 'badges/badge_assertion_info_modal.html' with badge_assertion=course_info.badge_assertion %}
+
+                    {% endif %}
+
+                    <div class="card ">
+
+                        <div class="card-header">
+                            <div class="course-title">{{ course_info.course.display_name }}</div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="course-thumbnail">
+                                        <img class="img-fluid"
+                                             alt="Course graphic for {{ course_info.course.token }}"
+                                             src="{{ course_info.course.catalog_description.thumbnail_url }}" />
+                                    </div>
+                                    {# About course page #}
+                                    <a style="margin-left:1.2em"
+                                       href="{% url 'catalog:about_page' course_slug=course_info.course.slug course_run=course_info.course.run %}"
+                                       class="btn btn-link">More about this course</a>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="course-blurb ">
+                                        {% if course_info.course.catalog_description.overview %}
+                                            {{ course_info.course.catalog_description.overview | safe }}
+                                        {% else %}
+                                            &nbsp;
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 offset-lg-1">
+                                    <div class="course-status ms-auto">
+                                        {% if course_info.has_passed %}
+                                            <div class="passed-course-bling ">
+                                                <img alt="Fancy ribbon graphic"
+                                                     src="{% static 'dashboard/images/ribbon.svg' %}" />
+                                                <div class="passed-message">You passed this course</div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer d-flex align-items-center justify-content-between flex-column flex-md-row">
+
+                            <div class="course-action-buttons d-flex flex-row align-items-center mb-5 mb-md-0 w-70">
+
+                                <div class="d-flex d-md-none text-muted w-100">Course actions:</div>
+
+                                {# View course button #}
+                                {% if course_info.user_can_access_course %}
+                                    <a href="{% url 'course:course_home_page' course_slug=course_info.course.slug course_run=course_info.course.run %}"
+                                       class="btn btn-primary">View Course</a>
+                                {% else %}
+                                    <button class="btn btn-light"
+                                            data-bs-toggle="tooltip"
+                                            title="This button will become active when the course is released."
+                                            data-bs-placement="top">View Course</button>
+                                {% endif %}
+
+                                {# Unenroll button #}
+                                <form style="margin-left:1.2em"
+                                      action="{% url "catalog:unenroll" course_slug=course_info.course.slug course_run=course_info.course.run %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn btn-secondary" value="Unenroll" />
+                                </form>
+
+                                <!-- helpful status message -->
+                                {% if course_info.user_can_access_course %}
+                                    {% comment no extra message %} {% endcomment %}
+                                {% else %}
+                                    {% if course_info.course.has_started %}
+                                        {% comment user must be disallowed for some reason %} {% endcomment %}
+                                        <div class="comment">You cannot view this course at this time.</div>
+                                    {% else %}
+                                        <div class="ms-3">Course&nbsp;starts:</div>
+                                        <div class="d-flex flex-row ms-2">
+                                            <div>
+                                                {% timezone 'US/Pacific' %}
+                                                {{ course_info.course.start_date|localtime|date:"M d, Y P e" }}
+                                            {% endtimezone %}
+                                        </div>
+                                        <div class="text-muted ms-2">
+                                            <i class="bi b-globe"
+                                               data-bs-title="{{ course_info.course.start_date|utc }} UTC"
+                                               data-bs-toggle="tooltip"></i>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+
+                        <!-- Credentials: badges and certs -->
+                        <div class="credentials-buttons d-flex flex-row align-items-center justify-content-end w-30">
+
+                            <div class="d-inline d-md-none text-muted w-100 ">Credentials:</div>
+
+                            {% if course_info.course_awards_badges and user_badges_enabled and course_info.has_passed %}
+                                {% comment %}
+                                    User passed course and deserves a badge. If they have one, show it.
+                                    If they don't, give them an option to create it.
+                                {% endcomment %}
+
+                                {% include 'badges/badge_assertion/badge_assertion_control.html' %}
+
+                            {% endif %}
+
+                            {% if course_info.certificate and course_info.certificate.certificate_url %}
+                                <a href="{{ course_info.certificate.certificate_url }}"
+                                   style="min-width:140px"
+                                   target="_blank"
+                                   class="btn btn-success">View Certificate</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="d-flex flex-column justify-content-center align-items-center w-100"
+                 style="min-height:80vh">
+                <div class="no-items-box">
+                    <div class="no-items p-3">
+                        <div>You are not enrolled in any courses.</div>
+                        <div class="mt-3">
+                            <a class="btn btn-primary" href="{% url 'catalog:index' %}">View Catalog</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock main_content %}

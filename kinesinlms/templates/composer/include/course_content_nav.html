@@ -1,0 +1,96 @@
+<div id="course-left-nav-off-canvas"
+     class="offcanvas offcanvas-start"
+     tabindex="-1"
+     style="z-index: 9999999"
+     data-bs-scroll="true"
+     aria-labelledby="course-left-nav-off-canvasLabel">
+
+    <div class="offcanvas-header">
+
+        <div class="d-flex flex-row w-100 p-2 align-items-center">
+            <button id="hideLeftNav"
+                    class="btn btn-primary"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close sidebar">
+                <i class="bi bi-arrow-left-circle"></i>
+            </button>
+
+            <div id="course-left-nav-off-canvas-label"
+                 class="w-100 ps-4"
+                 aria-label="Course title for left navigation bar"
+                 class="sidebar-header">
+                {{ course.display_name }}
+            </div>
+
+        </div>
+
+        <div class="course-nav-header">
+            <div class="course-nav-label">
+                Course Navigation
+            </div>
+            <div class="dropdown me-2">
+                <button class="btn btn-light dropdown-toggle"
+                        type="button"
+                        id="course-navigation-dropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu shadow-lg"
+                    aria-labelledby="course-navigation-dropdown">
+                    <li>
+                        <a class="dropdown-item"
+                           hx-post="{% url 'composer:edit_course_nav_hx' pk=course.id %}"
+                           hx-target="#course-nav-list">
+                            Refresh Navigation
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                           hx-post="{% url 'composer:add_module_node_to_root_node_hx' pk=course.id %}"
+                           hx-target="#course-nav-list">
+                            Add new module
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                           hx-post="{% url 'composer:edit_course_nav_hx' pk=course.id %}?action=auto_content_index&start_module_index_at=0"
+                           hx-target="#course-nav-list">
+                            Auto-number course from 0
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                           hx-post="{% url 'composer:edit_course_nav_hx' pk=course.id %}?action=auto_content_index&start_module_index_at=1"
+                           hx-target="#course-nav-list">
+                            Auto-number course from 1
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                           hx-post="{% url 'composer:edit_course_nav_hx' pk=course.id %}?action=clear_content_index"
+                           hx-target="#course-nav-list">
+                            Clear course numbering
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas-body">
+        <nav id="sidebar">
+            <div class="course-structure-nav">
+                <div id="course-nav-list">
+                    {% include 'composer/course/course_nav/course_navigation_list.html' with course=course course_nav=course_nav %}
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</div>

@@ -1,0 +1,212 @@
+<div id="student-list-title-bar" class="title-bar">
+    <h3 class="flex-grow-1">
+        {% if selected_cohort %}
+            {% if selected_cohort.type == "DEFAULT" %}
+                Unassigned Students (DEFAULT cohort)
+            {% else %}
+                Cohort: '{{ selected_cohort.name }}'
+            {% endif %}
+        {% endif %}
+    </h3>
+</div>
+<div class="control-bar">
+    {% if selected_cohort.type != "DEFAULT" %}
+        <div class="d-flex flex-column w-100">
+            <div class="d-flex flex-row mt-2 mb-2">
+                <div class="w-100">
+                    <a class="btn btn-light ms-2"
+                       data-bs-toggle="collapse"
+                       href="#cohort-details-collapse"
+                       role="button"
+                       aria-expanded="false"
+                       aria-controls="collapseExample">
+                        Cohort Details
+                    </a>
+                </div>
+                {% if selected_cohort.type != "DEFAULT" %}
+                    <div>
+                        <a id="btn-edit-cohort"
+                           href="{% url 'course:course_admin:cohorts:cohort_edit' course_run=course.run course_slug=course.slug cohort_id=selected_cohort.id %}"
+                           data-cohort-id="{{ selected_cohort.id }}"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="top"
+                           title="Edit this cohort"
+                           class="btn btn-primary me-2">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <button id="btn-delete-cohort"
+                                data-cohort-id="{{ selected_cohort.id }}"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="top"
+                                title="Delete this cohort"
+                                class="btn btn-danger me-2">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="collapse p-2"
+         id="cohort-details-collapse">
+        <div class="d-flex flex-column ">
+            <div class="mt-2">
+                <label>Description:</label>
+            </div>
+            <div class="card card-body" style="background: #eee;">
+                <div class="overflow-scroll" style="max-height: 150px;">
+                    {% if selected_cohort.description %}
+                        {{ selected_cohort.description }}
+                    {% else %}
+                        <span class="text-muted">
+                             ( no description )
+                            </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mt-2 d-flex flex-row">
+                <div class="me-2">
+                    <label style="min-width:5rem;">Tags:</label>
+                </div>
+                <div class="flex-grow-1">
+                    {% for tag in selected_cohort.tags.all %}
+                        <span class="badge rounded-pill text-bg-primary">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mt-2 d-flex flex-row">
+                <div class="me-2">
+                    <label style="min-width:5rem;">Institution:</label>
+                </div>
+                {% if selected_cohort.institution %}
+                    {{ selected_cohort.institution }}
+                {% else %}
+                    <span class="text-black-50">( none )</span>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="d-flex flex-row w-100 flex-grow-0 align-items-center pt-2"
+         style="padding:0.5rem; background-color: rgba(0,0,0,0.1)">
+        <label for="select-students-sort" style="margin: 0 0.5rem 0 0.2rem;">
+            Sort:
+        </label>
+        <select name="student_sort"
+                style="max-width: 10rem;"
+                id="select-students-sort"
+                class="form-select"
+                hx-get="{% url 'course:course_admin:cohorts:cohort_students_hx' course_run=course.run course_slug=course.slug cohort_id=selected_cohort.id %}"
+                hx-target="#cohort-detail"
+                hx-swap="innerHTML"
+                aria-label="Sort students options">
+            <option {% if student_sort == "username" %}selected{% endif %} value="username">Username</option>
+            <option {% if student_sort == "email" %}selected{% endif %} value="email">Email</option>
+            <option {% if student_sort == "name" %}selected{% endif %} value="name">Name</option>
+            <option {% if student_sort == "has_passed" %}selected{% endif %} value="has_passed">Has Passed</option>
+        </select>
+        <div class="ms-auto">
+            <a id="btn-download-cohort-student-list"
+               href="{% url 'course:course_admin:cohorts:cohort_download'  course_run=course.run course_slug=course.slug cohort_id=selected_cohort.id %}"
+               class="btn btn-secondary"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Download cohort student list as CSV">
+                <i class="bi bi-file-earmark-arrow-down"></i>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="students-list-wrapper">
+    {% if students %}
+        <div id="students-list-group" class="list-group">
+            {% for student in students %}
+                <div id="list-item-student-{{ student.id }}"
+                     class="list-group-item list-group-item-action d-flex flex-row justify-content-center student-list-item"
+                     style="padding-right:8px;"
+                     data-student-id="{{ student.id }}"
+                     data-cohort-id="{{ selected_cohort.id }}"
+                     draggable="true">
+                    <div class="d-flex flex-row align-items-center flex-grow-1">
+
+                        {% comment not implemented yet %}
+                                <input class="form-check-input me-2"
+                                       type="checkbox"
+                                       value=""
+                                       id="checkbox-{{ student.id }}">
+                         {% endcomment %}
+                        <label class="form-check-label"
+                               for="checkbox-{{ student.id }}">
+                            <label style="width:2.2rem;">
+                                {% if student.has_passed %}
+                                    <i class="bi bi-award-fill text-warning"
+                                       style="text-shadow: 1px 1px 3px #cccccccc;"></i>
+                                {% endif %}
+                            </label>
+                            {{ student.username }}
+                        </label>
+                    </div>
+                    <div class="d-flex flex-column align-items-end">
+                        <div class="text-muted ">
+                            {% if student.name %}
+                                {{ student.name }}
+                            {% else %}
+                                ( none )
+                            {% endif %}
+                        </div>
+                        <div class="text-muted ">
+                            {{ student.email }}
+                        </div>
+
+                    </div>
+                    <div class="d-flex flex-row align-items-center ms-3">
+                        <a href="{% url 'course:course_admin:cohorts:cohort_student' course_run=course.run course_slug=course.slug cohort_id=selected_cohort.id student_id=student.id %}"
+                           class="btn btn-light btn-small"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="top"
+                           title="View student detail">
+                            <i class="bi bi-file-person"></i>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-students">
+            <div class="text-muted">
+                ( No students )
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+
+<script>
+
+    setupDeleteButton();
+
+    function setupCohortTooltips() {
+        try {
+            new bootstrap.Tooltip(document.getElementById('btn-delete-cohort'));
+            new bootstrap.Tooltip(document.getElementById('btn-edit-cohort'));
+            new bootstrap.Tooltip(document.getElementById('btn-download-cohort-student-list'));
+        } catch (e) {
+
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        setupCohortTooltips()
+    })
+
+    // If this template fragment was loaded by HTMx,
+    // we'll have to manually registet tooltip.
+    document.body.addEventListener('htmx:load', (event) => {
+        setupCohortTooltips()
+    })
+</script>

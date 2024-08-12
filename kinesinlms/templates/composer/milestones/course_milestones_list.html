@@ -1,0 +1,24 @@
+{% extends "composer/composer_base.html" %}
+
+{% block main_content %}
+    <div class="container-fluid" style="margin-bottom:10rem;">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-row justify-content-between align-items-end mb-2">
+                    <h1 class="composer-page-header">Course Milestones</h1>
+                    <div>
+                        <a href="{% url 'composer:course_milestone_create' course_id=course.id %}"
+                           class="btn btn-primary">Add Milestone</a>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+
+                    {% include 'composer/milestones/hx/milestones_table.html' %}
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

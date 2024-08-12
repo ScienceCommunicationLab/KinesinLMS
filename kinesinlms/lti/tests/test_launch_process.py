@@ -1,0 +1,180 @@
+import logging
+import urllib.parse
+from django.test import TestCase
+from django.urls import reverse
+from django.test import Client
+
+from kinesinlms.external_tools.tests.factories import (
+    ExternalToolProviderFactory,
+    ExternalToolViewFactory,
+)
+from kinesinlms.lti.service import ExternalToolLTIService
+from kinesinlms.course.tests.factories import CourseFactory
+from kinesinlms.users.models import User
+from kinesinlms.learning_library.models import Block, BlockType
+from kinesinlms.external_tools.constants import ExternalToolViewLaunchType
+from kinesinlms.course.models import CourseUnit
+
+logger = logging.getLogger(__name__)
+
+
+class TestLTILaunchProcess(TestCase):
+    """
+    Test the various steps in the LTI v1.3 launch process.
+
+    This test case is based on the IMS Global LTI 1.3 Advantage specification:
+    https://www.imsglobal.org/spec/lti/v1p3
+
+    My hope is this test reminds me of the details of each step in the process.
+    Usually I get it after my first coffee but it's gone again at lunch.
+
+    """
+
+    enrolled_user = None
+    course = None
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        course = CourseFactory()
+        cls.course = course
+        enrolled_user = User.objects.create(username="enrolled-user")
+        cls.enrolled_user = enrolled_user
+
+        # PROVIDER
+        # Create an ExternalToolProvider to represent our mythical external tool.
+        external_tool_provider = ExternalToolProviderFactory()
+        cls.external_tool_provider = external_tool_provider
+
+        # COURSE BLOCK
+        # Make the first block in the course an "External tool view"
+        # that would be used to launch the external tool.
+        first_unit = CourseUnit.objects.filter(course=course).first()
+
+        block: Block = first_unit.contents.first()
+        block.type = BlockType.EXTERNAL_TOOL_VIEW.name
+        block.save()
+        cls.block = block
+        # Link block to an ExternalToolView, which is what we do
+        # to give a block a connection to a *particular view or resource*
+        # in an external tool.
+        external_tool_view = ExternalToolViewFactory(
+            external_tool_provider=external_tool_provider,
+            block=block,
+            launch_type=ExternalToolViewLaunchType.WINDOW.name,
+        )
+        cls.external_tool_view = external_tool_view
+
+        # LTI SERVICE
+        # Create the service class that makes the LTI connection with the tool.
+        external_tool_service = ExternalToolLTIService(
+            external_tool_view=external_tool_view,
+            course=course,
+        )
+        cls.external_tool_service = external_tool_service
+
+    def setUp(self):
+        pass
+
+    def test_login_url(self):
+        """
+        The first step in an LTIv1.3 launch is to login to the platform.
+        Make sure we're creating the correct data in this request.
+        """
+        login_url = self.external_tool_service.get_tool_login_url(
+            user=self.enrolled_user
+        )
+        logger.info(f"Login URL: {login_url}")
+        self.assertTrue(login_url)
+
+        # Parse the URL to check the query parameters
+        parsed_url = urllib.parse.urlparse(login_url)
+        query_params = urllib.parse.parse_qs(parsed_url.query)
+
+        # List of expected parameters
+
+        # See the docs on the LTIToolLoginData dataclass for more
+        # details about these params.
+        expected_params = [
+            # 'iss' : Issuer
+            #   This value should match the iss value in the LTI registration
+            #   to ensure that the request is coming from an authorized issuer.
+            "iss",
+            # 'login_hint' : Login hint
+            #  This is the login_hint parameter from the OIDC request.
+            #  It is optional, but we do use it in our implementation.
+            "login_hint",
+            # 'target_link_uri'
+            # The URL where the LTI tool should redirect the user to after authentication.
+            # This should be a callback URL defined on the KinesinLMS side.
+            "target_link_uri",
+            # 'lti_message_hint' : LTI message hint
+            "lti_message_hint",
+            # 'lti_deployment_id'
+            #   This is the deployment ID of the LTI tool. It is used to identify
+            #   the deployment of the tool that is making the request.
+            "lti_deployment_id",
+            # 'client_id'
+            # This identifies the platform to the tool. So the tool is supposed to already
+            # know this value and be able to validate it according to it's internal setup.
+            "client_id",
+        ]
+
+        # Check if each expected parameter is present in the query string
+        for param in expected_params:
+            self.assertIn(param, query_params, f"Missing expected parameter: {param}")
+
+        # Optionally, you can check for the presence of specific values
+        # if you have predefined expectations for them. For example:
+        # self.assertEqual(query_params.get('response_type'), ['code'])
+
+    def test_receive_login_response(self):
+        """
+        The second step in an LTIv1.3 launch is to receive the login response
+        from the tool. This is where the tool sends the user back to the platform
+        with an ID token.
+
+        If all goes well, the response from KinesinLMS should be to redirect the user
+        back to the final destination on the external tool (the 'redirect URI') so
+        they can view the external resource.
+        """
+
+        authorize_redirect_uri = reverse("lti:lti_authorize_redirect")
+
+        expected_login_hint = f"c_{self.course.id}_b_{self.block.id}_u_{self.enrolled_user.anon_username}"
+
+        # These are the parameters that the tool sends back to us
+        # after the user has authenticated.
+        request_from_tool_params = {
+            "scope": "openid",
+            "response_type": "id_token",  
+            "client_id": self.external_tool_provider.client_id,
+            "redirect_uri": self.external_tool_provider.launch_uri,
+            "login_hint": expected_login_hint,  
+            # Represents the state parameter from OAuth flow, for CSRF mitigation
+            # This is just a CSRF token.
+            "state": "sample-state",  
+             # LTIv1.3 requires response mode to always be 'form_post'
+            "response_mode": "form_post", 
+            "nonce": "sample-nonce", 
+            "prompt": "none",  # The platform should not prompt the user for authentication again
+            "lti_message_hint": expected_login_hint, 
+        }
+
+        # Create a test client to simulate the HTTP request
+        client = Client()
+
+        # Make a GET request to the authorize redirect URL
+        response = client.get(authorize_redirect_uri, request_from_tool_params)
+
+        # The view should return a response that contains a form that
+        # submits the ID token back to the tool.
+        self.assertEqual(response.status_code, 200, "Expected a 200 response")
+
+        # Assert that the redirect URL is the expected target link URI
+        expected_redirect_uri = self.external_tool_provider.launch_uri
+        self.assertEqual(
+            response["Location"],
+            expected_redirect_uri,
+            "Redirect URI did not match the expected target link URI",
+        )

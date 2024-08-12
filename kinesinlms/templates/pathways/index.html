@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load static i18n %}
+
+
+{% block main_content %}
+
+  <div class="container marketing-page">
+
+    <div class="card-deck">
+
+      {% for pathway in pathways %}
+        <div class="card mb-4 card-narrow">
+          <div class="card-body">
+            <h5 class="card-title">{{ pathway.display_name }}</h5>
+            <p class="card-text">{{ pathway.description }}</p>
+            <p class="card-text">{{ pathway.author.full_name }}</p>
+            <div class="tags">
+              {% for tag in pathway.tags.all %}
+                <span class="badge bg-dark">{{ tag.name }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'pathways:detail' pathway.id %}" class="btn btn-primary ms-auto">View</a>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+
+  </div> <!-- /container -->
+
+{% endblock %}

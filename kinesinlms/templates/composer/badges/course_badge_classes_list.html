@@ -1,0 +1,31 @@
+{% extends "composer/composer_base.html" %}
+
+{% block main_content %}
+    <div class="container-fluid" style="margin-bottom:10rem;">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-row justify-content-between align-items-end mb-2">
+                    <h1 class="composer-page-header">Course Badge Classes</h1>
+                    <div>
+                        <a href="{% url 'composer:course_badge_class_create' course_id=course.id %}"
+                           class="btn btn-primary ">Add Badge Class</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {% if not course.enable_badges %}
+                    <div class="alert alert-warning">
+                        <strong>Warning: Badges are disabled.</strong> You must enable badges for this course in the "course settings" tab for badge classes defined here to work.
+                    </div>
+                {% endif %}
+                <div class="table-responsive">
+
+                    {% include 'composer/badges/hx/badge_classes_table.html' %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

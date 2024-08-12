@@ -1,0 +1,142 @@
+/*
+  Defines print styles *specific to MRP and MEP print page
+  These should be in addition to (and overwrite) any styles
+  in our generic print css.
+
+  On this particular page, we want to hide almost everything (header,footer,etc.)
+  except course content.
+
+*/
+
+
+.pr-group {
+    margin-bottom: 1rem;
+}
+
+.group-content {
+    margin-bottom:1rem;
+}
+
+.group-subhead {
+    margin-bottom: 2rem;
+}
+
+.question-answer {
+    margin-bottom: 3rem;
+}
+
+.answer-read-only {
+    background: #f9f9f9;
+    border-left: 10px solid #ccc;
+    margin-bottom: 4rem;
+    padding: 10px 10px;
+    quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+.question-block {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.answer-block {
+    margin-bottom: 1em;
+}
+
+.your-answer-label {
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+.answer-text {
+    padding: 20px;
+    border: 1px solid #f1f1f1;
+    border-radius: 5px;
+}
+
+.question-title {
+    font-style: italic;
+}
+
+.answer-label {
+    color: #aaa;
+}
+
+.intro-text {
+    margin-bottom: 1rem;
+}
+
+.step-wrapper {
+    display: flex;
+    font-size: 1.3em;
+    border: 1px dotted #f8d04d;
+    border-radius: 5px 0 0 5px;
+    margin: 10rem 0 2rem;
+}
+
+.step-marker {
+    color: #000;
+    border-radius: 5px 0 0 5px;
+    padding: 15px 17px 15px 20px;
+    text-transform: uppercase;
+    margin-right: 12px;
+    font-size: 15px;
+    background: #f8d04d;
+    background: linear-gradient(to bottom, #f8d04d 0%, #efc84a 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f8d04d', endColorstr='#efc84a', GradientType=0);
+    align-self: center;
+    justify-content: center;
+}
+
+.step-text {
+    align-self: center;
+    padding-left: 20px;
+}
+
+/* PRINT STYLES */
+/* These are mostly things to hide when printing */
+
+@media print {
+
+    body {
+        background: #fff;
+    }
+
+    .step-marker {
+        background: #f1f1f1;
+    }
+
+    .step-wrapper {
+        border: 1px dotted #f1f1f1;
+    }
+
+    .answer-read-only {
+        border-left: 1px solid #ccc !important;
+        margin: 20px 10px 20px 0 !important;
+        background: #fff;
+    }
+
+    blockquote {
+        border: 0;
+    }
+
+    .logo a img {
+        display: none !important;
+    }
+
+    .kn-print-intro,
+    .top-nav,
+    .sidebar,
+    .course-nav-wrapper,
+    .course-sub-nav,
+    .unit-title-container,
+    .course-sub-nav-wrapper,
+    .bug-bar,
+    .course-info-bar-wrapper,
+    #footer-wrapper {
+        display: none !important;
+    }
+
+}
+
+
+

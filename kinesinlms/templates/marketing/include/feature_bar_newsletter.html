@@ -1,0 +1,26 @@
+{% load static core_tags %}
+{% with newsletter_signup_url as signup_url %}
+    {% if signup_url %}
+        <div class="feature-row kn-newsletter">
+            <div class="feature-container">
+                <div class="col-graphic">
+                    <a href="#">
+                        <img alt="Newspaper icon"
+                             class="news-icon"
+                             src="{% static 'images/icons/news-blue.svg' %}"
+                             style="width:180px;">
+                    </a>
+                </div>
+                <div class="col-content">
+                    <h2>Stay Updated!</h2>
+                    <div class="signup-body">
+                        <p>Join our email news list and keep up-to-date with the tools and
+                            techniques we're developing on {% site_name %}
+                        </p>
+                        <a class="btn btn-primary" href="{{ signup_url }}">Sign up today!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}

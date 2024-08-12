@@ -1,0 +1,61 @@
+{% extends "management/management_base.html" %}
+{% load static i18n core_tags %}
+{% load crispy_forms_tags %}
+
+
+{% block management_content %}
+
+    <style>
+        form {
+            align-items: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        form div {
+            margin-right: 1rem;
+        }
+
+        .btn {
+            min-width: 180px;
+        }
+
+    </style>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            <h2>Student Management </h2>
+            <div class="text-muted">Currently there are {{ student_count }} active students.</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 d-flex flex-column">
+
+            <div class="mb-3">
+                <a class="btn btn-primary" href="{% url 'management:students_list' %}">
+                    Student List
+                </a>
+            </div>
+
+            <div class="mb-3">
+                <a class="btn btn-primary" href="{% url 'management:students_manual_enrollment' %}">
+                    Batch Enroll
+                </a>
+            </div>
+
+            <div class="mb-3">
+                <a class="btn btn-primary" href="{% url 'management:students_manual_unenrollment' %}">
+                    Batch Unenroll
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock management_content %}
+
+
+

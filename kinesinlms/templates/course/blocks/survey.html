@@ -1,0 +1,137 @@
+{% load react %}
+{% load static %}
+{% load core_tags unit_extras %}
+
+{% comment %}
+This block template's main job is to simply render the iframe, which points to a specific
+survey. That iframe link also includes the user's anon username so survey provider gets
+that info when a survey is completed.
+
+If the Block has some html_content, this template renders that first, as it assumes that content
+is introductory or background info the user needs before taking the survey.
+
+{% endcomment %}
+<style>
+  .survey-completed-note {
+    max-width: 650px;
+    margin: 5rem auto 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem 2rem 1rem;
+    border: 1px dotted #ccc;
+    border-radius: 0.5rem;
+  }
+
+  .fa-check-square {
+    color: #ccc;
+    font-size: 3rem;
+    margin-right: 2rem;
+  }
+</style>
+
+<div class="section block block-survey-content">
+    {% if block.display_name and block.display_name != "" %}<h2>{{ block.display_name }}</h2>{% endif %}
+    {% get_survey_info block=block course=course user=user as survey_info %}
+    {% comment %}
+    When a survey is viewed for the first time, we send a reminder email to the user
+    if the survey is configured to do so. I can't think of a better place to do this
+    check than here, in the template where we know we're about to show the survey.
+    {% endcomment %}
+    {% if block_view_context == "" or block_view_context == "COURSE" %}
+        {% send_survey_reminder_email_if_required block=block course=course user=user %}
+    {% endif %}
+    {% if survey_info %}
+        {% if survey_info.completed_date %}
+            {% comment %}
+            Show a message that they've already done the survey.
+            Provide a link to survey in external page if they want to take again.
+            {% endcomment %}
+            <div class="row">
+                <div class="col-12 col-xl-9 survey-completed-note">
+                    <i class="bi bi-check-square"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="top"
+                       title="You've completed this survey!"></i>
+                    <p>
+                        You already completed this survey
+                        on {{ survey_info.completed_date | date:"M d, Y" }}. (Thanks!) If you
+                        want to take it again, you can do so on the external
+                        <a href="{{ survey_info.survey_url }}" target="_blank" rel="noreferrer">survey page here.</a>
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            {% comment %}
+            Give survey introduction and show the survey in an iframe.
+            {% endcomment %}
+            <div class="row">
+                <div class="col-12 col-xl-9 ">
+                    {% if block.html_content %}
+                       {% render_html_content block %}
+                    {% endif %}
+                    {% comment %}
+                    QUALTRICS-specific help text...
+                    {% endcomment %}
+                    {% if survey_info.provider_type == "QUALTRICS" %}
+                        <p>
+                            To proceed through the survey, use the navigation system ("Next", "Previous", "Arrows", etc.)
+                            embedded in the bottom of each survey page.
+                        </p>
+                    {% endif %}
+                    <p>
+                        As always, to navigate to a different course page, please use the yellow arrows at
+                        the top right of this page, the quick nav, or the course navigation links in the left-side
+                        navigation bar.
+                    </p>
+                    <p>
+                        If you revisit this page after you finish and submit the survey, we'll show a message
+                        reminding you that you've already submitted, but still offer you a link to the survey in case
+                        you want to take it again.
+                    </p>
+                </div>
+                <div class="col-xl-3 col-12 sidebar-content">{{ block.json_content.sidebar_content | safe }}</div>
+            </div>
+            <div class="row" style="border:1px dotted #333;">
+                <div class="col-12">
+                    <div class="m-2">
+                        <strong>Embedded Survey</strong>
+                        <p>
+                            <em>Make sure you scroll to the bottom of the survey below,
+                            as some content may be cut off.</em>
+                        </p>
+                    </div>
+                    <iframe class="embedded-survey"
+                            height="{{ survey_info.height }}"
+                            width="800"
+                            src="{{ survey_info.survey_url }}"
+                            title="{{ survey_info.survey_name }}">
+                    </iframe>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-8">
+                    <div class="alert alert-secondary" role="alert">
+                        <strong>NOTE</strong>
+                        If you can't see the survey embedded on this page, your browser
+                        might be blocking iframes. If so, no problem. You can still take
+                        the survey directly on the
+                        <a href="{{ survey_info.survey_url }}" target="_blank">external survey page here.</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                {% comment %}
+                We shouldn't get here. The 'survey_type' key/value
+                should always be set in the json_content for this type
+                of block.
+                {% endcomment %}
+                ( No survey available. )
+            </div>
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,101 @@
+{% extends "composer/composer_base.html" %}
+{% load tz %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+
+{% block main_content %}
+
+
+    <div class="container-fluid" style="min-height:800px;">
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="d-flex flex-row align-items-center">
+                    <h2 class="w-100">Simple Interactive Tool Templates</h2>
+                    <div>
+                        <a href="{% url 'composer:simple_interactive_tool_template_create' %}"
+                           class="btn btn-primary">
+                            Create&nbsp;New
+                        </a>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Admin Description</th>
+                        <th>Student Instructions</th>
+                        <td>Used by...</td>
+                        <th style="text-align:center; width:250px;">Edit Description</th>
+                        <th style="text-align:center; width:250px;">Edit Design</th>
+                        <th style="text-align:center; width:100px;">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for tool_template in simple_interactive_tool_templates %}
+                        <tr>
+                            <td>{{ tool_template.tool_type }}</td>
+                            <td>{{ tool_template.name }}</td>
+                            <td>{{ tool_template.description }}</td>
+                            <td>{{ tool_template.instructions }}</td>
+                            <td class="d-flex flex-col">
+                                {% if tool_template.simple_interactive_tools %}
+                                    {% for sit in tool_template.simple_interactive_tools.all %}
+                                        <a href="/admin/sits/simpleinteractivetool/{{ sit.id }}/change/"
+                                           class="badge rounded-pill bg-info text-dark">
+                                            SIT {{ sit.id }}
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
+                            <td style="text-align:center;">
+                                <a href="{% url 'composer:simple_interactive_tool_template_description' template_id=tool_template.id %}"
+                                   data-bs-toggle="tooltip"
+                                   title="Edit Simple Interactive Tool template description"
+                                   data-bs-placement="top"
+                                   class="btn btn-secondary"
+                                   style="min-width:50px;">
+                                    <i class="bi bi-pencil"></i> Description
+                                    <span class="visually-hidden">Edit Simple Interactive Tool template description</span>
+                                </a>
+                            </td>
+                            <td style="text-align:center;">
+                                <a href="{% url 'composer:simple_interactive_tool_template_design' template_id=tool_template.id %}"
+                                   data-bs-toggle="tooltip"
+                                   title="Edit simple interactive tool template design"
+                                   data-bs-placement="top"
+                                   class="btn btn-secondary"
+                                   style="min-width:50px;">
+                                    <i class="bi bi-pencil"></i> Template
+                                    <span class="visually-hidden">Edit Simple Interactive Tool template</span>
+                                </a>
+                            </td>
+                            <td style="text-align:center;">
+                                <a href="{% url 'composer:simple_interactive_tool_template_delete' template_id=tool_template.id %}"
+                                   data-bs-toggle="tooltip"
+                                   title="Delete Simple Interactive Tool template"
+                                   data-bs-placement="top"
+                                   class="btn btn-danger"
+                                   style="min-width:50px;">
+                                    <i class="bi bi-trash-fill"></i>
+                                    <span class="visually-hidden">Delete Simple Interactive Tool template</span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+{% endblock main_content %}

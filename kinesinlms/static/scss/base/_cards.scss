@@ -1,0 +1,130 @@
+/* Course cards */
+
+small {
+  font-size: 70%;
+}
+
+.card {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: "Jost", Helvetica, Arial, sans-serif;
+  }
+}
+
+.card-title {
+  font-family: "Jost", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+
+.card-narrow {
+  min-width: 16rem;
+  max-width: 20rem;
+}
+
+.meta-info {
+  min-height: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  border-top: 1px dotted #ccc;
+  padding-top: 0.5rem;
+
+  .start-end-dates {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+
+    .start-end-date {
+      display: flex;
+      flex-direction: row;
+
+      .start-end-label {
+        min-width: 3.5rem;
+        align-items: center;
+      }
+
+      .start-end-date {
+        align-items: center;
+      }
+    }
+
+  }
+}
+
+.card-img-top {
+  background-color: #ccc;
+  max-height: 12rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  object-fit: cover;
+  overflow: hidden;
+  height: 100%;
+  border-radius: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  /*
+
+   The 'action-buttons' are the buttons that appear on the right-hand side of the
+   card footer. They are usually the 'enrol' and 'unenrol' buttons.
+
+   We want to standardize these since they're such a common UI element.
+
+   */
+  .action-buttons {
+    margin-left: auto;
+
+    .btn {
+      min-width: 8rem;
+    }
+  }
+
+}
+
+.card-footer .start-time {
+  font-size: .8em;
+  border-bottom: 0;
+}
+
+.card-footer .text-muted {
+  color: #aaa !important;
+}
+
+.text-only-card {
+  box-shadow: none;
+  background: none;
+  background-color: #fff !important;
+}
+
+.speakers-list {
+  .speaker-image {
+    filter: saturate(0%);
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .card-narrow {
+    max-width: none;
+  }
+}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static i18n core_tags %}
+
+
+
+
+{% block main_content %}
+
+    <style>
+        .icon-holder {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #359ff7;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+    </style>
+
+    <section class="container kn-newsletter-signup-complete-page" style="min-height: 500px;">
+        <div class="row" style="margin-top:10rem;">
+            <div class="col-12 col-lg-3">
+                <div class="icon-holder">
+                    <img class="news-icon"
+                         alt="Newspaper icon"
+                         src="{% static 'images/icons/news-blue.svg' %}"
+                         style="width:180px;">
+                </div>
+            </div>
+            <div class="col-12 col-lg-8">
+                <h1>We've added you to our newsletter!</h1>
+                <p>
+                    You're all signed up for our {% site_name %} Newsletter. We'll be in touch with important
+                    announcements reminders.
+                </p>
+                <p>
+                    In the meantime, not check out <a href="{% url 'catalog:index' %}">some of our courses?</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+{% endblock main_content %}

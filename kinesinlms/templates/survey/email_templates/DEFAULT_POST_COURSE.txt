@@ -1,0 +1,13 @@
+Hi {{ informal_name }},
+
+Thank you for taking the "{{ course.name }}" course. We hope you enjoyed it and learned a lot!
+
+We are continuously working to improve our courses which means your feedback is very important to us. If you haven’t
+yet done so, please take several minutes to complete our post-course survey, available here:
+
+{{ survey_url }}
+
+We appreciate the time you take to fill out this survey.
+
+{% include 'survey/base/default_closing.html' %}
+

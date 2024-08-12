@@ -1,0 +1,81 @@
+{% extends "composer/composer_base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+
+{% load core_tags %}
+
+{% block main_content %}
+
+    <style>
+      .table-responsive {
+        max-height: 300px;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+    </style>
+
+    <div class="container-fluid composer-content course" style="height:80vh;">
+
+        <div class="delete-confirm-wrapper mt-5">
+
+            <form method="post">
+
+                <div class="card delete-confirm-card">
+
+                    <div class="card-header">Delete Course {{ course }}</div>
+
+                    <div class="card-body">
+                        {% csrf_token %}
+                        <p>Are you sure you want to delete "{{ course }}"?</p>
+
+                        <!-- Extra message about delete process -->
+                        <h3>Course Resources</h3>
+                        <p>In addition to the course and its contents, all "Course Resources" and "Educator Resources" will be deleted.</p>
+
+                        <h3>Block Resources</h3>
+                        <p>
+                            Block resources are resources used by the blocks in your course. These resources might be used by other courses.
+                            If they are, they won't be deleted. If they're only used by this course, you can delete them by selecting the
+                            checkbox below.
+                        </p>
+
+                        {% if exclusive_resources %}
+                            Block resources used by this course only:
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Resource</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for resource in exclusive_resources %}
+                                            <tr>
+                                                <td>{{ resource.file_name }}</td>
+                                                <td>{{ resource.type }}</td>
+                                                <td>
+                                                    {{ resource.description|show_none_for_none }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endif %}
+
+                        {% crispy form %}
+
+                    </div>
+
+                    <div class="card-footer justify-content-end">
+                        <input class="btn btn-danger" type="submit" value="Delete this course." />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock main_content %}

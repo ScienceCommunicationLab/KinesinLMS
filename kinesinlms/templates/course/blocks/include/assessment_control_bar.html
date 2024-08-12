@@ -1,0 +1,86 @@
+{% load i18n %}
+<div id="assessment-{{ block.assessment.id }}-control-bar"
+     class="assessment-control-bar">
+
+    {% if block_view_mode == "READ_ONLY" or form.is_assessment_disabled %}
+        <div class="btn-wrapper"
+
+                {% if form.answer_status == "COMPLETE" %}
+
+             data-bs-title="{% translate 'You have already submitted an answer.' %}"
+
+                {% elif form.answer_status == "CORRECT" %}
+
+             data-bs-title="{% translate 'You have already submitted a correct answer.' %}"
+
+                {% else %}
+
+             data-bs-title="{% translate 'This is assessment is no longer available.' %}"
+
+                {% endif %}
+
+             data-bs-toggle="tooltip"
+             data-bs-placement="top">
+
+            <button class="btn btn-primary submit-button disabled"
+                    type="submit"
+                    value="Save"
+                    disabled>
+                {% translate "Submit" %}
+            </button>
+
+        </div>
+
+    {% else %}
+
+        <button class="btn btn-primary submit-button"
+                type="submit"
+                value="Save">
+            {% translate "Submit" %}
+        </button>
+
+    {% endif %}
+
+
+    {% include 'course/blocks/include/spinner_button.html' %}
+
+    {% if block_view_context == "COMPOSER" %}
+        {#  We don't show the status when viewing this block in composer. #}
+    {% else %}
+        <div id="assessment-{{ block.assessment.id }}-answer-status-wrapper"
+             class="answer-status-wrapper">
+
+            {% if form.answer_status == "INCORRECT" %}
+                <div class="answer-status text-danger">
+                    <i class="bi bi-x "></i>
+                    &nbsp;&nbsp; {% translate "Incorrect." %}
+                </div>
+            {% elif form.answer_status == "INCOMPLETE" %}
+                {# pass #}
+            {% elif form.answer_status == "CORRECT" %}
+                <div class="answer-status text-success">
+                    <i class="bi bi-check "></i>
+                    &nbsp;&nbsp; {% translate "Correct!" %}
+                </div>
+            {% elif form.answer_status == "COMPLETE" %}
+                <div class="answer-status text-success">
+                    <i class="bi bi-check "></i>
+                    &nbsp;&nbsp; {% translate "Submission accepted" %}
+                </div>
+            {% elif form.answer_status == "UNANSWERED" %}
+                {# pass #}
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+    <div class="answer-scores">
+      {% if form.answer_status == "INCORRECT" or form.answer_status == "UNANSWERED" %}
+        Points possible: {{ block.assessment.max_score }}
+      {% else %}
+        Points received: {{ form.answer_score }} / {{ block.assessment.max_score }}
+      {% endif %}
+    </div>
+
+</div>

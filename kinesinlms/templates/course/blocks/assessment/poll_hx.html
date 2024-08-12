@@ -1,0 +1,51 @@
+{# HTML template for the Poll selector #}
+
+{% load i18n %}
+{% load assessment_tags %}
+{% load crispy_forms_tags %}
+
+<div id="poll-{{ block.assessment.id }}"
+     class="poll-wrapper assessment-component">
+
+    <form hx-post="{% url 'course:assessments:assessment_submission_hx' course_slug=course.slug course_run=course.run course_slug=course.slug course_run=course.run module_slug=module_slug section_slug=section_slug unit_slug=unit_slug pk=block.assessment.id %}"
+          hx-target="#poll-{{ block.assessment.id }}"
+          hx-indicator="#assessment-{{ block.assessment.id }}-control-bar"
+          hx-swap="outerHTML">
+
+        {# If assessment is complete form fields should shown as disabled. #}
+        {% csrf_token %}
+
+        {% comment %}
+        Build the poll choice form manually since I couldn't get crispy forms to do what I want.
+        But it's me, cripsy. It's not you.
+        {% endcomment %}
+
+        {{ form.course_unit_id }}
+
+        {% for choice in form.choices %}
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="{{ form.selection_type }}"
+                       name="answer"
+                       value="{{ choice.choice_key }}"
+                        {% if form.is_assessment_disabled %}
+                       disabled
+                        {% endif %}
+                        {% if choice.choice_key in form.selected_choices %}
+                       checked
+                        {% endif %}
+                       id="assessment-{{ block.assessment.id }}-choice-{{ forloop.counter }}">
+                <label class="form-check-label"
+                       for="assessment-{{ block.assessment.id }}-choice-{{ forloop.counter }}">
+                    {{ choice.text }}
+                </label>
+            </div>
+
+        {% endfor %}
+
+        {% include "course/blocks/include/assessment_control_bar.html" %}
+
+    </form>
+
+</div>
+

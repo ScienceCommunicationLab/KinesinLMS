@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% load tz %}
+
+{% load static i18n core_tags %}
+
+{% block meta_description %}
+    {{ course_description.blurb }}
+{% endblock meta_description %}
+
+{% block meta_keywords %}
+    courses, course
+{% endblock meta_keywords %}
+
+{% block og %}
+
+    {# uncomment and update these meta tags to provide information to X (formerly Twitter) #}
+    {% comment %}
+    <!-- twitter tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@example.com" />
+    <meta name="twitter:title" content="Course : {{ course_description.title }}" />
+    <meta name="twitter:description" content="{{ course_description.blurb }}" />
+    <meta name="twitter:image" content="{% static course_description.thumbnail_url %}" />
+    {% endcomment %}
+
+    {# uncomment and update these meta tags to provide information to Facebook.  #}
+    {% comment %}
+    <!-- og tags -->
+    <meta property="og:title" content="Course : {{ course_description.title }}" />
+    <meta property="og:image" content="{% static course_description.thumbnail_url %}" />
+    <meta property="og:url" content="{{ request.path }}" />
+    <meta property="og:description" content="{{ course_description.blurb }}" />
+    {% if course_description.trailer_video_url %}
+        <meta property="og:video" content="{{ course_description.trailer_video_url }}" />
+    {% endif %}
+    {% endcomment %}
+
+{% endblock og %}
+
+{% block infobar %}
+    {% comment  %}
+    Need to implement a breadcrumb so that this infobar can show something like:
+        Course Catalog :: About Course :: This course's name
+    {% endcomment %}
+{% endblock infobar %}
+
+{% block extra_css %}
+    {{ block.super }}
+    {% if course_description.custom_stylesheet %}
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static course_description.custom_stylesheet_url %}" />
+    {% endif %}
+{% endblock extra_css %}
+
+{% block main_content %}
+    <div class="catalog">
+        <div class="about-course-header"
+             style="background-color: {{ '#'|add:course_description.hex_theme_color }}">
+            <div class="container">
+                <div class="row d-flex flex-grow-1 align-items-center">
+                    <div class="col-xl-6 d-flex justify-content-center justify-content-xl-start mt-4 mb-4 mt-0-xl mb-0-xl about-course-title"
+                         style="color:#{{ course_description.hex_title_color }}">{{ course_description.title }}</div>
+                    <div class="col-xl-6 intro-video-wrapper">
+                        {% if course_description.trailer_video_url %}
+                            <div class="ratio ratio-16x9">
+                                <!-- Trailer video -->
+                                <iframe title="YouTube video of trailer for course {{ course_description.title }}."
+                                        class="embed-responsive-item"
+                                        src="{{ course_description.trailer_video_url }}?origin={% site_domain %}"
+                                        style="border:0"
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        {% elif course_description.thumbnail_url %}
+                            <div class="image-holder d-flex justify-content-center" style="">
+                                <!-- Course thumbnail -->
+                                <img alt="Course graphic for {{ course_description.course.token }}"
+                                     src="{{ course_description.thumbnail_url }}" />
+                            </div>
+                        {% else %}
+                            <!-- No video or thumbnail available -->
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-bar-wrapper">
+            <div class="container info-bar">
+                <div class="row">
+                    <div class="col-12">
+                        {% if is_enrolled %}
+
+                            {% include 'catalog/course_action_buttons_enrolled.html' with course=course user_can_access_course=user_can_access_course %}
+
+                        {% elif user.is_authenticated %}
+
+                            {% include 'catalog/course_action_buttons_not_enrolled.html' %}
+
+                        {% else %}
+
+                            {% include 'catalog/course_action_buttons_unauthenticated.html' %}
+
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container about-course-summary">
+
+            <div class="row">
+                <div class="{% if course_description.features %}col-xl-4{% else %}col-xl-7{% endif %} overview mb-4">
+                    <h2>Course Overview</h2>
+                    <div class="overview-text">{{ course_description.overview | safe }}</div>
+                </div>
+
+                {% if course_description.features %}
+                    <div class="col-xl-4 mb-4">
+                        <div class="course-features">
+                            <h2 style="border-bottom:0">Course Features</h2>
+                            <ul class="fa-ul ms-4">
+                                {% for feature in course_description.features %}
+                                    <li class="mb-1">
+                                        <span class="fa-li"><i class="bi bi-check-circle" style="color:green;"></i></span>
+                                        {{ feature }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="{% if course_description.features %}col-xl-4{% else %}col-xl-5{% endif %}">
+                    <div class="course-details">
+                        <h2 style="border-bottom:0">Course Details</h2>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Enrollment&nbsp;Starts</td>
+                                {% if course_description.enrollment_has_started %}
+                                    <td>Enrollment is open</td>
+                                {% else %}
+                                    <td>
+                                        <div>
+                                            {% timezone 'US/Pacific' %}
+                                            {{ course_description.course.enrollment_start_date|localtime|date:"M d, Y P e" }}
+                                        {% endtimezone %}
+                                    </div>
+                                    <div class="text-muted">
+                                        <i class="bi b-globe"></i> {{ course_description.course.enrollment_start_date|utc|date:"M d, Y H:i e" }}
+                                    </div>
+                                </td>
+                            {% endif %}
+                        </tr>
+
+                        <tr>
+                            {% if course_description.course_has_started and course_description.course.self_paced %}
+                                <td>Course Starts</td>
+                                <td>Anytime, self-paced</td>
+                            {% else %}
+                                {% if course_description.course_has_started %}
+                                    <td>Course Started</td>
+                                {% else %}
+                                    <td>Course Starts</td>
+                                {% endif %}
+                                <td>
+                                    <div>
+                                        {% timezone 'US/Pacific' %}
+                                        {{ course_description.course.start_date|localtime|date:"M d, Y P e" }}
+                                        <br />
+                                    {% endtimezone %}
+                                </div>
+                                <div class="text-muted">
+                                    <i class="bi b-globe"></i> {{ course_description.course.start_date|utc|date:"M d, Y H:i e" }}
+                                </div>
+                            </td>
+                        {% endif %}
+                    </tr>
+
+                    {% if course_description.course.end_date %}
+                        <tr>
+                            <td>Course Ends</td>
+                            <td>
+                                <div>
+                                    {% timezone 'US/Pacific' %}
+                                    {{ course_description.course.end_date|localtime|date:"M d, Y P e" }}
+                                {% endtimezone %}
+                            </div>
+                            <div class="text-muted">
+                                <i class="bi b-globe"></i> {{ course_description.course.end_date|utc|date:"M d, Y H:i e" }}
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if course_description.effort %}
+                    <tr>
+                        <td>Estimated&nbsp;Effort</td>
+                        <td>{{ course_description.effort }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if course_description.duration %}
+                    <tr>
+                        <td>Estimated&nbsp;Duration</td>
+                        <td>{{ course_description.duration }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if course_description.audience %}
+                    <tr>
+                        <td>Audience</td>
+                        <td>{{ course_description.audience }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if course_description.num_modules %}
+                    <tr>
+                        <td>Modules</td>
+                        <td>{{ course_description.num_modules }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if course_description.syllabus_url %}
+                    <tr>
+                        <td>Syllabus</td>
+                        <td>
+                            <a href="{{ course_description.syllabus_url }}" class="btn btn-dark">
+                                <i class="bi bi-cloud-arrow-down"></i>
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
+
+                <tr>
+                    <td>Certificate</td>
+                    <td>
+                        {% if course.enable_certificates == True %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Badge</td>
+                    <td>
+                        {% if course.enable_badges == True %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="container about-course-content">
+    <div class="row">
+        <div class="col-xl-7">{{ course_description.about_content | safe }}</div>
+        <div class="col-xl-5 about-course-sidebar">
+            <!-- Testimonials -->
+
+            {% if course_description.testimonials %}
+                <div class="testimonials ml-3">
+                    <h2>Testimonials</h2>
+                    {% for testimonial in course_description.testimonials %}
+                        <div class="testimonial">
+                            <p class="testimonial-quote">{{ testimonial.quote }}</p>
+                            <p class="testimonial-source">- {{ testimonial.source }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% comment %}
+                 TODO: update models to have flag or something similar to show
+                 TODO: when an educator resources page is ready
+            {% endcomment %}
+            {% if course.educator_resources %}
+                <div class="educator_resources ml-3">
+                    <h2>Educator Resources</h2>
+                    <div class="er-header-bar">
+                        <div class="er-header-bar-icon">
+                            <img alt="Guidebook graphic icon"
+                                 src="{% static 'images/icons/guide.svg' %}"
+                                 style="height:100%" />
+                        </div>
+                        Help for Educators
+                    </div>
+                    <div class="er-content">
+                        <p>
+                            Are you an educator? View our resources page for easy to access to the course’s
+                            outline, videos, video transcripts, infographics, term sheet, assessments, and discussion
+                            questions.
+                        </p>
+                        <div>
+                            <a href="{% url 'course:course_admin:resources' course_slug=course.slug course_run=course.run %}"
+                               class="btn btn-secondary">View Resources &gt;&gt;</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <!-- sidebar custom content -->
+            {% if course_description.sidebar_content %}
+                <div class="custom-content">{{ course_description.sidebar_content | safe }}</div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% comment %}
+        Show action buttons again so user doesn't
+        have to scroll back up if they decide to enroll
+{% endcomment %}
+<div class="info-bar-wrapper">
+    <div class="container info-bar">
+        {% if is_enrolled %}
+
+            {% include 'catalog/course_action_buttons_enrolled.html' with course=course user_can_access_course=user_can_access_course %}
+
+        {% elif user.is_authenticated %}
+
+            {% include 'catalog/course_action_buttons_not_enrolled.html' %}
+
+        {% else %}
+
+            {% include 'catalog/course_action_buttons_unauthenticated.html' %}
+
+        {% endif %}
+    </div>
+</div>
+
+</div>
+{% endblock main_content %}

@@ -1,0 +1,95 @@
+/* POST LIST */
+.post-list {
+    margin: 0 0 10rem;
+}
+
+.post-list .card {
+    margin-bottom: 2rem;
+}
+
+.post-list .card-title {
+    font-size: 1.1rem;
+    min-height: 5rem;
+}
+
+.post-list .card-body {
+    border-top: 1px solid #ccc;
+}
+
+.post-list .card-body .text-muted {
+    font-size: .8rem;
+}
+
+.post-list .card-img-top {
+    width: 100%;
+    max-height: 10rem;
+    object-fit: cover;
+}
+
+/* POST */
+
+.post-header {
+    line-height: 1.65;
+}
+
+.post-header .post-title-block {
+    margin-bottom: 1em;
+}
+
+.post-header h1 {
+    text-align: left !important;
+    margin-bottom: .5rem;
+}
+
+
+
+.post-header .author, .post-header .publish-date {
+    color: #999;
+    font-size: .9rem;
+}
+
+.post-content {
+    line-height: 1.65;
+    margin-bottom: 10rem;
+}
+
+.post-content .featured-image {
+    width: 100%;
+    margin-bottom: 2rem;
+    border: 1px solid #ccc;
+    padding: 1rem 1rem 0;
+    background-color: #EEE;
+}
+
+.post-content .featured-image img {
+    width: 100%;
+}
+
+.post-content .featured-image .image-credit {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: .2rem 0;
+    font-size: .7rem;
+    color: #ccc;
+    align-items: center;
+    min-height: 1rem;
+}
+
+
+
+/* POST SIDEBAR */
+
+.sidebar {
+    margin-bottom: 10em;
+}
+
+.sidebar h4 {
+    color: #999 !important;
+    font-size: 1em !important;
+    margin-bottom: .5rem !important;
+    margin-top: 0;
+}
+
+.marketing {
+}

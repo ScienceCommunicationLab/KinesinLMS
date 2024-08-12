@@ -1,0 +1,111 @@
+{% extends "management/management_base.html" %}
+
+{% load static i18n core_tags %}
+
+{% load crispy_forms_filters %}
+
+{% block management_content %}
+
+    <style>
+      form {
+        align-items: flex-end;
+        margin-bottom: 1rem;
+      }
+
+      form div {
+        margin-right: 1rem;
+      }
+
+      form label {
+        font-size: 0.8rem;
+        margin-bottom: 0.1rem !important;
+      }
+
+      .search-box {
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 1rem;
+        padding: 0.5rem 0.5rem 0.1rem 1rem;
+      }
+    </style>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-2 d-flex flex-column">
+            <form action=""
+                  method="get"
+                  class="form form-inline d-flex flex-row search-box"
+                  style="min-width:700px">
+                {{ filter.form | crispy }}
+                <div class="mb-3">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-lg-6 d-flex justify-content-end align-items-center"
+             style="padding-right: 2rem">
+            {% if is_paginated %}
+
+                {% include 'core/pagination.html' with page_obj=page_obj total_count=total_count %}
+
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Full name</th>
+                    <th>Email</th>
+                    <th>Currently enrolled...</th>
+                    <th>Certificates</th>
+                    {% if user.is_superuser %}<th style="text-align: center">Discourse</th>{% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for student in students %}
+                    <tr>
+                        <td>{{ student.username }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                <ul>
+                                    {% for enrollment in student.enrollments.all %}<li>{{ enrollment.course.token }}</li>{% endfor %}
+                                </ul>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                {% for certificate in student.certificates.all %}
+                                    <div>
+                                        <a class="btn btn-sm btn-dark mb-1"
+                                           href="{% url 'management:student_certificate' user_id=student.id certificate_id=certificate.id %}">
+                                            {{ certificate.course.token }}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        {% if user.is_superuser %}
+                            <td style="text-align: center">
+                                <a href="{% url 'management:sync_student_to_discourse' user_id=student.id %}"
+                                   class="btn btn-primary">Sync Student to Discourse</a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    {% if is_paginated %}
+
+        {% include 'core/pagination.html' with page_obj=page_obj total_count=total_count %}
+
+    {% endif %}
+
+{% endblock management_content %}

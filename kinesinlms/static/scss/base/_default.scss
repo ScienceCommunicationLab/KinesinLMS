@@ -1,0 +1,731 @@
+.kn-courses-logo {
+  max-height: 40px;
+}
+
+a {
+  text-decoration-style: dotted;
+}
+
+h2,
+.h2 {
+  font-size: 1.6rem;
+}
+
+body {
+  /* Moving to GitHub-style system font use */
+  // font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Jost", Helvetica, Arial, sans-serif;
+  margin-bottom: .5em;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.8em;
+  padding-top: 30px;
+  text-transform: initial;
+}
+
+h2 {
+  font-size: 1.6em;
+}
+
+h3 {
+  font-size: 1.3em;
+}
+
+h4 {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+h5 {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+legend {
+  font-size: 1rem;
+}
+
+.comment {
+  margin-left: 1em;
+  color: #777;
+  font-style: italic;
+}
+
+
+/* Header and header nav */
+#accept-cookie-banner {
+  display: flex;
+  flex-direction: row;
+  background-color: #aaa;
+  font-size: 0.9rem;
+  border-color: #999 !important;
+  border-radius: 0 !important;
+  margin-bottom: 1px !important;
+  line-height: 22px !important;
+  padding: 8px 15px !important;
+  align-items: center;
+
+  .cookie-message {
+    width: 100%;
+    margin-right: 1rem;
+    color: #000;
+  }
+
+  .non-essential-cookies-label {
+    min-width: 10rem;
+  }
+
+  .btn-close {
+    padding: 10px 20px !important;
+  }
+
+  .btn {
+    text-decoration: none;
+    min-width: 8rem !important;
+    margin-right: 1rem !important;
+  }
+
+}
+
+.nav-link,
+.navbar {
+  padding: .5rem 1rem;
+}
+
+.navbar-dark {
+  border-top: none !important;
+
+  .navbar-nav {
+    .nav-link {
+      &.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}
+
+
+.navbar-brand {
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+
+.navbar-brand img {
+  max-height: 1.5em;
+}
+
+.nav-item {
+  font-size: .9em
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+  color: #AAA !important;
+}
+
+
+/* 404 page */
+
+#page-404 {
+  min-height: 90vh;
+
+  .nothing-here-background {
+    width: 100%;
+    min-height: 300px;
+    background-image: linear-gradient(-45deg, #16276A, #4A5FAF);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+
+    .nothing-here-text {
+      color: #fff;
+      font-size: 2rem;
+      margin-top: 2rem;
+      font-family: monospace;
+
+      mark {
+        background-color: #ffffff;
+        opacity: 0.8;
+      }
+    }
+
+  }
+
+  .image-attribution {
+    margin-top: 0;
+    padding-top: 0.5rem;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .main-404-message {
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #e7e7e7;
+    min-height: 15rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 1rem;
+
+
+    .message-wrapper {
+      h1 {
+        margin-top: 0;
+        padding-top: 0;
+      }
+
+      max-width: 40rem;
+      text-align: center;
+    }
+  }
+
+}
+
+
+@media (min-width: 1400px) {
+  #page-404 {
+    .nothing-here-background {
+      align-items: flex-end;
+
+      .nothing-here-text {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+}
+
+
+
+/* Info bar. Appears beneath main nav, in catalog under hero, etc. Holds buttons a comment or two. */
+.info-bar-wrapper {
+  border-top: 1px dotted #888;
+  border-bottom: 1px dotted #888;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .info-bar {
+    padding: 0.5rem 0 0.5rem 1rem;
+    min-height: 3.0em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0;
+
+    a {
+      text-decoration: none;
+    }
+
+    .page-title {
+      font-size: 1em;
+    }
+
+    .page-description {
+      font-weight: normal;
+      color: #777;
+    }
+  }
+}
+
+/* Footer */
+
+#footer-site-map-wrapper {
+
+  #footer-site-map-show-hide-btn {
+    padding: 0.2rem 0;
+  }
+
+  border-top: 1px solid #aaa;
+  background-color: #ddd;
+
+  footer {
+    background-color: #e9e9e9;
+    color: #000;
+    line-height: 1.625 !important;
+    font-style: normal !important;
+
+    .kn-logo {
+      margin-top: 0.8rem;
+      height: 60px;
+    }
+
+    .kn-background {
+      margin-top: 1rem;
+      color: #333;
+      font-size: 16px;
+      font-weight: 300;
+    }
+
+    .kn-copyright {
+      margin-top: 20px;
+      color: #333;
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.625;
+    }
+
+    p {
+      font-style: normal;
+      font-weight: 300;
+      font-size: 16px;
+      color: #333;
+    }
+
+    h1 {
+      text-transform: uppercase;
+      margin: 10px 0 10px;
+      padding: 0 0 5px;
+      font-size: 1em;
+      color: #000;
+      text-align: left;
+      border-bottom: 1px dotted #777;
+    }
+
+    .kn-site-map {
+      color: #000;
+    }
+
+    .kn-site-map nav {
+
+      ul {
+        list-style-image: none;
+        margin-left: 0;
+        padding-left: 10px;
+      }
+
+      h2 {
+        text-transform: uppercase;
+        margin-top: 20px;
+        font-size: 1em;
+        color: #000;
+        text-align: left;
+      }
+
+    }
+
+    .kn-site-map li {
+      font-weight: 400 !important;
+      list-style: none;
+      margin: 0;
+    }
+
+    .kn-site-map li a {
+      font: inherit;
+      text-decoration: none;
+      transition: all 0.1s linear 0s;
+    }
+
+    .kn-site-map a:link {
+      color: #333;
+    }
+
+    .kn-site-map a:hover,
+    .kn-site-map a:active {
+      color: #000;
+    }
+
+    .kn-site-map a:visited {
+      color: #333;
+    }
+
+    .kn-newsletter-form label {
+      font-style: normal;
+    }
+
+    .kn-newsletter-form input {
+      font-style: normal;
+    }
+
+    .kn-nav-note {
+      margin-top: 30px;
+      max-width: 250px;
+    }
+
+    .nih-logo {
+      max-width: 250px;
+    }
+
+    .kn-logo-footer {
+      max-width: 260px;
+    }
+
+    .read-more {
+      color: #000;
+      text-decoration: none;
+    }
+
+    .newsletter-column {
+      margin-bottom: 6em;
+
+      a {
+        color: #000 !important;
+        text-decoration: none;
+        border-bottom: 1px dotted #777;
+      }
+    }
+  }
+}
+
+.kn-copyright-for-print {
+  display: none;
+}
+
+.marketing-page,
+.account-page,
+.help-page {
+  margin-top: 1.5em;
+  margin-bottom: 4em;
+}
+
+/* A simple white box to put an alert in, centered. */
+.alert-wrapper {
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border: 1px dotted #ccc;
+  padding: 1em;
+  margin: 2em 0;
+  min-height: 10rem;
+
+  .alert {
+    margin: 0;
+  }
+}
+
+
+/* no-items box ... for when there are no items */
+.no-items-box {
+  background: #ffffff66;
+  border: 1px dotted #e1e1e1;
+  margin-bottom: 1rem;
+  min-height: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+.no-items {
+  min-height: 4rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.messages {
+  background-color: #f1f1f1;
+  margin: 0;
+
+  .alert {
+    margin: 1em 0;
+  }
+}
+
+thead {
+  tr {
+    background-color: #f1f1f1;
+  }
+}
+
+
+/* LOG IN AND OUT */
+.login-container,
+.logout-container,
+.account-container {
+  border: 1px solid #f1f1f1;
+  border-radius: 5px;
+  background-color: #fff;
+  margin: 2rem 0 5rem;
+
+  .header {
+    border-bottom: 1px dotted #ccc;
+    padding: 1rem;
+    font-weight: bold;
+  }
+
+  .contents {
+    padding: 1rem;
+  }
+
+
+}
+
+
+.informal-callout {
+
+  padding: 1rem;
+  border: 1px solid #eee;
+  background: #fcfcfc;
+
+  .header {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+  }
+}
+
+
+/* User pages */
+.user-profile {
+  margin: 2em 0;
+}
+
+/* User and User Profile */
+/* TODO: Should probs move to separate sass or css */
+
+.user-profile {
+  form {
+    max-width: 900px;
+    border: 1px solid #eee;
+    padding: 2em;
+    border-radius: 5px;
+  }
+}
+
+
+/* Ribbon for coming soon */
+.ribbon-wrapper {
+  width: 85px;
+  height: 88px;
+  overflow: hidden;
+  position: absolute;
+  top: -3px;
+  right: -3px
+}
+
+.ribbon {
+  font-size: 12px;
+  color: #FFF;
+  text-transform: uppercase;
+  font-family: 'Montserrat Bold', Helvetica, Arial, sans-serif;
+  letter-spacing: .05em;
+  line-height: 15px;
+  text-align: center;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .4);
+  transform: rotate(45deg);
+  position: relative;
+  padding: 7px 0;
+  right: -11px;
+  top: 10px;
+  width: 100px;
+  height: 28px;
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .3);
+  box-shadow: 0 0 3px rgba(0, 0, 0, .3);
+  background-color: #dedede;
+  background-image: linear-gradient(to bottom, #ffffff 45%, #dedede 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffdedede', GradientType=0)
+}
+
+.ribbon:before,
+.ribbon:after {
+  content: "";
+  border-top: 3px solid #9e9e9e;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  position: absolute;
+  bottom: -3px
+}
+
+.ribbon:before {
+  left: 0
+}
+
+.ribbon:after {
+  right: 0
+}
+
+.ribbon.red {
+  background-color: #bc1a3a;
+  background-image: linear-gradient(to bottom, #a61733 45%, #bc1a3a 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa61733', endColorstr='#ffbc1a3a', GradientType=0)
+}
+
+.ribbon.red:before,
+.ribbon.red:after {
+  border-top: 3px solid #8f142c
+}
+
+.draft-message {
+  background-color: #bc1a3a;
+  border: 1px solid #bc1a3a;
+  border-radius: 5px;
+  color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+}
+
+.course-search {
+  h1 {
+    margin: 2rem 0 0;
+  }
+
+  .results-count {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  mark {
+    background-color: #ffbc00;
+  }
+
+  .search-title {
+    margin-bottom: 1rem;
+
+    h1 {
+      margin-top: 0.5rem;
+    }
+  }
+
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .search-result {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    border: 1px dotted #e1e1e1;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .result-unit {
+    font-weight: bold;
+  }
+
+  .result-text {
+    margin: 1rem;
+  }
+
+  .step-controls {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
+
+  .step-links {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .step-links .btn {
+    margin: 0.5rem 1rem;
+    min-width: 6rem;
+  }
+}
+
+
+.btn-standard {
+  min-width: 120px;
+}
+
+
+.node-marker {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 0.2rem;
+  padding: 0.1rem 0.4rem;
+  margin-right: 0.5rem;
+  height: 1.7rem;
+  min-width: 3rem;
+  text-align: center;
+
+  .marker-id {
+    color: #777;
+  }
+}
+
+.node-label {
+  flex-grow: 1;
+}
+
+.page-subhead {
+  border-bottom: 1px dotted #AAA;
+  padding-bottom: 0.5rem;
+  margin: 1.5rem 0 1rem 1rem;
+
+  h2 {
+    font-size: 1.8rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+
+  #accept-cookie-banner {
+    flex-direction: column;
+
+    .btn {
+      margin-bottom: 1rem;
+    }
+
+    .cookie-message {
+      margin-bottom: 1rem;
+    }
+
+    .non-essential-cookies-label {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+
+/* ~~~~~~~~~~~~~~~~~~~ */
+/* HTMx default styles */
+/* ~~~~~~~~~~~~~~~~~~~ */
+
+/*
+  We use the loading-states extension.
+  This style hides by default.
+*/
+.my-htmx-indicator {
+  display: none;
+}
+
+.htmx-request .my-htmx-indicator {
+  display: inline;
+}
+
+.htmx-request.my-htmx-indicator {
+  display: inline;
+}
+
+.htmx-request .hide-on-htmx-request {
+  display: none;
+}
+
+.htmx-request.hide-on-htmx-request {
+  display: none;
+}

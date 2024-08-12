@@ -1,0 +1,217 @@
+{% load static i18n core_tags waffle_tags %}
+
+<header>
+
+    {% if hide_accept_cookie_banner %}
+        {% comment %}
+        This is a page where we *always* hide the tracker alert,
+        e.g. the cookie config page
+        {% endcomment %}
+    {% else %}
+
+        {% include 'includes/hx/accept_cookie_banner.html' %}
+
+    {% endif %}
+
+    {% comment %}
+    Hide the main nav when user is 1) viewing a course and 2) has toggled the hide nav.
+    {% endcomment %}
+    <nav id="site-top-nav"
+         class="navbar navbar-expand-xl navbar-dark bg-dark {% if current_course_tab and request.session.hide_main_nav %}d-none{% endif %}">
+
+        {% if current_course_tab %}
+            <div data-bs-toggle="tooltip"
+                 data-bs-placement="bottom"
+                 title="Hide main navigation">
+                <a id="btnHideTopNav" class="btn">
+                    <i class="bi bi-caret-up-fill" style="color:#fff"></i>
+                </a>
+            </div>
+        {% endif %}
+
+        <a class="navbar-brand" href="{% url 'marketing:home' %}">{% site_name %}</a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link {% if section == "catalog" %}active{% endif %}"
+                       href="{% url 'catalog:index' %}">{% trans "Course Catalog" %}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if section == "news" %}active{% endif %}"
+                       href="{% url 'news:news-list' %}">{% trans "News" %}</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       id="resourcesNavbarDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">{% trans "Resources" %}</a>
+
+                    <div class="dropdown-menu dropdown-menu-left"
+                         aria-labelledby="resourcesNavbarDropdown">
+
+                        {% switch "LEARNING_LIBRARY" %}
+                        <a class="dropdown-item {% if section == 'learning_library' %}active{% endif %}"
+                           href="{% url 'learning_library:index' %}">{% trans "Learning Library" %}</a>
+                        {% endswitch %}
+
+                    </div>
+
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                    href="#"
+                    id="aboutNavbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">{% trans "About" %}</a>
+                    <div class="dropdown-menu dropdown-menu-left"
+                        aria-labelledby="aboutNavbarDropdown">
+                        <a class="dropdown-item" href="{% url 'marketing:get_started' %}">Get Started</a>
+                        <a class="dropdown-item" href="{% url 'marketing:about' %}">About {% site_name %}</a>
+                        <a class="dropdown-item" href="{% url 'speakers:speakers-list' %}">{% trans "Course Speakers" %}</a>
+                        <a class="dropdown-item" href="{% url 'help:main' %}">{% trans "Help" %}</a>
+                        <a class="dropdown-item" href="{% url 'marketing:faq' %}">{% trans "FAQ" %}</a>
+                        <a class="dropdown-item" href="{% url 'marketing:customize_cookies' %}">{% trans "Cookies" %}</a>
+                        <a class="dropdown-item" href="{% url 'marketing:contact' %}">{% trans "Support / Contact Us" %}</a>
+                    </div>
+                </li>
+
+                {# Uncomment the nav item below if you want to add some links to    #}
+                {# other sites in your learning community...                        #}
+
+                {% comment %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="sclCommunityNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% trans "Community" %}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="sclCommunityNavbarDropdown">
+                            <a class="dropdown-item" href="#" target="_blank">
+                                {% trans "Some community link" %}
+                            </a>
+                        </div>
+
+                        </li>
+                {% endcomment %}
+
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link  {% if section == "dashboard" %}active{% endif %}"
+                        href="{% url 'dashboard:index' %}">{% trans "My Dashboard" %}</a>
+                    </li>
+                    {% if forum_url %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ forum_url }}">{% trans "Forum" %}</a>
+                        </li>
+                    {% endif %}
+                    {% if request.user.is_superuser or request.user.is_staff %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if section == "management" %}active{% endif %}"
+                            href="#"
+                            id="managementNavbarDropdown"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">{% trans "Management" %}</a>
+                            <div class="dropdown-menu" aria-labelledby="managementNavbarDropdown">
+                                {% if request.user.is_superuser %}
+
+                                    <a class="dropdown-item" href="{% url 'management:index' %}">{% trans "Management Overview" %}</a>
+
+                                    <h6 class="dropdown-header mt-3">Site:</h6>
+
+                                    <a class="dropdown-item" href="{% url 'management:site_profile' %}">{% trans "Site Profile" %}</a>
+
+                                    <a class="dropdown-item" href="{% url 'management:site_features' %}">{% trans "Site Features" %}</a>
+
+                                    <a class="dropdown-item" href="{% url 'management:courses_list' %}">{% trans "Course management" %}</a>
+
+                                    <a class="dropdown-item" href="{% url 'management:students_manage' %}">{% trans "Student management" %}</a>
+
+                                    <h6 class="dropdown-header mt-3">Providers:</h6>
+
+                                    <a class="dropdown-item" href="{% url 'management:forum_provider' %}">{% trans "Forum provider" %}</a>
+                                    <a class="dropdown-item"
+                                    href="{% url 'management:email_automation_provider' %}">
+                                        {% trans "Email automation provider" %}
+                                    </a>
+                                    <a class="dropdown-item" href="{% url 'management:badge_provider' %}">{% trans "Badge provider" %}</a>
+                                    <a class="dropdown-item"
+                                    href="{% url 'management:survey_provider_list' %}">{% trans "Survey providers" %}</a>
+                                    <a class="dropdown-item"
+                                    href="{% url 'management:external_tool_provider_list' %}">
+                                        {% trans "External tool providers" %}
+                                    </a>
+
+                                {% endif %}
+                            </div>
+                        </li>
+
+                    {% endif %}
+
+                    {% if request.user.is_staff or request.user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if section == "composer" %}active{% endif %}"
+                            target="_blank"
+                            href="{% url 'composer:home' %}">{% trans "Composer" %}</a>
+                        </li>
+                    {% endif %}
+
+
+                    <!-- USER ACCOUNT LINKS -->
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link dropdown-toggle {% if section == "user_account" %}active{% endif %}"
+                        href="#"
+                        id="userMenuNavbarDropdown"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> {{ request.user.username }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end"
+                            aria-labelledby="userMenuNavbarDropdown">
+                            <a class="dropdown-item" href="{% url 'users:detail' request.user.id %}">{% trans "My Profile" %}</a>
+                            <a class="dropdown-item"
+                            href="{% url 'users:settings' request.user.id %}">{% trans "My Settings" %}</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        {# URL provided by django-allauth/account/urls.py #}
+                        <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        {# URL provided by django-allauth/account/urls.py #}
+                        <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>

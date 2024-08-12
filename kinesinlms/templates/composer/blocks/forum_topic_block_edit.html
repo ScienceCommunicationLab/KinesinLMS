@@ -1,0 +1,55 @@
+{% load static i18n %}
+{% load crispy_forms_filters %}
+{% load core_tags %}
+
+<div class="card-body bg-primary" style="--bs-bg-opacity: .1;">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form|crispy }}
+</div>
+
+<div style="margin: 2rem">
+    <p>Discourse topic linked to this block:</p>
+    <ol class="list-group list-group-numbered" style="max-width:600px;">
+        {% if block.forum_topic %}
+            <div class="list-group-item d-flex flex-column align-items-start">
+                <div class="d-flex flex-row align-items-center w-100">
+                    <div class="fw-bold ms-2 me-auto">Discourse Link</div>
+                    <div style="margin-left: 5rem;">
+                        <a href="/admin/discourse/discoursetopic/{{ block.forum_topic.id }}/change/"
+                           target="_blank"
+                           class="btn btn-light">Admin Edit</a>
+                    </div>
+                </div>
+                <div class="w-100" style="margin-top:1rem;">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>Topic Slug</td>
+                            <td>{{ block.forum_topic.topic_slug|show_none_for_none }}</td>
+                        </tr>
+                        <tr>
+                            <td>Topic ID</td>
+                            <td>{{ block.forum_topic.topic_id |show_none_for_none }}</td>
+                        </tr>
+                        {% if block.forum_topic.forum_subcategory %}
+                            <tr>
+                                <td>Subcategory type</td>
+                                <td>{{ block.forum_topic.forum_subcategory.subcategory_slug |show_none_for_none }}</td>
+                            </tr>
+                            <tr>
+                                <td>Subcategory ID</td>
+                                <td>{{ block.forum_topic.forum_subcategory.subcategory_id |show_none_for_none }}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td>Subcategory</td>
+                                <td>( No linked Discourse subcategory )</td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+
+            </div>
+        {% endif %}
+    </ol>
+</div>

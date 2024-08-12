@@ -1,0 +1,38 @@
+{% extends "composer/composer_base.html" %}
+
+{% block main_content %}
+    <div class="container-fluid" style="margin-bottom:10rem;">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-row justify-content-between align-items-end mb-2">
+                    <div class="d-flex flex-column justify-content-start">
+                        <h1 class="composer-page-header">Course Surveys</h1>
+                        <p>
+                            Course surveys are surveys created in an external survey provider. Use this section to link those surveys to KinesinLMS so that you can include them in this course.
+                        </p>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        {% if not survey_providers_exist %}
+                            <div class="alert alert-warning me-3">
+                                You must have a <a href="{% url 'management:survey_provider_list' %}" target="_blank">survey provider</a> defined to add course surveys.
+                            </div>
+                        {% endif %}
+                        <div>
+                            <a href="{% url 'composer:course_survey_create' course_id=course.id %}"
+                               class="btn btn-primary mb-2 {% if not survey_providers_exist %}disabled{% endif %}">Add Course Survey</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    {% include 'composer/surveys/hx/course_surveys_table.html' %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock main_content %}

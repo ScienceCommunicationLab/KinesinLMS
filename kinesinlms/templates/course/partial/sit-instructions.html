@@ -1,0 +1,37 @@
+<div class="block-embedded-content">
+
+    <div class="row">
+        <div class="col-12 col-xl-9">
+            <div class="accordion" id="sit-instructions-accordian-{{ block.simple_interactive_tool.id }}">
+                <div class="accordion-item">
+                    <h2 class="accordion-header"
+                        style="margin-top:0;"
+                        id="heading-sit-instructions-accordian-{{ block.simple_interactive_tool.id }}">
+                        <button class="accordion-button"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapse-sit-instructions-accordian-{{ block.simple_interactive_tool.id }}"
+                                aria-expanded="true"
+                                aria-controls="collapse-sit-instructions-accordian-{{ block.simple_interactive_tool.id }}">
+                            {% if block.simple_interactive_tool.tool_type == "TABLETOOL" %}
+                                Table
+                            {% elif block.simple_interactive_tool.tool_type == "DIAGRAM" %}
+                                Diagram
+                            {% endif %}
+                            Instructions
+                        </button>
+                    </h2>
+                    <div id="collapse-sit-instructions-accordian-{{ block.simple_interactive_tool.id }}"
+                         class="accordion-collapse collapse show"
+                         aria-labelledby="heading-sit-instructions-accordian-{{ block.simple_interactive_tool.id }}"
+                         data-bs-parent="#sit-instructions-accordian-{{ block.simple_interactive_tool.id }}">
+                        <div class="accordion-body">
+                            {{ block.simple_interactive_tool.instructions | safe }}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+{% load core_tags %}
+{% analytics_cookie_value request as analytics_cookie %}
+{% if analytics_cookie or hide_accept_cookie_banner %}
+    {% comment %} If user made a cookie selection, analytics_cookie has a value of ACCEPT or REJECT {% endcomment %}
+    {% comment %} So nothing to show, user already made a choice {% endcomment %}
+{% else %}
+    <div id="accept-cookie-banner"
+         class="alert alert-dark alert-dismissible mb-0 cookie-alert" role="alert">
+        <div class="cookie-message">
+            This website uses a small number of cookies to function properly. To find out more, see our <a
+                href="{% url 'marketing:privacy_policy' %}">privacy policy</a>.
+        </div>
+
+        <div class="non-essential-cookies-label">
+            Non-essential cookies:
+        </div>
+
+        <a hx-get="{% url 'marketing:toggle_non_essential_cookies_hx' %}?action=accept&control=accept_cookie_banner"
+           hx-target="#accept-cookie-banner"
+           hx-swap="outerHTML"
+           class="btn btn-sm btn-secondary">
+            Accept
+        </a>
+
+        <a hx-get="{% url 'marketing:toggle_non_essential_cookies_hx' %}?action=reject&control=accept_cookie_banner"
+           hx-target="#accept-cookie-banner"
+           hx-swap="outerHTML"
+           class="btn btn-sm btn-secondary">
+            Reject
+        </a>
+
+        <a href="{% url 'marketing:customize_cookies' %}"
+           class="btn btn-sm btn-outline-dark">
+            Customize
+        </a>
+    </div>
+{% endif %}

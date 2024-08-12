@@ -1,0 +1,3 @@
+
+
+OAUTH_LTI_TOOL_PLATFORM_NAME = "KinesinLMS LTI Tool Platform"

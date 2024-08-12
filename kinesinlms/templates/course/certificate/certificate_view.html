@@ -1,0 +1,79 @@
+{% extends "course/course_base_default_page.html" %}
+
+{% load static i18n %}
+
+
+
+{% block sidebar %}<!-- Don't show sidebar on certificate page -->{% endblock %}
+
+{% block course_sub_nav %}
+    <div class="course-subnav-label" style="flex-grow:1">
+        {% if not certificate %}
+            {% blocktrans %}Your certificate for completing this course will appear here.{% endblocktrans %}
+        {% endif %}
+    </div>
+    <div></div>
+{% endblock %}
+
+{% block page_content %}
+
+    <div class="course-certificate-page">
+
+        {% if certificate %}
+            <div class="certificate-download no-print">
+                <div class="download-message">
+                    {% blocktrans trimmed %}
+                        Congratulations! This is your certificate for completing this course.
+                        <br />
+                        You can print this page directly or click the download button to download a PDF.
+                    {% endblocktrans %}
+                </div>
+                <div class="download-button">
+                    <a class="btn btn-primary btn-sm"
+                       href="{% url 'course:certificate_download' course_slug=course.slug course_run=course.run %}">
+                        <i class="bi bi-file-earmark-arrow-down"></i>&nbsp;
+                        {% blocktrans %}Download&nbsp;Certificate PDF{% endblocktrans %}
+                    </a>
+                </div>
+
+            </div>
+
+            {% if custom_certificate_template %}
+
+                {% include custom_certificate_template %}
+
+            {% else %}
+
+                {% include 'course/certificate/certificate_default.html' %}
+
+            {% endif %}
+
+        {% else %}
+
+            <div class="container certificate-unachieved">
+
+                <div class="unachieved-content">
+                    {% blocktrans trimmed %}
+                        You haven't earned a certificate yet, but you're not far away!
+                        <br />
+                        Check the "Progress" tab to see what tasks remain.
+                    {% endblocktrans %}
+                </div>
+
+                <div class="certificate-placeholder">
+                    <img alt="Image of a generic certificate"
+                         src="{% static 'images/icons/certificate-placeholder.svg' %}" />
+                </div>
+
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+{% endblock page_content %}
+
+{% block unit_controls_bottom %}
+    <!-- no course controls -->
+{% endblock unit_controls_bottom %}

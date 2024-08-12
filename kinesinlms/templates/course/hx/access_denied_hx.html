@@ -1,0 +1,29 @@
+{% load tz i18n %}
+
+<style>
+  .denied-message {
+    width: 100%;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+</style>
+<div class="denied-message">
+    <div>
+        <h1>The course "{{ display_name }}" is not available.</h1>
+        {% if denied_message %}
+            <p>{{ denied_message }}</p>
+        {% else %}
+            <p>
+                {% blocktranslate %}
+                    You might not be enrolled, or it might not have started yet.<br />
+                    Visit the course <a href="{{ about_page_url }}">course about page</a>
+                    to enroll and check the start date and time.
+                {% endblocktranslate %}
+            </p>
+        {% endif %}
+    </div>
+</div>

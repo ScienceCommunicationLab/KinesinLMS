@@ -1,0 +1,67 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+{% load static i18n %}
+{% load crispy_forms_tags %}
+
+{% block main_content %}
+
+    {{ block.super }}
+
+    <div class="container-fluid composer-content course">
+        <div class="row mt-4" >
+            <div class="col-12 col-lg-8">
+                <form action="{% url 'composer:course_email_automations_settings_edit' pk=course.id %}"
+                      method="post">
+                    <div class="card">
+                        <div class="card-header">Course Email Automations</div>
+                        <div class="card-body">
+                            {% csrf_token %}
+                            {% crispy form %}
+                        </div>
+                        <div class="card-footer">
+                            <div class="action-buttons">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-lg-3">
+                {% blocktrans %}
+                Control which tracking events are sent as tags to the email automation service.
+                {% endblocktrans %}
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+      function toggleSendEventAsTag() {
+        const activeField = document.getElementById("id_active");
+        const sendEventAsTagFields = document.querySelectorAll('[id^="id_send_event_as_tag"]');
+
+        if (activeField.checked) {
+          sendEventAsTagFields.forEach(field => {
+            field.classList.remove("disabled");
+            field.classList.add("enabled");
+            field.removeAttribute("disabled");
+          });
+        } else {
+          sendEventAsTagFields.forEach(field => {
+            field.classList.remove("enabled");
+            field.classList.add("disabled");
+            field.checked = false;
+            field.setAttribute("disabled", "true");
+          });
+        }
+      }
+
+      // Call the function on page load
+      toggleSendEventAsTag();
+
+      // Bind the function to the change event of the active field
+      document.getElementById("id_active").addEventListener("change", toggleSendEventAsTag);
+    </script>
+
+{% endblock main_content %}

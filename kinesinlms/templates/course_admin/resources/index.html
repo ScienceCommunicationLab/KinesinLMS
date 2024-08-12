@@ -1,0 +1,20 @@
+{% extends "course_admin/course_admin_base.html" %}
+
+{% comment %}
+This template lists out all the different resources that are available for a course, in one grid.
+The idea is it's everything an educator might want to reference or use, in one place.
+{% endcomment %}
+
+{% load static %}
+
+{% load tz %}
+
+{% block course_admin_content %}
+
+    {% include "course_admin/partial/basic_resources.html" %}
+
+    {% include "course_admin/partial/educator_course_resources_grid.html" %}
+
+    {% include "course_admin/partial/course_resources_grid.html" %}
+
+{% endblock course_admin_content %}

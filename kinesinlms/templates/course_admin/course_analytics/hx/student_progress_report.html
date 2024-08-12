@@ -1,0 +1,23 @@
+
+{% if student_progress_report and student_progress_report.task_result and student_progress_report.task_result != "UNGENERATED" %}
+
+    {% if student_progress_report.task_result == "COMPLETE" %}
+
+        {% include 'course_admin/course_analytics/partial/complete.html' %}
+
+    {% elif student_progress_report.task_result == "IN_PROGRESS" %}
+
+        {% include 'course_admin/course_analytics/partial/in_progress.html' %}
+
+    {% elif student_progress_report.task_result == "FAILED" %}
+
+        {% include 'course_admin/course_analytics/partial/failed.html' %}
+
+    {% endif %}
+
+{% else %}
+
+    {% include 'course_admin/course_analytics/partial/generate_box.html' %}
+
+{% endif %}
+

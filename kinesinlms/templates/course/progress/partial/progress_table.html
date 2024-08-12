@@ -1,0 +1,97 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th scope="col">Status</th>
+        <th scope="col" style="min-width: 300px;">Milestone</th>
+        <th scope="col">Description</th>
+        <th scope="col" style="text-align: right;">Number<br/>Required</th>
+        <th scope="col" style="text-align: right;">Number<br/>Completed</th>
+        <th scope="col" style="text-align: right;">Score<br/>Required</th>
+        <th scope="col" style="text-align: right;">Score<br/>Achieved</th>
+        {% if badges_enabled and show_badge_fields %}
+          <th scope="col">Awards Badge</th>
+        {% endif %}
+        <th scope="col">Achievement&nbsp;Date</th>
+        {% if badges_enabled and show_badge_fields %}
+          <th scope="col">Badge</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+      {% for milestone in milestones %}
+          <tr>
+              <td style="text-align: center;">
+                  {% if milestone.progress.achieved %}
+                      <i class="bi bi-check-square milestone-check"
+                         data-bs-toggle="tooltip"
+                         data-bs-placement="top"
+                         title="You've achieved this milestone!"></i>
+                  {% else %}
+                      {% if course.has_finished %}
+                          <i class="bi bi-x"
+                             data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             title="Incomplete"></i>
+                      {% else %}
+                          <i class="bi bi-three-dots"
+                             data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             title="In progress..."></i>
+                      {% endif %}
+                  {% endif %}
+              </td>
+              <td>{{ milestone.name }}</td>
+              <td style="width:100%;">{{ milestone.description }}</td>
+              <td style="text-align: right">
+                  {% if milestone.count_requirement %}
+                    {{ milestone.count_requirement }}
+                  {% else %}
+                      --
+                  {% endif %}
+              </td>
+              <td style="text-align: right">
+                  {% if milestone.count_requirement %}
+                    {{ milestone.progress.count }}
+                  {% else %}
+                      --
+                  {% endif %}
+              </td>
+              <td style="text-align: right">
+                  {% if milestone.min_score_requirement %}
+                    {{ milestone.min_score_requirement }}
+                  {% else %}
+                      --
+                  {% endif %}
+              </td>
+              <td style="text-align: right">
+                  {% if milestone.min_score_requirement %}
+                    {{ milestone.progress.total_score }}
+                  {% else %}
+                      --
+                  {% endif %}
+              </td>
+              {% if badges_enabled and show_badge_fields %}
+                <td>
+                    {% if milestone.awards_badge %}Yes{% else %}No{% endif %}
+                </td>
+              {% endif %}
+              <td>
+                  {% if milestone.progress.achieved %}
+                      {{ milestone.progress.achieved_date | date }}
+                  {% else %}
+                      --
+                  {% endif %}
+              </td>
+              {% if badges_enabled and show_badge_fields %}
+                <td>
+                    {% if milestone.badge_class %}
+
+                    {% else %}
+                        --
+                    {% endif %}
+                </td>
+              {% endif %}
+          </tr>
+      {% endfor %}
+  </tbody>
+</table>

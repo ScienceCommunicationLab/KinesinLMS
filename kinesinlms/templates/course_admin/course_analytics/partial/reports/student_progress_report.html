@@ -1,0 +1,134 @@
+<table class="table table-bordered table-responsive table-striped">
+    <thead>
+    <tr style="background: #d6d6d6; border-color:#b9b9b9;">
+        <th>
+            <i class="bi bi-award-fill"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               data-bs-html=true
+               title="Passed"
+            ></i>
+
+        </th>
+        <th>Student</th>
+        <th style="min-width:120px;">Activity</th>
+        {% for module_info in student_progress_report.modules_info %}
+            <th>
+                <div>
+                    Mod. {{ module_info.content_index|default_if_none:"" }}
+                </div>
+            </th>
+        {% endfor %}
+    </tr>
+    <tr style="background: #dfdfdf; border-color:#d3d3d3;">
+        <th colspan="3"></th>
+        {% for module_info in student_progress_report.modules_info %}
+            <th style="vertical-align: top; font-size: 0.9rem; font-weight: normal;">
+                {{ module_info.display_name }}
+            </th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% if student_progress_report.students_modules_progresses %}
+        {% for smsp in student_progress_report.students_modules_progresses %}
+            <tr>
+            <td>
+                {% if smsp.has_passed %}
+                    <i class="bi bi-award-fill"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="top"
+                       data-bs-html=true
+                       title="Passed"></i>
+                {% endif %}
+            </td>
+            <td>
+                {{ smsp.username }}
+                <br/>
+                <span class="text-muted">{{ smsp.email|default_if_none:"" }}</span>
+
+            </td>
+            <td>
+                <div class="d-flex flex-column">
+                    <div class="event-box">
+                        <span class="text-black-50">Units</span>
+                    </div>
+                    <div class="event-box">
+                        <span class="text-black-50">Videos</span>
+                    </div>
+                    <div class="event-box">
+                        <span class="text-black-50">Assessments</span>
+                    </div>
+                    {% if course.has_sits %}
+                        <div class="event-box">
+                            <span class="text-black-50">SITs</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </td>
+            {% for module_progress in smsp.modules_progress %}
+                <td>
+                    <div class="d-flex flex-column">
+                        <div class="event-box"
+                             data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             data-bs-html=true
+                             title="Module {{ module_progress.module_info.content_index }}<br/>{{ module_progress.units_viewed }} / {{ module_progress.total_units_in_module }} unit views">
+                            {% include 'course_admin/course_analytics/partial/svg_bar.html' with bar_color=bar_colors.units percent_complete=module_progress.units_viewed_percent_complete total_items=module_progress.total_units_in_module %}
+                        </div>
+                        <div class="event-box"
+                             data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             data-bs-html=true
+                             title="Module {{ module_progress.module_info.content_index }}<br/>{{ module_progress.watched_videos }} / {{ module_progress.total_videos_in_module }} videos">
+                            {% include 'course_admin/course_analytics/partial/svg_bar.html' with bar_color=bar_colors.videos percent_complete=module_progress.videos_percent_complete total_items=module_progress.total_videos_in_module %}
+                        </div>
+                        <div class="event-box"
+                             data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             data-bs-html=true
+                             title="Module {{ module_progress.module_info.content_index }}<br/>{{ module_progress.answered_assessments }} / {{ module_progress.total_assessments_in_module }} assessments">
+                            {% include 'course_admin/course_analytics/partial/svg_bar.html' with bar_color=bar_colors.assessments percent_complete=module_progress.assessments_percent_complete total_items=module_progress.total_assessments_in_module %}
+                        </div>
+                        {% if course.has_sits %}
+                            <div class="event-box"
+                                 data-bs-toggle="tooltip"
+                                 data-bs-placement="top"
+                                 data-bs-html=true
+                                 title="Module {{ module_progress.module_info.content_index }}<br/>{{ module_progress.answered_sits }} / {{ module_progress.total_sits_in_module }} simple interactive tools">
+                                {% include 'course_admin/course_analytics/partial/svg_bar.html' with bar_color=bar_colors.sits percent_complete=module_progress.sits_percent_complete total_items=module_progress.total_sits_in_module %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </td>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="20" style="text-align:center;vertical-align: middle; height:5rem;">
+                {% if student_progress_report.cohort %}
+                    ( No students yet in this cohort )
+                {% else %}
+                    {% if request.user.is_superuser or request.user.is_staff %}
+                        No students yet in any cohorts <br/>
+                        <span class="text-muted">( Note: staff and 'test' user accounts are not shown )</span>
+                    {% else %}
+                        ( No students yet in any of the cohorts you have access to. )
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+
+<script>
+    htmx.onLoad(function (content) {
+        try {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        } catch (e) {
+            console.error("Could not init bootstrap tooltips.")
+        }
+    })
+</script>

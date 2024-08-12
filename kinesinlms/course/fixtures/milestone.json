@@ -1,0 +1,92 @@
+[
+  {
+    "model": "course.milestone",
+    "pk": null,
+    "fields": {
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z",
+      "course": 3,
+      "slug": "half_assessments",
+      "name": "Half of LE assessments",
+      "description": "Students must answer half of all assessments to pass this course.",
+      "type": "CORRECT_ANSWERS",
+      "count_requirement": 17,
+      "required_to_pass": true
+    }
+  },
+  {
+    "model": "course.milestone",
+    "pk": null,
+    "fields": {
+      "created_at": "2019-10-24T02:03:32.390Z",
+      "updated_at": "2019-11-04T01:43:03.968Z",
+      "course": 3,
+      "slug": null,
+      "name": "ALL LE videos",
+      "description": "Watch all the videos in the course.",
+      "type": "VIDEO_PLAYS",
+      "count_requirement": 34,
+      "required_to_pass": false
+    }
+  },
+  {
+    "model": "course.milestone",
+    "pk": null,
+    "fields": {
+      "created_at": "2019-11-04T01:41:56.453Z",
+      "updated_at": "2019-11-04T01:42:54.776Z",
+      "course": 1,
+      "slug": "all_videos",
+      "name": "All PYSJ videos",
+      "description": "Watch all the videos in PYSJ.",
+      "type": "VIDEO_PLAYS",
+      "count_requirement": 40,
+      "required_to_pass": false
+    }
+  },
+  {
+    "model": "course.milestone",
+    "pk": null,
+    "fields": {
+      "created_at": "2019-11-04T01:42:19.743Z",
+      "updated_at": "2019-11-04T01:42:36.816Z",
+      "course": 2,
+      "slug": "all_videos",
+      "name": "All BCLS Videos",
+      "description": "Watch all the videos in BCLS.",
+      "type": "VIDEO_PLAYS",
+      "count_requirement": 40,
+      "required_to_pass": false
+    }
+  },
+  {
+    "model": "course.milestone",
+    "pk": null,
+    "fields": {
+      "created_at": "2019-11-04T01:46:50.113Z",
+      "updated_at": "2019-11-04T02:51:49.064Z",
+      "course": 1,
+      "slug": "half_assessments",
+      "name": "Half of PYSJ assessments",
+      "description": "Answer half of PYSJ assessments",
+      "type": "CORRECT_ANSWERS",
+      "count_requirement": 21,
+      "required_to_pass": true
+    }
+  },
+  {
+    "model": "course.milestone",
+    "pk": null,
+    "fields": {
+      "created_at": "2019-11-04T02:53:22.970Z",
+      "updated_at": "2019-11-04T02:53:22.970Z",
+      "course": 1,
+      "slug": "all_assessments",
+      "name": "All PYSJ assessments",
+      "description": "",
+      "type": "CORRECT_ANSWERS",
+      "count_requirement": 40,
+      "required_to_pass": false
+    }
+  }
+]

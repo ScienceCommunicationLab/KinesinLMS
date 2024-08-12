@@ -1,0 +1,103 @@
+### Site metadata ###
+
+site_name: KinesinLMS Documentation
+site_description: KinesinLMS, a simple, effective, easy-to-grok, Learning Management System for the overworked developer.
+site_url: https://kinesinelms.github.io/
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.footer
+
+plugins:
+  - search
+  - print-site
+
+extra_css:
+  - styles/extra.css
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+
+nav:
+  - 'Home': 'index.md'
+
+  - 'Overview':
+      - 'Introduction': 'overview/introduction.md'
+      - 'Quick Start': 'overview/quick_start.md'
+      - 'Guiding Principles': 'overview/guiding_principles.md'
+      - 'Acknowledgements': 'overview/acknowledgements_and_attributions.md'
+
+  - 'Development':
+      - 'Overview': 'development/installation_overview.md'
+      - 'Local Setup': 'development/local_setup.md'
+      - 'Running Tests': 'development/running_tests.md'
+
+  - 'Architecture':
+      - 'Architecture Overview': 'architecture/architecture_overview.md'
+      - 'Database': 'architecture/database.md'
+      - 'Environment Variables': 'architecture/env_variables.md'
+      - 'API': 'architecture/api.md'
+      - 'Testing': 'architecture/testing.md'
+      - 'Styles': 'architecture/styles.md'
+      - 'Email': 'architecture/email.md'
+      - 'HTML Content Tags': 'architecture/html_content_tags.md'
+
+  - 'Courses':
+      - 'Courses Overview': 'course/course_overview.md'
+      - 'Blocks': 'course/blocks.md'
+      - 'Block Resources': 'course/block_resources.md'
+
+  - 'Groups and Permissions':
+      - 'Overview': 'groups_and_permissions/overview.md'
+
+  - 'Forum':
+      - 'Overview': 'forum/forum_overview.md'
+      - 'Production Setup & Integration': 'forum/provider_integration.md'
+      - 'Local Setup': 'forum/local_setup.md'
+      - 'Connecting Forum': 'forum/connecting_to_forum_service.md'
+      - 'Forum Models': 'forum/forum_models.md'
+
+  - 'Badges':
+      - 'Badges Overview': 'badges/badges_overview.md'
+      - 'Badge Provider Integration': 'badges/provider_integration.md'
+      - 'Creating Badge Classes': 'badges/creating_badge_classes.md'
+
+  - 'Surveys':
+      - 'Surveys Overview': 'surveys/surveys_overview.md'
+      - 'Survey Providers': 'surveys/survey_providers.md'
+      - 'Survey Integration': 'surveys/survey_integration.md'
+
+  - 'Email':
+      - 'System Emails': 'email/system_emails.md'
+      - 'Email Automation Overview': 'email/email_automation_overview.md'
+      - 'Email Automation Provider Integration': 'email/provider_integration.md'
+
+  - 'Deployment':
+      - 'Overview': 'deployment/overview.md'
+      - 'Heroku': 'deployment/heroku.md'
+      - 'Sentry': 'deployment/sentry.md'
+
+  - 'Marketing':
+      - 'Overivew': 'marketing/marketing_overview.md'
+      - 'Testimonials': 'marketing/testimonials.md'
+
+  - 'Course Authoring Guide':
+      - 'Authoring Overview': 'course_authoring_guide/course_authoring_guide_overview.md'
+      - 'Creating a Course': 'course_authoring_guide/creating_a_course.md'
+      - 'Course Contents':  'course_authoring_guide/course_contents.md'
+      - 'Using Template Tags': 'course_authoring_guide/using_template_tags.md'
+      - 'Course Milestones':  'course_authoring_guide/course_milestones.md'
+      - 'Course Badges':  'course_authoring_guide/course_badges.md'
+      - 'Course Forum':  'course_authoring_guide/course_forum.md'
+      - 'Course Surveys':  'course_authoring_guide/course_surveys.md'
+
+  - 'About':
+      - 'License': 'license.md'
+      - 'Release Notes': 'release_notes.md'
+      - 'Contributing': 'contributing.md'

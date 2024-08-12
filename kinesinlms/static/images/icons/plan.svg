@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="197px" height="217px" viewBox="0 0 197 217" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>plan</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" fill-rule="nonzero">
+            <rect id="Rectangle" stroke="#767474" stroke-width="4" fill="#FDF8F8" x="2" y="16" width="170" height="199"></rect>
+            <rect id="Rectangle" stroke="#F8DE1C" stroke-width="3" x="81.5" y="1.5" width="13" height="11"></rect>
+            <rect id="Rectangle" stroke="#EAD42D" fill="#F8DE1C" x="59.5" y="8.5" width="56" height="15"></rect>
+            <rect id="Rectangle" fill="#767474" x="186" y="30" width="11" height="105"></rect>
+            <rect id="Rectangle" stroke="#979797" fill="#D8A476" transform="translate(191.500000, 24.500000) scale(1, -1) translate(-191.500000, -24.500000) " x="186.5" y="20.5" width="10" height="8"></rect>
+            <rect id="Rectangle" fill="#10C3B9" x="21" y="50" width="39" height="33"></rect>
+            <rect id="Rectangle" stroke="#979797" fill="#FF595E" x="97.5" y="99.5" width="38" height="32"></rect>
+            <rect id="Rectangle" stroke="#979797" fill="#FBD545" x="40.5" y="157.5" width="38" height="32"></rect>
+            <polygon id="Triangle" stroke="#979797" fill="#D8D8D8" transform="translate(191.500000, 142.000000) scale(1, -1) translate(-191.500000, -142.000000) " points="191.5 135 196 149 187 149"></polygon>
+            <polyline id="Path" stroke="#979797" points="60 68.911499 116 68.911499 116 99"></polyline>
+            <polyline id="Path-2" stroke="#979797" points="97 117.644287 60 117.644287 60 157"></polyline>
+        </g>
+    </g>
+</svg>

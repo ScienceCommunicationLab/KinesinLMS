@@ -1,0 +1,52 @@
+{% extends "course_admin/course_admin_base.html" %}
+
+{% load static %}
+
+{% load tz %}
+
+{% block course_admin_content %}
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"
+         style="min-height:800px">
+
+        <div class="col">
+            <div class="card">
+                <div class="card-header">Student Register</div>
+                <div class="card-body" style="min-height: 10rem;">View currently enrolled students.</div>
+                <div class="card-footer text-end">
+                    <a href="{% url 'course:course_admin:course_enrollment:enrolled_students_list' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-primary">View Students</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <div class="card-header">Manually Enroll Students</div>
+                <div class="card-body" style="min-height: 10rem;">
+                    You can manually enroll a group of students via their emails or usernames.
+                    As part of this process, you can include emails of students not yet registered -- this will create "Invited" students.
+                </div>
+                <div class="card-footer text-end">
+                    <a href="{% url 'course:course_admin:course_enrollment:manual_enrollment' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-primary">Enroll Students</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <div class="card-header">View Invited Students</div>
+                <div class="card-body" style="min-height: 10rem;">
+                    View invited users that were created via manual enrollments in the past.
+                </div>
+                <div class="card-footer text-end">
+                    <a href="{% url 'course:course_admin:course_enrollment:invited_users' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-primary">View Invited Students</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "course_admin/course_admin_base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block course_admin_content %}
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"
+         style="min-height:800px;">
+
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Delete Submitted Answers
+                </div>
+                <div class="card-body"
+                     style="min-height: 10rem;">
+                    Delete answers submitted to assessments in this course
+                    so that they can be re-submitted by students.
+                </div>
+                <div class="card-footer text-end">
+                    <a href="{% url 'course:course_admin:delete_submitted_answers' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-primary">
+                       Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Re-score Assessments
+                </div>
+                <div class="card-body"
+                     style="min-height: 10rem;">
+                    Re-score answers submitted to assessments in this course
+                    to take into account any changes made to the assessments since they were answered.
+                </div>
+                <div class="card-footer text-end">
+                    <a href="{% url 'course:course_admin:rescore_submitted_answers' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-primary">
+                        Rescore
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

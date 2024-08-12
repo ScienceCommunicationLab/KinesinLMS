@@ -1,0 +1,77 @@
+{% load tz %}
+<div class="catalog-action-buttons d-flex">
+    {% comment %}
+    The user authenticated but is not enrolled so decide
+    here what options to show them...
+    {% endcomment %}
+
+    {% if user_can_enroll %}
+        <a href="{% url 'catalog:enroll' course_run=course.run course_slug=course.slug %}"
+           id="enroll_btn"
+           type="submit"
+           class="btn btn-primary">
+            Enroll
+        </a>
+        {% if not course_description.course.enrollment_has_started %}
+            {% if user.is_superuser %}
+                <div class="comment">
+                    Enrollment is not officially open (
+                    starts {{ course_description.course.enrollment_start_date | utc }} UTC ) but you are a "superuser"
+                    so you can enroll now.
+                </div>
+            {% elif user.is_staff %}
+                <div class="comment">
+                    Enrollment is not open until ( starts {{ course_description.course.enrollment_start_date | utc }}
+                    UTC ) but you are "staff" so you can enroll now.
+                </div>
+            {% else %}
+                <div class="comment">
+                    {% comment %}
+                    TODO: create 'is_beta_tester' flag and show appropriate message.
+                    {% endcomment %}
+                    Enrollment is not open until {{ course_description.course.enrollment_start_date | utc }} UTC but
+                    your user has permission to enroll now.
+                </div>
+            {% endif %}
+        {% endif %}
+
+    {% else %}
+
+        {% comment %}
+        User can't enroll.
+        Let's tell them why....
+        {% endcomment %}
+
+        {% if course_description.course.enrollment_has_started %}
+
+            {% comment %}
+            Enrollment has started but user doesn't have
+            permission to enroll.
+            {% endcomment %}
+
+            <div class="comment">
+                You don't have permission to enroll in this course.
+            </div>
+
+        {% else %}
+
+            {% comment %}
+            Enrollment has not started and user is not in the
+            beta-testers list (otherwise user_can_enroll would be true).
+            {% endcomment %}
+
+            <button type="submit" class="btn btn-light " disabled>Enroll</button>
+            <div class="comment">
+                Coming soon!&nbsp;&nbsp;Enrollment starts :&nbsp;
+                {% timezone 'US/Pacific' %}
+                    {{ course_description.course.enrollment_start_date|localtime|date:"M d, Y P e" }}
+                {% endtimezone %}
+                <i class="bi b-globe"
+                   data-bs-title="{{ course_description.course.enrollment_start_date|utc|date:"M d, Y H:i e" }}"
+                   data-bs-toggle="tooltip"></i>
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+</div>

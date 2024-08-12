@@ -1,0 +1,51 @@
+{% extends "management/management_base.html" %}
+{% load static i18n management_tags %}
+
+{% load crispy_forms_filters %}
+
+{% block management_content %}
+
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    {% trans "Badge Provider" %}
+                </div>
+                <div class="card-body">
+                    <form id="badge-provider-form"
+                          novalidate
+                          action="{% url 'management:badge_provider' %}"
+                          method="post">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+
+                        <button id="id_save_btn"
+                                class="btn btn-primary btn-lg mr-2"
+                                type="submit">
+                            {% trans "Save" %}
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4 mt-4 mt-lg-0 ">
+            <strong>Managing the Badge Provider</strong>
+            <p>
+                A Badge Provider is a third-party service that provides
+                an API for creating badge classes and badge assertions.
+            </p>
+            <p>
+                At the moment, we only support Badgr as a badge provider.
+            </p>
+            <p>
+                Define the properties of your Badgr account here, including your
+                Badgr API key and the URL of your Badgr instance. You can then
+                create badge classes and badge assertions for a particular course from
+                Composer.
+            </p>
+        </div>
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,80 @@
+{% comment %}
+Shows a small control to test whether a service API can be reached.
+This control should be generic enough to work for all services.
+
+To use this component, these variables must be defined in the context:
+
+- api_credentials_exist: True if the user has entered the required credentials to enable this test.
+- api_connect_results: A dictionary with the results of the API connection test.
+- test_api_htmx_url: The URL to an htmx view that tests the API connection for the target service.
+
+{% endcomment %}
+
+<div id="api-connection-test"
+     class="d-flex flex-row alert alert-light p-2 "
+     style="border: 1px dotted #ccc; border-radius: 0.5rem;"
+     data-loading-states>
+
+    <div class="api-connection-test-status w-100 justify-content-start d-flex flex-row align-items-center">
+
+        <div id="api-connection-test-spinner"
+             class="my-htmx-indicator ">
+            <div class="d-flex flex-row align-items-center">
+                <div class="spinner-border"
+                     role="status">
+                </div>
+                <div class="ms-3">Checking API...</div>
+            </div>
+        </div>
+
+        {% if api_connect_results %}
+            <div id="api-connection-test-result"
+                 class="hide-on-htmx-request">
+                {% if api_connect_results.can_connect %}
+                    <div class="text-success">
+                        <i class="bi bi-check-square"></i>
+                        The API is connected.
+                    </div>
+                {% else %}
+                    <div class="text-danger d-flex flex-column justify-content-center">
+                        <div class="mt-1 mb-1">
+                            <i class="bi bi-exclamation-square me-3"></i>
+                            Error connecting to the API.
+                        </div>
+                        {% if api_connect_results.error %}
+                        <div class="alert alert-secondary text-muted mt-3">
+                            <strong>Error:</strong> {{ api_connect_results.error }}
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div id="api-connection-test-login d-flex flex-row just-content-start align-items-center"
+                 class="hide-on-htmx-request">
+                {% if api_credentials_exist %}
+                    <div class="text-muted">
+                        Click test to see if you can connect to your provider's API.
+                    </div>
+                {% else %}
+                    <div class="text-muted">
+                        Entered the required credentials to enable this test.
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
+
+    <div>
+        <a hx-get="{{ test_api_htmx_url }}"
+           hx-target="#api-connection-test"
+           hx-indicator="#api-connection-test"
+           hx-swap="outerHTML"
+           class="btn btn-success"
+           {% if api_key_exists == False %}disabled{% endif %}
+           id="api-connection-test">
+            Test&nbsp;{% if api_connect_results %}Again{% endif %}
+        </a>
+    </div>
+</div>

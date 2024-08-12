@@ -1,0 +1,89 @@
+{% extends "course/progress/course_progress_base.html" %}
+
+{% load static %}
+
+{% load tz i18n %}
+
+{% block course_progress_content %}
+
+    <div id="module-progress">
+        <div class="row">
+            <div class="col-12 col-lg-3 d-print-none">
+
+                <div class="mt-2 mb-2">
+                    <h3>Modules</h3>
+                </div>
+
+                <div class="list-group">
+                    {% for module_node in course_nav.children %}
+                        {% if module_node.content_index >= 0 %}
+                            <a href="{% url 'course:module_progress_detail_page' course_slug=course.slug course_run=course.run module_id=module_node.id %}"
+                               class="list-group-item list-group-item-action {% if module_node.id == current_module_node_id %}active{% endif %}"
+                               aria-current="true">
+                                <div class="d-flex flex-row">
+                                    <div class="node-marker">
+                                        <span class="marker-id ">{{ module_node.content_index |default_if_none:"" }}</span>
+                                    </div>
+                                    <div class="node-label">{{ module_node.display_name }}</div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <div class="col-12 col-lg-9 module-details" style="margin-bottom:20rem;">
+
+                <div class="mb-2">
+                    <h3>
+                        Module Progress
+                        {% if current_module_node %}
+                            :
+                            {% if current_module_node.content_index %}
+                                <span class="marker-id ">{{ current_module_node.content_index }}</span>.
+                            {% endif %}
+                            {{ current_module_node.display_name }}
+                        {% endif %}
+                    </h3>
+                </div>
+
+                <div class="d-none d-print-block pb-3">User: {{ request.user.name }}</div>
+
+                <div class="module-progress-detail">
+                    {% if current_module_node %}
+
+                        {% if progress_status.has_data %}
+
+                            {% for milestone in progress_status.milestones %}
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        {% include 'course/progress/partial/milestone_progress.html' %}
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="d-flex flex-column justify-content-center align-items-center flex-grow-1">
+                                <div class="no-items-box">
+                                    <div class="no-items">{% blocktrans %}( No activities in this module ){% endblocktrans %}</div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% else %}
+
+                        <div class="d-flex flex-column align-items-center justify-content-center w-100"
+                             style="min-height:500px">
+                            <div class="alert alert-secondary">( Click a module name to see detailed progress. )</div>
+                        </div>
+
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock course_progress_content %}

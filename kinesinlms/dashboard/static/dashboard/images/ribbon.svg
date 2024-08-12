@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="109px" viewBox="0 0 64 109" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>Untitled</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ribbon" fill-rule="nonzero">
+            <path d="M42.3,35.8 L21.5,35.8 L4.76457737,0.435717753 C6.97104328,0.435717753 26.1725841,0.435717753 26.1725841,0.435717753 L31.9,14.4 L42.3,35.8 Z" id="Shape" fill="#F1543F"></path>
+            <g id="Group" transform="translate(0.000000, 33.000000)">
+                <path d="M42.4,9.7 L21.4,9.7 C19,9.7 17,7.7 17,5.3 C17,2.9 19,0.9 21.4,0.9 L42.4,0.9 C44.8,0.9 46.8,2.9 46.8,5.3 C46.8,7.8 44.8,9.7 42.4,9.7 Z M21.4,2.9 C20,2.9 18.9,4 18.9,5.4 C18.9,6.8 20,7.9 21.4,7.9 L42.4,7.9 C43.8,7.9 44.9,6.8 44.9,5.4 C44.9,4 43.8,2.9 42.4,2.9 L21.4,2.9 Z" id="Shape" fill="#FFD05B"></path>
+                <path d="M31.9,14.5 C30,14.5 28.5,13 28.5,11.1 L28.5,8.7 C28.5,6.8 30,5.3 31.9,5.3 C33.8,5.3 35.3,6.8 35.3,8.7 L35.3,11.1 C35.3,12.9 33.8,14.5 31.9,14.5 Z" id="Shape" fill="#F9B54C"></path>
+                <circle id="Oval" fill="#FFD05B" cx="32" cy="42.9" r="31.1"></circle>
+                <circle id="Oval" fill="#F9B54C" cx="32" cy="42.9" r="21.6"></circle>
+                <circle id="Oval" fill="#FFD05B" cx="32" cy="43.9" r="20.6"></circle>
+                <polygon id="Shape" fill="#F9B54C" points="32 28.4 36.4 37.3 46.4 38.8 39.2 45.8 40.9 55.7 32 51 23.1 55.7 24.8 45.8 17.6 38.8 27.6 37.3"></polygon>
+            </g>
+            <path d="M59.1928212,0.685302535 L42.4,35.8 L21.6,35.8 L32,14.4 L40.3,0.685302535 C47.1655637,0.685302535 52.7314749,0.685302535 59.1928212,0.685302535 Z" id="Shape" fill="#FF7058"></path>
+        </g>
+    </g>
+</svg>

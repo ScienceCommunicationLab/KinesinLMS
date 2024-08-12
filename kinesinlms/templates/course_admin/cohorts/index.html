@@ -1,0 +1,327 @@
+{% extends "course_admin/course_admin_base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block course_admin_content %}
+
+    <style>
+
+        .cohort-loading-htmx-indicator {
+            display: none;
+            position: relative;
+        }
+
+        .loading-indicator-wrapper {
+            display: flex;
+            position: absolute;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 3rem;
+            min-height: 500px;
+            width: 100%;
+        }
+
+        .indicator {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border: 1px dotted #999;
+        }
+
+
+        .htmx-request .cohort-loading-htmx-indicator {
+            display: flex;
+        }
+
+        .htmx-request.cohort-loading-htmx-indicator {
+            display: flex;
+        }
+
+
+    </style>
+
+
+    <script>
+
+        let currentCohortID = null;
+        let currentStudentDraggedElement = null;
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function onCohortDragEnter(event) {
+
+            const targetCohortID = event.currentTarget.dataset.cohortId;
+            if (!targetCohortID) {
+                return;
+            }
+            let oldCohortID = currentStudentDraggedElement.dataset.cohortId;
+            if (targetCohortID === oldCohortID) {
+                event.currentTarget.classList.add('drop-not-ok-indicator')
+                return;
+            }
+
+            // Ok to drag over...
+            event.preventDefault();
+
+            // Update UI to let user know drop is ok...
+            event.dataTransfer.dropEffect = "move";
+            event.currentTarget.classList.add('drop-ok-indicator')
+
+        }
+
+        function onCohortDragOver(event) {
+
+            const targetCohortID = event.currentTarget.dataset.cohortId;
+            if (!targetCohortID) {
+                return;
+            }
+            let oldCohortID = currentStudentDraggedElement.dataset.cohortId;
+            if (targetCohortID === oldCohortID) {
+                event.currentTarget.classList.add('drop-not-ok-indicator')
+                return;
+            }
+
+            // Ok to drag over...
+            event.preventDefault();
+
+            // Update UI to let user know drop is ok...
+            event.dataTransfer.dropEffect = "move";
+            event.currentTarget.classList.add('drop-ok-indicator')
+
+        }
+
+        function onCohortDragLeave(event) {
+            event.currentTarget.classList.remove('drop-ok-indicator')
+            event.currentTarget.classList.remove('drop-not-ok-indicator')
+        }
+
+        function onCohortDrop(event) {
+
+            const studentID = currentStudentDraggedElement.dataset.studentId;
+
+            let oldCohortID = currentStudentDraggedElement.dataset.cohortId;
+            const targetCohortID = event.currentTarget.dataset.cohortId;
+            if (!oldCohortID || !targetCohortID) {
+                return;
+            }
+            // Don't allow drag drop on currently selected cohort
+            if (targetCohortID === oldCohortID) {
+                return;
+            }
+
+            // Ok to drag drop...
+            event.preventDefault();
+            event.dataTransfer.dropEffect = "move";
+
+            // Add student by calling an _hx route. This will update
+            // the cohort item in the list (for number of students, etc.)
+            // as well as ask the students list to refresh.
+            const addStudentToCohortURL = `/courses/{{course.slug}}/{{course.run}}/course_admin/cohorts/${targetCohortID}/students/add/${studentID}/`;
+            const context = {
+                target: `#cohort-item-${targetCohortID}`,
+                swap: 'outerHTML'
+            }
+            htmx.ajax('GET', addStudentToCohortURL, context)
+                .then(() => {
+
+                    // Add listeners to new Cohort item
+                    const targetCohort = document.getElementById(`cohort-item-${targetCohortID}`)
+                    if (targetCohort) {
+                        setupCohortItem(targetCohort);
+                    }
+
+                    // Remove student from list
+                    const studentListItem = document.getElementById(`list-item-student-${studentID}`);
+                    if (studentListItem) {
+                        studentListItem.parentElement.removeChild(studentListItem);
+                    }
+
+                    // Update old cohort
+                    const oldCohortURL = `/courses/{{course.slug}}/{{course.run}}/course_admin/cohorts/${oldCohortID}/`;
+                    const context = {
+                        target: `#cohort-item-${oldCohortID}`,
+                        swap: 'outerHTML'
+                    }
+                    htmx.ajax('GET', oldCohortURL, context)
+                        .then(() => {
+                            // Add listeners to refreshed old cohort item
+                            const oldCohortElem = document.getElementById(`cohort-item-${oldCohortID}`)
+                            if (oldCohortElem) {
+                                setupCohortItem(oldCohortElem);
+                            }
+                        })
+
+                })
+                .catch(function (err) {
+                    // If there's an error, refresh the student list to add back
+                    // in the student that we removed as part of the drag finishing.
+                    window.alert(`Could not move student: ${err}`)
+                });
+
+            //cleanup
+            event.currentTarget.classList.remove('drop-ok-indicator')
+            event.currentTarget.classList.remove('drop-not-ok-indicator')
+        }
+
+        function onCohortDragEnd(event) {
+            currentStudentDraggedElement = null;
+        }
+
+        function onCohortClick(event) {
+            currentCohortID = event.currentTarget.dataset.cohortId;
+        }
+
+        function deleteCohort(event) {
+            const cohortID = event.currentTarget.dataset.cohortId;
+            if (cohortID) {
+                const confirm = window.confirm("Delete this cohort? (Students in this cohort will be reassigned to the DEFAULT cohort.)");
+                if (confirm) {
+                    window.location = `{% url 'course:course_admin:cohorts:index' course_run=course.run course_slug=course.slug %}${cohortID}/delete`;
+                }
+            }
+        }
+
+        function studentDragStart(event) {
+            event.dataTransfer.effectAllowed = "move";
+            currentStudentDraggedElement = event.currentTarget;
+        }
+
+        function setupStudentListElements() {
+            // look up all elements with the select class on it within the element
+            const studentsListGroupElem = document.getElementById('students-list-group');
+            if (studentsListGroupElem) {
+                const elems = studentsListGroupElem.getElementsByClassName('student-list-item');
+                if (elems) {
+                    for (let elem of elems) {
+                        elem.addEventListener("dragstart", studentDragStart);
+                    }
+                }
+            }
+        }
+
+        function setupCohortItem(elem) {
+            elem.addEventListener("dragenter", onCohortDragEnter);
+            elem.addEventListener("dragover", onCohortDragOver);
+            elem.addEventListener("dragleave", onCohortDragLeave);
+            elem.addEventListener("dragend", onCohortDragEnd);
+            elem.addEventListener("drop", onCohortDrop);
+        }
+
+        function setupDeleteButton() {
+            const deleteBtn = document.getElementById("btn-delete-cohort");
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', deleteCohort);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Set up Cohort items
+            const cohortItemElems = document.getElementsByClassName('cohort-item');
+            if (cohortItemElems) {
+                for (let elem of cohortItemElems) {
+                    setupCohortItem(elem);
+                }
+            }
+
+            // Set up special Toast for this page (to work with HTMx)
+            htmx.on("moveStudentToNewCohortMessage", (e) => {
+                const toastElement = document.getElementById("htmx-cohort-student-toast")
+                toastElement.style.display = "block";
+                const toastBody = document.getElementById("toast-body")
+                const toast = new bootstrap.Toast(toastElement, {delay: 2000})
+                toastBody.innerText = e.detail.value
+                toast.show()
+            })
+
+            setupStudentListElements();
+            setupDeleteButton();
+
+        });
+
+
+        document.body.addEventListener('htmx:load', (event) => {
+                if (event.detail.elt.id === "student-list-title-bar") {
+                    setupStudentListElements();
+                    setupDeleteButton();
+                }
+            }
+        )
+
+
+    </script>
+
+
+    <div class="row">
+
+        <div class="col col-6 " style="min-height:600px; margin-bottom: 5rem;">
+            <div class="d-flex flex-row align-items-center" style="min-height: 2.8rem;">
+                Select a cohort to see membership.
+            </div>
+            <div id="cohorts-list">
+                <div class="control-bar flex-row justify-content-end">
+                    <div class="pt-1">
+                        <a href="{% url 'course:course_admin:cohorts:cohort_create' course_run=course.run course_slug=course.slug %}"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="top"
+                           title="Create new cohort"
+                           class="btn btn-primary me-2">
+                            <i class="bi bi-plus-circle"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="list-group" id="cohorts-list-tab">
+                    {% for cohort in cohorts %}
+                        {% include 'course_admin/cohorts/hx/cohort_list_item.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col col-6" style="margin-bottom: 8rem;">
+            <div id="cohort-loading-indicator" class="cohort-loading-htmx-indicator">
+                <div class="loading-indicator-wrapper">
+                    <div class="indicator">
+                        <div class="spinner-border me-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Loading...
+                    </div>
+
+                </div>
+            </div>
+            <div id="cohort-detail">
+                {% if selected_cohort %}
+                    {% include 'course_admin/cohorts/hx/cohort_detail.html' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast to show student moves -->
+    <div class="position-fixed top-0 end-0 p-3"
+         style="z-index: 9999">
+        <div id="htmx-cohort-student-toast"
+             class="toast align-items-center text-white bg-primary border-0 mt-3"
+             role="alert"
+             aria-live="assertive"
+             aria-atomic="true">
+            <div class="d-flex">
+                <div id="toast-body" class="toast-body"></div>
+                <button type="button"
+                        class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock course_admin_content %}

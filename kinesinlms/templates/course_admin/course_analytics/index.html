@@ -1,0 +1,137 @@
+{% extends "course_admin/course_admin_base.html" %}
+{% load static %}
+{% load tz %}
+
+
+{% block title_bar_controls %}
+    <div class="d-flex flex-row">
+        <div class="navbar-text me-2">Cohort:</div>
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle btn btn-outline-secondary"
+                   href="#"
+                   role="button"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                                        <span style="min-width: 10rem;">
+                                    {% if current_cohort %}
+                                        {{ current_cohort.name }}
+                                    {% else %}
+                                        ( all cohorts )
+                                    {% endif %}
+                                        </span>
+                </a>
+                <ul class="dropdown-menu">
+                    {% if alllowed_all_cohorts %}
+                        {% if not current_cohort %}
+                            <li>
+                                <a class="dropdown-item disabled">
+                                    ( all cohorts )
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{% url 'course:course_admin:course_analytics:index' course_run=course.run course_slug=course.slug %}">
+                                    ( all cohorts )
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+
+                    {% for cohort in cohorts %}
+                        <li>
+                            {% if cohort == current_cohort %}
+                                <a class="dropdown-item disabled"> {{ cohort.name }}</a>
+                            {% else %}
+                                <a class="dropdown-item"
+                                   href="{% url 'course:course_admin:course_analytics:index' course_run=course.run course_slug=course.slug %}?cohort_id={{ cohort.id }}">
+                                    {{ cohort.name }}
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+{% endblock %}
+
+
+{% block course_admin_content %}
+
+    <style>
+        .card-footer {
+            min-height: 3.45rem
+        }
+    </style>
+
+
+    <div class="row mt-4 mb-4">
+        <div class="col col-12 ">
+            <div class="card">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                    <div>Course Engagement <span class="text-muted">( last 90 days )</span></div>
+                    <a {% if current_cohort %}
+                        href="{% url 'course:course_admin:course_analytics:student_cohort_progress' course_run=course.run course_slug=course.slug cohort_id=current_cohort.id %}"
+                    {% else %}
+                        href="{% url 'course:course_admin:course_analytics:student_progress' course_run=course.run course_slug=course.slug %}"
+                    {% endif %}
+                        class="btn btn-primary">
+                        View Engagement Details
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div>
+                        {% include 'charts/basic_chart.html' with basic_chart=engagement_chart %}
+                    </div>
+                </div>
+                <div class="card-footer d-flex flex-row align-items-center">
+                    <span class="text-sm text-muted">Staff users and 'test' users are not shown.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom:10rem;">
+
+        <div class="col col-6 ">
+            <div class="card">
+                <div class="card-header">
+                    Enrollments <span class="text-muted">( last 90 days )</span>
+                </div>
+                <div class="card-body">
+                    <div style="min-height:200px">
+                        {% include 'charts/basic_chart.html' with basic_chart=enrollments_chart %}
+                    </div>
+                </div>
+                <div class="card-footer d-flex flex-row align-items-center">
+                    <span class="text-sm text-muted">Staff users and 'test' users are not shown.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col col-6 ">
+            <div class="card">
+                <div class="card-header">
+                    Course Passed <span class="text-muted">( last 90 days )</span>
+                </div>
+                <div class="card-body">
+                    <div style="min-height:200px">
+                        {% include 'charts/basic_chart.html' with basic_chart=course_passed_chart %}
+                    </div>
+                </div>
+                <div class="card-footer d-flex flex-row align-items-center">
+                    <span class="text-sm text-muted">Staff users and 'test' users are not shown.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock course_admin_content %}

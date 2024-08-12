@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static i18n core_tags %}
+
+{% block main_content %}
+
+    <div class="container marketing-page">
+
+        <h2> {% site_name %} Terms of Service</h2>
+
+        <p>This website is provided as a public service to promote science. It welcomes anyone willing to join us in
+            this pursuit.</p>
+
+        <p>You are encouraged to take as many courses on this site as you wish for free, and to share what you
+            learn with others both online and offline according to the Creative Commons copyright we assign to each
+            course's material and the site itself.</p>
+
+        <p>Anyone 15 and over can take courses on this website.</p>
+
+        <p>We are seeking to build a mature online community. Please be aware, when commenting on this
+            website or related channels, that we will remove:</p>
+
+        <ul>
+            <li>content promoting pseudo-science, conspiracy theories, zealotry, proselytizing, self-promotion,
+                product-hawking, and new-age fluff.
+            </li>
+            <li>content written in speak, all-caps, or otherwise lazy grammar.</li>
+            <li>content using joke names or non-names.</li>
+            <li>disrespectful, distasteful, unconstructive, or illegal content.</li>
+        </ul>
+
+        <p>If you are under the age of 15, you may not take courses on our website.</p>
+
+        <p>If you act disrespectfully, disruptively or illegally on this site or our related channels, we reserve
+            the right to block your access for further commenting.</p>
+
+        <h2>Privacy Policy</h2>
+
+        <p>Before you continue using our website we advise you to read our <a
+                href="{% url 'marketing:privacy_policy' %}" target="_blank">privacy
+            policy</a>
+            regarding our user data collection. It will help you better understand our practices.</p>
+
+    </div>
+
+{% endblock main_content %}

@@ -1,0 +1,25 @@
+<form class="form-inline d-print-none"
+      action="{% url 'course:course_search_page' course_run=course.run course_slug=course.slug %}"
+      method="get">
+    <div class="form-group w-100">
+        <div class="input-group w-100 align-items-center">
+            {% if search_again %}
+                <div class="me-2">Search again:</div>
+            {% endif %}
+            <input class="form-control"
+                   name="search_text"
+                   type="text"
+                   value="{{ current_search_text }}"
+                   maxlength="100"
+                   placeholder="Search this course..."
+                   aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn ms-2"
+                        aria-label="Search course"
+                        type="submit">
+                    <i class="bi bi-search" style="color:#777;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

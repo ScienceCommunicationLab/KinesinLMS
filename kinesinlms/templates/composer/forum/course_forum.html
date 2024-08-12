@@ -1,0 +1,196 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% load crispy_forms_filters %}
+
+{% block extra_css %}
+    <style>
+      .forum-item-status {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+{% endblock extra_css %}
+{% block main_content %}
+    {{ block.super }}
+    <div class="container-fluid" style="min-height:800px;">
+        <div class="row">
+            <div class="col-12">
+                <div>
+                    <h1 class="composer-page-header">{% blocktrans %}Manage External Course Forum{% endblocktrans %}</h1>
+                    <p>
+                        {% blocktrans trimmed %}
+                            Use this page to manage the connection between this course and a remote forum provider. For
+                            a course's forum topics to appear in the remote forum, you must first set up the correct
+                            groups and then categories in the forum for this course (always groups before categories).
+                            This usually happens automatically when you create a course, but if for some reason these
+                            things are not set up then, you can do so manually here.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom:300px;">
+            <div class="col-12">
+                <div class="card main-card">
+                    <div class="card-header">Course Forum</div>
+                    <div class="card-body">
+                        {% if show_configure_all_btn %}
+                            <div class="d-flex flex-row justify-content-end">
+                                <a href="#" class="btn btn-primary mb-2">Configure All</a>
+                            </div>
+                        {% endif %}
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Component</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if forum_provider and forum_provider.active %}
+                                    <tr>
+                                        <td style="width:30rem;">
+                                            <strong>{% blocktrans %}Forum Provider{% endblocktrans %}</strong>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-row">
+                                                <i class="bi bi-check-square text-success me-2"></i> {% blocktrans %}
+                                            Configured{% endblocktrans %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>{% blocktrans %}Course Forum Group{% endblocktrans %}</strong>
+                                            <div class="text-muted">
+                                                {% blocktrans %}
+                                                A group must be set up in the remote forum to hold students from
+                                                this course.
+                                            {% endblocktrans %}
+                                            </div>
+                                        </td>
+                                        <td>
+
+                                            {% include "composer/forum/forum_item_status/course_forum_group_status.html" %}
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>{% blocktrans %}DEFAULT Cohort Forum Group{% endblocktrans %}</strong>
+                                            <div class="text-muted">
+                                                {% blocktranslate trimmed %}
+                                                    A group must be set up in the remote forum to hold students from the
+                                                    DEFAULT cohort in this course.
+                                                {% endblocktranslate %}
+                                            </div>
+                                            <td>
+
+                                                {% include "composer/forum/forum_item_status/default_cohort_forum_group_status.html" %}
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>{% blocktrans %}Course Forum Category{% endblocktrans %}</strong>
+                                                <div class="text-muted">
+                                                    {% blocktranslate trimmed %}
+                                                        Every course that wants to include forum topics needs a category to
+                                                        be set up in the remote forum. Click the "Create Category" to set up a
+                                                        category for this course in the remote forum.
+                                                    {% endblocktranslate %}
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                {% include "composer/forum/forum_item_status/course_forum_category_status.html" %}
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>{% blocktrans %}DEFAULT Cohort Forum
+                                            Subcategory{% endblocktrans %}</strong>
+                                                <div class="text-muted">
+                                                    {% blocktranslate trimmed %}
+                                                        Every cohort in a course gets a copy of the forum topic in the
+                                                        remote forum. And since every course has a DEFAULT cohort, we need to
+                                                        set up a subcategory in the forum for the DEFAULT cohort.
+                                                    {% endblocktranslate %}
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                {% include "composer/forum/forum_item_status/default_cohort_forum_subcategory_status.html" %}
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>{% blocktrans %}Cohort Groups{% endblocktrans %}</strong>
+                                            </td>
+                                            <td>
+                                                <p>Re-sync the remote forum cohort groups with the course cohorts.</p>
+                                                <a href="#" class="btn btn-success mt-2 mb-2">Sync Forum Cohort Groups</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>{% blocktrans %}Forum Topics{% endblocktrans %}</strong>
+                                            </td>
+                                            <td>
+                                                <p>Re-sync the remote forum topics with the topics defined in the course.</p>
+                                                <p class="text-muted">
+                                                    This ensures that remote topics reflect the current set of
+                                                    topics and have the same title and description.
+                                                </p>
+                                                <a href="#" class="btn btn-success mt-2 mb-2">Sync Forum Topics</a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        {% url 'management:forum_provider' as forum_provider_url %}
+                                        <tr>
+                                            <td style="width:10rem;">
+                                                <strong>{% blocktrans %}Forum Provider:{% endblocktrans %}</strong>
+                                            </td>
+                                            <td>
+                                                <div class="alert alert-warning">
+                                                    {% if not forum_provider %}
+                                                        <p>
+                                                            {% blocktrans trimmed %}
+                                                                No forum provider has been set up, so this course cannot be
+                                                                linked to a forum.
+                                                            {% endblocktrans %}
+                                                        </p>
+                                                        <p>
+                                                            To set up a forum provider, go to the <a href="{{ forum_provider_url }}">forum provider admin page</a>
+                                                        </p>
+                                                    {% elif not forum_provider.active %}
+                                                        <p>
+                                                            {% blocktrans trimmed %}
+                                                                A forum provider is defined, but is not active.
+                                                            {% endblocktrans %}
+                                                        </p>
+                                                        <p>
+                                                            {% blocktrans trimmed %}
+                                                                To activate the forum provider, go to the <a href="{{ forum_provider_url }}">forum provider
+                                                            admin page</a>
+                                                        {% endblocktrans %}
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

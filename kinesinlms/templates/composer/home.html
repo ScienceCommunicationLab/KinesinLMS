@@ -1,0 +1,71 @@
+{% extends "composer/composer_base.html" %}
+
+{% load static %}
+
+{% block infobar %}
+    {% comment %}
+    Hide infobar.
+    {% endcomment %}
+{% endblock infobar %}
+
+{% block main_content %}
+
+    <div class="container-fluid ">
+        <div class="row g-lg-5 py-5"
+             style="background-color: rgba(197, 218, 253, 0.8)">
+            <div class="col-lg-7 text-center text-lg-start">
+
+                <div class="d-flex flex-row align-items-center">
+                    <div class="d-flex flex-row align-items-center justify-content-center me-2">
+                        <div style="border-radius: 0.5rem; width: 5rem; height: 5rem;">
+                            <img src="{% static 'composer/images/paint-brushes-dark.svg' %}"
+                                 alt="Icon of two paint brushes."
+                                 style="width:5rem;
+                                        height: 5rem" />
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <h2 class="mb-1">COMPOSER</h2>
+                        <p>
+                            Use composer to author courses and link them
+                            to surveys, forums and badges.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-3 mb-2 pb-4">
+            <div class="col-12 col-md-10">
+                <h2>Current courses</h2>
+            </div>
+            <div class="col-12 col-md-2 d-flex flex-row justify-content-end">
+                <div>
+                    <a href="{% url 'composer:course_create' %}"
+                       class="btn btn-success btn-sm ms-auto">
+                        <i class="bi bi-plus"></i> Create New Course
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-5 g-4 pb-5 pt-1"
+             style="border-top: 1px dotted #ccc">
+            {% for course_description in course_descriptions %}
+                <div class="col">
+
+                    {% include 'composer/course/course_card.html' with course_description=course_description %}
+
+                </div>
+            {% endfor %}
+
+            <div class="col">
+
+                {% include 'composer/include/new_course_card.html' %}
+
+            </div>
+
+        </div>
+    </div>
+{% endblock main_content %}

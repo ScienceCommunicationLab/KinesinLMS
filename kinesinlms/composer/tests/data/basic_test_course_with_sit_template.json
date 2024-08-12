@@ -1,0 +1,239 @@
+{
+  "slug": "TEST_W_SIT",
+  "run": "SP",
+  "display_name": "Test Course (Self-Paced)",
+  "short_name": "Test Course (SP)",
+  "start_date": "2019-11-25T02:24:13Z",
+  "end_date": null,
+  "advertised_start_date": "Anytime, self-paced",
+  "enrollment_start_date": "2019-11-25T02:24:17Z",
+  "enrollment_end_date": null,
+  "self_paced": true,
+  "days_early_for_beta": 90.0,
+  "enable_certificates": true,
+  "enable_badges": true,
+  "catalog_description": {
+    "title": "Test Course",
+    "slug": "TEST",
+    "blurb": "A test blurb for this course catalog description.",
+    "overview": "A test overview for this course catalog description.",
+    "about_content": "<div>About content. Usually there's a lot of html here</div>",
+    "sidebar_content": "",
+    "visible": true,
+    "hex_theme_color": "e1e1e1",
+    "hex_title_color": "ffffff",
+    "custom_stylesheet": null,
+    "trailer_video_url": null,
+    "effort": "03:00 hours/week",
+    "order": 5,
+    "duration": "Test duration",
+    "audience": "Test audience",
+    "features": [
+      "some feature",
+      "another feature"
+    ]
+  },
+  "surveys": [
+    {
+      "type": "PRE_COURSE",
+      "provider": "qualtrics-kinesinlms",
+      "send_reminder_email": false,
+      "url": "https://example.com/pre_course_survey_url"
+    },
+    {
+      "type": "POST_COURSE",
+      "provider": "qualtrics-kinesinlms",
+      "send_reminder_email": true,
+      "days_delay": 10,
+      "url": "https://example.com/post_course_survey_url"
+    },
+    {
+      "type": "FOLLOW_UP",
+      "provider": "qualtrics-kinesinlms",
+      "send_reminder_email": true,
+      "days_delay": 50,
+      "url": "https://example.com/follow_up_survey_url"
+    }
+  ],
+  "course_root_node": {
+    "slug": "test_sp",
+    "display_sequence": 0,
+    "children": [
+      {
+        "type": "MODULE",
+        "slug": "test-module",
+        "purpose": null,
+        "display_name": "Test Module",
+        "release_datetime": null,
+        "display_sequence": 0,
+        "unit": null,
+        "children": [
+          {
+            "type": "SECTION",
+            "slug": "test-section",
+            "purpose": null,
+            "display_name": "Test Section",
+            "release_datetime": null,
+            "display_sequence": 0,
+            "unit": null,
+            "children": [
+              {
+                "type": "UNIT",
+                "slug": "test-unit",
+                "children": [],
+                "purpose": null,
+                "display_name": "Test Unit",
+                "release_datetime": null,
+                "display_sequence": 0,
+                "unit": {
+                  "type": "STANDARD",
+                  "uuid": "5e3b7076-b933-4d40-80f5-0882fd15d51b",
+                  "display_name": "Welcome to the Test Course",
+                  "short_description": null,
+                  "course_only": false,
+                  "slug": "welcome-to-the-test-course",
+                  "unit_blocks": [
+                    {
+                      "label": null,
+                      "block_order": 1,
+                      "hide": false,
+                      "read_only": false,
+                      "block": {
+                        "type": "HTML_CONTENT",
+                        "assessment": null,
+                        "display_name": null,
+                        "short_description": null,
+                        "course_only": false,
+                        "slug": "b64feda7-1ad4-4424-ad9c-fbc760202845",
+                        "version": 0,
+                        "html_content": "<p>This is a test course</p>",
+                        "json_content": null
+                      }
+                    },
+                    {
+                      "label": null,
+                      "block_order": 2,
+                      "hide": false,
+                      "read_only": false,
+                      "block": {
+                        "type": "ASSESSMENT",
+                        "assessment": {
+                          "type": "LONG_FORM_TEXT",
+                          "slug": "q1-assessment",
+                          "question": "Try entering some text in the long-form text control:",
+                          "question_as_statement": "",
+                          "definition_json": {},
+                          "solution_json": null,
+                          "explanation": null,
+                          "show_answer": false,
+                          "show_slug": false,
+                          "attempts_allowed": null,
+                          "has_correct_answer": false,
+                          "graded": false
+                        },
+                        "display_name": null,
+                        "short_description": "",
+                        "course_only": false,
+                        "slug": "q1-assessment-block",
+                        "version": 0,
+                        "html_content": "",
+                        "json_content": null
+                      }
+                    },
+                    {
+                      "label": "",
+                      "index_label": null,
+                      "block_order": 1,
+                      "hide": false,
+                      "read_only": false,
+                      "include_in_summary": true,
+                      "block": {
+                        "type": "SIMPLE_INTERACTIVE_TOOL",
+                        "slug": "build-mentor-map",
+                        "uuid": "346361df-e646-42c7-9e27-e76fad32e08a",
+                        "display_name": "Draw Out Your Network",
+                        "short_description": "Some short description for diagram.",
+                        "course_only": false,
+                        "enable_template_tags": true,
+                        "html_content": "",
+                        "json_content": null,
+                        "assessment": null,
+                        "simple_interactive_tool": {
+                          "slug": "build-mentor-map",
+                          "name": "SIT name",
+                          "tool_type": "DIAGRAM",
+                          "graded": true,
+                          "instructions": "<p>The drawing window below lists the four development categories (ovals) from the table (Research, Career, Professional, & Health and Well-Being).  The map also links a few blank Mentor boxes (rectangles) to each of the categories.</p>\r\n\r\n<p>Add new elements to the map by dragging them out from the menu to the right of the drawing window.</p>\r\n\r\n<ol>\r\n<li>To add either a Development category (oval) or Mentor (rectangle) to the map, click on the shape in the right side menu and drag it into the drawing window. </li>\r\n\r\n<li>In the window, double click on the text “(Category)” or “(Mentor)” to highlight it. Once highlighted, delete to replace that text and write in the name you wish to add. </li>\r\n\r\n<li>When you add a new Mentor (rectangle) to the map, you will be prompted to choose the type of mentor from one of six options: Research advisor/PI, Thesis committee member, Other research trainees, Other research faculty, Family/Friends, and Other mentors. <strong>Note: You will not be able to save your map until you choose a type for each mentor.</strong></li>\r\n\r\n<li>Connect each mentor to categories to which they belong by drawing a line from the Mentor (rectangle) to the corresponding Category(ies) (oval). To draw the line, hover over the side of a Mentor or Category box and click on the connecting point (or grayed-out circles). Once you click there, a line will appear that you can drag to make the corresponding connection. </li>\r\n\r\n<li>The links (lines) between each category and mentor specify the strength of your connection or mentoring relationship: “3” indicates strong support, “2” moderate support, and “1” weak support. Click on the circle to change the number. Each line starts with a default value of “1.”</li>\r\n\r\n<li>To organize your map in a way that is meaningful to you, you can color the “Mentor” boxes with custom colors (or change the colors of the “Development” boxes). </li>\r\n\r\n<li>You can delete line connections that have been drawn by selecting that line and then pressing backspace or delete on your keyboard.</li>\r\n<li>Remember to click “Save” at the bottom of the drawing tool before you leave this page or shut down your browser. You don’t want to lose all your hard work!</li>\r\n</ol>",
+                          "definition": {
+                            "tray_nodes_type": "MENTOR_CATEGORY",
+                            "tray_instructions": "Drag a mentor box or category box onto your work area. You will then see four grey circles on the box you placed. You can connect mentor boxes to category boxes by clicking a grey circle on a box and dragging the connector to another box.",
+                            "open_mentor_type_popup_after_add": true
+                          }
+                        },
+                        "speakers": [],
+                        "learning_objectives": [
+                          "1",
+                          "2",
+                          "3"
+                        ]
+                      }
+                    }
+                  ],
+                  "version": 0,
+                  "html_content": null,
+                  "json_content": null
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "type": "ROOT",
+    "purpose": null,
+    "display_name": "TEST_SP",
+    "node_url": "/courses/TEST/SP/content/",
+    "release_datetime": null,
+    "unit": null
+  },
+  "milestones": [
+    {
+      "slug": "all_assessments",
+      "name": "All assessments",
+      "description": "Answer all assessments.",
+      "type": "CORRECT_ANSWERS",
+      "count_requirement": 1,
+      "required_to_pass": true
+    }
+  ],
+  "speakers": [
+    "test-speaker-1",
+    "test-speaker-2"
+  ],
+  "learning_objectives": [
+    {
+      "slug": "1",
+      "description": "Learning Objective 1"
+    },
+    {
+      "slug": "2",
+      "description": "Learning Objective 2"
+    },
+    {
+      "slug": "3",
+      "description": "Learning Objective 3"
+    }
+  ],
+  "badge_classes": [
+    {
+      "slug": "TEST_SP-course-passed",
+      "name": "Test SP Course Passed",
+      "type": "COURSE_PASSED",
+      "provider": "BADGR",
+      "external_entity_id": "g4OK8WfFTeym5aRTn0djMA",
+      "open_badge_id": "https://api.badgr.io/public/badges/g4OK8WfFTeym5aRTn0djMA-HOg",
+      "image_url": "https://api.badgr.io/public/badges/c87tAYNdSVWTlWijeG-g4OK8WfFTeym5aRTn0djMA/image",
+      "criteria": "Criteria to be defined..."
+    }
+  ]
+}

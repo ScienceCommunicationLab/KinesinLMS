@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.2 (51160) - http://www.bohemiancoding.com/sketch -->
+    <title>speech-bubble</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="1.62109375e-06%" y1="50%" x2="100%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#F0505A" offset="0%"></stop>
+            <stop stop-color="#C8323B" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="1.62109375e-06%" y1="50%" x2="100%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#F0505A" offset="0%"></stop>
+            <stop stop-color="#D43740" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="speech-bubble" fill-rule="nonzero">
+            <g id="Group" fill="url(#linearGradient-2)">
+                <circle id="Oval" cx="256" cy="256" r="256"></circle>
+            </g>
+            <path d="M393.537611,140 L130.321603,140 C115.785058,140 104,150.797507 104,164.116253 L104,325.813563 C104,339.133472 115.785058,349.92985 130.321603,349.92985 L179.542972,349.92985 L180.037125,401.356136 L247.878906,349.92985 L393.537611,349.92985 C408.074858,349.92985 419.859214,339.133472 419.859214,325.813563 L419.859214,164.116253 C419.859214,150.797507 408.074858,140 393.537611,140 Z" id="Shape" fill="#000000" opacity="0.3"></path>
+            <path d="M393.537611,132 L130.321603,132 C115.785058,132 104,142.797507 104,156.116253 L104,317.813563 C104,331.133472 115.785058,341.92985 130.321603,341.92985 L179.542972,341.92985 L180.037125,393.356136 L244.367188,341.92985 L393.537611,341.92985 C408.074858,341.92985 419.859214,331.133472 419.859214,317.813563 L419.859214,156.116253 C419.859214,142.797507 408.074858,132 393.537611,132 Z M307.929617,289.889863 L150,289.889863 L150,279 L307.929617,279 L307.929617,289.889863 Z M373.733604,242.889863 L150,242.889863 L150,232 L373.733604,232 L373.733604,242.889863 Z M150,195.889863 L150,185 L344.781267,185 L344.781267,195.889863 L150,195.889863 Z" id="Shape" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

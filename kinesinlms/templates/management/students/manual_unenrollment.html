@@ -1,0 +1,62 @@
+{% extends "management/management_base.html" %}
+{% load static i18n core_tags %}
+{% load crispy_forms_filters %}
+
+
+{% block management_content %}
+
+    <style>
+        form {
+            align-items: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        form div {
+            margin-right: 1rem;
+        }
+
+        .btn {
+            min-width: 180px;
+        }
+
+    </style>
+
+
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            <h2>Batch Unenroll Students</h2>
+            <p>
+                Select a course below, and then add one or more usernames or emails,
+                separated by new lines.
+            </p>
+            <p>
+                Click "Unenroll" to unenroll these students in the selected course.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 d-flex flex-column">
+            <form action="{% url 'management:students_manual_unenrollment' %}" method="post">
+                {% csrf_token %}
+                {{ form | crispy }}
+                <a href="{% url 'management:students_manage' %}"
+                   type="button"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+                <button type="submit"
+                        class="btn btn-primary">
+                    Unenroll
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+
+
+{% endblock management_content %}
+
+
+

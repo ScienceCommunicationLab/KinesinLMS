@@ -1,0 +1,37 @@
+{% extends "course_admin/course_admin_base.html" %}
+{% load static %}
+{% load tz %}
+{% load i18n %}
+{% load crispy_forms_filters %}
+
+{% block course_admin_content %}
+
+    <div class="row">
+        <div class="col-12 col-lg-8 mt-5" style="margin-bottom:10rem;">
+            <h2>{% if cohort %} Update {% else %} Create a New {% endif %} Cohort</h2>
+
+            <form class="add-cohort-form"
+                  method="POST"
+                    {% if cohort %}
+                  action="{% url 'course:course_admin:cohorts:cohort_edit' course_run=course.run course_slug=course.slug cohort_id=cohort.id %}"
+                    {% else %}
+                  action="{% url 'course:course_admin:cohorts:cohort_create' course_run=course.run course_slug=course.slug %}"
+                    {% endif %}>
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div>
+                    <input type="submit" value="Save" class="btn btn-primary" style="min-width: 120px;">
+                    <a href="{% url 'course:course_admin:cohorts:index' course_run=course.run course_slug=course.slug %}?id={{ cohort.id }}"
+                       style="min-width: 120px;"
+                       class="btn btn-light">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+
+{% endblock %}

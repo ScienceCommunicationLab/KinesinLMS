@@ -1,0 +1,138 @@
+{% extends "course/course_base_default_page.html" %}
+{% load static %}
+{% load tz %}
+
+{% block course_sub_nav %}
+    <div class="course-subnav-label">
+        Course home page, with recent updates and news.
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    <!-- Don't show course sidebar on home tab -->
+{% endblock sidebar %}
+
+{% block page_content %}
+
+    <div class="section course_home">
+
+        <div class="row">
+
+            <div class="col-xl-8">
+                {% block course_home_page_content %}
+                {% endblock %}
+            </div>
+
+            <div class="col-xl-4 home-sidebar mt-4 mt-lg-0">
+
+                <div class="sidebar-item course-resources">
+                    <h2>Course Resources</h2>
+                    {% if course_resources %}
+                        {% for course_resource in course_resources %}
+
+                            <a href="{% url 'course:download_course_resource' course_run=course.run course_slug=course.slug course_resource_id=course_resource.id %}" download>
+                                <div class="course-resource">
+                                    <div class="course-resource-icon">
+                                        <i class="bi bi-file-earmark-text"></i>
+                                    </div>
+                                    <div class="course-resource-content">
+                                        <div class="course-resource-name">
+                                            <strong>{{ course_resource.name }}</strong>
+                                        </div>
+                                        <div class="course-resource-description">
+                                            {{ course_resource.description | safe }}
+                                        </div>
+                                        <div class="paperclip">
+                                            <img alt="paperclip icon"
+                                                 src="{% static 'images/icons/half_paperclip.svg' %}"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <div class="note">
+                            ( No course resources for this course. )
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if course.enable_course_outline %}
+                    <div class="sidebar-item course-outline">
+                        <h2>Course Outline</h2>
+
+                        <a href="{% url "course:outline_course" course_slug=course.slug course_run=course.run %}"
+                           class="btn btn-secondary btn-secondary">
+                            <i class="bi bi-list-columns-reverse"></i> View Course Outline
+                        </a>
+                    </div>
+                {% endif %}
+
+                {% if important_dates %}
+                    <div class="sidebar-item course-important-dates">
+                        <h2>Important Dates</h2>
+                        {% for notice in important_dates %}
+                            <div class="date-item">
+                                <div class="date-title">
+                                    {{ notice.title }}
+                                </div>
+                                <div class="date">
+                                    {{ notice.date | localtime }}
+                                </div>
+                                <div class="date-content">
+                                    {{ notice.html_content | safe }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+
+                <div class="course-news">
+                    <h2>News</h2>
+                    {% if news %}
+                        {% for notice in news %}
+                            <div class="news-item">
+                                <div class="news-title">
+                                    {{ notice.title }}
+                                </div>
+                                {% if notice.date %}
+                                    <div class="news-date">
+                                        {{ notice.date | localtime }}
+                                    </div>
+                                {% endif %}
+                                <div class="news-content">
+                                    {{ notice.html_content | safe }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="note">
+                            ( No news items at this time. )
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <section class="course-home-page-content">
+    </section>
+
+{% endblock %}
+
+{% block course_info_bar_bottom %}
+    <div class="container course-info-bar-controls bottom">
+        <a href="{{ first_unit_url }}"
+           data-bs-toggle="tooltip"
+           disabled="true"
+           title="Go to course content"
+           data-bs-placement="top"
+           class="btn btn-secondary btn-forward">
+            Go to course content&nbsp;
+            <i class="bi bi-caret-right-fill"></i>
+        </a>
+    </div>
+{% endblock course_info_bar_bottom %}

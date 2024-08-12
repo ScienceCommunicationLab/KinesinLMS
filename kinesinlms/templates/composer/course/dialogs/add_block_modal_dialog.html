@@ -1,0 +1,94 @@
+{% comment %}
+Renders a modal with buttons for adding a block to a course unit.
+This content should be generated on the server via an HTMx call.
+The server will set the insert_index as passed in from the button
+that opened the modal.
+
+Expected args in context:
+    before_block_id:    The ID of the block this block should be added above.
+                        If not defined, the block will be added at the end of the unit.
+
+
+{% endcomment %}
+
+{% load i18n composer_tags %}
+
+
+<div id="add-block-modal-dialog"
+     class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="add-block-modal-label">Add a New Block
+                {% if before_block_id and before_block_id > 0 %}
+                    ( before block id {{ before_block_id }} )
+                {% elif before_block_id == -1 %}
+                    ( at the end of the unit )
+                {% endif %}
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="block-button-groups">
+
+                {% add_block_button_groups as button_groups_info %}
+
+                {% for buttons_group in button_groups_info %}
+                    <div class="block-button-group">
+                        <div class="group-title">
+                            {{ buttons_group.group_name }}
+                        </div>
+                        <div class="block-button-group-buttons">
+                            {% for button_info in buttons_group.buttons %}
+
+                                {% comment %}
+                                Each add block buton will call an hx method on the server
+                                to create the block and then reload the entire unit
+                                (so that everything can be indexed again).
+                                {% endcomment %}
+
+                                <a class="btn add-block-button-square {{ button_info.block_type_classes }}"
+                                        {% if button_info.block_subtype %}
+                                   hx-get="{% url 'composer:add_course_unit_block_type_subtype_hx' course_id=course.id course_unit_id=course_unit.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id block_type=button_info.block_type block_subtype=button_info.block_subtype %}{% if before_block_id %}?before_block_id={{ before_block_id }}{% endif %}"
+                                        {% else %}
+                                   hx-get="{% url 'composer:add_course_unit_block_type_hx' course_id=course.id course_unit_id=course_unit.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id block_type=button_info.block_type %}{% if before_block_id %}?before_block_id={{ before_block_id }}{% endif %}"
+                                        {% endif %}
+                                        {% if before_block_id >= 0 %}
+                                   hx-target="#block-edit-card-{{ before_block_id }}-before-slot"
+                                        {% else %}
+                                   hx-target="#block-edit-card-final-slot"
+                                        {% endif %}
+                                   hx-swap="beforebegin"
+                                   data-bs-dismiss="modal">
+                                    <div class="d-flex flex-column">
+                                        <div>
+                                            <i class="{{ button_info.bi_icon_class }} fs-1"></i>
+                                        </div>
+                                        <div class="block-type-name">
+                                            {{ button_info.name }}
+                                        </div>
+                                        <div>
+                                            {% comment %}{{ button_info.description }}{% endcomment %}
+                                        </div>
+                                    </div>
+
+                                </a>
+
+                            {% endfor %}
+                        
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="add-block-modal-close-btn"
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+

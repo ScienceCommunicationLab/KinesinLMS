@@ -1,0 +1,38 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+{% block main_content %}
+    {{ block.super }}
+    <div class="container" style="min-height:800px;">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="d-flex flex-row align-items-center">
+                    <h2 class="w-100">Update Course Survey</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4" style="margin-bottom:300px;">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">Course Survey</div>
+                    <div class="card-body">
+                        <form action="{% url 'composer:course_survey_update'  course_id=course.id pk=course_survey.id %}"
+                              method="post">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <a href="{% url 'composer:course_surveys_list' course_id=course.id %}"
+                               type="button"
+                               class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

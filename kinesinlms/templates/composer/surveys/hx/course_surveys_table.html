@@ -1,0 +1,58 @@
+<table id="course-surveys-table" class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th class="text-start" style="width:50%;min-width:20rem;">Name</th>
+            <th class="text-start" style="width:50%;min-width:10rem;">Provider</th>
+            <th class="text-start" style="min-width:10rem;">Type</th>
+            <th style="min-width:5rem;">Email&nbsp;Reminder</th>
+            <th class="text-end" style="width:10rem;">Days&nbsp;Delay</th>
+            <th class="text-center" style="min-width:7rem;">Edit</th>
+            <th class="text-center" style="min-width:7rem;">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if course_surveys %}
+            {% for course_survey in course_surveys %}
+                <tr id="row-course-survey-{{ course_survey.id }}">
+                    <td>{{ course_survey.name }}</td>
+                    <td>{{ course_survey.provider }}</td>
+                    <td class="text-start">{{ course_survey.type }}</td>
+                    <td class="text-center">
+                        {% if course_survey.send_reminder_email %}
+                            <i class="bi bi-check-square text-success" style="font-size: x-large;"></i>
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td class="text-start">{{ course_survey.days_delay|default_if_none:"--" }}</td>
+                    <td class="text-center">
+                        <a class="btn btn-primary"
+                           href="{% url 'composer:course_survey_update' course_id=course.id pk=course_survey.id %}">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-danger"
+                           hx-confirm="Are you sure you want to delete course survey '{{ course_survey.name }}'?"
+                           hx-target="#course-surveys-table"
+                           hx-trigger="click"
+                           hx-delete="{% url 'composer:course_survey_delete_hx' course_id=course.id pk=course_survey.id %}"
+                           hx-swap="outerHTML">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7" class="w-100">
+                    <div class="d-flex flex-column w-100 justify-content-center align-items-center" style="height: 10rem;">
+                        <div class="alert alert-light">
+                            No course surveys have been added to this course.
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

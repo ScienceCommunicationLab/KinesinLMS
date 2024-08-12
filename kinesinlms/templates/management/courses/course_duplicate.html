@@ -1,0 +1,33 @@
+{% extends "management/management_base.html" %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+
+
+{% block management_content %}
+
+    <div class="row">
+        <div class="col-lg-7 col-12 ms-auto me-auto">
+            <div class="card">
+                <div class="card-header">
+                    Duplicate "{{ course.display_name }}" ( {{ course.token }} )
+                </div>
+
+                <div class="card-body">
+                    {{ form|crispy }}
+                </div>
+                
+                <div class="card-footer">
+                    <div class="action-buttons">
+                        <input type="submit"
+                               value="{% trans "Duplicate" %}"
+                               class="btn btn-primary">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

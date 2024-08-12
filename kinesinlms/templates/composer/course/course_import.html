@@ -1,0 +1,51 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+
+{% load crispy_forms_tags %}
+
+{% load static i18n %}
+
+{% block main_content %}
+
+    <div class="container-fluid composer-content">
+
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <h1>{% blocktrans %}Import a Course{% endblocktrans %}</h1>
+            </div>
+        </div>
+
+        <!-- upload course table -->
+        <div class="row">
+            <div class="col-12 col-lg-8">
+
+                <form action="{% url 'composer:course_import_view' %}"
+                      method="post"
+                      enctype="multipart/form-data">
+                    <div class="card">
+                        <div class="card-header">{% blocktrans %}Import Course Archive{% endblocktrans %}</div>
+                        <div class="card-body">
+                            {% csrf_token %}
+                            {% crispy form %}
+                        </div>
+                        <div class="card-footer">
+
+                            <div class="actions-right">
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-12 col-lg-3">
+                <p>{% blocktrans %}Use this form to import a course from a course archive.{% endblocktrans %}</p>
+                <p>{% blocktrans %}At the moment this form only supports KinesinLMS course archive format.{% endblocktrans %}</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content %}

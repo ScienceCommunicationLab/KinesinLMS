@@ -1,0 +1,110 @@
+{% extends "course_admin/course_admin_base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block title_bar_controls %}
+
+    <div class="d-flex flex-row">
+        <nav class="navbar navbar-expand-lg bg-light" style="padding-right:0">
+            <div class="navbar-text me-2">Cohort:</div>
+            <ul class="navbar-nav">
+
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn btn-outline-secondary"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                                    <span style="min-width: 10rem;">
+                                {% if current_cohort %}
+                                    {{ current_cohort.name }}
+                                {% else %}
+                                    ( all cohorts )
+                                {% endif %}
+                                    </span>
+                    </a>
+                    <ul class="dropdown-menu">
+
+                        {% if num_cohorts > 1 %}
+                            {% if not current_cohort %}
+                                <li>
+                                    <a class="dropdown-item disabled">
+                                        ( all cohorts )
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a class="dropdown-item"
+                                       href="{% url 'course:course_admin:course_analytics:student_progress' course_run=course.run course_slug=course.slug %}">
+                                        ( all cohorts )
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for cohort in cohorts %}
+                            <li>
+                                {% if cohort == current_cohort %}
+                                    <a class="dropdown-item disabled"> {{ cohort.name }}</a>
+                                {% else %}
+                                    <a class="dropdown-item"
+                                       href="{% url 'course:course_admin:course_analytics:student_cohort_progress' course_run=course.run course_slug=course.slug cohort_id=cohort.id %}">
+                                        {{ cohort.name }}
+                                    </a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endblock title_bar_controls %}
+
+{% block course_admin_content %}
+
+    <style>
+
+        .generate-box {
+            width: 100%;
+            min-height: 20rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px dotted #999999;
+            border-radius: 0.5rem;
+            background: #ccc;
+        }
+
+        .event-box {
+            min-height: 25px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .legend {
+            margin-top: 15px;
+        }
+
+
+        @media only screen and (max-width: 1400px) {
+            .event-box {
+                margin-left: 1rem;
+            }
+        }
+
+
+
+    </style>
+
+
+
+    <div id="student-progress-report">
+        {% include 'course_admin/course_analytics/hx/student_progress_report.html' %}
+    </div>
+
+
+{% endblock course_admin_content %}

@@ -1,0 +1,30 @@
+
+.course-speakers {
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+.speaker {
+    display: flex;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px dotted #999;
+}
+
+.speaker .profile-pic-container {
+}
+
+.speaker .profile-pic-container img {
+  width: 100%;
+}
+
+.speaker .info-name {
+    font-weight: bold;
+}
+.speaker .info-university {
+    font-style: italic;
+}
+
+.speaker .info-bio {
+    margin-top: 1rem;
+}

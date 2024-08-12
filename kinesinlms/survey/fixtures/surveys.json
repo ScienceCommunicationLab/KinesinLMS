@@ -1,0 +1,111 @@
+[
+  {
+    "model": "survey.survey",
+    "fields": {
+      "type": "pre-course",
+      "url": "https://ucsf.co1.qualtrics.com/jfe/form/SV_2meMTGWZ4KymwF7",
+      "send_reminder_email": false,
+      "days_delay": 0,
+      "course": ["PYSJ", "SP"],
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z"
+    }
+  },
+  {
+    "model": "survey.survey",
+    "fields": {
+      "type": "post-course",
+      "url": "https://ucsf.co1.qualtrics.com/jfe/form/SV_bqKGhMRfPrzTxQN",
+      "send_reminder_email": true,
+      "days_delay": 2,
+      "course": ["PYSJ", "SP"],
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z"
+    }
+  },
+  {
+    "model": "survey.survey",
+    "fields": {
+      "type": "follow-up",
+      "url": "https://ucsf.co1.qualtrics.com/jfe/form/SV_cAydVf8sEQJ94Dr",
+      "send_reminder_email": true,
+      "days_delay": 90,
+      "course": ["PYSJ", "SP"],
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z"
+    }
+  },
+  {
+    "model": "survey.survey",
+    "fields": {
+      "type": "pre-course",
+      "url": "https://wustl.az1.qualtrics.com/jfe/form/SV_6Fq3giCTGChpkMJ",
+      "send_reminder_email": false,
+      "days_delay": 0,
+      "course": ["BCLS", "SP"],
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z"
+    }
+  },
+  {
+    "model": "survey.survey",
+    "fields": {
+      "type": "post-course",
+      "url": "https://wustl.az1.qualtrics.com/jfe/form/SV_bDdxPuTzfCajlbv",
+      "send_reminder_email": true,
+      "days_delay": 2,
+      "course": ["BCLS", "SP"],
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z"
+    }
+  },
+  {
+    "model": "survey.survey",
+    "fields": {
+      "type": "follow-up",
+      "url": "https://wustl.az1.qualtrics.com/jfe/form/SV_blrrOZWeFvfHV3f",
+      "send_reminder_email": true,
+      "days_delay": 90,
+      "course": ["BCLS", "SP"],
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z"
+    }
+  },
+  {
+    "model": "survey.survey",
+    "fields": {
+      "type": "pre-course",
+      "url": "https://ucsf.co1.qualtrics.com/jfe/form/SV_7VvjBDToK13hjyR",
+      "send_reminder_email": false,
+      "days_delay": 0,
+      "course": ["LE", "SP"],
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z"
+    }
+  },
+  {
+    "model": "survey.survey",
+    "fields": {
+      "type": "post-course",
+      "url": "https://ucsf.co1.qualtrics.com/jfe/form/SV_87wIptNBQviUUN7",
+      "send_reminder_email": true,
+      "days_delay": 2,
+      "course": ["LE", "SP"],
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z"
+    }
+  },
+  {
+    "model": "survey.survey",
+    "fields": {
+      "type": "follow-up",
+      "url": "https://ucsf.co1.qualtrics.com/jfe/form/SV_3QuFWoLvYRERVBP",
+      "send_reminder_email": true,
+      "days_delay": 90,
+      "course": ["LE", "SP"],
+      "created_at": "2019-09-24T04:09:45.699Z",
+      "updated_at": "2019-11-04T02:51:57.281Z"
+    }
+  }
+
+]

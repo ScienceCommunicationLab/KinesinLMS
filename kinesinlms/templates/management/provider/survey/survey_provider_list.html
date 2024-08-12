@@ -1,0 +1,85 @@
+{% extends "management/management_base.html" %}
+
+{% load static i18n management_tags %}
+
+{% block management_content %}
+    <style>
+      .col-surveys {
+        text-align: right;
+      }
+
+      .col-edit,
+      .col-delete {
+        text-align: center;
+        width: 8rem;
+      }
+    </style>
+    <div class="d-flex flex-row justify-content-between mb-1 align-items-center">
+        <div class="ms-2">Current Survey Providers</div>
+        <a href="{% url 'management:survey_provider_create' %}"
+           class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> {% trans "Add Survey Provider" %}
+        </a>
+    </div>
+    <table class="table table-responsive table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>{% trans "Provider Name" %}</th>
+                <td>{% trans "Type" %}</td>
+                <td>{% trans "Active" %}</td>
+                <td>{% trans "Slug" %}</td>
+                <td>{% trans "Datacenter ID" %}</td>
+                <td class="col-surveys">{% trans "# Surveys" %}</td>
+                <td class="col-edit">{% trans "Edit" %}</td>
+                <td class="col-delete">{% trans "Delete" %}</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% if survey_providers %}
+                {% for survey_provider in survey_providers %}
+                    <tr>
+                        <td>{{ survey_provider.name }}</td>
+                        <td>{{ survey_provider.type }}</td>
+                        <td>{{ survey_provider.active }}</td>
+                        <td>{{ survey_provider.slug }}</td>
+                        <td>{{ survey_provider.datacenter_id }}</td>
+                        <td class="col-surveys">
+                            {% if survey_provider.surveys %}
+                                {{ survey_provider.surveys.count }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </td>
+                        <td class="col-edit">
+                            <a href="{% url 'management:survey_provider_update' survey_provider.id %}"
+                               type="button"
+                               class="btn btn-primary"
+                               aria-label="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                        <td class="col-delete">
+                            <div {% if not survey_provider.can_delete %} data-bs-toggle="tooltip" data-bs-placement="top" title="{% blocktrans %}This survey provider has surveys linked to it. You must delete the surveys before you can delete the provider.{% endblocktrans %}" {% endif %}>
+                                <a href="{% url 'management:survey_provider_delete' survey_provider.id %}"
+                                   type="button"
+                                   class="btn btn-danger {% if not survey_provider.can_delete %}disabled{% endif %} "
+                                   aria-label="Delete">
+                                    <i class="bi bi-x-square"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7">
+                        <div class="d-flex flex-row justify-content-center align-items-center w-100"
+                             style="min-height:15rem">
+                            <span class="text-muted">( No survey providers defined. )</span>
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

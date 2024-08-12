@@ -1,0 +1,1081 @@
+{
+  "document_type": "kinesinlms:course_export",
+  "metadata": {
+    "exporter_version": "1.0.0",
+    "export_date": "2024-03-12T01:08:31.077595+00:00"
+  },
+  "course": {
+    "slug": "TEST",
+    "run": "SP",
+    "display_name": "Test Course (Self-Paced)",
+    "short_name": "Test Course (SP)",
+    "start_date": "2024-03-12T01:08:17.061647Z",
+    "end_date": null,
+    "advertised_start_date": "March 12, 2024",
+    "enrollment_start_date": "2024-03-02T01:08:17.061650Z",
+    "enrollment_end_date": null,
+    "admin_only_enrollment": false,
+    "self_paced": true,
+    "enable_course_outline": true,
+    "days_early_for_beta": 100,
+    "enable_certificates": true,
+    "token": "TEST_SP",
+    "custom_apps": [],
+    "catalog_description": {
+      "title": "Some Course",
+      "blurb": "A blurb for some course.",
+      "overview": "An overview for some course.",
+      "about_content": "About content for some course.",
+      "sidebar_content": "Some sidebar content",
+      "visible": true,
+      "hex_theme_color": "ffffff",
+      "hex_title_color": "ffffff",
+      "custom_stylesheet": "some-course.css",
+      "trailer_video_url": null,
+      "effort": "300 hours/week",
+      "duration": "5 weeks",
+      "audience": "Test audience",
+      "features": [
+        "some feature",
+        "another feature"
+      ],
+      "order": 2
+    },
+    "course_root_node": {
+      "slug": "",
+      "display_name": null,
+      "type": "ROOT",
+      "purpose": null,
+      "node_url": "/courses/TEST/SP/content/",
+      "release_datetime": null,
+      "content_index": 0,
+      "display_sequence": 0,
+      "unit": null,
+      "children": [
+        {
+          "slug": "basic_module",
+          "display_name": "Basic Stuff",
+          "type": "MODULE",
+          "purpose": null,
+          "node_url": "/courses/TEST/SP/content/basic_module/",
+          "release_datetime": null,
+          "content_index": 0,
+          "display_sequence": 1,
+          "unit": null,
+          "children": [
+            {
+              "slug": "basic_section_1",
+              "display_name": "Basic Lesson 1",
+              "type": "SECTION",
+              "purpose": null,
+              "node_url": "/courses/TEST/SP/content/basic_module/basic_section_1/",
+              "release_datetime": null,
+              "content_index": 1,
+              "display_sequence": 1,
+              "unit": null,
+              "children": [
+                {
+                  "slug": "course_unit_1",
+                  "display_name": "Course Unit 1",
+                  "type": "UNIT",
+                  "purpose": null,
+                  "node_url": "/courses/TEST/SP/content/basic_module/basic_section_1/course_unit_1/",
+                  "release_datetime": null,
+                  "content_index": 0,
+                  "display_sequence": 1,
+                  "unit": {
+                    "type": "STANDARD",
+                    "uuid": "31f9a37e-1849-45bc-8caa-5698c1afa184",
+                    "slug": "course_unit_1",
+                    "display_name": null,
+                    "short_description": null,
+                    "course_only": false,
+                    "enable_template_tags": true,
+                    "html_content": null,
+                    "json_content": null,
+                    "status": "PUBLISHED",
+                    "unit_blocks": [
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 1,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "VIDEO",
+                          "slug": "video_for_unit_1",
+                          "uuid": "9b1d5371-e0f4-49af-96ad-c22c7bd49f83",
+                          "display_name": "Video for Unit 1",
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": {
+                            "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
+                            "video_id": "wf9QrrRzJys"
+                          },
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": [
+                            {
+                              "type": "VIDEO_TRANSCRIPT",
+                              "uuid": "dc6b6f3f-4c5c-4a39-9ddd-e0ec1fbbb13d",
+                              "file_name": "test_file_8C13nO0.rst"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 2,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "HTML_CONTENT",
+                          "slug": null,
+                          "uuid": "1287efcc-a754-4b8e-abc4-3dd957a0c39b",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": "<h1>Test Unit 1</h1><p>This is a simple HTML block for unit 1.</p>",
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 3,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "ASSESSMENT",
+                          "slug": null,
+                          "uuid": "52d0e105-af8b-4fb6-8df0-b412fd2eaaac",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": {
+                            "type": "LONG_FORM_TEXT",
+                            "slug": "assessment-0",
+                            "question": "Some long question for question # 0",
+                            "question_as_statement": null,
+                            "definition_json": null,
+                            "solution_json": null,
+                            "explanation": null,
+                            "show_answer": true,
+                            "show_slug": true,
+                            "attempts_allowed": null,
+                            "has_correct_answer": false,
+                            "complete_mode": "DISABLED_ON_COMPLETE",
+                            "graded": true
+                          },
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 4,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "SIMPLE_INTERACTIVE_TOOL",
+                          "slug": null,
+                          "uuid": "8db65b24-80fa-4ab6-b55a-60226f478447",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": {
+                            "slug": "simple-interactive-tool-0",
+                            "name": null,
+                            "tool_type": "DIAGRAM",
+                            "instructions": null,
+                            "graded": false,
+                            "definition": {},
+                            "template": null
+                          },
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                },
+                {
+                  "slug": "course_unit_2",
+                  "display_name": "Course Unit 2",
+                  "type": "UNIT",
+                  "purpose": null,
+                  "node_url": "/courses/TEST/SP/content/basic_module/basic_section_1/course_unit_2/",
+                  "release_datetime": null,
+                  "content_index": 0,
+                  "display_sequence": 2,
+                  "unit": {
+                    "type": "STANDARD",
+                    "uuid": "85923dee-78a9-4f43-866a-d0df4efec377",
+                    "slug": "course_unit_2",
+                    "display_name": null,
+                    "short_description": null,
+                    "course_only": false,
+                    "enable_template_tags": true,
+                    "html_content": null,
+                    "json_content": null,
+                    "status": "PUBLISHED",
+                    "unit_blocks": [
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 1,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "VIDEO",
+                          "slug": "video_for_unit_2",
+                          "uuid": "082ae6ad-1270-4894-91db-99db62eec55a",
+                          "display_name": "Video for Unit 2",
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": {
+                            "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
+                            "video_id": "wf9QrrRzJys"
+                          },
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": [
+                            {
+                              "type": "VIDEO_TRANSCRIPT",
+                              "uuid": "1b165ac8-dc80-43aa-9349-2587683c0a9d",
+                              "file_name": "test_file_ySsS47w.rst"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 2,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "HTML_CONTENT",
+                          "slug": null,
+                          "uuid": "a852907d-1116-468e-826c-4d9f93013389",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": "<h1>Test Unit 2</h1><p>This is a simple HTML block for unit 2.</p>",
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 3,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "ASSESSMENT",
+                          "slug": null,
+                          "uuid": "08690c67-24ba-4740-9c55-0703049ee9b0",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": {
+                            "type": "LONG_FORM_TEXT",
+                            "slug": "assessment-1",
+                            "question": "Some long question for question # 1",
+                            "question_as_statement": null,
+                            "definition_json": null,
+                            "solution_json": null,
+                            "explanation": null,
+                            "show_answer": true,
+                            "show_slug": true,
+                            "attempts_allowed": null,
+                            "has_correct_answer": false,
+                            "complete_mode": "DISABLED_ON_COMPLETE",
+                            "graded": true
+                          },
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 4,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "SIMPLE_INTERACTIVE_TOOL",
+                          "slug": null,
+                          "uuid": "c955ae78-6651-4e0c-b921-e85d534d01d5",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": {
+                            "slug": "simple-interactive-tool-1",
+                            "name": null,
+                            "tool_type": "DIAGRAM",
+                            "instructions": null,
+                            "graded": false,
+                            "definition": {},
+                            "template": null
+                          },
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "slug": "basic_section_2",
+              "display_name": "Basic Lesson 2",
+              "type": "SECTION",
+              "purpose": null,
+              "node_url": "/courses/TEST/SP/content/basic_module/basic_section_2/",
+              "release_datetime": null,
+              "content_index": 2,
+              "display_sequence": 2,
+              "unit": null,
+              "children": [
+                {
+                  "slug": "course_unit_3",
+                  "display_name": "Course Unit 3",
+                  "type": "UNIT",
+                  "purpose": null,
+                  "node_url": "/courses/TEST/SP/content/basic_module/basic_section_2/course_unit_3/",
+                  "release_datetime": null,
+                  "content_index": 0,
+                  "display_sequence": 3,
+                  "unit": {
+                    "type": "STANDARD",
+                    "uuid": "0a2c041c-a93c-430b-a996-68d053f76c44",
+                    "slug": "course_unit_3",
+                    "display_name": null,
+                    "short_description": null,
+                    "course_only": false,
+                    "enable_template_tags": true,
+                    "html_content": null,
+                    "json_content": null,
+                    "status": "PUBLISHED",
+                    "unit_blocks": [
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 1,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "VIDEO",
+                          "slug": "video_for_unit_3",
+                          "uuid": "b9d41e23-cf67-4497-a99c-df7ca48c83fc",
+                          "display_name": "Video for Unit 3",
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": {
+                            "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
+                            "video_id": "wf9QrrRzJys"
+                          },
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": [
+                            {
+                              "type": "VIDEO_TRANSCRIPT",
+                              "uuid": "cd5f417f-41bc-4a4e-96af-2abfa3c532c1",
+                              "file_name": "test_file_ulLcfHb.rst"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 2,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "HTML_CONTENT",
+                          "slug": null,
+                          "uuid": "3447ec82-fa01-4091-8815-c4b70ee2ff96",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": "<h1>Test Unit 3</h1><p>This is a simple HTML block for unit 3.</p>",
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 3,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "ASSESSMENT",
+                          "slug": null,
+                          "uuid": "9b12299e-7243-4f14-9b52-22bb55a459df",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": {
+                            "type": "LONG_FORM_TEXT",
+                            "slug": "assessment-2",
+                            "question": "Some long question for question # 2",
+                            "question_as_statement": null,
+                            "definition_json": null,
+                            "solution_json": null,
+                            "explanation": null,
+                            "show_answer": true,
+                            "show_slug": true,
+                            "attempts_allowed": null,
+                            "has_correct_answer": false,
+                            "complete_mode": "DISABLED_ON_COMPLETE",
+                            "graded": true
+                          },
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 4,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "SIMPLE_INTERACTIVE_TOOL",
+                          "slug": null,
+                          "uuid": "3452a50a-bf91-4acd-b43f-d4e74c66dd46",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": {
+                            "slug": "simple-interactive-tool-2",
+                            "name": null,
+                            "tool_type": "DIAGRAM",
+                            "instructions": null,
+                            "graded": false,
+                            "definition": {},
+                            "template": null
+                          },
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                },
+                {
+                  "slug": "course_unit_4",
+                  "display_name": "Course Unit 4",
+                  "type": "UNIT",
+                  "purpose": null,
+                  "node_url": "/courses/TEST/SP/content/basic_module/basic_section_2/course_unit_4/",
+                  "release_datetime": null,
+                  "content_index": 0,
+                  "display_sequence": 4,
+                  "unit": {
+                    "type": "STANDARD",
+                    "uuid": "86ff5a03-25dc-4100-88d5-ab6be9df2faa",
+                    "slug": "course_unit_4",
+                    "display_name": null,
+                    "short_description": null,
+                    "course_only": false,
+                    "enable_template_tags": true,
+                    "html_content": null,
+                    "json_content": null,
+                    "status": "PUBLISHED",
+                    "unit_blocks": [
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 1,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "VIDEO",
+                          "slug": "video_for_unit_4",
+                          "uuid": "a3f75273-b4b1-45fb-8346-f80862a106ee",
+                          "display_name": "Video for Unit 4",
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": {
+                            "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
+                            "video_id": "wf9QrrRzJys"
+                          },
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": [
+                            {
+                              "type": "VIDEO_TRANSCRIPT",
+                              "uuid": "aa619e88-ee34-428d-bb5b-12a60747b9e2",
+                              "file_name": "test_file_Dcq3hvZ.rst"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 2,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "HTML_CONTENT",
+                          "slug": null,
+                          "uuid": "fba95a0d-017d-41bb-b386-568955e6310e",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": "<h1>Test Unit 4</h1><p>This is a simple HTML block for unit 4.</p>",
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 3,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "ASSESSMENT",
+                          "slug": null,
+                          "uuid": "4678efb2-aa75-47ce-a58f-b1c30134e482",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": {
+                            "type": "LONG_FORM_TEXT",
+                            "slug": "assessment-3",
+                            "question": "Some long question for question # 3",
+                            "question_as_statement": null,
+                            "definition_json": null,
+                            "solution_json": null,
+                            "explanation": null,
+                            "show_answer": true,
+                            "show_slug": true,
+                            "attempts_allowed": null,
+                            "has_correct_answer": false,
+                            "complete_mode": "DISABLED_ON_COMPLETE",
+                            "graded": true
+                          },
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 4,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "SIMPLE_INTERACTIVE_TOOL",
+                          "slug": null,
+                          "uuid": "ef97f3f5-0ffc-4a1b-ae90-6fac55a777cc",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": {
+                            "slug": "simple-interactive-tool-3",
+                            "name": null,
+                            "tool_type": "DIAGRAM",
+                            "instructions": null,
+                            "graded": false,
+                            "definition": {},
+                            "template": null
+                          },
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "advanced_module",
+          "display_name": "Advanced Stuff",
+          "type": "MODULE",
+          "purpose": null,
+          "node_url": "/courses/TEST/SP/content/advanced_module/",
+          "release_datetime": null,
+          "content_index": 0,
+          "display_sequence": 2,
+          "unit": null,
+          "children": [
+            {
+              "slug": "advanced_section_3",
+              "display_name": "Advanced Lesson 3",
+              "type": "SECTION",
+              "purpose": null,
+              "node_url": "/courses/TEST/SP/content/advanced_module/advanced_section_3/",
+              "release_datetime": null,
+              "content_index": 3,
+              "display_sequence": 3,
+              "unit": null,
+              "children": [
+                {
+                  "slug": "course_unit_5",
+                  "display_name": "Course Unit 5",
+                  "type": "UNIT",
+                  "purpose": null,
+                  "node_url": "/courses/TEST/SP/content/advanced_module/advanced_section_3/course_unit_5/",
+                  "release_datetime": null,
+                  "content_index": 0,
+                  "display_sequence": 5,
+                  "unit": {
+                    "type": "STANDARD",
+                    "uuid": "a51777b7-ec38-4c2c-90db-60389f13f8d3",
+                    "slug": "course_unit_5",
+                    "display_name": null,
+                    "short_description": null,
+                    "course_only": false,
+                    "enable_template_tags": true,
+                    "html_content": null,
+                    "json_content": null,
+                    "status": "PUBLISHED",
+                    "unit_blocks": [
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 1,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "VIDEO",
+                          "slug": "video_for_unit_5",
+                          "uuid": "1f29b4ba-7ed6-485d-be72-300d45d3f87f",
+                          "display_name": "Video for Unit 5",
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": {
+                            "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
+                            "video_id": "wf9QrrRzJys"
+                          },
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": [
+                            {
+                              "type": "VIDEO_TRANSCRIPT",
+                              "uuid": "77e5b971-1656-4865-aebf-6bbd49b58f9f",
+                              "file_name": "test_file_JS5k4jI.rst"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 2,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "HTML_CONTENT",
+                          "slug": null,
+                          "uuid": "0f8da919-4a0a-4f21-8df4-2596616ea137",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": "<h1>Test Unit 5</h1><p>This is a simple HTML block for unit 5.</p>",
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 3,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "ASSESSMENT",
+                          "slug": null,
+                          "uuid": "0baeaf6f-2e6a-4db9-b196-56d5376fd7d4",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": {
+                            "type": "LONG_FORM_TEXT",
+                            "slug": "assessment-4",
+                            "question": "Some long question for question # 4",
+                            "question_as_statement": null,
+                            "definition_json": null,
+                            "solution_json": null,
+                            "explanation": null,
+                            "show_answer": true,
+                            "show_slug": true,
+                            "attempts_allowed": null,
+                            "has_correct_answer": false,
+                            "complete_mode": "DISABLED_ON_COMPLETE",
+                            "graded": true
+                          },
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 4,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "SIMPLE_INTERACTIVE_TOOL",
+                          "slug": null,
+                          "uuid": "c4597be8-bf09-4153-ae14-af4e68fc31b0",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": {
+                            "slug": "simple-interactive-tool-4",
+                            "name": null,
+                            "tool_type": "DIAGRAM",
+                            "instructions": null,
+                            "graded": false,
+                            "definition": {},
+                            "template": null
+                          },
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                },
+                {
+                  "slug": "course_unit_6",
+                  "display_name": "Course Unit 6",
+                  "type": "UNIT",
+                  "purpose": null,
+                  "node_url": "/courses/TEST/SP/content/advanced_module/advanced_section_3/course_unit_6/",
+                  "release_datetime": null,
+                  "content_index": 0,
+                  "display_sequence": 6,
+                  "unit": {
+                    "type": "STANDARD",
+                    "uuid": "1f5f599f-6811-4058-b921-5de3f13f0ad5",
+                    "slug": "course_unit_6",
+                    "display_name": null,
+                    "short_description": null,
+                    "course_only": false,
+                    "enable_template_tags": true,
+                    "html_content": null,
+                    "json_content": null,
+                    "status": "PUBLISHED",
+                    "unit_blocks": [
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 1,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "VIDEO",
+                          "slug": "video_for_unit_6",
+                          "uuid": "80695434-e92d-46bc-88fa-2aedd3e535e5",
+                          "display_name": "Video for Unit 6",
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": {
+                            "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
+                            "video_id": "wf9QrrRzJys"
+                          },
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": [
+                            {
+                              "type": "VIDEO_TRANSCRIPT",
+                              "uuid": "831adc33-a8d7-4cbb-b46b-c21d88e05416",
+                              "file_name": "test_file_9sVVl4y.rst"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 2,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "HTML_CONTENT",
+                          "slug": null,
+                          "uuid": "83463181-36cd-48d6-90f0-cd7c642ee85d",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": "<h1>Test Unit 6</h1><p>This is a simple HTML block for unit 6.</p>",
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 3,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "ASSESSMENT",
+                          "slug": null,
+                          "uuid": "773c1f9e-f6fa-4f1a-8159-1d9358d2b006",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": {
+                            "type": "LONG_FORM_TEXT",
+                            "slug": "assessment-5",
+                            "question": "Some long question for question # 5",
+                            "question_as_statement": null,
+                            "definition_json": null,
+                            "solution_json": null,
+                            "explanation": null,
+                            "show_answer": true,
+                            "show_slug": true,
+                            "attempts_allowed": null,
+                            "has_correct_answer": false,
+                            "complete_mode": "DISABLED_ON_COMPLETE",
+                            "graded": true
+                          },
+                          "simple_interactive_tool": null,
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      },
+                      {
+                        "label": null,
+                        "index_label": null,
+                        "block_order": 4,
+                        "hide": false,
+                        "read_only": false,
+                        "include_in_summary": false,
+                        "block": {
+                          "type": "SIMPLE_INTERACTIVE_TOOL",
+                          "slug": null,
+                          "uuid": "bea5dce2-eb31-4ea1-a89b-da873a8d7525",
+                          "display_name": null,
+                          "short_description": null,
+                          "course_only": false,
+                          "enable_template_tags": true,
+                          "html_content": null,
+                          "json_content": null,
+                          "assessment": null,
+                          "simple_interactive_tool": {
+                            "slug": "simple-interactive-tool-5",
+                            "name": null,
+                            "tool_type": "DIAGRAM",
+                            "instructions": null,
+                            "graded": false,
+                            "definition": {},
+                            "template": null
+                          },
+                          "speakers": [],
+                          "learning_objectives": [],
+                          "resources": []
+                        }
+                      }
+                    ]
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "enable_badges": true,
+    "milestones": [
+      {
+        "course_token": "TEST_SP",
+        "slug": "one_assessment_to_pass",
+        "name": "Test Course Passed Milestone",
+        "description": "Answer one assessments to pass course",
+        "count_graded_only": false,
+        "type": "CORRECT_ANSWERS",
+        "count_requirement": 1,
+        "required_to_pass": true
+      }
+    ],
+    "course_resources": [],
+    "speakers": [],
+    "surveys": [],
+    "badge_classes": [
+      {
+        "slug": "TEST_SP-course-passed",
+        "type": "COURSE_PASSED",
+        "name": "Test Course Passed",
+        "provider": "BADGR",
+        "external_entity_id": "5LQn_kygTT6rmomsgWux-w",
+        "open_badge_id": "https://api.badgr.io/public/badges/5LQn_kygTT6rmomsgWux-w",
+        "image_url": "https://api.badgr.io/public/badges/5LQn_kygTT6rmomsgWux-w/image",
+        "description": "Student has finished the DEMO_SP Course.",
+        "criteria": "Badge criteria would go here."
+      }
+    ],
+    "learning_objectives": [],
+    "cohorts": [],
+    "simple_interactive_tool_templates": [],
+    "certificate_template": {
+      "signatories": [
+        {
+          "slug": "some-signatory",
+          "name": "Some Signatory Name",
+          "title": "Some Signatory Title",
+          "organization": "Some Signatory Organization"
+        }
+      ],
+      "custom_template_name": null
+    },
+    "enable_enrollment_survey": true,
+    "enrollment_survey": null,
+    "course_home_content": null
+  }
+}

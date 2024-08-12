@@ -1,0 +1,72 @@
+{% extends "management/management_base.html" %}
+{% load static i18n core_tags %}
+{% load crispy_forms_tags %}
+
+
+{% block management_content %}
+
+    <style>
+        form {
+            align-items: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        form div {
+            margin-right: 1rem;
+        }
+
+        .btn {
+            min-width: 180px;
+        }
+
+    </style>
+
+
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            <h2>Batch Enroll Students</h2>
+            <p>
+                Select a course below, and then add one or more usernames or emails,
+                separated by new lines.
+            </p>
+            <p>
+                Click "Enroll" to enroll these students in the selected course.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 d-flex flex-column">
+            {% include 'management/forms/manual_enrollment_form.html' %}
+        </div>
+    </div>
+
+
+    <script>
+        function initForm() {
+            console.log("init form")
+            const courseSelectElem = document.getElementById('id_course');
+            console.log("courseSelectElem: ", courseSelectElem);
+            if (courseSelectElem) {
+                courseSelectElem.addEventListener('change', event => {
+                    const courseID = courseSelectElem.value;
+                    const selectURL = `/management/hx/cohorts_select/${courseID}/`;
+                    htmx.ajax('GET', selectURL, {target: '#manual-enrollment-form', swap: 'outerHTML'})
+                })
+            }
+        }
+
+        htmx.on("htmx:load", event => {
+            initForm();
+        });
+
+    </script>
+
+
+
+
+
+{% endblock management_content %}
+
+
+

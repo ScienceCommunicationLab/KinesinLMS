@@ -1,0 +1,16 @@
+{% load core_tags unit_extras %}
+<div class="block block-answer-list">
+    <h4 class="subhead">{{ block.display_name }}</h4>
+    {% if block.html_content %}
+
+        <div class="html-content">
+            {% render_html_content block %}
+        </div>
+
+    {% endif %}
+    {% get_unit_blocks_for_answer_list block as unit_blocks %}
+    {% for unit_block in unit_blocks %}
+        {% get_assessment_readonly_data unit_block user as assessment_data %}
+        {% include 'course/custom/assessment_read_only.html' %}
+    {% endfor %}
+</div>

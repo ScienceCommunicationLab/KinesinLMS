@@ -1,0 +1,53 @@
+{% extends "base.html" %} 
+{% load tz %} 
+{% load static i18n %} 
+
+{% block main_content %}
+
+<div class="container-fluid learning-library">
+
+  <div class="row">
+      <div class="col-12 mt-2">
+        <h2>{{ title }}</h2>
+        <p>This is a complete list of learning content that has been marked as available to learners in the library.</p>
+      </div>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-4 rows-cols-lg-4">
+
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          Course Units
+        </div>
+        <div class="card-body" style="min-height:10rem;">
+          Search and view all course units that have been marked as 
+          available in the learning library.
+        </div>
+        <div class="card-footer d-flex flex-row justify-content-end">
+          <a href="{% url "learning_library:course_units" %}" class="btn btn-dark">View Course Units</a>  
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card learning-item">
+        <div class="card-header">
+          Blocks
+        </div>
+        <div class="card-body" style="min-height:10rem;">
+          A "block" is a unit of content from a course.
+          Search and view all blocks that have been marked as 
+          available in the learning library.
+        </div>
+        <div class="card-footer d-flex flex-row justify-content-end">
+          <a href="{% url "learning_library:blocks" %}" class="btn btn-dark">View Blocks</a>  
+        </div>
+      </div>
+
+    </div>
+  </div> 
+
+</div>
+
+{% endblock main_content %}

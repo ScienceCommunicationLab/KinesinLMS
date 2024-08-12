@@ -1,0 +1,90 @@
+{% extends "management/management_base.html" %}
+{% load static i18n core_tags %}
+{% load crispy_forms_tags %}
+
+
+{% block management_content %}
+
+    <style>
+        form {
+            align-items: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        form div {
+            margin-right: 1rem;
+        }
+
+        .btn {
+            min-width: 180px;
+        }
+
+        li {
+            max-width: 300px !important;
+        }
+
+    </style>
+
+
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            <h2>Batch Unenroll Students : Complete</h2>
+            <p>The following unenrollments were made. If any students were not enrolled to begin with,
+                they're listed below in the 'Skipped' section.
+            </p>
+            <p>Students should receive an unenrolled email as if they had unenrolled themselves.</p>
+            <p>If there were any errors when trying to unenroll a student, they're reported below.</p>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom:2rem;">
+        <div class="col-12 col-lg-6 d-flex flex-column">
+            <h3>Unenrolled</h3>
+            {% if unenrolled_students %}
+                <ul class="list-group">
+                {% for student in unenrolled_students %}
+                    <li class="list-group-item">
+                        <i class="bi bi-check"></i> {{ student }}
+                    </li>
+                {% endfor %}
+            {% else %}
+                <div class="text-muted"> ( No students unenrolled. )</div>
+
+            {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    {% if skipped_students %}
+        <div class="row" style="margin-bottom:2rem;">
+            <div class="col-12 col-lg-6 d-flex flex-column">
+                <h3>Skipped (were not enrolled to begin with)</h3>
+                <ul class="list-group">
+                    {% for student in skipped_students %}
+                        <li class="list-group-item">{{ student }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row" style="margin-bottom:2rem;">
+        <div class="col-12 col-lg-6 d-flex flex-column">
+            <h3>Errors</h3>
+            {% if form_errors %}
+                <ul class="list-group">
+                    {% for form_error in form_errors %}
+                        <li class="list-group-item">{{ form_error }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="text-muted">( No errors. )</div>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock management_content %}
+
+
+

@@ -1,0 +1,11 @@
+{% load composer_tags %}
+
+{% is_wysiwyg_active as wysiwyg_active %}
+<a id="btn-toggle-wysiwyg"
+   type="checkbox"
+   class="btn btn-sm {% if wysiwyg_active %}btn-success{% else %}btn-outline-success{% endif %}"
+   hx-get="{% url 'composer:toggle_wysiwyg_hx' %}"
+   hx-target="#btn-toggle-wysiwyg"
+   hx-swap="outerHTML">
+    <i class="bi bi-card-text"></i> 
+</a>

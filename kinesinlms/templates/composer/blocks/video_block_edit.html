@@ -1,0 +1,19 @@
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+{% if block.video_id %}
+    <div class="embed-responsive embed-responsive-16by9 video-wrapper">
+        <iframe id="ytplayer{{ block_index.id }}"
+                type="text/html"
+                width="640"
+                height="360"
+                src="https://www.youtube.com/embed/{{ block.video_id }}"></iframe>
+
+    </div>
+{% endif %}
+
+<div class="card-body bg-primary" style="--bs-bg-opacity: .1;">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form|crispy }}
+</div>

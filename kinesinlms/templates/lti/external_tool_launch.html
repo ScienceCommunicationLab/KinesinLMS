@@ -1,0 +1,40 @@
+{% comment %} This template constructs an auto-submitting form to continue the
+OIDC login process with an external tool. It shouldn't really be seen by the
+user since it auto-submits upon loading and is, ideally, immediately replaced by
+the external tool's response. {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en"> 
+  <body>
+
+    <h1>Test</h1>
+
+    <form id="external-tool-launch-{{ external_tool_view.id }}"
+          action="{{ external_tool_launch_data.launch_url }}"
+          method="post"
+          enctype="application/x-www-form-urlencoded">
+      {% csrf_token %}
+      {% for launch_param_name, launch_param_value in external_tool_launch_data.launch_params.items %}
+        <input id="external-tool-launch-{{ external_tool_view.id }}"
+               name="{{ launch_param_name }}"
+               value="{{ launch_param_value }}" />
+      {% endfor %}
+
+      <input type="submit" value="Continue" />
+
+    </form>
+    <script>
+      {
+        % comment %
+      }
+      TEMP
+      document.addEventListener("DOMContentLoaded", function() {
+        var form = document.getElementById("external-tool-launch-{{ external_tool_view.id }}");
+        form.submit();
+      });
+      {
+        % endcomment %
+      }
+    </script>
+  </body>
+</html>

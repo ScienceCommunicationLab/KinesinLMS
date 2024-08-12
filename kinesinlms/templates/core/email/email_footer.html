@@ -1,0 +1,54 @@
+{% load static core_tags %}
+<table style="margin-top:1rem; border-top:1px dotted #f1f1f1; padding-top:1rem; width:100%">
+    <tr>
+        <td>
+            <a href="{% site_url %}"
+               style="margin:0;outline:none;padding:0;color:#045fb4;text-decoration:none;font-weight:bold; font-size:1.2rem;"
+               target="_blank">
+                {% site_name %}
+            </a><br/>
+            <a href="mailto:{% support_email %}">
+                {% support_email %}
+            </a>
+        </td>
+    </tr>
+</table>
+
+{# SOCIAL LINKS FOR EMAIL FOOTER #}
+
+<table style="width:120px;">
+    <tr>
+        {% facebook_page_url as fb_page_url %}
+        {% if fb_page_url %}
+            <td>
+                <a href="{{ fb_page_url }}"
+                   style="margin-left:1rem;"
+                   target="_blank"
+                   height="34"
+                   width="34">
+                    <img height="34"
+                         width="34"
+                         src="{% static 'images/logos/third-party/facebook-logo.png' %}"
+                         alt="Facebook logo"/>
+                </a>
+            </td>
+        {% endif %}
+
+
+        {% twitter_page_url as tw_url %}
+        {% if tw_url %}
+            <td>
+                <a href="{{ tw_url }}"
+                   style="margin-left:1rem;"
+                   target="_blank"
+                   height="34"
+                   width="34">
+                    <img height="34"
+                         width="34"
+                         src="{% static 'images/logos/third-party/twitter-logo.png' %}"
+                         alt="Twitter logo"/>
+                </a>
+            </td>
+        {% endif %}
+    </tr>
+</table>

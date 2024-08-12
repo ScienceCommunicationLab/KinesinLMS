@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+
+{% comment %}
+This is the base template for all 'course' pages, which at the moment are navigable
+via a course tab in the main site navigation.
+{% endcomment %}
+
+{% load mptt_tags %}
+
+{% load static %}
+
+{% load i18n %}
+
+{% load tz %}
+
+{% load core_tags unit_extras %}
+
+{% load core_tags %}
+
+{% block header_javascript %}
+    {% comment %}
+        Load our library of standard components used in course units. This includes
+        things like the video player and the long-form text input. We load this library on
+        every page regardless of whether the unit has the components defined in it or not.
+    {% endcomment %}
+
+    <script src="{% static 'js/kinesinlms-standard-course-components.bundle.js' %}?version={{ KINESINLMS_JAVASCRIPT_VERSION }}"></script>
+
+    {% comment %}
+    Load our simple js library for more generic functions we need available
+    in the course section of the site.
+    {% endcomment %}
+    <script src="{% static 'js/kinesinlms-course.bundle.js' %}?version={{ KINESINLMS_JAVASCRIPT_VERSION }}"></script>
+
+    {% comment %}
+    This javascript function is inline in the page because we use session state.
+    TODO: abstract this to library with alternative method of getting state from session.
+    {% endcomment %}
+
+    {% if request.session.hide_main_nav %}
+        <script>
+          window.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('btnShowTopNav');
+            btn.style.display = "flex";
+          });
+        </script>
+    {% endif %}
+
+    {% comment %}
+    If this course page uses extra javascript libraries load those libraries here.
+    We keep these libraries separate from more general kn-course.bundle.js and the kn-unit-components
+    library so we can keep those two as small as possible, and only suffer larger loads if
+    those larger components (like Diagram Tool) are used in the current Unit.
+    {% endcomment %}
+
+    {% if extra_course_unit_js_libraries %}
+        {% for js_library_name in extra_course_unit_js_libraries %}
+            <script src="{% static 'js/' %}{{ js_library_name }}"></script>
+        {% endfor %}
+    {% endif %}
+
+{% endblock header_javascript %}
+
+{% block sidebar %}
+    {% comment %}
+    The sidebar is in a block as some pages may override or hide it.
+    {% endcomment %}
+
+    {% include "course/sidebar.html" %}
+
+{% endblock sidebar %}
+{% block main_content %}
+    <div id="course-base" class="course-wrapper">
+
+        {% block course_nav %}
+            <div class="course-info-bar-wrapper">
+
+                {% comment %}
+                The course-info-bar contains course title and top-level course controls, 
+                like search and tabs 
+                {% endcomment %}
+
+                <div class="container course-info-bar">
+
+                    <a id="btnShowTopNav"
+                       class="btn btn-light"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Show main navigation"
+                       aria-controls="site-top-nav"
+                       style="display:{% if request.session.hide_main_nav %}initial{% else %}none{% endif %}">
+                        <div>
+                            <i class="bi bi-caret-down-fill" style="color:#000"></i>
+                        </div>
+                    </a>
+
+                    <div class="course-info-bar-controls">
+                        <div class="row">
+                            <div class="col-lg-8 col-12 d-flex flex-row align-items-center">
+                                <div class="course-title">
+                                    <div class="course-text">
+                                        <span class="d-none d-print-inline">{% site_name %}:</span>
+                                        <span class="d-print-none">{% trans "Course" %}:</span>
+                                    </div>
+                                    <div class="course-display-name">{{ course.display_name }}</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-12 pr-lg-0 mt-3 mt-lg-0 ms-lg-auto d-print-none"
+                                 style="min-height:2.5rem">
+                                {% if current_course_tab != 'search' and current_course_tab != 'analytics' and not hide_search %}
+
+                                    {% include 'course/search_component.html' with course=course %}
+
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course tabs -->
+                    <div class="course-nav-wrapper d-print-none">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="d-lg-none nav-item nav-link active"
+                                 style="padding: 0.6rem 1rem">{{ current_course_tab_name }}</div>
+                            <!-- toggle course tabs when in mobile view -->
+                            <button class="navbar-toggler"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#navbarNav"
+                                    aria-controls="navbarNav"
+                                    aria-expanded="false"
+                                    aria-label="Toggle course navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav">
+                                    {% if current_course_tab == 'search' %}
+                                        <li class="nav-item active">
+                                            <a class="nav-link" href="#">Search</a>
+                                        </li>
+                                    {% endif %}
+                                    <li class="nav-item {% if current_course_tab == 'home' %}active{% endif %}">
+                                        <a class="nav-link"
+                                           href="{% url 'course:course_home_page' course_slug=course.slug course_run=course.run %}">
+                                            {% trans "Home" %}
+                                        </a>
+                                    </li>
+                                    <li class="nav-item  {% if current_course_tab == 'course' %}active{% endif %}">
+                                        <a class="nav-link"
+                                           href="{% url 'course:course_page' course_slug=course.slug course_run=course.run %}">
+                                            {% trans "Course" %}
+                                        </a>
+                                    </li>
+                                    <li class="nav-item {% if current_course_tab == 'progress' %}active{% endif %}">
+                                        <a class="nav-link "
+                                           href="{% url 'course:progress_overview_page' course_slug=course.slug course_run=course.run %}">
+                                            {% trans "Progress" %}
+                                        </a>
+                                    </li>
+                                    <li class="nav-item {% if current_course_tab == 'bookmarks' %}active{% endif %}">
+                                        <a class="nav-link "
+                                           href="{% url 'course:bookmarks_page' course_slug=course.slug course_run=course.run %}">
+                                            {% trans "Bookmarks" %}
+                                        </a>
+                                    </li>
+                                    <li class="nav-item {% if current_course_tab == 'forum_topics' %}active{% endif %}">
+                                        <a class="nav-link"
+                                           href="{% url 'course:forum_topics_page' course_slug=course.slug course_run=course.run %}">
+                                            {% trans "Forum Topics" %}
+                                        </a>
+                                    </li>
+                                    {% for custom_app in course.custom_apps.all %}
+                                        <li class="nav-item {% if custom_app_slug_active == custom_app.slug %}active{% endif %}">
+                                            <a class="nav-link"
+                                               href="{% url 'course:custom_app_page' course_slug=course.slug course_run=course.run custom_app_slug=custom_app.slug %}">
+                                                {{ custom_app.tab_label }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                    <li class="nav-item {% if current_course_tab == 'certificate' %}active{% endif %}">
+                                        <a class="nav-link"
+                                           href="{% url 'course:certificate_page' course_slug=course.slug course_run=course.run %}">
+                                            {% trans "Certificate" %}
+                                        </a>
+                                    </li>
+                                    {% can_view_course_admin request.user course as show_analytics %}
+                                    {% if show_analytics %}
+                                        <li id="course-admin-nav-item"
+                                            class="nav-item {% if current_course_tab == 'course_admin' %}active{% endif %}">
+                                            <a class="nav-link"
+                                               href="{% url 'course:course_admin:course_analytics:index' course_slug=course.slug course_run=course.run %}">
+                                                <i class="bi bi-lock-fill text-danger-emphasis"></i>&nbsp;{% trans "Course Admin" %}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        {% endblock course_nav %}
+        <div id="course-subnav-wrapper" class="sticky-top">
+            <div class="container course-subnav">
+                {% block course_sub_nav %}
+                {% endblock course_sub_nav %}
+            </div>
+        </div>
+        {% block course_content %}
+        {% endblock course_content %}
+    </div>
+{% endblock main_content %}
+
+{% block footer %}
+
+    {% comment %}
+    In the course pages, the footer provides :
+    - a second set of controls for controlling course navigation
+    - a site map footer that has been minimized to avoid clutter the page.
+    {% endcomment %}
+
+    <div id="course-footer-bar-wrapper" class="fixed-bottom">
+
+        {% block adminbar %}
+            {# Used to show content for superadmin #}
+        {% endblock adminbar %}
+
+        <div class="course-footer-bar">
+            {% block unit_controls_bottom %}
+                <div class="container ">
+                    <div class="row">
+                        <div class="col-12 course-footer-bar-controls">
+                            {% block course_info_bar_bottom %}
+                                {% if prev_unit_node_name %}
+                                    <a href="{{ prev_unit_node_url }}"
+                                       aria-label="Previous unit navigation button"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Previous unit : {{ prev_unit_node_name }}"
+                                       class="btn btn-sm btn-secondary btn-back course-nav-button ms-2 ms-md-0 {% if prev_unit_node_name == None %}disabled{% endif %}">
+                                        <i class="bi bi-caret-left-fill"></i>&nbsp;{% trans "Previous" %}
+                                    </a>
+                                {% endif %}
+                                {% if next_unit_node_name %}
+                                    <a href="{{ next_unit_node_url }}"
+                                       aria-label="Next unit navigation button"
+                                       data-bs-toggle="tooltip"
+                                       title="Next unit : {{ next_unit_node_name }}"
+                                       data-bs-placement="top"
+                                       class="btn btn-sm btn-secondary btn-forward course-nav-button me-2 me-md-0 {% if next_unit_node_name == None %}disabled{% endif %}">
+                                        {% trans "Next" %}&nbsp;<i class="bi bi-caret-right-fill"></i>
+                                    </a>
+                                {% endif %}
+                            {% endblock course_info_bar_bottom %}
+                        </div>
+                    </div>
+                </div>
+            {% endblock unit_controls_bottom %}
+        </div>
+
+        {# When showing course pages, we want the final site map footer to be as minimal as possible. So hide it in a collapse.  #}
+        {# Update this template if you want a special footer shown when a user is in a course.  #}
+
+        <div id="footer-site-map-wrapper" class="d-print-none">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <a id="footer-site-map-show-hide-btn"
+                           class="btn btn-sm"
+                           data-bs-toggle="collapse"
+                           href="#collapseExample"
+                           role="button"
+                           aria-expanded="false"
+                           aria-controls="collapseExample">
+                            <span class="text-sm text-muted">{% trans "Site Navigation" %}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse" id="collapseExample">
+
+                {% include 'includes/footer.html' %}
+
+            </div>
+        </div>
+    {% endblock footer %}
+</div>

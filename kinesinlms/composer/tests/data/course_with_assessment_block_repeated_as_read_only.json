@@ -1,0 +1,210 @@
+{
+  "document_type": "kinesinlms:course_export",
+  "metadata": {
+    "exporter_version": "1.0.0",
+    "export_date": "2022-08-21T22:00:04.155645+00:00"
+  },
+  "course": {
+    "slug": "TEST",
+    "run": "SP",
+    "display_name": "Test Course (Self-Paced)",
+    "short_name": "Test Course (SP)",
+    "start_date": "2019-11-25T02:24:13Z",
+    "end_date": null,
+    "advertised_start_date": "Anytime, self-paced",
+    "enrollment_start_date": "2019-11-25T02:24:17Z",
+    "enrollment_end_date": null,
+    "self_paced": true,
+    "days_early_for_beta": 90.0,
+    "enable_certificates": true,
+    "enable_badges": true,
+    "catalog_description": {
+      "title": "Test Course",
+      "slug": "TEST",
+      "blurb": "A test blurb for this course catalog description.",
+      "overview": "A test overview for this course catalog description.",
+      "about_content": "<div>About content. Usually there's a lot of html here</div>",
+      "sidebar_content": "",
+      "visible": true,
+      "hex_theme_color": "e1e1e1",
+      "hex_title_color": "ffffff",
+      "custom_stylesheet": null,
+      "trailer_video_url": null,
+      "effort": "03:00 hours/week",
+      "order": 5,
+      "duration": "Test duration",
+      "audience": "Test audience",
+      "features": [
+        "some feature",
+        "another feature"
+      ]
+    },
+    "surveys": [
+      {
+        "type": "PRE_COURSE",
+        "provider": "qualtrics-kinesinlms",
+        "send_reminder_email": false,
+        "url": "https://example.com/pre_course_survey_url"
+      },
+      {
+        "type": "POST_COURSE",
+        "provider": "qualtrics-kinesinlms",
+        "send_reminder_email": true,
+        "days_delay": 10,
+        "url": "https://example.com/post_course_survey_url"
+      },
+      {
+        "type": "FOLLOW_UP",
+        "provider": "qualtrics-kinesinlms",
+        "send_reminder_email": true,
+        "days_delay": 50,
+        "url": "https://example.com/follow_up_survey_url"
+      }
+    ],
+    "course_root_node": {
+      "slug": "test_sp",
+      "display_sequence": 0,
+      "children": [
+        {
+          "type": "MODULE",
+          "slug": "test-module",
+          "purpose": null,
+          "display_name": "Test Module",
+          "release_datetime": null,
+          "display_sequence": 0,
+          "unit": null,
+          "children": [
+            {
+              "type": "SECTION",
+              "slug": "test-section",
+              "purpose": null,
+              "display_name": "Test Section",
+              "release_datetime": null,
+              "display_sequence": 0,
+              "unit": null,
+              "children": [
+                {
+                  "type": "UNIT",
+                  "slug": "test-unit",
+                  "children": [],
+                  "purpose": null,
+                  "display_name": "Test Unit",
+                  "release_datetime": null,
+                  "display_sequence": 1,
+                  "unit": {
+                    "type": "STANDARD",
+                    "uuid": "5e3b7076-b933-4d40-80f5-0882fd15d51b",
+                    "display_name": "Welcome to the Test Course",
+                    "short_description": null,
+                    "course_only": false,
+                    "slug": "assessment-unit",
+                    "unit_blocks": [
+                      {
+                        "label": null,
+                        "block_order": 2,
+                        "hide": false,
+                        "read_only": false,
+                        "block": {
+                          "type": "ASSESSMENT",
+                          "uuid": "5e3b7076-b933-4d40-80f5-0882fd15d51c",
+                          "assessment": {
+                            "type": "LONG_FORM_TEXT",
+                            "slug": "q1-assessment",
+                            "question": "Try entering some text in the long-form text control:",
+                            "question_as_statement": "",
+                            "definition_json": {},
+                            "solution_json": null,
+                            "explanation": null,
+                            "show_answer": false,
+                            "show_slug": false,
+                            "attempts_allowed": null,
+                            "has_correct_answer": false,
+                            "graded": false
+                          },
+                          "display_name": null,
+                          "short_description": "",
+                          "course_only": false,
+                          "slug": "q1-assessment-block",
+                          "version": 0,
+                          "html_content": "",
+                          "json_content": null
+                        }
+                      }
+                    ],
+                    "version": 0,
+                    "html_content": null,
+                    "json_content": null
+                  }
+                },
+                {
+                  "type": "UNIT",
+                  "slug": "test-unit",
+                  "children": [],
+                  "purpose": null,
+                  "display_name": "Test Unit",
+                  "release_datetime": null,
+                  "display_sequence": 2,
+                  "unit": {
+                    "type": "STANDARD",
+                    "display_name": "This unit repeats the assessment as read-only.",
+                    "short_description": null,
+                    "course_only": false,
+                    "slug": "read-only-unit",
+                    "unit_blocks": [
+                      {
+                        "label": null,
+                        "block_order": 1,
+                        "hide": false,
+                        "read_only": true,
+                        "block": {
+                          "uuid": "5e3b7076-b933-4d40-80f5-0882fd15d51c"
+                        }
+                      }
+                    ],
+                    "version": 0,
+                    "html_content": null,
+                    "json_content": null
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "type": "ROOT",
+      "purpose": null,
+      "display_name": "TEST_SP",
+      "node_url": "/courses/TEST/SP/content/",
+      "release_datetime": null,
+      "unit": null
+    },
+    "milestones": [
+      {
+        "slug": "all_assessments",
+        "name": "All assessments",
+        "description": "Answer all assessments.",
+        "type": "CORRECT_ANSWERS",
+        "count_requirement": 1,
+        "required_to_pass": true
+      }
+    ],
+    "speakers": [
+      "test-speaker-1",
+      "test-speaker-2"
+    ],
+    "learning_objectives": [
+      {
+        "slug": "1",
+        "description": "Learning Objective 1"
+      },
+      {
+        "slug": "2",
+        "description": "Learning Objective 2"
+      },
+      {
+        "slug": "3",
+        "description": "Learning Objective 3"
+      }
+    ]
+  }
+}

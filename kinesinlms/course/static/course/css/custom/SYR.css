@@ -1,0 +1,24 @@
+/* Custom styles for SYR */
+
+.printable-review h1 {
+    margin-top:2.5rem;
+    font-size: 2rem;
+}
+
+.my-responses h2, .printable-review h2 {
+    margin-top: 2.2rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: .5em;
+}
+
+.my-responses h3, .printable-review h3 {
+    font-size: 1.3em;
+    margin-top: 2rem;
+    text-transform: uppercase;
+}
+
+.my-responses h4, .printable-review h4 {
+    font-size: 1.2em;
+    margin-top: 2rem;
+}
+

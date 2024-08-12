@@ -1,0 +1,103 @@
+{% load static %}
+
+{% comment %}
+
+This template is used to render the edit view for a course unit.
+The view shows the unit as it would appear in the course, except
+that the blocks are in 'read-only' mode.
+
+The user can then select a block for editing (only one at a time), 
+where we then use HTMx to load the correct 'authoring' version 
+of a block for editing.
+
+{% endcomment %}
+
+<div class="course-unit-edit-controls">
+
+    <div class="controls-left">
+        <div data-bs-toggle="tooltip"
+             class="ms-2"
+             title="View course contents nav">
+            <button type="button"
+                    class="btn btn-light btn-sm d-print-none course-nav-button course-contents-button"
+                    id="sidebarCollapse"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#course-left-nav-off-canvas">
+                <i class="bi bi-list"></i>
+            </button>
+            <span class="text-muted">Nav</span>
+        </div>
+    </div>
+
+    <div class="controls-right">
+
+        {% if course_unit %}
+
+            <div>
+                <a href="{% url 'course:unit_page' course_slug=course.slug course_run=course.run module_slug=module_node.slug section_slug=section_node.slug unit_slug=unit_node.slug %}"
+                   class="btn btn-light btn-sm ms-2"
+                   data-bs-placement="top"
+                   data-bs-toggle="tooltip"
+                   title="View Unit in Course"
+                   target="_blank">
+                    <i class="bi bi-eye"></i>
+                </a>
+            </div>
+
+            <div data-bs-title="Add a new block at end of unit"
+                 data-bs-toggle="tooltip"
+                 data-bs-placement="top">
+
+                <a id="btn-add-block-end" 
+                   class="btn btn-sm btn-primary ms-3"
+                   hx-get="{% url 'composer:show_add_block_modal_dialog_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id %}?before_block_id=-1"
+                   hx-target="#add-block-modal"
+                   hx-swap="innerHTML"
+                   data-bs-toggle="modal"
+                   data-bs-above-block-id="{{ insert_index }}"
+                   data-bs-target="#add-block-modal">
+                    <i class="bi bi-box"></i>
+                </a>
+            </div>
+
+            <div class="ms-2"
+                 data-bs-title="Toggle WYSIWYG editing mode"
+                 data-bs-toggle="tooltip"
+                 data-bs-placement="top">
+                {% include 'composer/hx/toggle_wysiwyg.html' %}
+            </div>
+
+        {% endif %}
+    </div>
+</div>
+
+{% include 'composer/course/course_unit/course_unit_header.html' with course=course course_unit=course_unit module_node=module_node section_node=section_node unit_node=unit_node %}
+
+<div id="block-edit-list">
+
+    {% for unit_block in course_unit.unit_blocks.all %}
+
+        {% include "composer/course/course_unit/course_unit_block.html" with block=unit_block.block %}
+
+    {% endfor %}
+
+</div>
+
+<div id="block-edit-card-final-slot"></div>
+
+{% include 'composer/course/course_unit/add_block_mini_button.html' with before_block_id=-1 %}
+
+{# visual element suggesting end of block sequence #}
+<div class="d-flex flex-row justify-content-center">
+    <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="4" r="4" stroke="#999" fill="#fff" stroke-width="1"></circle>
+    </svg>
+</div>
+
+{% if course_unit.type != 'STANDARD' %}
+    <div class="d-flex flex-row w-100 justify-content-center">
+        <span class="text-muted mt-2" style="font-size: 0.8rem;">
+            You cannot add blocks to a {{ course_unit.type }} unit.
+        </span>
+    </div>
+{% endif %}

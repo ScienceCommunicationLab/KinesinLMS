@@ -1,0 +1,25 @@
+.management-page {
+  margin-top: 2rem;
+  padding-bottom: 5rem;
+  min-height: $min-content-height;
+
+  .management-header h1 {
+    font-size: 1.2rem
+  }
+
+
+  .management-group {
+    border: 1px solid #CCC;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background: linear-gradient(70deg, #f3f7fc, #cbe0fc);
+
+    .row {
+      padding: 0;
+    }
+
+    .card-body {
+      min-height: 10rem;
+    }
+  }
+}

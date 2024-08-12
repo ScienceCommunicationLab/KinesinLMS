@@ -1,0 +1,25 @@
+{% load tz %}
+<a  {% if node.link_enabled %}
+    href="{{ node.node_url }}"
+{% endif %}
+        {% if node.type == "UNIT" and active_unit_node_id == node.id %}
+    id="current-unit-item"
+        {% endif %}>
+
+    {% if node.type == "UNIT" and active_unit_node_id == node.id %}
+        <div id="you-are-here-marker"
+             class="star-marker" >
+            <i class="bi bi-star-fill"></i>
+        </div>
+    {% endif %}
+    <div class="node-info">
+        <div class="sequence {{ node.type | lower }}-sequence">
+            {% if node.type == "MODULE" and node.content_index != None %}
+                <div class="content-index-holder">
+                    <div class="content-index-number">{{ node.content_index }}</div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="node-title">{{ node.display_name }}</div>
+    </div>
+</a>

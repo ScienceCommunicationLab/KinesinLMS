@@ -1,0 +1,119 @@
+<table id="milestones-table" class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th style="text-align:center;">
+                <div class="d-flex flex-row">
+                    Required to Pass
+                    <i data-bs-toggle="tooltip"
+                       title="This milestone must be completed to pass the course."
+                       class="bi bi-info-circle-fill ms-2 text-secondary"></i>
+                </div>
+            </th>
+            <th style="text-align:center;">
+                <div class="d-flex flex-row">
+                    Count Requirement
+                    <i data-bs-toggle="tooltip"
+                       title="The number of assessments that must be answered successfully."
+                       class="bi bi-info-circle-fill ms-2 text-secondary"></i>
+                </div>
+            </th>
+            <th style="text-align:center;">
+                <div class="d-flex flex-row">
+                    Minimum score
+                    <i data-bs-toggle="tooltip"
+                       title="This minimum score must be reached by the completed blocks."
+                       class="bi bi-info-circle-fill ms-2 text-secondary"></i>
+                </div>
+            </th>
+            <th style="text-align:center;">
+                <div class="d-flex flex-row">
+                    Count Graded Only
+                    <i data-bs-toggle="tooltip"
+                       title="Only count assessments marked 'graded' against the count requirement. Otherwise, all assessment answers is counted."
+                       class="bi bi-info-circle-fill ms-2 text-secondary"></i>
+                </div>
+            </th>
+            <th>Badge&nbsp;Class</th>
+            <th style="width:4rem;text-align:center;">Edit</th>
+            <th style="width:4rem;text-align:center;">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if milestones %}
+            {% for milestone in milestones %}
+                <tr id="row-milestone-{{ milestone.id }}">
+                    <td>{{ milestone.name }}</td>
+                    <td>{{ milestone.slug }}</td>
+                    <td>{{ milestone.type }}</td>
+                    <td>{{ milestone.description }}</td>
+                    <td style="text-align:center;">
+                        {% if milestone.required_to_pass %}
+                            <i class="bi bi-check-square text-success"
+                               style="font-size: x-large"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="This milestone is required to pass the course."></i>
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="text-align:center;">
+                        {% if milestone.count_requirement %}
+                            {{ milestone.count_requirement }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="text-align:center;">
+                        {% if milestone.min_score_requirement %}
+                            {{ milestone.min_score_requirement }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="text-align:center;">
+                        {% if milestone.count_graded_only %}
+                            <i class="bi bi-check-square text-success text-bold"
+                               style="font-size: x-large"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Only 'graded' assessments are counted against this milestone."></i>
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td>{{ milestone.badge_class }}</td>
+                    <td style="width:4rem;text-align:center;">
+                        <a class="btn btn-primary"
+                           href="{% url 'composer:course_milestone_update' course_id=course.id pk=milestone.id %}">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                    </td>
+                    <td style="width:4rem;text-align:center;">
+                        <a class="btn btn-danger"
+                           hx-confirm="Are you sure you want to delete milestone '{{ milestone.name }}'?"
+                           hx-target="#milestones-table"
+                           hx-trigger="click"
+                           hx-delete="{% url 'composer:course_milestone_delete_hx' course_id=course.id pk=milestone.id %}"
+                           hx-swap="outerHTML">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="11" class="w-100">
+                    <div class="d-flex flex-column w-100 justify-content-center align-items-center"
+                         style="height: 10rem">
+                        <div class="alert alert-light">No milestones have been added to this course.</div>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

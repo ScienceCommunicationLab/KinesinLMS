@@ -1,0 +1,47 @@
+{% load static i18n tz %}
+
+<div class="card course-card" style="min-height:25rem;">
+
+    <div class="card-header">{{ course_description.course.token }}</div>
+
+    <a href="{% url 'composer:course_edit' course_id=course_description.course.id %}"
+       class="card-img-top">
+        <img src="{{ course_description.thumbnail_url }}"
+             class="card-img-top"
+             alt="Thumbnail illustration for {{ course_description.title }}." />
+    </a>
+
+    <div class="card-body">
+
+        <div class="card-title">{{ course_description.title }}</div>
+
+        {% if descrip.blurb %}<p class="card-text">{{ course_description.blurb }}</p>{% endif %}
+
+        <div class="meta-info-wrapper">
+
+            {% if not course_description.course.self_paced %}
+                <div class="meta-info">
+                    <div class="label">Starts:</div>
+                    <div class="meta-value">{{ course_description.course.start_date | utc }} UTC</div>
+                </div>
+                <div class="meta-info">
+                    <div class="label">Ends:</div>
+                    <div class="meta-value">{{ course_description.course.end_date | utc }} UTC</div>
+                </div>
+
+            {% endif %}
+        </div>
+
+    </div>
+    <div class="card-footer d-flex flex-row justify-content-between">
+        <div>
+            {% if course_description.course.self_paced %}
+                <i class="bi bi-person-walking"></i> Self-paced
+            {% else %}
+                <i class="bi bi-calendar"></i> Instructor-led
+            {% endif %}
+        </div>
+        <a href="{% url 'composer:course_edit' course_id=course_description.course.id %}"
+           class="btn btn-primary ms-auto">Edit Course</a>
+    </div>
+</div>

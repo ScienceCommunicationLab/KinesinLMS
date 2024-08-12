@@ -1,0 +1,188 @@
+{% load core_tags %}
+{% comment %}
+
+This template is used to render a block in the course unit edit page in a 'read only' mode.
+
+That means it's not yet selected for editing, and composer is instead trying to render the block
+as close as possible to how one would see it in the course.
+
+Essentially, all interactivity should be return off in the block.
+
+However, Composer does provide a set of actions to edit, move and delete the block.
+
+
+{% endcomment %}
+
+<div id="block-edit-card-{{ block.id }}"
+     class="card block-edit-card block-status-{{ block.status|lower }} block-edit-card-read-only">
+
+    <div class="card-header">
+
+        <div class="block-edit-header-info">
+
+            <a class="btn btn-light me-2 btn-sm btn-blockcollapse"
+               data-bs-toggle="collapse"
+               href="#collapse-block-{{ block.id }}"
+               role="button"
+               aria-expanded="true"
+               aria-controls="collapse-block-{{ block.id }}">
+                <i class="bi bi-chevron-double-down"></i>
+            </a>
+
+            <div>
+                {{ block.type_display_name|upper }}
+                {% if block.type == "ASSESSMENT" %}
+                    / {{ block.assessment_type_display_name|upper }}
+                    {% if block.assessment.type == "MULTIPLE_CHOICE" %}/ {{ block.quiz_type_display_name|upper }}{% endif %}
+                {% elif block.type == "SIMPLE_INTERACTIVE_TOOL" %}
+                    / {{ block.simple_interactive_tool.tool_type }}
+                {% endif %}
+            </div>
+
+        </div>
+        <!-- /block-edit-header-info -->
+
+        <div class="header-actions">
+
+            <a class="btn btn-light me-3 btn-sm btn-block-edit"
+               hx-swap="outerHTML"
+               hx-indicator="#load-unit-spinner-wrapper"
+               hx-get="{% url 'composer:blocks:edit_block_panel_set_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id pk=block.id %}"
+               hx-target="#course-unit-block-{{ block.id }}">
+                <i class="bi-pencil-fill"></i>
+            </a>
+
+            <a data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Move block up"
+               class="btn btn-light btn-sm me-2 btn-block-move-up"
+               hx-swap="innerHTML"
+               hx-indicator="#load-unit-spinner-wrapper"
+               hx-trigger="click"
+               hx-post="{% url 'composer:edit_course_unit_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id pk=unit_node.unit.id %}?action=move_block&direction=UP&block_id={{ block.id }}"
+               hx-target="#course-unit-contents">
+                <i class="bi bi-arrow-up"></i>
+            </a>
+            <a data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Move block down"
+               class="btn btn-light btn-sm me-2 btn-block-move-down"
+               hx-swap="innerHTML"
+               hx-indicator="#load-unit-spinner-wrapper"
+               hx-trigger="click"
+               hx-post="{% url 'composer:edit_course_unit_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id pk=unit_node.unit.id %}?action=move_block&direction=DOWN&block_id={{ block.id }}"
+               hx-target="#course-unit-contents">
+                <i class="bi bi-arrow-down "></i>
+            </a>
+
+            <a data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Delete block"
+               hx-confirm="Are you sure you want to delete this {{ block.type }} block ?"
+               hx-trigger="click"
+               hx-delete="{% url 'composer:blocks:delete_course_unit_block_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id pk=block.id %}"
+               hx-swap="outerHTML"
+               hx-target="#course-unit-block-{{ block.id }}"
+               class="btn btn-danger btn-sm btn-block-delete">
+                <i class="bi bi-x"></i>
+            </a>
+
+        </div>
+        <!-- /header-actions -->
+
+    </div>
+    <!-- /card-header -->
+
+    <div id="collapse-block-{{ block.id }}" class="collapse show">
+
+        <div class="card-body">
+
+            {% if block.type == 'VIDEO' %}
+
+                {% include 'course/blocks/video.html' %}
+
+            {% elif block.type == "SURVEY" %}
+
+                {% include 'course/blocks/survey.html' %}
+
+            {% elif block.type == "ASSESSMENT" %}
+
+                {% include 'course/blocks/assessment.html' %}
+
+            {% elif block.type == "HTML_CONTENT" %}
+
+                {% include 'course/blocks/html_content.html' %}
+
+            {% elif block.type == "FILE_RESOURCE" %}
+
+                {% include 'course/blocks/file_resource.html' %}
+
+            {% elif block.type == "CALLOUT" %}
+
+                {% include 'course/blocks/callout.html' %}
+
+            {% elif block.type == "ANSWER_LIST" %}
+
+                {% include 'course/blocks/answer_list.html' %}
+
+            {% elif block.type == "FORUM_TOPIC" %}
+
+                {% include 'course/blocks/forum_topic.html' %}
+
+            {% elif block.type == "SIMPLE_INTERACTIVE_TOOL" %}
+
+                {% if block.simple_interactive_tool.tool_type == "DIAGRAM" %}
+
+                    {% include 'course/blocks/diagram.html' %}
+
+                {% elif block.simple_interactive_tool.tool_type == "TABLETOOL" %}
+
+                    {% include 'course/blocks/tabletool.html' %}
+
+                {% else %}
+                    <div class="text-muted">
+                        Cannot render '{{ block.simple_interactive_tool.tool_type }}' interaction.
+                        <br />
+                        Please contact support for help.
+                    </div>
+                {% endif %}
+
+            {% elif block.type == "EXTERNAL_TOOL_VIEW" %}
+
+                {% include 'course/blocks/external_tool_view.html' %}
+
+            {% else %}
+
+                <div class="text-muted">
+                    ( Unrecognized block type: {{ block.type }} )
+                </div>
+
+            {% endif %}
+        </div>
+        <!-- /card-body -->
+
+        <div class="card-footer">
+
+            <div class="actions-left">
+                <div class="block-identifiers">
+                    <div>
+                        <label>ID:</label>
+                        {{ block.id }}
+                    </div>
+                    <div class="ms-3">
+                        <label>slug:</label>
+                        {{ block.slug|show_none_for_none }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions-right"></div>
+
+        </div>
+        <!-- /card-footer -->
+
+    </div>
+    <!-- /collapse-block-{{ block.id }} -->
+
+</div>
+<!-- /block-edit-card-{{ block.id }} -->

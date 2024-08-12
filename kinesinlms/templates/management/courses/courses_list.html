@@ -1,0 +1,186 @@
+{% extends "management/management_base.html" %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+
+{% block management_content %}
+
+
+    <table class="table table-bordered ">
+
+        <thead class="table-light">
+        <tr>
+            <th>Course name</th>
+            <th style="text-align: center">Actions</th>
+            {% if user.is_superuser %}
+                <th style="text-align: center">Students</th>
+                <th style="text-align: center">Badge</th>
+                <th style="text-align: center;  width:3rem;">
+                    Duplicate
+                </th>
+                <th style="text-align: center;  width:3rem;">
+                    Edit
+                </th>
+                {% if user.is_superuser %}
+                    <th style="text-align: center; width:3rem;">
+                        Delete
+                    </th>
+                {% endif %}
+            {% endif %}
+        </tr>
+        </thead>
+
+        {% for course in courses %}
+            <tr>
+                <td>
+                    <a href="{% url 'management:course_update' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-link">
+                        {{ course.display_name }}
+                    </a>
+                </td>
+                <td>
+                    <a class="btn btn-light mb-3"
+                       href="{% url 'course:outline_course' course_run=course.run course_slug=course.slug %}">
+                        View&nbsp;Outline
+                    </a>
+                </td>
+                <td style="text-align: center">
+                    <a href="{% url 'management:students_in_course_list' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-light">
+                        View&nbsp;Students
+                    </a>
+                </td>
+                <td style="text-align: center">
+                    <a href="{% url 'management:course_badge_classes' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-light mb-3">
+                        Manage Badges
+                    </a><br/>
+                    <a href="{% url 'management:course_badge_assertions' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-light">
+                        View Awarded Badges
+                    </a>
+
+
+                </td>
+
+
+                <td style="text-align: center">
+                    <a href="{% url 'management:duplicate_course' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-primary"
+                       aria-label="Duplicate">
+                        <i class="bi bi-copy"></i>
+                    </a>
+                </td>
+
+                <td style="text-align: center">
+                    <a href="{% url 'management:course_update' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-primary"
+                       aria-label="Edit">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                </td>
+                {% if user.is_superuser %}
+                    <td style="text-align: center">
+                        <a class="btn btn-danger"
+                           arial-label="Delete"
+                           data-bs-toggle="modal"
+                           data-bs-target="#delete-course-modal"
+                           data-url="{% url 'management:course_delete' course_run=course.run course_slug=course.slug %}"
+                           data-message="Are you sure you want to delete course '{{ course.token }}' ">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+    </table>
+
+
+
+{% endblock management_content %}
+
+{% block modal %}
+
+    {{ block.super }}
+
+    <div id="delete-course-modal"
+         class="modal fade"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="delete-course-modal-label"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Course</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!--    The 'action' attribute will be filled in with the 'delete' url
+                           for the selected course by JS when modal is shown -->
+                <form id="confirm-delete-course-form"
+                      action=""
+                      method="post">
+
+                    {% csrf_token %}
+
+                    <div class="modal-body">
+
+                        <div id="delete-course-modal-message" class="mb-5">
+                            <!-- Will be filled in by JS when modal is shown -->
+                        </div>
+
+
+                        {{ delete_course_form|crispy }}
+
+
+                    </div>
+
+                    <div class="modal-footer mt-5">
+                        <button type="submit"
+                                class="btn btn-danger"
+                                id="confirmButtonModal">
+                            Delete
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-primary"
+                                data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock modal %}
+
+{% block javascript %}
+    {{ block.super }}
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            let form_confirm = document.querySelector('#confirm-delete-course-form');
+            let buttons = document.querySelectorAll("[data-bs-target='#delete-course-modal']");
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    if (button.dataset.message) {
+                        document.getElementById("delete-course-modal-message").innerHTML = button.dataset.message;
+                    }
+                    // extract url from calling element and replace the modals texts with it
+                    if (button.dataset.url) {
+                        form_confirm.action = button.dataset.url;
+                    }
+                })
+            });
+        });
+    </script>
+{% endblock %}
+
+

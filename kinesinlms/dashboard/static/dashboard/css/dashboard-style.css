@@ -1,0 +1,100 @@
+
+.dashboard-page {
+    margin-bottom: 200px;
+}
+
+.dashboard-page .card-footer {
+    background-color: #fefefe;
+    border-top: 1px dotted #ccc;
+}
+
+.dashboard-page .course-thumbnail {
+    background: #f1f1f1;
+}
+.dashboard-page .course-thumbnail img {
+    max-height: 250px;
+    padding: 0.2rem;
+    object-fit: cover;
+}
+
+.course-list {
+}
+
+.course-list .card {
+    margin-bottom: 2em;
+}
+
+.card {
+    margin: 1rem 0;
+}
+
+.card-body {
+    padding: 0;
+}
+
+
+.course-item {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 2em;
+    background: #f6f6f6;
+}
+
+
+.course-thumbnail, .course-blurb {
+    margin: 1rem 1rem 0.5rem;
+}
+
+.course-thumbnail img {
+    width: 100%;
+}
+
+.course-details {
+    padding: 1em 1em .5em 1em;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-title {
+    font-weight: 600;
+    flex-grow: 0;
+    margin-bottom: .2em;
+    font-family: "Jost", Arial, sans-serif !important;
+}
+
+.course-controls {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    flex-grow: 0;
+    align-items: center;
+}
+
+.course-controls button {
+    margin-right: 1em;
+}
+
+.passed-course-bling {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+    font-size: .8em;
+    color: #999;
+    margin-bottom: 2rem;
+}
+
+.passed-message {
+    margin-top: 10px;
+}
+
+.course-action-buttons .btn {
+    min-width: 140px;
+}
+
+.credentials-buttons .btn {
+    min-width: 140px;
+}

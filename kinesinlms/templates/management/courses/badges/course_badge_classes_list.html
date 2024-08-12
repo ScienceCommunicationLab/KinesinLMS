@@ -1,0 +1,54 @@
+{% extends "management/management_base.html" %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+
+{% block management_content %}
+
+    <div>
+
+    </div>
+
+
+    <div class="d-flex flex-row justify-content-between mb-1 align-items-center">
+        <div class="ms-2">
+            Badge Classes for Course {{ course.token }}
+        </div>
+        <a href="{% url 'management:cour' %}"
+           class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> {% trans "Add Badge Class" %}
+        </a>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead class="table-light">
+            <tr>
+                <td>Badge Class</td>
+                <td>issued_on</td>
+                <td>URL</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% if badge_classes %}
+                {% for badge_class in badge_classes %}
+                    <tr>
+                        <td>{{ badge_class.name }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4"
+                        style="height:10rem;">
+                        <div class="d-flex flex-column align-items-center justify-content-center w-100 h-100">
+                            <span class="text-muted">( No badges classes defined yet in for this course. )</span>
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,379 @@
+{% extends "help/help_base.html" %}
+
+{% load static i18n core_tags %}
+
+{% block help_content %}
+
+    <style>
+      .course-passed-badges {
+        border: 1px solid #ccc;
+        border-radius: 1rem;
+        padding: 1rem;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .course-passed-badges img {
+        max-width: 10rem;
+        margin-right: 2rem;
+      }
+    </style>
+
+    <div class="row ">
+        <div class="col-12 col-lg-8">
+
+            {% site_name as curr_site_name %}
+
+            <h3>
+                {% blocktrans trimmed %}
+                    What Are Badges?
+                {% endblocktrans %}
+            </h3>
+
+            <p>
+                {% blocktrans trimmed %}
+                    Badges, or "digital badges", are computer-based graphical images that serve as proof of an
+                    achievement or skill. You might see badges associated with online learning achievements, games,
+                    conference attendance, and in other contexts. Badge images are a great (and easy) way to share your
+                    accomplishments.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans trimmed %}
+                    Badges can be industry recognized or used within a group to indicate completion of learning. For
+                    courses on {{ curr_site_name }}, you can share these badges to indicate you’ve gained skills in a
+                    particular area, however, these badges are not yet industry recognized.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans trimmed %}
+                    To help validate claims of achievement promoted by a badge, an industry group created the concept of
+                    "<a target="_blank"
+   href='https://www.imsglobal.org/sites/default/files/Badges/OBv2p0Final/index.html'>Open
+                    Badges,</a>" which is a technique for embedding verifiable metadata directly into a badge image.
+                    Essentially, when you earn a badge, information about the criteria for achievement and who awarded
+                    the badge is embedded as metadata directly into the image. The image and data are usually stored in
+                    .png
+                    or .svg format.
+                {% endblocktrans %}
+            </p>
+
+            <p>
+                {% blocktrans trimmed %}
+                    Open Badges is a free and "open" standard, therefore, any badge you earn should be portable across
+                    different systems and uses. So you can keep and share your hard-earned Open Badges even if the
+                    systems or groups that awarded them go away. If you want to learn more about Open Badges,
+                    visit Badgr.com and review their
+                    <a href="https://support.badgr.com/en/knowledge/what-are-open-badges">overview page</a>.
+                    {% endblocktrans %}
+                </p>
+
+                <h3>{% blocktrans %}Course Passed Badges{% endblocktrans %}</h3>
+
+                <p>
+                    {% url 'dashboard:index' as dashboard_url %}
+                    {% blocktrans trimmed %}
+                        {{ curr_site_name }} plans to offer a series of badges to celebrate your various learning
+                        achievements and your contributions to our community. We've just started, so for now we simply award
+                        one "course passed" badge for each course you pass. Access your badge on the "Progress" page for the
+                        course, just like your certificate. To generate and view badges for all your enrolled courses,
+                        go to your "My Dashboard" page.
+                    {% endblocktrans %}
+                </p>
+
+                <p>
+                    {% if dashboard_url %}
+                        <a href="{{ dashboard_url }}" class="btn btn-primary" target="_blank">
+                            {% blocktrans %}View "My Dashboard"{% endblocktrans %}
+                        </a>
+                    {% endif %}
+                </p>
+
+                <p>
+                    {% support_email as contact_email %}
+                    {% blocktrans trimmed %}
+                        If you have ideas for other badges to highlight your contributions and achievements, please
+                        <a href="mailto:{{ contact_email }}">let us know</a>.
+                    {% endblocktrans %}
+                </p>
+
+                <div class="d-flex flex-row course-passed-badges">
+                    <img src="{% static 'images/badges/course_passed_badge_SYR.svg' %}"
+                         alt="Image of 'course passed' badge for SYR" />
+                    <img src="{% static 'images/badges/course_passed_badge_PYSJ.svg' %}"
+                         alt="Image of 'course passed' badge for PYSJ" />
+                    <img src="{% static 'images/badges/course_passed_badge_LE.svg' %}"
+                         alt="Image of 'course passed' badge for LE" />
+                    <img src="{% static 'images/badges/course_passed_badge_BCLS.svg' %}"
+                         alt="Image of 'course passed' badge for BCLS" />
+                </div>
+
+                <h3>{% blocktrans %}Disabling Badges {% endblocktrans %}</h3>
+                <p>
+                    {% blocktrans trimmed %}
+                        If you don't believe in badges, no problem. After logging in to {{ curr_site_name }}, select your
+                        Username on the far right of the top navigation bar. Then select "My Settings." Uncheck "Enable
+                        badges" and we won't generate badges for you.
+                    {% endblocktrans %}
+                </p>
+                <img class="img img-thumbnail mb-2"
+                     style="max-width: 30rem"
+                     alt="Screenshot of the 'enable badges' option on the 'My Settings' page."
+                     src="{% static 'help/images/enable-badges-option-screenshot.png' %}" />
+
+                <h3 id="twitter">
+                    {% blocktrans trimmed %}
+                        How to Share Your Badge on Twitter
+                    {% endblocktrans %}
+                </h3>
+                <p>
+                    {% blocktrans trimmed %}
+                        Sharing your badge on Twitter is easy. After earning a badge, access the "Badge" pulldown on the
+                        course "Progress" page or the "My Dashboard" page.
+                    {% endblocktrans %}
+                </p>
+
+                <p>
+                    {% blocktrans trimmed %}
+                        Using that pulldown, simply select the "Share on Twitter" option and then complete the
+                        tweet with the badge information on the Twitter site.
+                    {% endblocktrans %}
+                </p>
+                {% twitter_username as tw_username %}
+                {% if tw_username %}
+                    <p>
+                        {% blocktrans trimmed %}
+                            Tag us @{{ tw_username }} so that we can
+                            celebrate you, too!
+                        {% endblocktrans %}
+                    </p>
+                {% endif %}
+
+                <img class="img img-thumbnail mb-2"
+                     style="max-width: 20rem"
+                     alt="Screenshot of the 'Share on Twitter' option in the 'Badges' pulldown menu."
+                     src="{% static 'help/images/share-on-twitter-option-screenshot.png' %}" />
+
+                <h3 id="linkedin">
+                    {% blocktrans trimmed %}
+                        How to Add Your Badge to LinkedIn
+                    {% endblocktrans %}
+                </h3>
+
+                <p>
+                    {% blocktrans trimmed %}
+                        Add a badge directly to your LinkedIn profile by adding a certification or course. If you add it to
+                        your LinkedIn feed, it will be a temporary addition and others may miss it as time
+                        passes.
+                    {% endblocktrans %}
+                </p>
+
+                <p>
+                    {% blocktrans trimmed %}
+                        We haven't yet automated the procedure to share a badge on your LinkedIn profile, but you can do it
+                        easily in a few steps:
+                    {% endblocktrans %}
+                </p>
+
+                <p class="mt-5">
+
+                    {% blocktrans trimmed %}
+                        <strong>Step 1:</strong> Log into your LinkedIn account and select your "profile"
+                    {% endblocktrans %}
+
+                </p>
+
+                <p class="mt-5">
+                    {% blocktrans trimmed %}
+                        <strong>Step 2:</strong> Click "Add Profile Section"
+                    {% endblocktrans %}
+                </p>
+
+                <p>
+                    {% blocktrans trimmed %}
+                        You should see a popup that looks something like this:
+                    {% endblocktrans %}
+                </p>
+
+                <img class="img img-thumbnail mb-2"
+                     style="max-width: 30rem"
+                     alt="Screenshot of LinkedIn dialog for adding a profile section."
+                     src="{% static 'help/images/linkedin-add-profile-section.png' %}" />
+
+                <p class="mt-5">
+                    {% blocktrans trimmed %}
+                        <strong>Step 3:</strong> Select the “Recommended” section and click "Add Licenses and
+                        Certifications"
+                    {% endblocktrans %}
+                </p>
+
+                <p>
+                    {% blocktrans trimmed %}
+                        You should then see a popup that looks something like this:
+                    {% endblocktrans %}
+                </p>
+
+                <img class="img img-thumbnail mb-2"
+                     style="max-width: 30rem"
+                     alt="Screenshot of LinkedIn dialog for adding a license or certification."
+                     src="{% static 'help/images/linkedin-add-credential-popup.png' %}" />
+
+                <p class="mt-5">
+                    {% blocktrans trimmed %}
+                        <strong>Step 4:</strong> Enter Your Badge Information
+                    {% endblocktrans %}
+                </p>
+
+                <p>
+                    {% blocktrans trimmed %}
+                        Now it's time to copy over your badge information into that
+                        "Add License or certification" dialog shown by LinkedIn.
+                    {% endblocktrans %}
+                </p>
+
+                <p>
+                    {% blocktrans trimmed %}
+                        You can view your badge information by going to the "Progress" tab in the course for the badge,
+                        and then select "View Badge Info" from the "Badge" dropdown.
+                    {% endblocktrans %}
+                </p>
+
+                <p>
+                    {% blocktrans trimmed %}
+                        You'll see a popup window like the following:
+                    {% endblocktrans %}
+                </p>
+
+                <img src="{% static 'help/images/badge-popup-example.png' %}"
+                     class="img img-thumbnail"
+                     style="max-width:500px"
+                     alt="Screenshot of an example badge information popup window." />
+
+                <p class="mt-4">
+                    {% blocktrans trimmed %}
+                        Use the information in the badge popup to help you enter the correct data into the fields
+                        in the LinkedIn form. The table below describes each field you'll need to copy over.
+                    {% endblocktrans %}
+                </p>
+
+                {% if badge_assertion %}
+                    <p>
+                        {% blocktrans trimmed %}
+                            For example, if you wanted to add the badge you just earned
+                            in "{{ badge_assertion.course_title }}", you would enter the following badge information
+                            into the LinkedIn form:
+                        {% endblocktrans %}
+                    </p>
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>
+                                <strong>{% trans "LinkedIn Field" %}</strong>
+                            </td>
+                            <td>
+                                <strong>{% trans "Value you should use..." %}</strong>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>{% trans "Name" %}</td>
+                            <td>{{ badge_assertion.badge_title }}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Issuing Organization" %}</td>
+                            <td>{% site_name %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Issue Date" %}</td>
+                            <td>{{ badge_assertion.issued_on }}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Expiration" %}</td>
+                            <td class="text-secondary">
+                                <em>( leave blank )</em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Credential ID" %}</td>
+                            <td>{{ badge_assertion.external_entity_id }}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Credential URL" %}</td>
+                            <td>{{ badge_assertion.open_badge_id }}</td>
+                        </tr>
+                    </table>
+
+                {% else %}
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>
+                                <strong>{% trans "LinkedIn Field" %}</strong>
+                            </td>
+                            <td>
+                                <strong>{% trans "Value you should use..." %}</strong>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>{% trans "Name" %}</td>
+                            <td>
+                                {% blocktrans trimmed %}
+                                    Course passed badge for
+                                    <span class="text-secondary"><em>( Copy the name of the course from the "Course:" field )</em></span>
+                                {% endblocktrans %}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>{% trans "Issuing Organization" %}</td>
+                            <td>{% trans "Science Communication Lab" %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Issue Date" %}</td>
+                            <td class="text-secondary">
+                                <em>
+                                    {% blocktrans trimmed %}
+                                        Use the date shown in the "Issued On:" field )
+                                    {% endblocktrans %}
+                                </em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Expiration" %}</td>
+                            <td class="text-secondary">
+                                <em>{% trans "( leave blank )" %}</em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Credential ID" %}</td>
+                            <td class="text-secondary">
+                                <em>
+                                    {% blocktrans trimmed %}
+                                        Copy the value from the 'Credential ID:' field )
+                                    {% endblocktrans %}
+                                </em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{% trans "Credential URL" %}</td>
+                            <td class="text-secondary">
+                                <em>
+                                    {% blocktrans trimmed %}
+                                        Copy the value from the 'Credential URL:' field )
+                                    {% endblocktrans %}
+                                </em>
+                            </td>
+                        </tr>
+                    </table>
+                {% endif %}
+
+            </div>
+        </div>
+
+    {% endblock help_content %}

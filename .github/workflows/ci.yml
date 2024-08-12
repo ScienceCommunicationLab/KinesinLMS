@@ -1,0 +1,22 @@
+name: 'CI'
+
+on: push
+
+jobs:
+  front-end:
+    name: 'Build and test the front-end code'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Check types
+        run: npm run typecheck
+      - name: Run unit tests
+        run: npm run test
+# TODO: later we can add linting checks (eslint + prettier, with a prettier git hook to format before you commit)
+#      - name: Check formatting
+#        run: npm run lint
+
+# TODO: later we can add a simple pipeline for the back-end (Python) code as well.

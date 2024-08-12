@@ -1,0 +1,834 @@
+// Global "Composer" section styles
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+$composer-subhead-color: #e0ecfd;
+$composer-main-background: #f9f9f9;
+
+#composer-base {
+
+  .composer-page-header {
+    margin: 0;
+    padding: 1rem 0 0.5rem;
+  }
+
+  .composer-content {
+    padding: 0 1.25rem 10rem 1.25rem;
+    margin: 0;
+    border-top: 1px dotted #bbb;
+
+    &.course {
+      border-top: none;
+    }
+
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    padding-top: 1rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  main {
+    padding: 0;
+    margin: 0;
+    background: $composer-main-background;
+    min-height: calc(100vh - 100px);
+  }
+
+  small {
+    font-size: 0.8rem;
+  }
+
+  .hideMeAfter3Seconds {
+    animation: hideAnimation 2s 1;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+  }
+
+  // Nav link back to main KinesinLMS site from composer
+  .main-site-link {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+  }
+
+  .main-site-link .bg-wrapper {
+    position: absolute;
+    top: -15px;
+    left: -16px;
+    bottom: -11px;
+    filter: drop-shadow(-1px -1px 3px #00000022);
+    overflow-y: clip;
+
+  }
+
+  .main-site-link .navbar-brand {
+    z-index: 99;
+    padding-right: 2rem;
+  }
+
+
+  @keyframes hideAnimation {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+
+  // Need these for all spinners used by HTMx
+  .htmx-indicator {
+    display: none !important;
+  }
+
+  .htmx-request .htmx-indicator {
+    display: flex !important;
+  }
+
+  .htmx-request.htmx-indicator {
+    display: flex !important;
+  }
+
+  .front-page-hero {
+    background: #f1f1f1;
+  }
+
+
+  /* For tabs where we show one big card, make sure it's formatted correctly */
+  .main-card {
+    .card-body {
+      min-height: 30rem;
+    }
+  }
+
+  /*
+  Styles the course card when its used to
+  represent the course simply...e.g. in a list
+  of courses for editing.
+   */
+  .course-card {
+
+    .card-title {
+      min-height: 3rem;
+    }
+
+    .card-body {
+      min-height: 15rem;
+    }
+
+    .meta-info-wrapper {
+      min-height: 8rem;
+
+      .meta-info {
+        display: flex;
+        flex-direction: row;
+        padding: 0 0 0.2rem;
+
+        .label {
+          min-width: 5rem;
+          color: #999;
+        }
+      }
+    }
+  }
+
+
+  // Styles for home page
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  .page-home {
+    margin: 0;
+    padding: 0 0 10rem;
+
+
+    .page-home-hero {
+      height: 15rem;
+      background-color: #f1f1f1;
+      background-position: center center;
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+
+      .row {
+        height: 100%;
+      }
+
+      .lead-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        font-family: "Jost", Helvetica, Arial, sans-serif;
+
+        .lead {
+          margin-right: 1rem;
+          text-align: right;
+          color: #fff;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          flex-direction: row;
+          justify-content: right;
+          align-items: center;
+          font-weight: 800;
+          border-radius: 1rem;
+          padding: 1rem;
+
+          img {
+            height: 10rem;
+            margin: 0 2rem;
+          }
+
+          .lead-header {
+            font-size: 2.0rem;
+          }
+
+          .lead-content {
+            max-width: 20rem;
+            font-size: 1.2rem;
+            font-weight: normal;
+          }
+        }
+
+        .lead-icon {
+          width: 10rem;
+          margin-right: 2rem;
+        }
+
+      }
+
+    }
+
+    .courses-list {
+      margin: 0.35rem;
+    }
+
+
+  }
+
+  .info-bar-wrapper {
+    background: $composer-subhead-color;
+    border: 0;
+    font-size: 0.9rem;
+    padding: 0 0 0 0.15rem;
+    margin: 0;
+    min-height: 2rem !important;
+
+    .page-title {
+      font-weight: normal;
+    }
+
+    .info-bar {
+      padding: 0;
+      margin: 0 0 0 1rem;
+    }
+  }
+
+
+  #course-edit-tabs {
+    background: $composer-subhead-color;
+    border: 0;
+
+    li:first-child {
+      margin-left: 1rem;
+    }
+
+    .nav-link.active {
+      background: $composer-main-background;
+      border-bottom: 1px solid #fafafa;
+    }
+  }
+
+  .section-info-bar-wrapper {
+    border-top: none;
+    border-bottom: 1px dotted #ccc;
+    background: #f9f9f9;
+  }
+
+
+  // Styles for composer course_edit page
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  .course-contents-edit-page {
+    margin-top: 0 !important;
+    display: flex;
+    flex-direction: column;
+    background: $composer-main-background;
+
+
+    .offcanvas-header {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin: 0;
+      padding: 0;
+
+      .course-nav-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 3rem;
+        border: 1px solid #eee;
+        padding-left: 0;
+        width: 100%;
+
+
+        .course-nav-label {
+          flex-grow: 1;
+          margin-left: 0.7rem;
+        }
+      }
+    }
+
+    .offcanvas-body {
+      padding: 0;
+      margin: 0;
+    }
+
+
+    .course-structure-nav {
+      padding: 0;
+      margin: 0;
+      min-width: 20rem;
+
+      .dropdown-toggle {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 0;
+      }
+
+      .composer-nav-dropdown {
+        a {
+        }
+      }
+
+      .list-group {
+        max-width: 30rem;
+        padding-bottom: 5rem;
+        overflow: scroll;
+        border-radius: 0;
+      }
+
+      .list-group-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-radius: 0 !important;
+      }
+
+      .module-item:not(:first-child) {
+        margin-top: 2rem;
+      }
+
+      .module-item:last-child {
+        margin-bottom: 5rem;
+      }
+
+      .module-item {
+        padding-left: .7rem;
+        padding-right: 0.5rem;
+        background: #A2DAC4;
+        border-top: 2px solid #31D090;
+      }
+
+      .section-item {
+        background: #DDD;
+        padding-left: 1.2rem;
+        padding-right: 0.5rem;
+      }
+
+      .unit-item-wrapper {
+        padding: 0 0.5rem 0 0;
+        align-items: center;
+      }
+
+      .unit-item {
+        padding-left: 1.4rem;
+        border: 0;
+        cursor: pointer;
+      }
+
+      .unit-item:hover {
+        background: lightskyblue;
+      }
+
+
+    }
+
+    #course-unit-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 1rem;
+
+      #load-unit-spinner-wrapper {
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .block-label-small {
+        color: #aaa;
+        font-size: .8rem;
+      }
+
+      #course-unit-contents {
+        width: 100%;
+        padding: 0 3rem;
+
+        .course-unit-header {
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #e1e1e1;
+          border-radius: 0.5rem;
+          background: #ffffff;
+
+          .course-unit-info {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            align-items: center;
+            justify-content: flex-start;
+
+            .course-unit-sequence {
+              margin-right: 1rem;
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-start;
+              align-items: center;
+              color: #999;
+            }
+
+            .course-unit-name {
+              margin-right: 1rem;
+            }
+
+          }
+
+          .course-unit-header-html-content {
+            padding: 1rem;
+          }
+
+
+          #edit-course-unit-form {
+            width: 100%;
+          }
+
+          .course-unit-title-info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+
+
+            label {
+              margin-left: 1rem;
+              margin-right: 0.3rem;
+            }
+
+
+            form {
+              width: 100%;
+
+              img {
+                color: currentColor;
+              }
+            }
+
+
+          }
+
+
+        }
+
+
+        /*
+        Styles the card used to contain
+        a course block for editing.
+        */
+        .block-edit-list {}
+
+        /*
+
+        block-edit-card provides the base styles for the
+        card that encloses each block.
+
+        These styles should make the controls subtle and easy to ignore
+        when reading the content.
+
+        When the user wants to interacte with a card, the
+        block-edit-card-active class is added to the card.
+
+        This class should add any extra styles that make the controls "pop"
+
+        */
+
+        .block-edit-card-wrapper {
+
+          border-color: #e1e1e1;
+
+          /* enable these when we provide draft vs published feature
+          &.block-status-published {
+            border-right: 5px solid $success;
+          }
+
+          &.block-status-draft {
+            border-right: 5px solid $warning;
+          }
+          */
+
+          .block-edit-card {
+
+            form {
+              width: 100%;
+            }
+
+            .card-header {
+
+              display: flex;
+              flex-direction: row;
+              background: #fff;
+              border-bottom: 1px dotted #eee;
+
+              .block-edit-header-info {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                color: #aaa;
+                font-size: 0.8rem;
+                min-height: 2rem;
+              }
+
+              .header-actions {
+                display: flex;
+                flex-grow: 1;
+                min-width: 400px;
+                align-items: center;
+                justify-content: flex-end;
+                color: #aaa;
+                font-size: 0.8rem;
+              }
+            }
+
+            .video-wrapper {
+              background: #000;
+              display: flex;
+              flex-direction: row;
+              justify-content: center;
+            }
+
+            .block-video {
+              max-width: 600px;
+            }
+
+            .card-body {
+              padding: 1rem;
+            }
+
+            .card-footer {
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-end;
+              align-items: center;
+              border-top: 1px dotted #eee;
+              background: #fff;
+
+              .block-identifiers {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                font-size: 0.8rem;
+                color: #999;
+
+                label {
+                  color: #c08d8d;
+                }
+
+              }
+
+              .actions-left {
+                width: 50%;
+                display: inherit;
+                justify-content: flex-start;
+                align-items: center;
+              }
+
+              .actions-right {
+                width: 50%;
+                display: inherit;
+                justify-content: flex-end;
+                align-items: center;
+              }
+
+              .block-saved-message {
+                color: darkgreen;
+                margin-right: 1rem;
+              }
+
+            }
+
+            .block-save-spinner-wrapper {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: flex-end;
+
+              .spinner-message {
+                margin: 0 2rem 0 1rem;
+              }
+            }
+
+            .inline-radio .form-check {
+              display: inline-block;
+              padding-right: 1em;
+            }
+
+          }
+
+          .panel-set-wrapper {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem 0 0;
+            background: $primary-bg-subtle;
+
+            .panel-tabs {
+              padding-right: 1rem;
+            }
+
+            .panel-tabs:first-child {
+              padding-left: 1rem;
+            }
+
+            .panels-content {
+              margin: 0 1rem 1rem;
+              min-height: 10rem;
+
+              .panel {
+                background: #fff;
+                padding: 1rem;
+                border-left: 1px solid #ddd;
+                border-right: 1px solid #ddd;
+                border-bottom: 1px solid #ddd;
+                margin-bottom: 0;
+                border-bottom-right-radius: 0.5rem;
+                border-bottom-left-radius: 0.5rem;
+
+                .card {
+                  border: none;
+                  margin: 0;
+                  padding: 0;
+
+                  .card-body {
+                    border: 0;
+                    margin: 0;
+                    min-height: 25rem;
+                  }
+
+                  .panel-content {
+                    padding: 0;
+                  }
+
+                }
+
+
+              }
+            }
+          }
+
+          .block-edit-card-active {
+            margin: 0;
+
+            .card-header {
+
+              .block-edit-header-info {
+                color: #000;
+              }
+
+              .header-actions {
+                color: #000;
+              }
+            }
+          }
+        }
+
+
+      }
+
+
+    }
+
+
+    .course-unit-edit-controls {
+      display: flex;
+      flex-direction: row;
+      margin: 0 0 1rem;
+      padding: 0.5rem;
+      border: 1px dotted #eee;
+      min-width: 1.2rem;
+      position: sticky;
+      top: 0 !important;
+      z-index: 999;
+      background-color: #fff;
+
+      .controls-left {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        width: 50%;
+      }
+
+      .controls-right {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        width: 50%;
+      }
+    }
+
+    .block-content {
+      width: 100%;
+      padding: 1rem;
+      border: 1px dotted #999;
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .add-blocks-controls {
+
+      .controls-row {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: row;
+        border: 1px dotted #ccc;
+        padding: 0.5rem;
+        align-items: center;
+
+        .label {
+          padding-right: 2rem;
+        }
+
+        .btn {
+          margin-right: 1rem;
+          min-width: 120px;
+          color: #fff;
+        }
+      }
+    }
+
+  }
+
+  #add-block-modal {
+
+    .modal-content {
+      min-height: 50vh;
+
+      .modal-body {
+        padding: 0 0.5rem;
+      }
+
+      .block-button-groups {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+
+        .block-button-group {
+          margin-top: 1rem;
+          display: flex;
+          flex-direction: column;
+
+          border: 1px dotted #ccc;
+          border-radius: 0.5rem;
+
+          .group-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin: 0.2rem 0.5rem 0;
+            color: #999;
+          }
+
+
+          .block-button-group-buttons {
+
+            margin-top: 0.1rem;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 0.2rem 0.5rem 0.5rem;
+
+            .add-block-button-square {
+              width: 9rem;
+              height: 6rem;
+              margin-right: 1rem;
+
+              .title {
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+
+      }
+    }
+
+    #add-block-modal-close-btn {
+      min-width: 8rem;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+
+    .action-button {
+      min-width: 120px;
+    }
+  }
+
+
+  // simple, standardized layout for delete form
+  // when show on own page.
+  .delete-confirm-wrapper {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: 20rem;
+
+    .delete-confirm-card {
+
+      max-width: 50rem;
+    }
+
+  }
+
+}
+
+.drag-drop-highlight {
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+  padding: 3px 0 3px 3px;
+  margin: 5px 1px 3px 0;
+  border: 1px solid rgba(81, 203, 238, 1);
+}

@@ -1,0 +1,35 @@
+{% extends "management/management_base.html" %}
+{% load static i18n %}
+
+
+{% block management_content %}
+
+
+    <table class="table table-bordered">
+
+        <thead>
+        <tr>
+            <th>Course name</th>
+            <th style="text-align: center">View outline</th>
+        </tr>
+        </thead>
+
+        {% for course in courses %}
+            <tr>
+                <td>
+                    {{ course.display_name }}
+                </td>
+                <td style="text-align: center">
+                    <a href="{% url 'course:outline_course' course_run=course.run course_slug=course.slug %}"
+                       class="btn btn-primary">View Outline</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+
+{% endblock management_content %}
+
+
+

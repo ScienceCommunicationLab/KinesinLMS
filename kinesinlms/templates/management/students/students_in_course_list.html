@@ -1,0 +1,46 @@
+{% extends "management/management_base.html" %}
+{% load static i18n %}
+
+
+{% block management_content %}
+
+
+    <h2>Students in course {{ course.token }}</h2>
+    <table class="table table-bordered">
+
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th style="text-align: left">Email</th>
+            {% if user.is_superuser %}
+                <th>Actions</th>
+            {% endif %}
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for enrollment in enrollments %}
+            <tr>
+                <td>
+                    {{ enrollment.student.username }}
+                </td>
+                <td>
+                    {{ enrollment.student.email }}
+                </td>
+
+                <td>
+                    {% if user.is_superuser %}
+
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+{% endblock management_content %}
+
+
+

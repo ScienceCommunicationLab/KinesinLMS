@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col col-12" style="min-height:600px; padding:0">
+        <div class="generate-box">
+
+            <div class="d-flex flex-column align-items-center justify-content-center" style="margin-top:5rem;">
+                <p>The report generation failed.</p>
+                <div class="alert alert-warning">
+                    Error: {{ student_progress_report.task_message }}
+                </div>
+            </div>
+
+            <a style="margin-top: 1.5rem"
+                    {% if current_cohort %}
+               hx-get="{% url 'course:course_admin:course_analytics:student_cohort_progress_generate_hx' course_run=course.run course_slug=course.slug cohort_id=current_cohort.id %}"
+                    {% else %}
+               hx-get="{% url 'course:course_admin:course_analytics:student_progress_generate_hx' course_run=course.run course_slug=course.slug %}"
+                    {% endif %}
+               hx-trigger="click"
+               hx-target="#student-progress-report"
+               hx-swap="innerHTML"
+               class="btn btn-primary">
+                Try Again
+            </a>
+
+
+        </div>
+    </div>
+</div>

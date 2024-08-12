@@ -1,0 +1,92 @@
+<!-- Modal -->
+<style>
+    .badge-table-label {
+        width: 12rem;
+        color: #555;
+    }
+    .badge-image-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+    }
+    .badge-image {
+        max-height: 12rem;
+    }
+</style>
+
+<div class="modal fade"
+     id="badgeAssertionModal{{ badge_assertion.id }}"
+     tabindex="-1"
+     aria-labelledby="badgeAssertionModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog " style="max-width: 600px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="badgeAssertionModalLabel">Course Badge</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-2 mt-2">
+                    {{ badge_assertion.badge_title }}
+                </div>
+
+                <div class="badge-image-wrapper">
+                    <img class="img badge-image"
+                         src="{{ badge_assertion.badge_image_url }}"
+                         alt="Image of badge : {{ badge_assertion.badge_title }}"/>
+                </div>
+
+                <div class="d-flex justify-content-center mt-2">
+                    <a class="btn btn-primary"
+                       target="_blank"
+                       href="{% url 'badges:download_badge_assertion_image' badge_class_id=badge_assertion.badge_class.id badge_assertion_id=badge_assertion.id %}">
+                        <i class="bi bi-cloud-arrow-down"></i> Download Badge
+                    </a>
+                </div>
+
+                <table class="table table-bordered mt-5 mb-2 " style="table-layout:fixed">
+                    <tr>
+                        <td class="badge-table-label">Type:</td>
+                        <td>{{ badge_assertion.badge_class.type_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="badge-table-label">Course:</td>
+                        <td>{{ badge_assertion.badge_class.course.display_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="badge-table-label">Issued On:</td>
+                        <td>{{ badge_assertion.issued_on }}</td>
+                    </tr>
+                    <tr>
+                        <td class="badge-table-label">Credential&nbsp;ID:</td>
+                        <td>{{ badge_assertion.external_entity_id }}</td>
+                    </tr>
+                    <tr>
+                        <td class="badge-table-label">Credential&nbsp;URL:</td>
+                        <td style="word-wrap:break-word;">
+                            <a href="{{ badge_assertion.open_badge_id }}"
+                               style="word-wrap:break-word;"
+                               target="_blank">
+                                {{ badge_assertion.open_badge_id }}
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,85 @@
+<div id="course-left-nav-off-canvas"
+     class="offcanvas offcanvas-start"
+     tabindex="-1"
+     style="z-index: 2000"
+     data-bs-scroll="true"
+     aria-labelledby="course-left-nav-off-canvasLabel">
+
+    <div class="offcanvas-header">
+        <button id="hideLeftNav"
+                class="btn btn-primary"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close sidebar">
+            <i class="bi bi-arrow-left-circle"></i>
+        </button>
+        <div id="course-left-nav-off-canvas-label"
+             aria-label="Course title for left navigation bar"
+             class="sidebar-header">
+            {{ course.display_name }}
+        </div>
+    </div>
+
+    <div id="course-navigation-label">
+        Course Navigation
+    </div>
+
+    <div class="offcanvas-body">
+        <nav id="sidebar">
+            <ul class="list-unstyled list-modules">
+                {% for module_node in course_nav.children %}
+                    <li id="nav-module-{{ module_node.id }}"
+                        class="item item-module {% if module_node.id == active_module_node_id %}active-module{% endif %}">
+                        {% include 'course/partial/nav_node.html' with node=module_node %}
+
+                        {% if module_node.is_released or user.is_superuser or user.is_staff %}
+
+                            {% if not module_node.is_released %}
+                                <div class="alert alert-warning mb-0">
+                                    Module not yet released to students
+                                </div>
+                            {% endif %}
+
+                            <ul class="list-unstyled list-sections ">
+
+                                {% for section_node in module_node.children %}
+                                    <li id="nav-section-{{ section_node.id }}"
+                                        class="item item-section {% if section_node.id == active_section_id %}active-section{% endif %} ">
+                                        {% include 'course/partial/nav_node.html' with node=section_node %}
+                                        {% if section_node.is_released or user.is_superuser or user.is_staff %}
+
+                                            {% if not section_node.is_released %}
+                                                <div class="alert alert-warning mb-0">
+                                                    Section not yet released to students
+                                                </div>
+                                            {% endif %}
+
+                                            <ul class="list-unstyled list-units {% if section_node.is_released == False %}node-not-released{% endif %}">
+                                                {% for unit_node in section_node.children %}
+                                                    <li id="nav-unit-{{ unit_node.id }}"
+                                                        class="item item-unit {% if unit_node.id == active_unit_id %}active-unit{% endif %}">
+                                                        {% include 'course/partial/nav_node.html' with node=unit_node %}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <!-- section {{ section_node.slug }} is not yet released. -->
+                                            {% include 'course/partial/node_release_info.html' with node=section_node %}
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <!-- module {{ module_node.slug }} is not yet released. -->
+                            {% include 'course/partial/node_release_info.html' with node=module_node %}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="end-message">
+                That's the end.<br/>
+                There is no more.
+            </div>
+        </nav>
+    </div>
+
+</div>

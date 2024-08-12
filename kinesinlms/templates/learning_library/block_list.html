@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% block main_content %}
+
+  <div class="container-fluid learning-library mt-3">
+
+    {# TODO: Add search / filtering #}
+
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Display Name</th>
+              <th class="col-short-description">Short Description</th>
+              <th>UUID</th>
+              <th class="col-view"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for library_item in library_items %}
+              <tr>
+                <td>{{ library_item.block.type }}</td>
+                <td>{{ library_item.block.display_name }}</td>
+                <td class="col-short-description">{{ library_item.block.short_description }}</td>
+                <td>{{ library_item.block.uuid }}</td>
+                <td class="col-view">
+                  <a href="{% url 'learning_library:item_detail' library_item.id %}"
+                     class="btn btn-primary">View</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+{% endblock main_content %}

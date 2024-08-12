@@ -1,0 +1,44 @@
+{% load i18n %}
+<div id="forum-item-default-cohort-forum-subcategory-status"
+     class="forum-item-status">
+
+    {% if default_cohort_forum_subcategory %}
+        <div class="d-flex flex-row">
+            <i class="bi bi-check-square text-success me-2"></i> {% blocktrans %}Created{% endblocktrans %}
+        </div>
+    {% else %}
+
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if not forum_provider %}
+
+            {% include "composer/forum/forum_item_status/no_forum_provider_warning.html" %}
+
+        {% else %}
+
+            <div class="alert alert-warning">
+                {% blocktranslate trimmed %}
+                    No default cohort subcategory has been set up for this course.
+                {% endblocktranslate %}
+            </div>
+
+
+            <div>
+                <a hx-get="{% url 'composer:create_forum_item_hx' course_id=course.id forum_item_slug='DEFAULT_COHORT_FORUM_SUBCATEGORY' %}"
+                   hx-target="#forum-item-default-cohort-forum-subcategory-status"
+                   hx-swap="outerHTML"
+                   class="btn btn-primary mb-2">
+                    {% blocktranslate trimmed %}
+                        Create&nbsp;Forum&nbsp;Subcategory
+                    {% endblocktranslate %}
+                </a>
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+</div>

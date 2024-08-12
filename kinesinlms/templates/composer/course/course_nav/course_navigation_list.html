@@ -1,0 +1,132 @@
+{% load core_tags %}
+
+<ul class="list-group">
+    {% for module_node in course_nav.children %}
+
+        {# MODULE NODE #}
+        <li id="nav-module-{{ module_node.id }}"
+            class="list-group-item module-item {% if module_node.id == active_module_node_id %}active-module{% endif %}">
+            <div class="node-marker">
+                <span class="marker-id ">{{ module_node.content_index |show_none_for_none }}</span>
+            </div>
+            <div class="node-label">{{ module_node.display_name }}</div>
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle"
+                        type="button"
+                        id="module-dropdown-{{ module_node.id }}"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"></button>
+                <ul class="dropdown-menu shadow-lg"
+                    aria-labelledby="module-dropdown-{{ module_node.id }}">
+                    <li>
+                        <a class="dropdown-item"
+                           href="/{{ admin_base_url }}course/coursenode/{{ module_node.id }}/change/"
+                           target="_blank">Edit module node in admin</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                           hx-post="{% url 'composer:add_section_node_to_module_hx' course_id=course.id module_node_id=module_node.id %}"
+                           hx-target="#course-nav-list">Add new section to module</a>
+                    </li>
+                    <hr class="dropdown-divider" />
+                    <li>
+                        <a class="dropdown-item"
+                           hx-post="{% url 'composer:delete_module_node_hx' course_id=course.id pk=module_node.id %}"
+                           hx-confirm="Are you sure you want to delete this module node?"
+                           hx-target="#course-nav-list">Delete module node</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        {% for section_node in module_node.children %}
+
+            {# SECTION NODE #}
+            <li id="nav-section-{{ section_node.id }}"
+                class="list-group-item section-item {% if section_node.id == active_section_id %}active-section{% endif %} ">
+
+                <div class="node-marker">
+                    <span class="marker-id ">
+                        {{ module_node.content_index |show_none_for_none }}.{{ section_node.content_index |show_none_for_none }}
+                    </span>
+                </div>
+
+                <div class="node-label">{{ section_node.display_name }}</div>
+
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle"
+                            type="button"
+                            id="section-dropdown-{{ section_node.id }}"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"></button>
+                    <ul class="dropdown-menu shadow-lg"
+                        aria-labelledby="section-dropdown-{{ section_node.id }}">
+                        <li>
+                            <a class="dropdown-item"
+                               href="/{{ admin_base_url }}course/coursenode/{{ section_node.id }}/change/"
+                               target="_blank">Edit section node in admin</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               hx-post="{% url 'composer:add_unit_node_to_section_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id %}"
+                               hx-target="#course-nav-list">Add new unit to section</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </li>
+
+            {% for unit_node in section_node.children %}
+
+                {# UNIT NODE #}
+                <div class="list-group-item unit-item-wrapper">
+                    <a id="nav-unit-{{ unit_node.id }}"
+                       hx-indicator="#load-unit-spinner-wrapper"
+                       hx-trigger="click"
+                       hx-get="{% url 'composer:edit_course_unit_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id pk=unit_node.unit.id %}"
+                       hx-target="#course-unit-contents"
+                       class="list-group-item unit-item list-group-item-action {% if unit_node.id == active_unit_id %}active-unit{% endif %}">
+                        <div class="node-marker">
+                            <span class="marker-id">
+                                {{ module_node.content_index |show_none_for_none }}.{{ section_node.content_index |show_none_for_none }}.{{ unit_node.content_index |show_none_for_none }}
+                            </span>
+                        </div>
+                        <div class="node-label">{{ unit_node.display_name }}</div>
+                    </a>
+                    <div class="dropdown composer-nav-dropdown">
+                        <button class="btn btn-light dropdown-toggle"
+                                type="button"
+                                id="unit-dropdown-{{ unit_node.id }}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"></button>
+                        <ul class="dropdown-menu shadow-lg"
+                            aria-labelledby="unit-dropdown-{{ unit_node.id }}">
+                            <li>
+                                <a class="dropdown-item"
+                                   href="/{{ admin_base_url }}course/coursenode/{{ unit_node.id }}/change/"
+                                   target="_blank">Edit UNIT node in admin</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   hx-post="{% url 'composer:delete_unit_node_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id pk=unit_node.id %}"
+                                   hx-confirm="Are you sure you want to delete this unit node? If a CourseUnit has this Unit node as it's only parent, it will also be deleted. Use the admin for finer grained deletes."
+                                   hx-target="#course-nav-list">Delete UNIT node</a>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+</ul>

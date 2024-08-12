@@ -1,0 +1,126 @@
+{% load static %}
+{% load tz %}
+{% load i18n %}
+
+{% comment %}
+
+   This control should only be shown when a badge_assertion exists
+   for a student and a badge class.
+
+   If the badge_assertion variable is set, this include shows the badge pulldown.
+
+{% endcomment %}
+
+{% if badge_assertion %}
+
+    {% if badge_assertion.creation_status == "STAGED" or badge_assertion.creation_status == "IN_PROCESS" %}
+
+        <div class="btn btn-secondary me-3"
+             style="cursor: wait; "
+             hx-get="{% url 'badges:badge_assertion_status_hx' badge_class_id=badge_assertion.badge_class.id pk=badge_assertion.id %}"
+             hx-trigger="load delay:3s"
+             hx-target="#badge-assertion-control"
+             hx-swap="outerHTML"
+             disabled>
+            <div class="spinner-border spinner-border-sm " role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            {% trans "Creating Badge..." %}
+        </div>
+
+
+    {% elif badge_assertion.creation_status == "COMPLETE" %}
+        <div class="dropdown" style="margin-right:1rem;">
+            <button class="btn btn-success dropdown-toggle"
+                    type="button"
+                    style="min-width:120px;"
+                    id="badgeDropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                {% trans "Badge" %}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="badgeDropdownMenuButton">
+                <li>
+                    <a class="dropdown-item btn btn-primary"
+                       href="#"
+                       data-bs-toggle="modal"
+                       data-bs-target="#badgeAssertionModal{{ badge_assertion.id }}">
+
+                        {% trans "View Badge Info" %}
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item"
+                       href="{{ badge_assertion.open_badge_id }}"
+                       target="_blank">
+
+                        {% trans "View Badge on Badgr.com" %}
+
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item"
+                       disabled="true"
+                       target="_blank"
+                       href="{% url 'help:help_page' help_page_slug='badges' %}?badge_assertion_id={{ badge_assertion.id }}#linkedin">
+
+
+                        {% trans "Share on LinkedIn (How To)" %}
+
+
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item"
+                       target="_blank"
+                       href="{{ badge_assertion.twitter_share_url }}">
+
+                        {% trans "Share on Twitter" %}
+
+
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item"
+                       target="_blank"
+                       href="{% url 'badges:download_badge_assertion_image' badge_class_id=badge_assertion.badge_class.id badge_assertion_id=badge_assertion.id %}">
+
+
+                        {% trans "Download" %}
+
+                    </a>
+                </li>
+            </ul>
+        </div>
+    {% elif badge_assertion.creation_status == "FAILED" %}
+        <div class="btn btn-warning"
+             style="margin-right:1rem;"
+             data-bs-toggle="tooltip"
+             data-bs-placement="top"
+             title="There was an error creating your badge...please contact support for help. ({{ badge_assertion.error_message }})">
+
+            {% trans "( Badge Error )" %}
+
+        </div>
+    {% else %}
+        {%  comment %}
+    The assertion exists but doesn't have an ID, so let's offer student option to create it again and
+    handle the different scenarios on the server.
+    {% endcomment %}
+        <a id="btnGenerateAssertion{{ course_passed_badge_class.id }}"
+           class="btn btn-secondary visible"
+           hx-get="{% url 'badges:create_badge_assertion_hx' course_passed_badge_class.id %}"
+           hx-target="#badge-assertion-control"
+           hx-swap="outerHTML"
+           style="margin-right:1rem;">
+            {% trans "Generate Badge" %}
+        </a>
+    {% endif %}
+{% endif %}
+

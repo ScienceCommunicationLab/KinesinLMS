@@ -1,0 +1,17 @@
+<div class="block block-callout {{ block.json_content.callout_type }}-callout">
+  <div class="icon-block">
+    <div class="icon-image"></div>
+  </div>
+  <div class="callout-text">
+    {% if block.json_content.callout_type == "reading" %}
+      <h2>Recommended reading</h2>
+    {% else %}
+      <h2>{{ block.json_content.callout_type }}</h2>
+    {% endif %}
+    {{ block.html_content | safe }}
+
+    {% if block.json_content.link_title and block.json_content.link_url %}
+      <a href="{{ block.json_content.link_url }}" target="_blank">{{ block.json_content.link_title }}</a>
+    {% endif %}
+  </div>
+</div>

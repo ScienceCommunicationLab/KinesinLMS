@@ -1,0 +1,47 @@
+{
+  "topic": {
+    "id": 76,
+    "title": "This is a test of a topic in a subcategory",
+    "fancy_title": "This is a test of a topic in a subcategory",
+    "posts_count": 1,
+    "created_at": "2020-05-29T04:46:58.088Z",
+    "views": 0,
+    "reply_count": 0,
+    "like_count": 0,
+    "last_posted_at": "2020-05-29T04:46:58.142Z",
+    "visible": true,
+    "closed": false,
+    "archived": false,
+    "archetype": "regular",
+    "slug": "this-is-a-test-of-a-topic-in-a-subcategory",
+    "category_id": 11,
+    "word_count": 6,
+    "deleted_at": null,
+    "user_id": 2,
+    "featured_link": null,
+    "pinned_globally": false,
+    "pinned_at": null,
+    "pinned_until": null,
+    "unpinned": null,
+    "pinned": false,
+    "highest_post_number": 1,
+    "deleted_by": null,
+    "has_deleted": false,
+    "bookmarked": false,
+    "participant_count": 1,
+    "thumbnails": null,
+    "created_by": {
+      "id": 2,
+      "username": "daniel",
+      "name": "None",
+      "avatar_template": "/user_avatar/discuss.kinesinlms.org/daniel/{size}/2_2.png"
+    },
+    "last_poster": {
+      "id": 2,
+      "username": "daniel",
+      "name": "None",
+      "avatar_template": "/user_avatar/discuss.kinesinlms.org/daniel/{size}/2_2.png"
+    },
+    "tags_disable_ads": false
+  }
+}

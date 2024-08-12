@@ -1,0 +1,38 @@
+{% extends "management/management_base.html" %}
+{% load tz %}
+
+{% block course_info_bar %}
+
+
+{% endblock %}
+
+
+{% block management_content %}
+
+  <a class="btn btn-primary" href="{{ download_csv_url }}">
+    Download CSV
+  </a>
+
+  <div class="course-bookmarks">
+    <h1>Evaluation Answers</h1>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>User</th>
+        <th>Question</th>
+        <th>Answer</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for answer in evaluation_answers %}
+        <tr>
+          <td>{{ answer.user }}</td>
+          <td>{{ answer.question }}</td>
+          <td>{{ answer.answer }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock management_content %}

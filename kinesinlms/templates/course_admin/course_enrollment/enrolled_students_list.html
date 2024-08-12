@@ -1,0 +1,86 @@
+{% extends "course_admin/course_admin_base.html" %}
+
+{% load static %}
+
+{% load crispy_forms_filters %}
+
+{% load tz %}
+
+{% block title_bar_controls %}
+{% endblock title_bar_controls %}
+
+{% block course_admin_content %}
+
+    <div class="row">
+        <div class="col-12 col-lg-9 mb-3 order-2 order-md-1">
+
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width:3rem;">ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Informal Name</th>
+                            <th>Email</th>
+                            <th style="text-align:center; width:6rem;">Details</th>
+                            <th style="text-align:center; width:6rem;">Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if enrolled_students.qs.exists %}
+                            {% for student in enrolled_students.qs %}
+                                <tr>
+                                    <td style="width:3rem;">{{ student.id }}</td>
+                                    <td>{{ student.username }}</td>
+                                    <td>
+                                        {{ student.name|default_if_none:'<span class="text-muted">( none )</span>' }}
+                                    </td>
+                                    <td>
+                                        {{ student.informal_name|default_if_none:'<span class="text-muted">( none )</span>' }}
+                                    </td>
+                                    <td>{{ student.email }}</td>
+                                    <td style="width:150px; text-align: center;">
+                                        <a href="{% url 'course:course_admin:course_enrollment:enrolled_student_detail_view' course_slug=course.slug course_run=course.run pk=student.id %}"
+                                           class="btn btn-light">Details</a>
+                                    </td>
+                                    <td style="width:150px; text-align: center;">
+                                        <a href="{% url 'course:course_admin:course_enrollment:enrolled_student_events_list' course_slug=course.slug course_run=course.run pk=student.id %}"
+                                           class="btn btn-light">Activity</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if not enrolled_students.qs.exists %}
+                <div class="alert-wrapper mt-0">
+                    <div class="alert alert-light" role="alert">No students found.</div>
+                </div>
+            {% endif %}
+
+            {% if is_paginated and page_obj and total_count %}
+
+                {% include 'core/pagination.html' with page_obj=page_obj total_count=total_count %}
+
+            {% endif %}
+        </div>
+
+        <div class="col-12 col-lg-3 order-1 order-md-2">
+            <div class="card filter-box">
+                <form class="form" action="" method="get">
+                    <div class="card-header">Search</div>
+                    <div class="card-body">{{ search_form|crispy }}</div>
+                    <div class="card-footer">
+
+                        <input class="btn btn-primary" type="submit" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock course_admin_content %}

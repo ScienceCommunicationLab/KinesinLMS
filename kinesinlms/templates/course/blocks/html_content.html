@@ -1,0 +1,43 @@
+{% load react %}
+{% load static %}
+{% load core_tags unit_extras %}
+{% load markdownify %}
+
+<div id="block_{{ block.id }}" class="block block-html-content">
+
+    {% if block_view_context == "COMPOSER" %}
+        {# pass #}
+    {% else %}
+        {# We're rending in the actual course #}
+        {% if request.user.is_staff or request.user.is_superuser %}
+            {# Give admins viewing the course the ability to quickly go to an edit view #}
+            {% if show_admin_controls and course.edit_status.mode == "EDIT" %}
+                <a href="{% url 'composer:edit_block' block_id=block.id %}"
+                   target="_blank"
+                   style="position:relative;
+                          left:-70px;
+                          top:40px"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Edit this HTML block"
+                   class="btn btn-secondary">
+                    <i class="bi bi-pencil"></i>
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% if block.display_name and block.display_name != "" %}<h2>{{ block.display_name }}</h2>{% endif %}
+
+    <div class="section">
+        <div class="row">
+            <div class="col-12 col-xl-9">
+                {% if block.html_content %}
+                    {% render_html_content block %}
+                {% endif %}
+            </div>
+            <div class="col-xl-3 sidebar-content">{{ block.json_content.sidebar_content|safe }}</div>
+        </div>
+    </div>
+
+</div>

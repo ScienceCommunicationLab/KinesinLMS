@@ -1,0 +1,3 @@
+
+class CourseArchiveParseError(Exception):
+    pass

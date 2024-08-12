@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="feature-row  kn-register">
+    <div class="feature-container">
+        <div class="col-graphic">
+            <figure class="figure">
+                <img src="{% static 'marketing/images/world-compass.png' %}"
+                     alt="An image of a compass over a map of the world" />
+                <figcaption class="figure-caption image-attribution">
+                    Image by <a href="https://www.freepik.com/free-vector/flat-map-compass-background_1581317.htm#query=compass%20rose&position=4&from_view=keyword&track=ais_user&uuid=9dfb7ea9-587d-4916-8da2-0c2706e5dc41">Freepik</a>
+                </figcaption>
+            </figure>
+        </div>
+        <div class="col-content">
+            <h2>Start Today</h2>
+            {% if user.is_authenticated %}
+                <p>Checkout out our available courses in the Course catalog!</p>
+                <br />
+                <br />
+                <div class="btn-wrapper">
+                    <a class="btn btn-primary" href="{% url 'catalog:index' %}">View Course Catalog</a>
+                </div>
+            {% else %}
+                <p>Register today and get free access to our courses!</p>
+                <div class="btn-wrapper mt-5">
+                    <a class="btn btn-primary" href="/accounts/signup">Register Today</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

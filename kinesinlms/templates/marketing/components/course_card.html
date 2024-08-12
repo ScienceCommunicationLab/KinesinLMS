@@ -1,0 +1,115 @@
+{% comment %}
+This is the course card for the main 'marketing pages'. It might be a bit different
+than the course card used in the composer, hence what looks like some duplication.
+{% endcomment %}
+
+{% load static i18n tz %}
+
+<!-- TODO: Make this one component ... combine with composer card. -->
+<div class="card">
+    <a href="{{ course_description.about_page_url }}"
+       class="card-img-top"
+       style="background-color: #{{ course_description.hex_theme_color }}">
+
+        <img src="{{ course_description.thumbnail_url }}"
+             alt="Thumbnail illustration for {{ course_description.title }}." />
+
+    </a>
+    <div class="card-body d-flex flex-column align-items-start">
+
+        <div class="card-title">
+            {{ course_description.title }}
+            <br />
+            <div style="font-size: 0.9rem; color:#999; font-weight: normal">{{ course_description.course.token }}</div>
+        </div>
+
+        {% if course_description.blurb %}<p class="card-text">{{ course_description.blurb }}</p>{% endif %}
+
+        <div class="meta-info">
+
+            <div class="start-end-dates mt-2">
+
+                {% get_current_timezone as TIME_ZONE %}
+                <div class="enrollment-dates w-100">
+                    <strong>Enrollment Dates</strong>
+                    <div class="start-end-date text-muted">
+                        <div class="start-end-label">Starts:</div>
+                        {% if course_description.enrollment_has_started %}
+                            <div>Now Open</div>
+                        {% else %}
+                            <div class="me-2">{{ course_description.course.enrollment_start_date|localtime|date:"M d, Y P e" }}</div>
+
+                            {% if TIME_ZONE != "UTC" %}
+                                <i class="bi bi-globe ms-2 text-black-50"
+                                   data-bs-title="{{ course_description.course.enrollment_start_date|utc|date:'M d, Y H:i e' }}"
+                                   data-bs-toggle="tooltip"></i>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="start-end-date text-muted">
+                        <div class="start-end-label">Closes:</div>
+                        {% if course_description.course.enrollment_end_date %}
+                            <div class="me-2">{{ course_description.course.enrollment_start_date|localtime|date:"M d, Y P e" }}</div>
+                            {% if TIME_ZONE != "UTC" %}
+                                <i class="bi bi-globe ms-2 text-black-50"
+                                   data-bs-title="{{ course_description.course.enrollment_start_date|utc|date:'M d, Y H:i e' }}"
+                                   data-bs-toggle="tooltip"></i>
+                            {% endif %}
+                        {% else %}
+                            <div class="text-muted">( no close date )</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="course-dates mt-2 w-100">
+                    <strong>Course Dates</strong>
+
+                    <div class="start-end-date text-muted">
+                        <div class="start-end-label">Starts:</div>
+                        {% if course_description.course.has_started %}
+                            <div>Available now</div>
+                        {% else %}
+                            <div class="start-end-date">
+                                <div class="me-2">{{ course_description.course.start_date|localtime|date:"M d, Y P e" }}</div>
+                                <i class="bi bi-globe ms-2 text-black-50"
+                                   data-bs-title="{{ course_description.course.start_date|utc|date:'M d, Y H:i e' }}"
+                                   data-bs-toggle="tooltip"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="start-end-date text-muted">
+                        <div class="start-end-label">Ends:</div>
+                        <div class="start-end-date">
+                            {% if course_description.course.end_date %}
+                                <div class="me-2">{{ course_description.course.end_date|localtime|date:"M d, Y P e" }}</div>
+                                <i class="bi bi-globe ms-2 body-secondary text-black-50"
+                                   data-bs-title="{{ course_description.course.end_date|utc|date:'M d, Y H:i e' }}"
+                                   data-bs-toggle="tooltip"></i>
+                            {% else %}
+                                ( no end date )
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="card-footer justify-content-between">
+        <div >
+            {% if course_description.course.self_paced %}
+                <div class="run-type">
+                    <i class="bi bi-person-walking"></i> Self-paced
+                </div>
+            {% else %}
+                <div class="run-type">
+                    <i class="bi bi-calendar3"></i> Timebound
+                </div>
+            {% endif %}
+        </div>
+        <a href="{{ course_description.about_page_url }}"
+           class="btn btn-primary ms-auto">About</a>
+    </div>
+</div>

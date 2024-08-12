@@ -1,0 +1,22 @@
+[
+  {
+    "model": "catalog.coursecatalogdescription",
+    "pk": 1,
+    "fields": {
+      "title": "Test Course",
+      "blurb": "This is an example course for KinesinLMS",
+      "overview": "An overview of the course would go here.",
+      "about_content": "<section class=\"about\">\r\n  <h2>About This Course</h2>\r\n \r\n  <p>About content would go here.</p></section>",
+      "sidebar_content": "",
+      "thumbnail": "test_sp_thumbnail.png",
+      "visible": true,
+      "hex_theme_color": "ec6f60",
+      "custom_stylesheet": "about-test.css",
+      "trailer_video_url": null,
+      "syllabus_url": "https://kinesinlms.s3-us-west-1.amazonaws.com/media/course/BCLS/SP/BCLS_Course_Syllabus__2_.pdf",
+      "effort": "3:00 hours/week",
+      "duration": "5 weeks",
+      "order": 2
+    }
+  }
+]

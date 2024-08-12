@@ -1,0 +1,37 @@
+{% load crispy_forms_filters %}
+{% load static crispy_forms_filters %}
+
+<form id="edit-course-unit-form"
+      class="form "
+      method="post"
+      hx-post="{% url 'composer:edit_course_unit_info_hx' course_id=course.id  module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id %}">
+
+    <div class="card block-edit-card">
+        <div class="card-header bg-primary bg-opacity-50">
+            Edit Course Unit Info
+        </div>
+        <div class="card-body bg-primary" style="--bs-bg-opacity: .1;">
+            {% csrf_token %}
+            {{ form|crispy }}
+        </div>
+
+        <div class="card-footer bg-primary bg-opacity-50">
+
+            <a hx-get="{% url 'composer:edit_course_unit_info_hx' course_id=course.id  module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id %}?cancel=True"
+               hx-target="#edit-course-unit-form"
+               class="btn btn-danger ms-2">
+                <i class="bi-cancel"></i>
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="btn btn-primary ms-2">
+                <i class="bi-check"></i>
+                Save
+            </button>
+        </div>
+
+    </div>
+
+
+</form>

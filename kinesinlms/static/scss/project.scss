@@ -1,0 +1,30 @@
+// BOOTSTRAP STYLES
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Import all of Bootstrap's CSS
+@import "bootstrap/scss/bootstrap";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css");
+
+// PROJECT STYLES
+// Define styles for different areas
+// of the project site.
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Load settings variables for things like colors...1
+@import "settings";
+
+// Default styles apply to any page
+@import "base";
+
+// Blocks styles should be site wide since they
+// appear in both courses and composer
+@import "blocks";
+
+// Styles for the composer section
+@import "composer";
+
+// Styles for 'courses' section
+@import "course";
+
+// Styles for 'learning_library' section
+@import "learning_library";

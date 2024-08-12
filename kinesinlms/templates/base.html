@@ -1,0 +1,150 @@
+{% load static i18n core_tags %}
+
+{% comment %}
+This is the base template that should be extended by all other templates, including
+other 'base' templates for certain sections of the site, such as course_base.html.
+{% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <title>
+            {% block title %}
+                {% site_name %}
+            {% endblock title %}
+        </title>
+
+        <link rel="shortcut icon"
+              type="image/png"
+              href="{% static 'images/favicon.png' %}" />
+
+        {% block head %}
+
+            {% include 'includes/head_meta.html' %}
+
+        {% endblock head %}
+
+        {% block og %}
+            {% comment %} This block is for a child page to define any og tags {% endcomment %}
+        {% endblock og %}
+
+        {% comment %}
+    Load the main kinesinlms-project.js file in the header
+    so that any inline scripts have access to core libraries and dependencies (like HTMx).
+        {% endcomment %}
+        <script src="{% static 'js/kinesinlms-project.bundle.js' %}?version={{ KINESINLMS_JAVASCRIPT_VERSION }}"></script>
+
+        {% block css %}
+
+            {% include 'includes/core_css_includes.html' %}
+
+        {% endblock css %}
+
+        {% block header_javascript %}
+            {% comment %}
+        Pages that need extra javascript, and want it to be in the header before the body tag,
+        can use this block. (For example, pages that use our React component definitions will use this block.)
+            {% endcomment %}
+        {% endblock header_javascript %}
+
+        {% comment %}
+    This block is for 'extra' css that should augement or override more default styles.
+    This block should appear after all base styles and js files (which may include css information)
+    so that styles declared here take precedence.
+        {% endcomment %}
+        {% block extra_css %}
+
+        {% endblock extra_css %}
+
+        {% if is_analytics_cookies_accepted %}
+            {% comment %}
+            If is_analytics_cookies_accepted is True, the user has indicated they're ok with analytics trackers.
+            If so, and you want to load analytics trackers, you can load them here.
+            {% endcomment %}
+        {% endif %}
+
+    </head>
+
+    <body {% if csrf_token %}hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'{% endif %}>
+
+        {% block messages %}
+            {% if messages %}
+
+                {% include 'core/toasts.html' %}
+
+            {% endif %}
+        {% endblock messages %}
+
+        {% block sidebar %}
+            {# Use in course #}
+        {% endblock sidebar %}
+
+        {% block topnav %}
+            <div id="top-nav">
+
+                {% include "includes/top_nav.html" %}
+
+            </div>
+        {% endblock topnav %}
+
+        <main>
+            {% block infobar %}
+                {% if title or description or breadcrumbs %}
+
+                    {% include 'core/infobar.html' %}
+
+                {% endif %}
+            {% endblock infobar %}
+
+            {% block breadcrumb %}
+
+            {% endblock breadcrumb %}
+
+            {% block main_content %}
+
+            {% endblock main_content %}
+
+            {% block footer %}
+                {% comment %}
+                This block holds the footer content.
+                The default template here is for the marketing pages.
+                The course templates will override this block 
+                with a more appropriate (i.e. less visible) footer.
+                {% endcomment %}
+                <div id="footer-site-map-wrapper" class="d-print-none">
+
+                    {% include "includes/footer.html" %}
+
+                </div>
+            {% endblock footer %}
+
+        </main>
+
+        {% block modal %}
+            {# Use to hold bootstrap modals needed by a page #}
+        {% endblock modal %}
+
+        {% block javascript %}
+            {% comment %}
+                (Per Django Cookiecutter convention.)
+                This block should contain tags with only code, no src (defer by default). To run
+                with a "defer" so that you run inline code. For example, something like:
+                <script>
+                  window.addEventListener('DOMContentLoaded', () => {
+                    /* Run whatever you want */
+                  });
+                </script>
+            {% endcomment %}
+        {% endblock javascript %}
+
+        {% if is_analytics_cookies_accepted %}
+            {# Add analytics / trackers that should be loaded at bottom of body. #}
+            {% comment %}
+            {% include 'core/third_party_trackers/some_third_party_tracker.html' %}
+            {% endcomment %}
+        {% endif %}
+
+    </body>
+</html>

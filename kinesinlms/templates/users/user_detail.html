@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static core_tags %}
+
+{% block title %}User: {{ object.username }}{% endblock %}
+
+{% block main_content %}
+
+    <style>
+
+        .user-profile-wrapper table {
+            background-color: #ffffffdd;
+        }
+
+        .private-wrapper {
+            border: 1px dotted #999;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            background-color: #f1f1f1;
+        }
+    </style>
+
+    <div class="container mb-5 user-profile-wrapper">
+        <!-- Public info -->
+        <div class="row">
+            <div class="col-12 mx-auto">
+
+                <div>
+
+                    <h1>User Profile</h1>
+                    <p style="max-width: 800px;margin-bottom: 3em;">By filling out your profile, you help us at {% site_name %}
+                        create better, more targeted courses. Only your username is public. Also, we use your
+                        email to show your gravatar in our forums (if you've established a gravatar). Otherwise, your
+                        profile
+                        information is not shared with other users. See our <a
+                                href="{% url 'marketing:privacy_policy' %}">Privacy
+                            Policy</a> for more details.</p>
+
+
+                </div>
+
+                <h2>Public information</h2>
+                <table class="table table-bordered" style="width:100%;">
+                    <tr>
+                        <td style="min-width:15rem;">
+                            Username
+                        </td>
+                        <td style="width:100%;">
+                            {{ object.username }}
+                        </td>
+                    </tr>
+                </table>
+                <h2>Private information</h2>
+
+                <div class="private-wrapper">
+                    <h3>Email</h3>
+                    <table class="table table-bordered" style="width:100%;">
+                        <tr>
+                            <td style="min-width:15rem;">Email</td>
+                            <td style="width:100%;">
+                                {{ user.email }}
+                                {% if object == request.user %}
+                                    <a class="btn btn-primary ms-5"
+                                       href="{% url 'account_email' %}" role="button">
+                                        Update E-Mail
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <h3>Password</h3>
+                    <table class="table table-bordered" style="width:100%;">
+                        <tr>
+                            <td style="min-width:15rem;">Password</td>
+                            <td style="width:100%;">
+                                *************&nbsp;
+                                {% if object == request.user %}
+                                    <a class="btn btn-primary ms-5"
+                                       href="{% url 'account_change_password' %}" role="button">
+                                        Change Password
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h3>User profile</h3>
+                    <p>We collect this information for research purposes, but don't show it to other
+                        students.</p>
+                    <table class="table table-bordered" style="width:100%;">
+                        {% for profile_field in profile_fields %}
+                            <tr>
+                                <td style="min-width:15rem;"> {{ profile_field.label }}</td>
+                                <td style="width:100%;">
+                                    {{ profile_field.value | default:"<span class='text-muted'>--</span>" }}
+                                    {% if profile_field.note %}
+                                        <div class="mt-2 text-muted small">{{ profile_field.note }}</div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    {% if object == request.user %}
+                        <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">Update My Profile</a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock main_content %}
+

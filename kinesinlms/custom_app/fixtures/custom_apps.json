@@ -1,0 +1,47 @@
+[
+  {
+    "model": "custom_app.customapp",
+    "pk": 1,
+    "fields": {
+      "created_at": "2019-09-12T04:16:25.219Z",
+      "updated_at": "2019-09-30T01:56:44.352Z",
+      "display_name": "PYSJ Course Speakers",
+      "type": "COURSE_SPEAKERS",
+      "slug": "course_speakers",
+      "course": 1,
+      "short_description": "Short video intros to each of our course speakers",
+      "description": "",
+      "tab_label": "Course Speakers"
+    }
+  },
+  {
+    "model": "custom_app.customapp",
+    "pk": 2,
+    "fields": {
+      "created_at": "2019-09-12T23:53:39.261Z",
+      "updated_at": "2019-09-30T01:56:36.050Z",
+      "display_name": "BCLS Course Speakers",
+      "type": "COURSE_SPEAKERS",
+      "slug": "course_speakers",
+      "course": 2,
+      "short_description": "Short biographies of each of our speakers.",
+      "description": "",
+      "tab_label": "Course Speakers"
+    }
+  },
+  {
+    "model": "custom_app.customapp",
+    "pk": 3,
+    "fields": {
+      "created_at": "2019-09-12T23:54:28.984Z",
+      "updated_at": "2019-09-30T01:56:29.857Z",
+      "display_name": "LE Course Speakers",
+      "type": "COURSE_SPEAKERS",
+      "slug": "course_speakers",
+      "course": 3,
+      "short_description": "Short video biographies of each of our speakers.",
+      "description": "",
+      "tab_label": "Course Speakers"
+    }
+  }
+]

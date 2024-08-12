@@ -1,0 +1,34 @@
+<div class="basic-resources-list">
+
+    <div class="row">
+        <div class="col-12 col-lg-10">
+            <h3 class="mb-2">Basic Resources</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-10">
+
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Course Outline</td>
+                        <td style="width: 10rem; text-align:center;">
+                            <a class="btn btn-primary btn-standard"
+                               target="_blank"
+                               href="{% url 'course:outline_course' course_run=course.run course_slug=course.slug %}">View</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>JSON Representation</td>
+                        <td style="width: 10rem; text-align:center;">
+                            <a class="btn btn-primary btn-standard"
+                               target="_blank"
+                               href="{% url 'courses-detail' pk=1 %}">View</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

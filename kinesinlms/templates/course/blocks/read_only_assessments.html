@@ -1,0 +1,16 @@
+{% for item in read_only_assessment_data %}
+  <div class="question-answer">
+      {% if item.question %}
+        <div class="assessment-question">
+          <span class="question-text">{{ item.question | safe }}</span>
+        </div>
+      {% endif %}
+    <div class="answer-read-only">
+        {% if item.answer_text %}
+            {{ item.answer_text }}
+        {% else %}
+          <i>(No answer yet)</i>
+        {% endif %}
+    </div>
+  </div>
+{% endfor %}

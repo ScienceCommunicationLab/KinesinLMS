@@ -1,0 +1,46 @@
+{% extends "management/management_base.html" %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+
+
+{% block management_content %}
+
+    <div class="row">
+        <div class="col-lg-7 col-12 ms-auto me-auto">
+            <div class="card">
+                <div class="card-header">
+                    Edit "{{ course.display_name }}" ( {{ course.token }} )
+                </div>
+
+                <div class="card-body">
+
+                    <p>
+                        Use this form to quickly manage course settings while the course is running.
+                        To access and update <strong>all</strong> course properties, edit the course
+                        <a href="{% url 'composer:course_edit_settings' pk=course.id %}">in
+                            composer</a>
+                    </p>
+
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                    </form>
+
+                </div>
+
+                <div class="card-footer">
+                    <div class="action-buttons">
+                        <input type="submit"
+                               value="{% trans "Save" %}"
+                               class="btn btn-primary">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

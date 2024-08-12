@@ -1,0 +1,29 @@
+{% extends "composer/composer_base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load static i18n %}
+
+{% block main_content %}
+
+    <div class="container-fluid composer-content">
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 mt-1">
+
+            <div class="col">
+
+                {% include 'composer/include/new_course_card.html' %}
+
+            </div>
+
+            {% for course_description in course_descriptions %}
+                <div class="col">
+
+                    {% include 'composer/course/course_card.html' with course_description=course_description %}
+
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock main_content %}

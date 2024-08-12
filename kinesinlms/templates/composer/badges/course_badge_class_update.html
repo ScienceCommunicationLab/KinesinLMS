@@ -1,0 +1,33 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+{% block main_content %}
+
+    {{ block.super }}
+
+    <div class="container-fluid composer-content course">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="card mt-4">
+                    <div class="card-header">{% translate "Course Badge" %}</div>
+                    <div class="card-body">
+                        <form action="{% url 'composer:course_badge_class_update' course_id=course.id pk=badge_class.id %}"
+                              method="post">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <a href="{% url 'composer:course_badge_classes_list' course_id=course.id %}"
+                               type="button"
+                               class="btn btn-secondary">{% translate "Cancel" %}</a>
+                            <button type="submit" class="btn btn-primary">{% translate "Update" %}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content %}

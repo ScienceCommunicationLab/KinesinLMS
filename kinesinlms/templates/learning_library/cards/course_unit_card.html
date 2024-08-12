@@ -1,0 +1,69 @@
+<div class="card mb-4 card-narrow course-card">
+
+    <div class="card-header block-{{ library_item.type }}">
+        {{ library_item.type }}
+    </div>
+
+    <div class="card-body">
+
+        <div class="block-name">
+            <b>{{ course_unit.display_name }}</b>
+        </div>
+
+        <div class="block-description">
+            {% if course_unit.short_description %}
+                {{ course_unit.short_description }}
+            {% else %}
+                Admin note: This course unit is missing a 'short description.'
+                Each unit should have a short description that describes
+                content and learning outcomes.
+            {% endif %}
+        </div>
+
+        <div class="block-info">
+
+            <div class="block-info-label">
+                Created for course:
+            </div>
+
+            <a class="course-link"
+               href='{{ course_unit.course.course_url }}'
+               target='blank'
+               title="{{ course.display_name }}"
+               alt="Link to location in course {{ course_unit.course.token }}">
+                {{ course_unit.course.token }}
+            </a>
+
+        </div>
+
+        <div class="block-info">
+            <div class="block-info-label">
+                Tags:
+            </div>
+            {% with tags=course_unit.tags.all %}
+                {% if tags %}
+                    {% for tag in course_unit.tags.all %}
+                        <div class="block-tag">
+                            {{ tag }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    &nbsp;&nbsp;( no tags )
+                {% endif %}
+            {% endwith %}
+
+        </div>
+
+        <small class="text-muted">
+            UUID: {{ library_item.uuid }}
+        </small>
+    </div>
+    <div class="card-footer">
+        {% if library_item.uuid %}
+            <a href="{% url "learning_library:item-detail" item_type=library_item.type id=library_item.course_unit.id %}"
+               class="btn btn-dark">
+                View Resource
+            </a>
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,547 @@
+#course-admin-content {
+
+  min-height: 900px;
+
+  #course-admin-nav {
+
+    .nav-item {
+      border: 1px solid rgba(0, 0, 0, 0);
+      border-top-left-radius: .25rem;
+      border-top-right-radius: .25rem;
+      padding: .2rem .5rem;
+    }
+
+    .active {
+      color: #000 !important;
+      background-color: #f9f9f9 !important;
+      border-color: #dee2e6 #dee2e6 $course-header-nav-color;
+      bottom: -6px;
+      position: relative;
+    }
+
+  }
+
+
+  h3 {
+    margin: 0;
+  }
+
+  .list-group {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .cohort-item {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cohort-info {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+
+  .cohort-icon {
+    width: 3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    border-right: 1px dotted #999;
+  }
+
+  .cohort-stats {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .cohort-stat {
+    display: flex;
+    flex-direction: row;
+    margin-right: 2rem;
+    align-items: center;
+    font-weight: 700;
+  }
+
+
+  .cohort-stat label {
+    font-weight: normal;
+    margin-right: 0.5rem;
+  }
+
+  .cohort-stat mark {
+    background: rgba(0, 0, 0, 0.05);
+    font-weight: 700;
+    min-width: 3.5rem;
+    text-align: right;
+    border-radius: 0.3rem;
+  }
+
+  .title-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    min-height: 2.5rem;
+
+    h2 {
+      flex-grow: 1;
+    }
+  }
+
+  .control-bar {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border: 1px dotted #999;
+    border-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.08);
+    min-height: 3.5rem;
+    overflow: clip;
+  }
+
+
+  .drop-ok-indicator {
+    border: 2px solid #0d6efd !important;
+  }
+
+  .drop-not-ok-indicator {
+    border: 2px solid #cc0000 !important;
+  }
+
+  .students-list-wrapper {
+    border: 1px dotted #999;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    min-height: 400px;
+    max-height: 600px;
+    overflow: scroll;
+  }
+
+  #students-list-group {
+    overflow: scroll;
+  }
+
+  .no-students {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+  }
+
+  .list-group-item.active {
+    background-color: #cfe2ff;
+    color: #000 !important;
+  }
+
+
+  #manual-enrollment-form {
+    align-items: flex-end;
+    margin-bottom: 1rem;
+  }
+
+  #manual-enrollment-form div {
+    margin-right: 1rem;
+  }
+
+  #manual-enrollment-form #btn-enroll,
+  #manual-enrollment-form #btn-cancel {
+    min-width: 120px;
+  }
+
+  #delete-submitted-answers {
+
+    margin-bottom: 5em;
+
+    .delete-submitted-answers-result {
+      font-style: italic;
+    }
+  }
+}
+
+
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 30px;
+  float: right;
+  margin-top: 0;
+  margin-left: 20px;
+  padding: 0.5rem 1rem 1rem;
+  border: 1px dotted #bbb;
+  border-radius: 0.5rem;
+  background: #ffffff33;
+}
+
+
+@media only screen and (max-width: 992px) {
+  .legend {
+    margin-top: 32px;
+    flex-direction: row;
+    padding-bottom: 0.5rem;
+    float: none;
+    margin-left: 0;
+    margin-bottom: 1rem;
+    filter: drop-shadow(5px 5px 4px #00000022);
+    flex-wrap: wrap;
+    row-gap: 5px;
+
+    .legend-item {
+      margin-right: 1rem;
+      padding-right: 0.5rem;
+      background-color: #00000008 !important;
+    }
+  }
+}
+
+
+
+// Legency for the course resources list, which can appear in different places
+
+#course-resources-list {
+
+  .legend {
+
+    min-width: 10rem;
+
+    .legend-label {
+      padding-right: 1rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    .legend-item {
+      height: 2rem;
+      padding: .2rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+
+      .bi {
+        margin-right: 0.5rem;
+      }
+
+    }
+
+    .bi {
+      font-size: 1rem;
+      margin: 0 0 1.5rem;
+    }
+  }
+
+
+  h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .header-row {
+    background: #c1c1c1;
+  }
+
+  .module-row {
+    background: #f9f9f9;
+    border-bottom: 2px solid #999;
+    padding-top: 2rem;
+  }
+
+  td {
+    vertical-align: middle !important;
+    text-align: center;
+  }
+
+  .col-type {
+    text-align: center;
+    vertical-align: top !important;
+  }
+
+  .col-title {
+    text-align: left;
+    width: 40%;
+    vertical-align: top !important;
+  }
+
+  .col-description {
+    text-align: left;
+    width: 60%;
+    vertical-align: top !important;
+  }
+
+  .col-resource {
+    text-align: center;
+    min-width: 10rem;
+  }
+
+  .row-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+    font-size: 2rem;
+    opacity: 0.6;
+  }
+
+  .title-note {
+    font-size: .8rem;
+    color: #444;
+    text-align: left;
+  }
+
+  .resources-table {
+
+    .module-header {
+      padding-top: 2.5rem;
+      border-bottom: 2px solid #333;
+      text-align: left;
+    }
+
+    .module-title {
+      font-weight: bold;
+    }
+  }
+
+  .cell-icon {
+    background-color: #ffffff;
+    text-align: center;
+    width: 25px;
+    vertical-align: top !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cell-icon .bi {
+    font-size: 1.6rem;
+  }
+
+  .icon-video {
+    color: #337ab7;
+  }
+
+  .cell-video {
+    color: #337ab7;
+  }
+
+  .btn {
+    font-size: .8rem !important;
+    max-width: 120px;
+  }
+
+  .icon-assessment {
+    color: #777;
+  }
+
+  .cell-assessment {
+    color: #777;
+  }
+
+  .icon-discussion {
+    color: #777;
+  }
+
+  .cell-discussion {
+    color: #777;
+  }
+
+  .icon-file {
+    color: #f0ad4e;
+  }
+
+  .cell-file {
+    color: #f0ad4e;
+  }
+
+  .icon-web {
+    color: #999;
+  }
+
+  .cell-web {
+    color: #999;
+  }
+
+  .icon-infographic {
+    color: #5cb85c;
+  }
+
+  .cell-infographic {
+    color: #5cb85c;
+  }
+
+  .video-icon {
+    color: #ffc107;
+  }
+
+  .cell-video-info {
+    background-color: #f9f9f9;
+  }
+
+
+  .plus-transcript {
+    color: #aaa;
+    display: inline;
+  }
+
+  .course-resources-list-title {
+    margin-top: 4rem;
+  }
+
+  .er-assessments {
+    margin-bottom: 10rem;
+  }
+
+  .er-discussions {
+    margin-bottom: 10rem;
+  }
+
+  .er tr {
+    border-color: #333;
+  }
+
+  .er .table thead tr {
+
+    border-bottom: 1px solid #333;
+  }
+
+  .er .table thead th {
+    background: #ddd;
+    border: 1px solid #333;
+    text-align: center;
+  }
+
+  .table thead .th-video {
+    border: 1px solid #7BC0F9;
+    background-color: #DBEAF6;
+  }
+
+
+  .btn-dark {
+    background-color: #787f86;
+    border-color: #787f86;
+  }
+
+
+  /* Timeline CSS derived from example on https://bootsnipp.com/snippets/xrKXW */
+
+}
+
+
+
+.event-timeline {
+  list-style-type: none;
+  position: relative;
+
+  .timeline-item {
+    margin: 20px 0 40px 10px;
+    padding-left: 20px;
+    max-width: 700px;
+  }
+
+  .icon-holder {
+    display: flex;
+    position: absolute;
+    left: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    z-index: 999;
+    border-radius: 0.5rem;
+
+    i {
+      color: #fff;
+    }
+  }
+
+  &:before {
+    content: ' ';
+    background: #d4d9df;
+    display: inline-block;
+    position: absolute;
+    left: 29px;
+    width: 2px;
+    height: 100%;
+    z-index: 400;
+  }
+
+  .event-header {
+    padding-top: 12px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .event-title {
+    flex-grow: 1;
+  }
+
+  .event-info {
+    margin-top: 0.3rem;
+    padding: 1rem;
+    border: 1px dotted #c1c1c1;
+    border-radius: 0.5rem;
+  }
+
+  .event-data {
+    color: #999;
+    font-family: monospace;
+  }
+
+  .default-icon {
+    background-color: #333;
+  }
+
+  .video-icon {
+    background-color: #de4b37;
+  }
+
+  .custom-page-icon {
+    background-color: #174c74;
+    opacity: 0.8;
+  }
+
+  .assessment-icon {
+    background-color: #9bac9c;
+  }
+
+  .page-view-icon {
+
+    background-color: #174c74;
+  }
+
+  .forum-icon {
+    background-color: #f5ecc8;
+
+    i {
+      color: #333;
+    }
+  }
+
+  .bookmark-icon {
+    background-color: green;
+  }
+
+  .default-icon {
+    background-color: #999999;
+  }
+
+  .enrollment-icon {
+    background-color: #f1f1f1;
+    border: 1px solid #000;
+
+    i {
+      color: #000;
+    }
+  }
+
+
+}

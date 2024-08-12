@@ -1,0 +1,13 @@
+{% extends "course_admin/course_admin_base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block course_admin_content %}
+
+    <div class="row" style="min-height:30rem;">
+        <div class="col-12 mb-3">
+            {% include 'course_admin/course_enrollment/hx/invited_users.html' %}
+        </div>
+    </div>
+
+{% endblock %}

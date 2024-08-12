@@ -1,0 +1,44 @@
+{% extends "composer/composer_base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% load static i18n %}
+
+{% block header_javascript %}
+    {{ form.media }}
+{% endblock header_javascript %}
+
+{% block main_content %}
+
+    <div class="container-fluid composer-content course">
+        <div class="row mt-4">
+            <div class="col-12 col-lg-8">
+                <form method="post"
+                      action="{% url 'composer:course_catalog_description_edit' course_id=current_course.id pk=current_course.catalog_description.id %}"
+                      class="password_reset">
+                    {% csrf_token %}
+                    <div class="card main-card">
+                        <div class="card-header">Create Course Catalog Description</div>
+                        <div class="card-body">
+                            {% crispy form %}
+                        </div>
+                        <div class="card-footer">
+                            <div class="action-buttons">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-lg-3">
+                <p>
+                    {% blocktrans %}
+                        Use this form to update the information about the course shown in the catalog,
+                        including the course 'About' page. This information is shown to the public, and should encourage users to enroll in the course.
+                    {% endblocktrans %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content %}

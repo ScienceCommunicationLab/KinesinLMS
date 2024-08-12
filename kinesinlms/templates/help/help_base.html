@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load static i18n %}
+
+{% block main_content %}
+
+    <style>
+        .subtopic {
+            padding-left: 2rem;
+        }
+    </style>
+
+    <div class="container-fluid help-page">
+
+        <div class="row ">
+            <div class="col-12 col-lg-2">
+                <div class="list-group ">
+                    {% for topic in help_topics %}
+                        <a id="topic-{{ topic.slug }}"
+                           href="{% url 'help:help_page' help_page_slug=topic.slug %}"
+                           class="list-group-item {% if active_topic_slug == topic.slug %}active{% endif %}">
+                            {{ topic.count }}. {{ topic.title }}
+                        </a>
+                        {% for subtopic in topic.subtopics %}
+                            <a id="subtopic-{{ topic.slug }}"
+                               class="list-group-item subtopic {% if active_topic_slug == subtopic.slug %}active{% endif %}"
+                               href="{% url 'help:help_page' help_page_slug=subtopic.slug %}">
+                                {{ topic.count }}.{{ subtopic.count }} {{ subtopic.title }}
+                            </a>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-12 col-lg-10 mt-4 mt-lg-0">
+
+                {% if help_topic %}
+                    <h2 class="mb-2">{{ help_topic_id }} {{ help_topic.title }}</h2>
+                {% endif %}
+
+                {% block help_content %}
+
+
+                {% endblock %}
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock main_content %}

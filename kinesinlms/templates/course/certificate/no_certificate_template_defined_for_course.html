@@ -1,0 +1,26 @@
+{% extends "course/course_base_default_page.html" %}
+
+{% load static i18n %}
+
+{% block sidebar %}<!-- Don't show sidebar on certificate page -->{% endblock %}
+
+{% block course_sub_nav %}{% endblock %}
+
+{% block page_content %}
+
+    <div class="d-flex flex-column justify-content-center align-items-center "
+         style="min-height: 50vh">
+
+        <div class="unachieved-content">
+            {% blocktrans trimmed %}
+                No certificate has been defined for this course.
+            {% endblocktrans %}
+        </div>
+
+    </div>
+
+{% endblock page_content %}
+
+{% block unit_controls_bottom %}
+    <!-- no course controls -->
+{% endblock unit_controls_bottom %}

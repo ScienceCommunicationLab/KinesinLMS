@@ -1,0 +1,22 @@
+{% load static core_tags %}
+{% load crispy_forms_filters %}
+<div class="form-header">
+    <div>
+        Why are you here?
+    </div>
+</div>
+
+<div class="form-body">
+
+    {% if educator_survey_form_thanks %}
+        <div class="thanks-for-input">
+            <p>Thanks for your input!</p>
+        </div>
+    {% else %}
+        <form action="{% url 'educator_resources:educator-resources-detail' educator_resources.id %}" method="post">
+            {% csrf_token %}
+            {{ educator_survey_form | crispy }}
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </form>
+    {% endif %}
+</div>

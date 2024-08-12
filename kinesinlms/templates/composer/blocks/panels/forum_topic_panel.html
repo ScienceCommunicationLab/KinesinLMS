@@ -1,0 +1,19 @@
+{% extends "composer/blocks/panels/base_block_edit_panel.html" %}
+
+{% block extra_panel_content %}
+    {% if panel_form.is_course_forum_configured == False %}
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="alert alert-warning">
+                    <p>
+                        <strong>Warning:</strong> The course forum is not configured, so this topic will not be set up
+                        in the remote forum. Please configure the course forum by clicking the "Forum" tab in the
+                        composer
+                        navigation above, so that forum topics like this one can be created and updated in the remote
+                        forum.
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock extra_panel_content %}

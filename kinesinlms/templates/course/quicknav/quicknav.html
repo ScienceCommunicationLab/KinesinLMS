@@ -1,0 +1,134 @@
+{% load static %}
+{% load core_tags unit_extras %}
+
+<script>
+    function klmsOnUnitMarkerDoubleClick(unitURL) {
+        window.location.href = unitURL;
+    }
+</script>
+
+<div class="modal fade"
+     id="quickNavModal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" style="display:flex;flex-direction: row;align-items: center;">
+                    <img src="{% static 'images/icons/quick_nav.svg' %}"
+                         alt="Compass icon: click to view Quick Nav" style="width:1.5rem;margin:0 0.5rem 0 0.5rem;"/>
+                    &nbsp;Quick Nav : Jump to any part of the course
+                </div>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="quick-nav-wrapper">
+                    <div class="quick-nav-tree">
+                        {% for module_node in course_nav.children %}
+                            <div class="module-wrapper">
+                                <div class="module-label">
+                                    {% if module_node.content_index != None %}
+                                        <div class="node-content-index index-circle">
+                                            {{ module_node.content_index }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="node-display-name">
+                                        {{ module_node.display_name }}
+                                    </div>
+                                </div>
+                                {% if module_node.is_released or user.is_superuser or user.is_staff %}
+                                    <div class="module-section-boxes">
+                                        {% for section_node in module_node.children %}
+                                            <div class="section section-box">
+                                                <div class="section-display-sequence">
+                                                    {{ section_node.content_index|default_if_none:"" }}
+                                                </div>
+                                                {% if section_node.is_released or user.is_superuser or user.is_staff %}
+                                                    {% for unit_node in section_node.children %}
+
+                                                        {% comment %}
+                                                        COURSE NODE MARKER
+                                                        This is the small node marker that, when rolled over, uses htmx to load
+                                                        a course summary in the card holder further below.
+                                                        {% endcomment %}
+                                                        <div hx-indicator="#spinner"
+                                                             hx-trigger="mouseenter"
+                                                             hx-get="{% url 'course:unit_page_summary_hx' course_slug=course.slug course_run=course.run module_slug=module_node.slug section_slug=section_node.slug unit_slug=unit_node.slug %}"
+                                                             hx-target="#unit-summary"
+                                                                {% if current_unit_node_id == unit_node.id %}
+                                                             title="Current location"
+                                                             data-bs-toggle="tooltip"
+                                                             data-bs-placement="top"
+                                                                {% endif %}
+                                                             ondblclick="klmsOnUnitMarkerDoubleClick('{% url 'course:unit_page' course_slug=course.slug course_run=course.run module_slug=module_node.slug section_slug=section_node.slug unit_slug=unit_node.slug %}')"
+                                                             href="{{ unit_node.node_url }}"
+                                                             class="unit-box {% if current_unit_node_id == unit_node.id %}star-marker{% else %}location-marker{% endif %}">
+                                                            {% if current_unit_node_id == unit_node.id %}
+                                                                <i class="bi bi-star"></i>
+                                                            {% else %}
+                                                                {{ unit_node.content_index|default_if_none:"" }}
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% include 'course/quicknav/node_release_info.html' with node=section_node %}
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="module-section-boxes">
+                                        {% include 'course/quicknav/node_release_info.html' with node=module_node %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="card quick-nav-unit-info">
+                        <div class="card-header">
+                            Unit Summary
+                        </div>
+                        <div id="unit-summary-wrapper" class="card-body">
+
+                            {% comment %}
+                            This spinner is controlled by HTMx
+                            {% endcomment %}
+                            <div id="spinner"
+                                 class="spinner-wrapper htmx-indicator ">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <div class="loading-message">Loading...</div>
+                            </div>
+
+                            {% comment %}
+                            This unit-summary div is populated by HTMx.
+                            {% endcomment %}
+                            <div id="unit-summary">
+
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            View your progress on the
+                            <a href="{% url 'course:progress_overview_page' course_slug=course.slug course_run=course.run %} ">
+                                Progress page
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,177 @@
+{% load react %}
+
+{% if request.user.is_staff or request.user.is_superuser %}
+    {% if show_admin_controls and course.edit_status.mode == "EDIT" %}
+        <a target="_blank"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           style="position:relative; left:-70px; top:40px; width:40px; height:40px;"
+           href="{% url 'composer:edit_block' block_id=block.id %}"
+           title="Edit this Video block"
+           class="btn btn-secondary">
+            <i class="bi bi-pencil"></i>
+        </a>
+    {% endif %}
+{% endif %}
+
+
+{% if block.display_name and block.hide_display_name == False and block.display_name != "" %}
+    <h2 class="block-display-name">
+        {{ block.display_name }}
+    </h2>
+{% endif %}
+
+{% if block.json_content.header %}
+    <div class="block block-callout video-callout">
+        <div class="icon-block">
+            <div class="icon-image"></div>
+        </div>
+        <div class="callout-text">
+            {{ block.json_content.header | safe }}
+        </div>
+    </div>
+{% endif %}
+
+
+<div id="block_{{ block.id }}" class="block block-video ">
+    {% if not block.json_content.video_id or block.json_content.video_id == "" %}
+        <div class="no-video-container">
+            <div>( Video coming soon... )</div>
+        </div>
+    {% else %}
+        {% if block.json_content.player_type == "wistia" %}
+            {% include 'includes/video/wistia_player.html' %}
+        {% elif block.json_content.player_type == "vimeo" %}
+            {% include 'includes/video/vimeo_player.html' %}
+        {% else %}
+            <div class="video d-print-none">
+                {% if is_outline %}
+                    <div class="video-outline d-flex flex-column justify-content-start">
+                        <h2 class="w-100 mb-4" style="border-bottom:1px dotted #333;">VIDEO</h2>
+                        <div>
+                            <strong>URL&nbsp;:&nbsp;</strong>
+                            <a href="https://youtu.be/{{ block.json_content.video_id }}">
+                                https://youtu.be/{{ block.json_content.video_id }}
+                            </a>
+                        </div>
+                        {% if block.speakers and block.speakers.count > 0 %}
+                            <div>
+                                <strong>Speakers:</strong>
+                                {% for speaker in block.speakers.all|dictsort:"last_name" %}
+                                    {{ speaker.full_name }} {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if block.resources %}
+                            <div class="mb-2">
+                                {% for block_resource in block.resources.all %}
+                                    {% if block_resource.type == 'VIDEO_TRANSCRIPT' %}
+                                        <strong>Video transcript :</strong>
+                                        <a href="{% url 'course:download_resource' course_run=course.run course_slug=course.slug block_resource_id=block_resource.id %}">
+                                            View
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                {% elif block_view_context == "COMPOSER" %}
+
+                    <iframe id="ytplayer{{ block_index.id }}"
+                            type="text/html"
+                            width="640"
+                            height="360"
+                            src="https://www.youtube.com/embed/{{ block.video_id }}"></iframe>
+
+                {% else %}
+                    {% react_render component="VideoPlayer" props=block %}
+                {% endif %}
+            </div>
+            <div class="d-none d-print-block video-print-block">
+                Video URL: https://youtu.be/{{ block.json_content.video_id }}
+            </div>
+        {% endif %}
+    {% endif %}
+
+
+    {% if not is_outline %}
+        <div class="video-info">
+
+            {% if block.speakers and block.speakers.count > 0 %}
+                <div class="speakers d-print-none">
+                    {% if block.speakers.count < 4 %}
+                        {% if block.speakers.count == 1 %}
+                            Speaker:&nbsp;
+                        {% else %}
+                            Speakers
+                        {% endif %}
+                        {# Show speaker names as pills #}
+                        {% for speaker in block.speakers.all|dictsort:"last_name" %}
+                            <a href="/speakers/{{ speaker.slug }}" target="_blank">
+                                <div class="badge text-bg-secondary ms-2">
+                                    {{ speaker.full_name }}
+                                </div>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        {# Show speaker names as pulldown #}
+                        <div class="dropdown">
+                            <a class="btn btn-sm btn-secondary dropdown-toggle"
+                               href="#"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                Speakers
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% for speaker in block.speakers.all|dictsort:"last_name" %}
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="/speakers/{{ speaker.slug }}"
+                                           target="_blank">
+                                            {{ speaker.full_name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% if block.resources %}
+                <div class="transcripts">
+                    {% for block_resource in block.resources.all %}
+                        {% if block_resource.type == 'VIDEO_TRANSCRIPT' %}
+                            <div class="transcript ms-2">
+                                <a id="block_resource_{{ block_resource.id }}"
+                                   class="d-print-none btn btn-sm btn-secondary"
+                                   target="_blank"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="top"
+                                   title="Download the transcript for this video"
+                                   href="{% url 'course:download_resource' course_run=course.run course_slug=course.slug block_resource_id=block_resource.id %}"
+                                   class="btn btn-sm btn-secondary mt-2">
+                                    <i class="bi bi-cloud-arrow-down me-1"></i>Transcript
+                                    ({{ block_resource.extension }})
+                                </a>
+                                {# show url when printing #}
+                                <div class="d-none d-print-block">
+                                    Video transcript
+                                    URL: {% url 'course:download_resource' course_run=course.run course_slug=course.slug block_resource_id=block_resource.id %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="d-none d-print-block">
+            (Video hidden for print.)
+        </div>
+
+    {% endif %}
+
+</div>

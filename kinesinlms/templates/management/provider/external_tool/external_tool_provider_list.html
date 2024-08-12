@@ -1,0 +1,110 @@
+{% extends "management/management_base.html" %}
+{% load static i18n management_tags %}
+
+
+{% block management_content %}
+
+    <div class="d-flex flex-row justify-content-between mb-1 align-items-center">
+        <div class="ms-2">
+            Current External Tool Providers
+        </div>
+        <a href="{% url 'management:external_tool_provider_create' %}"
+           class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> {% trans "Add External Tool Provider" %}
+        </a>
+    </div>
+
+    <table class="table table-responsive table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th>{% trans "Provider Name" %}</th>
+            <td>{% trans "Type" %}</td>
+            <td>{% trans "Active" %}</td>
+            <td>{% trans "URLs" %}</td>
+            <td>{% trans "Client ID" %}</td>
+            <td style="text-align: center; width: 8rem;">{% trans "Edit" %}</td>
+            <td style="text-align: center; width: 8rem;">{% trans "Delete" %}</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% if external_tool_providers %}
+            {% for external_tool_provider in external_tool_providers %}
+                <tr>
+                    <td>
+                        {{ external_tool_provider.name }}
+                    </td>
+                    <td>
+                        {{ external_tool_provider.type }}
+                    </td>
+                    <td>
+                        {{ external_tool_provider.active }}
+                    </td>
+                    <td class="d-flex flex-column">
+                        {% if external_tool_provider.launch_uri %}
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <div style="min-width:6rem">
+                                    Launch URL:
+                                </div>
+                                <div class="alert alert-info mb-0">
+                                    {{ external_tool_provider.launch_uri }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if external_tool_provider.login_url %}
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <div style="min-width:6rem">
+                                    Login URL:
+                                </div>
+                                <div class="alert alert-info mb-0">
+                                    {{ external_tool_provider.login_url }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if external_tool_provider.public_keyset_url %}
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <div style="min-width:6rem">
+                                    Keyset URL:
+                                </div>
+                                <div class="alert alert-info mb-0">
+                                    {{ external_tool_provider.public_keyset_url }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ external_tool_provider.client_id }}
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="{% url 'management:external_tool_provider_update' external_tool_provider.id %}"
+                           type="button"
+                           class="btn btn-primary"
+                           aria-label="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    </td>
+                    <td style="text-align: center;">
+                        <a href="{% url 'management:external_tool_provider_delete' external_tool_provider.id %}"
+                           type="button"
+                           class="btn btn-danger"
+                           aria-label="Delete">
+                            <i class="bi bi-x-square"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7">
+                    <div class="d-flex flex-row justify-content-center align-items-center w-100"
+                         style="height:4rem;">
+                        <span class="text-muted">( No external_tool providers defined. )</span>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+
+{% endblock %}
+

@@ -1,0 +1,113 @@
+{% load static %}
+
+{% load core_tags unit_extras %}
+
+{% if unit_is_released %}
+
+    <div class="location-info">
+        <div class="location-type">Module {{ unit_nav_info.module_content_index |default_if_none:"" }}:</div>
+        <div class="location-name">{{ unit_nav_info.module_display_name|safe }}</div>
+    </div>
+
+    <div class="location-info ml-2">
+        <div class="location-type">Lesson {{ unit_nav_info.section_content_index |default_if_none:"" }}:</div>
+        <div class="location-name">{{ unit_nav_info.section_display_name|safe }}</div>
+    </div>
+
+    <div class="location-info ml-4">
+        <div class="location-type">Unit {{ unit_nav_info.unit_content_index |default_if_none:"" }}:</div>
+        <div class="location-name">{{ course_unit.display_name|safe }}</div>
+    </div>
+
+    <div class="unit-blocks-contents">
+
+        {% if block.short_description %}
+            <div class="unit-block-contents unit-summary">
+                <div class="block-type-marker">
+                    <i class="bi bi-book"></i>
+                </div>
+                <div class="block-info d-flex flex-row justify-content-start align-items-center ms-2">
+                    {{ block.short_description }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% for block in course_unit.ordered_contents %}
+
+            {% comment %}
+            We don't list individual HTML_CONTENT blocks as they're so varied
+            in terms of what they're used for.
+            {% endcomment %}
+
+            {% if block.type ==  "VIDEO" %}
+                <a class="unit-block-contents video-block"
+                   href="{{ course_unit_url }}#block_{{ block.id }}">
+                    <div class="block-type-marker video-icon">
+                        <img src="{% static 'images/icons/camera.svg' %}" alt="Camera icon" />
+                    </div>
+                    <div class="block-info d-flex flex-row justify-content-start align-items-center ms-2">
+                        <div class="w-100"
+                             title="{{ block.summary_text }}"
+                             data-bs-toggle="tooltip"
+                             data-bs-placement="top">{{ block.summary_text |truncatechars:20 }}</div>
+                        <img src="{{ block.thumbnail_url }}" alt="Icon for a 'thumbnail' image." />
+                    </div>
+                </a>
+            {% elif block.type == "HTML_CONTENT" %}
+                <a class="unit-block-contents html-content-block"
+                   href="{{ course_unit_url }}#block_{{ block.id }}">
+                    <div class="block-type-marker">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <div class="d-flex flex-row block-info align-items-center">{% get_html_content_label block course_unit %}</div>
+                </a>
+            {% elif block.type == "ASSESSMENT" %}
+                <a class="unit-block-contents assessment-block"
+                   href="{{ course_unit_url }}#assessment_{{ block.slug }}">
+                    <div class="block-type-marker">
+                        <i class="bi bi-pencil"></i>
+                    </div>
+                    <div class="block-info ">
+                        {% get_assessment_label block course_unit %}
+                        {% if block.assessment.question %}<span class="question-text">{{ block.summary_text }}</span>{% endif %}
+                    </div>
+                </a>
+
+            {% elif block.type == "FORUM_TOPIC" %}
+                <a class="unit-block-contents discussions-block"
+                   href="{{ course_unit_url }}#block_{{ block.id }}">
+                    <div class="block-type-marker">
+                        <i class="bi bi-chat-left-quote"></i>
+                    </div>
+                    <div class="block-info ">{{ block.summary_text }}</div>
+                </a>
+
+            {% elif block.type == "SIMPLE_INTERACTIVE_TOOL" %}
+                <a class="unit-block-contents activity-block"
+                   href="{{ course_unit_url }}#simple-interactive-tool-{{ block.simple_interactive_tool.id }}">
+                    <div class="block-type-marker">
+                        <i class="bi bi-pencil"></i>
+                    </div>
+                    <div class="block-info">
+                        {% get_activity_label block course_unit %}
+                        {{ block.summary_text }}
+                    </div>
+                </a>
+            {% elif block.type == "SURVEY" %}
+                <a class="unit-block-contents survey-block" href="{{ course_unit_url }}">
+                    <div class="block-type-marker">
+                        <i class="bi bi-emoji-neutral"></i>
+                    </div>
+                    <div class="d-flex flex-row block-info align-items-center">{% get_survey_label block course_unit %}</div>
+                </a>
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+{% else %}
+    <div>
+        <div>Unit is not yet released.</div>
+    </div>
+{% endif %}

@@ -1,0 +1,140 @@
+{% load react %}
+{% load core_tags unit_extras %}
+
+<div id="simple-interactive-tool-{{ block.simple_interactive_tool.id }}"
+     class="block block-sit">
+
+    {% block_is_read_only block course_unit as is_read_only %}
+
+    <div class="row block-embedded-content">
+        <div class="col-12">
+
+            <div class="sit-header pb-2">
+
+                <div class="block-header-markers">
+                    {% if block.simple_interactive_tool.graded and is_read_only == False %}
+
+                        {% include 'course/partial/marker_graded.html' %}
+
+                    {% endif %}
+                    {% if unit_block.include_in_summary %}
+
+                        {% include 'course/partial/marker_summary.html' %}
+
+                    {% endif %}
+                </div>
+
+                <h3 class="mb-0">
+                    <span>Activity
+                        {% if unit_block.read_only %}Review{% endif %}
+                    :</span>
+                    {% if unit_block.label %}{{ unit_block.label }}{% endif %}
+
+                    {% if unit_block.label and block.simple_interactive_tool.name %}:{% endif %}
+
+                    {# If author defined a name on the SIT model use that, otherwise #}
+                    {# look for a name on the Block model. #}
+                    {% if block.simple_interactive_tool.name %}
+                        {{ block.simple_interactive_tool.name|default_if_none:"" }}
+                    {% elif block.display_name %}
+                        {{ block.display_name }}
+                    {% endif %}
+
+                </h3>
+
+            </div>
+        </div>
+    </div>
+
+    {% if not is_read_only %}
+        <div class="row block-embedded-content">
+            <div class="col-12 col-xl-9">
+                <div class="sit-html-content block-embedded-content">
+                    {% if block.html_content %}
+                        {% if unit_block.index_label %}{{ unit_block.index_label }}.&nbsp;{% endif %}
+                        {% render_html_content block %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if not is_read_only %}
+        {# We only show instructions if diagram is editable and instructions exist #}
+        {% if block.simple_interactive_tool.instructions %}
+
+            {% include 'course/partial/sit-instructions.html' %}
+
+        {% endif %}
+    {% endif %}
+
+    {% if request.user.is_staff or request.user.is_superuser %}
+        {% if show_admin_controls and course.edit_status and course.edit_status.mode == "EDIT" %}
+            <a target="_blank"
+               style="position:relative;
+                      left:-70px;
+                      top:95px;
+                      width:40px;
+                      height:40px"
+               href="{% url 'composer:edit_simple_interactive_tool' block_id=block.id %}"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="Edit this SimpleInteractiveTool (Diagram) block"
+               class="btn btn-secondary block-embedded-content d-print-none">
+                <i class="bi bi-pencil"></i>
+            </a>
+        {% endif %}
+    {% endif %}
+
+    {% if course.has_finished %}
+        <div class="alert alert-warning">This course has finished. This activity is now read-only.</div>
+    {% endif %}
+
+    {% comment %}
+    SIT controls when sit is embedded as block in unit page
+    {% endcomment %}
+    <div class="sit-top-controls no-print">
+
+        {% if is_read_only and not course.has_finished %}
+            <div class="text-muted flex-grow-1">
+                <span class="badge bg-warning">Read only</span>
+                This diagram is not editable in this
+                unit, but you can still pan and zoom.
+            </div>
+        {% else %}
+            <h3 class="flex-grow-1 mb-0">
+                {% if  block.simple_interactive_tool and block.simple_interactive_tool.name %}
+                    {{ block.simple_interactive_tool.name }}
+                {% endif %}
+            </h3>
+        {% endif %}
+
+        <a href="/help/diagramtool/"
+           target="_blank"
+           class="btn btn-sm d-print-none"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           title="Diagram tool help">
+            <i class="bi bi-question-circle"></i> Help
+        </a>
+        <div class="block-embedded-content d-print-none">
+            <button class="btn btn-sm d-print-none"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Show diagram tool full screen"
+                    onclick="klmsOnBlockToFullScreen('simple-interactive-tool-{{ block.simple_interactive_tool.id }}')">
+                <i class="bi bi-arrows-angle-expand"></i> Full screen
+            </button>
+        </div>
+        <div class="block-fullscreen-content d-none d-print-none">
+            <button class="btn btn-sm d-print-none"
+                    onclick="klmsOnBlockExitFullScreen('simple-interactive-tool-{{ block.simple_interactive_tool.id }}')">
+                <i class="bi bi-arrows-angle-expand"></i> Exit full screen
+            </button>
+        </div>
+    </div>
+
+    {% react_render component="Diagram" props=block.simple_interactive_tool class="kn-react-component" %}
+
+</div>
+<!-- ./block-assessment -->

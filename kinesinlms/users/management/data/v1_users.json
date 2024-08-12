@@ -1,0 +1,32 @@
+[
+    {
+        "username": "MariaSchnoes",
+        "email": "schnoes@gmail.com",
+        "name": "Maria Schnoes",
+        "gender": "f",
+        "level_of_education": "p",
+        "year_of_birth": 1975,
+        "date_joined": "2017-03-14T22:30:05",
+        "gender_description": "False"
+    },
+    {
+        "username": "danielmcstudent2",
+        "email": "daniel@simplediagrams.com",
+        "name": "Daniel McStudent2",
+        "gender": "",
+        "level_of_education": "",
+        "year_of_birth": null,
+        "date_joined": "2017-03-27T02:44:14",
+        "gender_description": "False"
+    },
+    {
+        "username": "shannon_student",
+        "email": "shannon.behrman@gmail.com",
+        "name": "Shannon Behrman",
+        "gender": "f",
+        "level_of_education": "p",
+        "year_of_birth": 1978,
+        "date_joined": "2017-03-27T16:40:41.071",
+        "gender_description": "False"
+    }
+]

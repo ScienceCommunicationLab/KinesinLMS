@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+    <div class="container" style="min-height:800px; margin-top:4rem;">
+        <div class="row">
+            <div class="col">
+
+
+                <h2>Badge Classes</h2>
+
+                <table class="table table-bordered">
+
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Service</th>
+                        <th>Open Badge ID</th>
+                        <th style="text-align: center">Entity ID</th>
+                        <th style="text-align: center">Badge Image</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for badge_class in badge_classes %}
+                        <tr>
+                            <td>{{ badge_class.name }}</td>
+                            <td>{{ badge_class.service }}</td>
+                            <td>{{ badge_class.entity_id }}</td>
+                            <td style="text-align: center">
+                                <a href="{{ badge_class.open_badge_id }}"
+                                   class="btn btn-secondary"
+                                   target="_blank">
+                                    View Entity ID
+                                </a>
+                            </td>
+                            <td style="text-align: center">
+                                <img src="{{ badge_class.image_url }}" alt="Badge image"/>
+                            </td>
+                            <td>{{ badge_class.description }}</td>
+                            <td>
+                                <a href="{% url 'badges:badge_class_detail' badge_class.id %}"
+                                   class="btn btn-primary">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

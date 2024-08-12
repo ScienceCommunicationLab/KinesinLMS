@@ -1,0 +1,109 @@
+{% extends "management/management_base.html" %}
+{% load static i18n management_tags %}
+
+{% load crispy_forms_filters %}
+
+{% block management_content %}
+
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    {% trans "Forum Provider" %}
+                </div>
+                <div class="card-body">
+                    <form id="forum-provider-form"
+                          novalidate
+                          action="{% url 'management:forum_provider' %}"
+                          method="post">
+
+                        {% csrf_token %}
+                        {{ form | crispy }}
+
+                        <div class="mb-3">
+                            <label class="form-label ">
+                                {% trans "API Key" %}
+                            </label>
+                            {% if api_key_exists %}
+                                <div class="alert alert-info">
+                                    <i class="bi bi-check"></i>
+                                    {% blocktrans trimmed %}
+                                        The FORUM_API_KEY key is set in
+                                        the environment.
+                                    {% endblocktrans %}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-x-circle"></i>
+                                    {% blocktrans trimmed %}
+                                        The FORUM_API_KEY must be set
+                                        in the environment for this
+                                        provider to work.
+                                    {% endblocktrans %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label ">
+                                {% trans "SSO Secret" %}
+                            </label>
+                            {% if api_key_exists %}
+                                <div class="alert alert-info">
+                                    <i class="bi bi-check"></i>
+                                    {% blocktrans trimmed %}
+                                        The FORUM_SSO_SECRET key is set in
+                                        the environment.
+                                    {% endblocktrans %}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-x-circle"></i>
+                                    {% blocktrans trimmed %}
+                                        The FORUM_SSO_SECRET must be set
+                                        in the environment for forum single-sign
+                                        on to work.
+                                    {% endblocktrans %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <button id="id_save_btn"
+                                class="btn btn-primary btn-lg mr-2"
+                                type="submit">
+                            {% trans "Save" %}
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4 mt-4 mt-lg-0 ">
+
+            <strong>Managing the Forum Provider</strong>
+            <p>
+                A Forum Provider is a third-party service that provides
+                a user interface for student discussions. The Forum Provider
+                must also provide an API for managing the forum and discussion
+                for each course. It also allows manages single sign-on (SSO) to the forum.
+            </p>
+            <p>
+                At the moment, we only support Discourse as a forum provider.
+            </p>
+            <p>
+                Define the properties of your Discourse account here. You can then
+                manage the forum for each course in the Composer.
+            </p>
+            <p>
+                Because they're quite sensitive, you don't save your forum API key and SSO
+                secret in the database through this form. Instead, you set them directly in the Django
+                application environment with the <code>FORUM_API_KEY</code> and <code>FORUM_SSO_SECRET</code>
+                environment variables.
+            </p>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+

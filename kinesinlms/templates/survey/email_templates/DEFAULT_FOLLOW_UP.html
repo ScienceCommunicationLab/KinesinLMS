@@ -1,0 +1,19 @@
+{% load core_tags %}
+<p>Hi{{ informal_name }},</p>
+
+<p>
+    Once again we would like to thank you for your participation in the "{{ course.name }}" course.
+</p>
+
+<p>It’s been awhile since you completed the course! Would you be willing to complete this short survey and share
+    your experiences implementing the strategies you developed during the course?</p>
+
+<p><a href="{{ survey_url }}">Begin survey</a></p>
+
+<p>We appreciate the time you take to fill out this survey.</p>
+
+{% include 'survey/base/default_closing.html' %}
+
+
+
+

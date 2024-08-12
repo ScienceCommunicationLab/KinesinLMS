@@ -1,0 +1,56 @@
+<a hx-get="{% url 'course:course_admin:cohorts:cohort_students_hx' course_slug=course.slug course_run=course.run cohort_id=cohort.id %}"
+   hx-target="#cohort-detail"
+   hx-indicator="#cohort-loading-indicator"
+   swap="innerHTML"
+   click="onCohortSelected(event)"
+   id="cohort-item-{{ cohort.id }}"
+   data-cohort-id="{{ cohort.id }}"
+   class="list-group-item list-group-item-action cohort-item"
+   aria-current="true">
+    <div class="cohort-icon">
+        <i class="bi bi-collection"></i>
+    </div>
+    <div class="cohort-info flex-grow-1">
+        {% if cohort.type == "DEFAULT" %}
+            <div class="fw-bold">Unassigned (Default)</div>
+        {% else %}
+            <div class="fw-bold">{{ cohort.name }}</div>
+        {% endif %}
+        <div class="cohort-stats">
+            <div class="cohort-stat"
+                 data-bs-toggle="tooltip"
+                 title="Number of students"
+                 data-bs-placement="top">
+                <label>
+                    <i class="bi bi-people-fill"
+                    ></i>
+                </label>
+                <mark>{{ cohort.num_students }}</mark>
+            </div>
+            <div class="cohort-stat"
+                 data-bs-toggle="tooltip"
+                 title="Number of passing students"
+                 data-bs-placement="top">
+                <i class="bi bi-award-fill text-warning" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.2);"></i>
+                <mark>{{ cohort.num_students_passed }}</mark>
+            </div>
+            {% if cohort.institution %}
+                <div class="institution">
+                    <label><i class="bi bi-people-fill"></i></label>
+                    {{ cohort.institution }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</a>
+<script>
+    // If this template fragment was loaded by HTMx,
+    // we'll have to manually registet tooltip.
+    try {
+        for (const elem in document.getElementsByClassName('cohort-stat')) {
+            new bootstrap.Tooltip(elem);
+        }
+    } catch (e) {
+        //do nothing
+    }
+</script>

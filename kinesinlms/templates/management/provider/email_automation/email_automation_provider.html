@@ -1,0 +1,84 @@
+{% extends "management/management_base.html" %}
+{% load static i18n management_tags %}
+
+{% load crispy_forms_filters %}
+
+{% block management_content %}
+
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    {% trans "Email Automation Provider" %}
+                </div>
+                <div class="card-body">
+                    <form id="email-automation-form"
+                          novalidate
+                          action="{% url 'management:email_automation_provider' %}"
+                          method="post">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+
+                        <div class="mb-3">
+                            <label class="form-label ">
+                                {% trans "API Key" %}
+                            </label>
+                            {% if api_key_exists %}
+                                <div class="alert alert-info">
+                                    <i class="bi bi-check"></i>
+                                    {% blocktrans trimmed %}
+                                        The EMAIL_AUTOMATION_PROVIDER_API_KEY key is set in
+                                        the environment.
+                                    {% endblocktrans %}
+                                    {% if key_snippet %} ( {{ key_snippet }} ) {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-x-circle"></i>
+                                    {% blocktrans trimmed %}
+                                        The EMAIL_AUTOMATION_PROVIDER_API_KEY must be set
+                                        in the environment for this
+                                        provider to work.
+                                    {% endblocktrans %}
+                                </div>
+                            {% endif %}
+                        </div>
+                            <div class="mb-3">
+                                <label class="form-label ">
+                                    {% trans "Test API connection:" %}
+                                </label>
+                                {% include 'management/provider/hx/test_api_connection.html' %}
+                            </div>
+                        <button id="id_save_btn"
+                                class="btn btn-primary btn-lg mr-2"
+                                type="submit">
+                            {% trans "Save" %}
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4 mt-4 mt-lg-0 ">
+
+            <strong>Managing the Email Automation Provider</strong>
+            <p>
+                An Email Automation Provider is a third-party service that provides
+                a way to create and trigger email automations.
+            </p>
+
+            <p>
+                Define the properties of your Email Automation Provider account here.
+            </p>
+
+            <p>
+                At the moment, we only support ActiveCampaign as an email
+                automation provider.
+            </p>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+

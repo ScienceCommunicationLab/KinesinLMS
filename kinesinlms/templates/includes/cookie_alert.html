@@ -1,0 +1,21 @@
+<div id="cookieAlert" class="alert alert-dark alert-dismissible mb-0 cookie-alert" role="alert">
+    This website uses a small number of cookies to function properly. To find out more, see our <a
+        href="{% url 'marketing:privacy_policy' %}">privacy policy</a>.
+    <button type="submit" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<script language="javascript">
+    {% comment %}
+       Keep script here b/c and not in project.j becaues we need Django to write the url.
+    {% endcomment %}
+    // Handle cookie alert dismissal
+    try {
+        const cookieAlert = document.getElementById('cookieAlert');
+        if (cookieAlert) {
+            cookieAlert.addEventListener('closed.bs.alert', function () {
+                window.location = "{% url 'marketing:hide_cookie_notice' %}";
+            });
+        }
+    } catch (err) {
+        console.log("Error initializing cookie alert: ", err)
+    }
+</script>

@@ -1,0 +1,34 @@
+{% load i18n %}
+
+<div id="div_id_api_url" class="mb-3">
+    <label class="form-label ">{% trans "API Key" %}</label>
+    {% if survey_provider_api_key_exists %}
+        <div class="alert alert-info">
+            <i class="bi bi-check"></i>
+            {% blocktrans trimmed %}
+                The SURVEY_PROVIDER_API_KEY key is set in
+                the environment.
+            {% endblocktrans %}
+        </div>
+    {% else %}
+        {% if survey_provider.requires_api_key %}
+            <div class="alert alert-warning">
+                <i class="bi bi-x-circle"></i>
+                {% blocktrans trimmed %}
+                    The SURVEY_PROVIDER_API_KEY must be set
+                    in the environment for this
+                    provider to work.
+                {% endblocktrans %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle-fill"></i>
+                {% blocktrans trimmed %}
+                    The <code>SURVEY_PROVIDER_API_KEY</code> is not set. 
+                    Please set this key in the environment if you
+                    plan to implement functions to access this provider's API.
+                {% endblocktrans %}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

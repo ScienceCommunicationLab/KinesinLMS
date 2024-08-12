@@ -1,0 +1,39 @@
+{% extends "course/course_base_default_page.html" %}
+
+{% load tz %}
+
+{% block course_sub_nav %}<div class="course-subnav-label">A list of forum topics in this course.</div>{% endblock %}
+
+{% block sidebar %}{# Don't show sidebar on home page #}{% endblock %}
+
+
+{% block page_content %}
+
+    {{ block.super }}
+
+    <div class="course-forum-topics mt-3" style="margin-bottom:15rem;">
+        {% if forum_topics %}
+            <ul>
+                {% for forum_topic in forum_topics %}
+                    <li class="forum-topic-item">
+                        <div class="forum-topic-title">
+                            {% if forum_topic.is_released %}
+                                <a href="{{ forum_topic.url }}" target="_blank">{{ forum_topic.title }}</a>
+                            {% else %}
+                                {{ forum_topic.title }} <span class="note">(not released yet)</span>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>(There are no forum topics in this course.)</p>
+        {% endif %}
+    </div>
+
+
+{% endblock page_content %}
+
+{% block unit_controls_bottom %}
+    {#  no course controls #}
+{% endblock unit_controls_bottom %}

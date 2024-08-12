@@ -1,0 +1,28 @@
+{% extends "course_admin/course_admin_base.html" %}
+
+{% load static %}
+
+{% load tz %}
+
+{% block course_admin_content %}
+
+    <div class="row">
+        <div class="col col-6 mt-4" style="min-height:600px;margin-bottom:5rem;">
+            {% if cohort.type == "DEFAULT" %}
+                <p>This student is assigned to the DEFAULT cohort.</p>
+            {% else %}
+                <p>
+                    This student is a member of the cohort '<strong>{{ cohort.name }}</strong>'
+                </p>
+            {% endif %}
+
+            {% include 'course_admin/partial/student_detail_card.html' %}
+
+            <a href="{% url 'course:course_admin:cohorts:index' course_run=course.run course_slug=course.slug %}?id={{ cohort.id }}"
+               class="mt-4 btn btn-light">
+                <i class="bi bi-chevron-double-left"></i> Back to Cohorts
+            </a>
+        </div>
+    </div>
+
+{% endblock course_admin_content %}

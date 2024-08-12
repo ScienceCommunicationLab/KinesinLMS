@@ -1,0 +1,76 @@
+{% load i18n %}
+{% comment %}
+
+   This template is used to display the badge assertion for a course passed badge.
+
+   If the user has the assertion, this template will show a control to view it or download it.
+
+   If the user has earned the badge but does not yet have an assertion, the template
+   will offer the user the option to generate the assertion.
+
+   If the badge assertion generation is in progress, the template will display a
+   message telling the student to wait and then refresh the page.
+
+   Context variables:
+
+   - badge_assertion (optional) :               if set, an instance of the badge assertion object
+   - course_passed_badge_class (optional) :     if set, the course passed badge class
+
+    (one of the above two should be set)
+
+{% endcomment %}
+
+<div id="badge-assertion-control">
+
+    {% if badge_assertion %}
+        
+        {% include 'badges/badge_assertion_info_modal.html' with badge_assertion=badge_assertion %}
+
+        {#  show options for displaying or downloading #}
+        {% include 'badges/badge_assertion/include/badge_assertion_pulldown.html' with badge_assertion=badge_assertion %}
+
+    {% elif course_passed and course_passed_badge_class %}
+
+        {# Student passed course and there's a badge available, but they don't have a badge assertion. #}
+
+        {% if badge_generation_error %}
+
+            {#  TODO: Handle error messages better... #}
+
+            <div id="btnCreatingBadge{{ course_passed_badge_class.id }}"
+                 class="btn btn-secondary invisible d-none"
+                 style="margin-right:1rem;"
+                 data-bs-toggle="tooltip"
+                 data-bs-placement="top"
+                 disabled>
+                Error
+            </div>
+
+            {{ badge_generation_error }}
+
+        {% else %}
+
+            <div data-bs-toggle="tooltip"
+                 data-bs-placement="top"
+                 title="This course awards badges. Click this button to generate a badge to serve as proof you passed this course.">
+                <a id="btnGenerateAssertion{{ course_passed_badge_class.id }}"
+                   class="btn btn-secondary visible"
+                   hx-get="{% url 'badges:create_badge_assertion_hx' course_passed_badge_class.id %}"
+                   hx-target="#badge-assertion-control"
+                   hx-swap="outerHTML"
+                   style="margin-right:1rem;">
+                    {% trans "Generate Badge" %}
+                </a>
+            </div>
+        {% endif %}
+
+    {% else %}
+
+        {% comment %}
+        Don't show anything, no assertion or badge class in the context.
+        {% endcomment %}
+
+    {% endif %}
+
+
+</div>

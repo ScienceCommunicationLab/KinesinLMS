@@ -1,0 +1,90 @@
+{% extends "composer/composer_base.html" %}
+{% load tz %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+{% load react %}
+{% load core_tags unit_extras %}
+
+
+
+
+{% block header_javascript %}
+
+    {%comment %}
+    Load our React library for course library components. This includes
+    things like the video player and the long-form text input
+    {%endcomment %}
+
+    {% if js_helper_libraries %}
+        <!-- Including javascript libraries need to render {{ object.tool_type }} simple interactive tool. -->
+        {% for js_helper_library in js_helper_libraries %}
+            <script src="{% static 'js/' %}{{ js_helper_library }}"></script>
+        {% endfor %}
+    {% endif %}
+
+{% endblock header_javascript %}
+
+
+{% block main_content %}
+
+    <style>
+
+        .kn-react-component {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 200px) !important;
+            flex-grow: 1;
+        }
+
+    </style>
+
+    <div class="block block-sit" id="simple-interactive-tool-{{ simple_interactive_tool_template.id }}" style="margin:0 2rem;">
+
+        <div class="sit-top-controls d-flex flex-row align-items-end mb-2 ">
+            <h3 class="flex-grow-1 mb-0">
+                {% if block.display_name %}
+                    {{ block.display_name }}
+                {% else %}
+                    {{simple_interactive_tool_template.tool_type }} Template
+                {% endif %}
+            </h3>
+            <button class="btn btn-sm"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Diagram tool help"
+                    onclick="klmsOnBlockExitFullScreen('simple-interactive-tool-{{ block.simple_interactive_tool_template.id }}')">
+                <i class="bi bi-question-circle"></i> Help
+            </button>
+            <div class="block-embedded-content d-print-none">
+                <button class="btn btn-sm"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Show diagram tool full screen"
+                        onclick="klmsOnBlockToFullScreen('simple-interactive-tool-{{ block.simple_interactive_tool_template.id }}')">
+                    <i class="bi bi-arrows-angle-expand"></i> Full screen
+                </button>
+            </div>
+            <div class="block-fullscreen-content d-none d-print-none">
+                <button class="btn btn-sm"
+                        onclick="klmsOnBlockExitFullScreen('simple-interactive-tool-{{ block.simple_interactive_tool_template.id }}')">
+                    <i class="bi bi-arrows-angle-expand"></i> Exit full screen
+                </button>
+            </div>
+        </div>
+
+        {% if simple_interactive_tool_template.tool_type == "DIAGRAM" %}
+            {% react_render component="Diagram" props=simple_interactive_tool_template class="kn-react-component" %}
+        {% elif simple_interactive_tool_template.tool_type == "TABLETOOL" %}
+            ( Tabletool templates are not implemented )
+        {% else %}
+            ( Unsupported tool type {{ simple_interactive_tool_template.tool_type }} )
+        {% endif %}
+
+        {% react_print %}
+
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% comment %} Don't want footer in this view {% endcomment %}
+{% endblock %}

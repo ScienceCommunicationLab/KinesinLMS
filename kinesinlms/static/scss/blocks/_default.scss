@@ -1,0 +1,45 @@
+/*
+
+Default styles for blocks.
+
+These styles should apply to block regardless of where they appear
+on the site (courses, composer, etc.).
+ */
+
+.block {
+
+  .block-icon {
+    font-size: 1.3rem;
+    color: #AAA;
+  }
+
+  .block-header-markers {
+    display: flex;
+    flex-grow: 0;
+    flex-direction: row;
+    margin-right: 0.25rem;
+
+    .block-icon {
+      margin-right: 0.25rem;
+    }
+  }
+
+  .file-resource {
+    display: flex;
+    flex-direction: column;
+    border: 1px dotted #999;
+    background-color: #f1f1f1;
+    padding: 0.2rem 0.5rem 1rem 0.7rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+
+    .file-resource-hint {
+      text-transform: uppercase;
+      color: #333;
+      font-size: 0.7rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+
+}

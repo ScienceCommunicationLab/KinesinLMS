@@ -1,0 +1,27 @@
+{# HTML template for the Multiple Choice selector #}
+
+{% load i18n %}
+{% load assessment_tags %}
+{% load crispy_forms_filters %}
+
+<div id="long-form-text-entry-{{ block.assessment.id }}"
+     class="long-form-text-entry-wrapper assessment-component">
+
+
+    <form hx-post="{% url 'course:assessments:assessment_submission_hx' course_slug=course.slug course_run=course.run course_slug=course.slug course_run=course.run module_slug=module_slug section_slug=section_slug unit_slug=unit_slug pk=block.assessment.id %}"
+          hx-target="#long-form-text-entry-{{ block.assessment.id }}"
+          hx-indicator="#assessment-{{ block.assessment.id }}-control-bar"
+          hx-swap="outerHTML">
+
+        {# If assessment is complete form fields should shown as disabled. #}
+        {% csrf_token %}
+        <div class="assessment-component">
+            {{ form|crispy }}
+        </div>
+
+        {% include "course/blocks/include/assessment_control_bar.html" %}
+
+    </form>
+
+</div>
+

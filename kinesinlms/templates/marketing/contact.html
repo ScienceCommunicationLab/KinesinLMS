@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load crispy_forms_filters static core_tags %}
+
+
+
+{% block main_content %}
+
+    <div class="container marketing-page">
+
+
+        <div class="row">
+            <div class="col col-12">
+                <h2>Contact Us</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-8 mb-3">
+                {% support_email as contact_email %}
+                <p>
+                    {% blocktrans %}
+                        Please email us at <a href="mailto: {{ contact_email }} ">{{ contact_email }} </a> if you
+                        need help accessing this site, using the courseware, or if you have a bug to report or
+                        suggestion to share.
+                    {% endblocktrans %}
+                </p>
+
+            </div>
+
+        </div>
+        {% if request.user.is_authenticated %}
+            <div class="row">
+                <div class="col-12">
+                    <p>
+                        {% blocktrans %}
+                            Alternatively, you can use the form below to send us your thoughts:
+                        {% endblocktrans %}
+                    </p>
+
+                    <div class="card">
+                        <div class="card-header">
+                            {% trans "Contact Us" %}
+                        </div>
+                        <div class="card-body">
+
+                            {% if form %}
+                                <form action="" method="post">
+
+                                    {% csrf_token %}
+                                    {{ form|crispy }}
+
+                                    <input type="submit"
+                                           value="{% trans 'Submit' %}"
+                                           class="btn btn-primary">
+                                </form>
+                            {% else %}
+                                <div style="min-height:15rem; display:flex;flex-direction: column; align-items: center; justify-content: center">
+                                    <div>{% trans "Thanks for your comments!" %}</div>
+                                </div>
+                            {% endif %}
+                        
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+
+
+{% endblock main_content %}

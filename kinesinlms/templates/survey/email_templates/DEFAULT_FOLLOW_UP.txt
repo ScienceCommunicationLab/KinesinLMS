@@ -1,0 +1,15 @@
+Hi {{ informal_name }},
+
+Once again we would like to thank you for your participation in the "{{ course.name }}" course.
+
+It’s been awhile since you completed the course! Would you be willing to complete this short survey and share
+your experiences implementing the strategies you developed during the course?
+
+{{ survey_url }}
+
+We appreciate the time you take to fill out this survey.
+
+{% include 'survey/base/default_closing.txt' %}
+
+
+

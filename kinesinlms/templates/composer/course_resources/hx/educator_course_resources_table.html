@@ -1,0 +1,65 @@
+{% load i18n %}
+<table id="educator-course-resources-table" class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th style="width:3rem;">{% trans "Enabled" %}</th>
+            <th style="width:10rem;">{% trans "Type" %}</th>
+            <th style="width:20%; min-width:20rem;">{% trans "Name" %}</th>
+            <th style="width:20%">{% trans "Overview" %}</th>
+            <th style="width:20%">{% trans "File" %}</th>
+            <th style="width:20%">URL</th>
+            <th style="text-align:center">{% trans "Edit" %}</th>
+            <th style="text-align:center">{% trans "Delete" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if course.educator_resources.exists %}
+            {% for educator_course_resource in course.educator_resources.all %}
+                <tr id="row-educator-course-resource-{{ educator_course_resource.id }}">
+                    <td>
+                        {% if educator_course_resource.enabled %}<i class="bi bi-check-square-fill text-success"></i>{% endif %}
+                    </td>
+                    <td>{{ educator_course_resource.get_type_display }}</td>
+                    <td>{{ educator_course_resource.name }}</td>
+                    <td>{{ educator_course_resource.overview }}</td>
+                    <td>
+                        {% if educator_course_resource.file %}
+                            <a href="{{ educator_course_resource.file.url }}" target="_blank">{{ educator_course_resource.file.url }}</a>
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td>{{ educator_course_resource.url|default_if_none:"--" }}</td>
+                    <td style="text-align: center">
+                        <a class="btn btn-primary"
+                           href="{% url 'composer:educator_course_resource_update' course_id=course.id pk=educator_course_resource.id %}">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                    </td>
+                    <td style="text-align: center">
+                        <a class="btn btn-danger"
+                           hx-confirm="Are you sure you want to delete course resource '{{ educator_course_resource.name }}'?"
+                           hx-target="#educator-course-resources-table"
+                           hx-trigger="click"
+                           hx-delete="{% url 'composer:course_resource_delete_hx' course_id=course.id pk=educator_course_resource.id %}"
+                           hx-swap="outerHTML">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="8" style="text-align: center">
+                    <div class="no-items-box">
+                        <div class="no-items">
+                            {% blocktrans %}
+                        No educator resources have been added to this course.
+                        {% endblocktrans %}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

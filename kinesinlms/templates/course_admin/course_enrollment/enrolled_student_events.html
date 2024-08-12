@@ -1,0 +1,56 @@
+{% extends "course_admin/course_admin_base.html" %}
+
+{% load static %}
+
+{% load tz %}
+
+{% load tracking_tags %}
+
+{% block course_admin_content %}
+
+    <div class="row">
+        <div class="col-12 mb-3">
+
+            <ul class="event-timeline">
+                {% for event in events %}
+                    <li class="timeline-item">
+                        {% event_icon event.event_type %}
+
+                        <div class="d-flex flex-row event-header">
+                            <div class="event-title">{% event_display_name event %}</div>
+                            <div class="event-date">{{ event.time|date:"DATETIME_FORMAT" }}</div>
+                        </div>
+                        <div class="event-info">
+                            {% if event.event_type == "kinsinlms.course.video.activity" %}
+                                <div>Video ID: {{ event.event_data.video_id }}</div>
+                            {% elif event.event_type == "kinsinlms.course.custom_app.page_view" %}
+                                <div>Custom App: {{ event.event_data.custom_app }}</div>
+                            {% elif event.event_type == "kinsinlms.course.content.page_view" %}
+                                <div>Unit: {{ event.event_data.unit_display_name }}</div>
+                            {% endif %}
+                            <div>Unit slug: {{ event.unit_node_slug }}</div>
+                            <div class="event-data mt-2">
+                                raw event data:
+                                <br />
+                                {{ event.event_data }}
+                            </div>
+
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div style="min-height:200px;
+                        display:flex;
+                        align-items: center;
+                        justify-content: center">(No more events)</div>
+
+            {% if is_paginated %}
+
+                {% include 'core/pagination.html' with page_obj=page_obj total_count=total_count %}
+
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock course_admin_content %}

@@ -1,0 +1,280 @@
+{% load static i18n core_tags %}
+
+{% comment %}
+This is the base template for all Composer pages. It looks similar to the base.html template,
+but we keep this separate as Composer is such a different and focused tool. This template may
+need to change as Composer grows, in ways where we don't want to affect the rest of the site.
+{% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <title>
+            {% block title %}
+                {% site_name %}
+            {% endblock title %}
+        </title>
+
+        <link rel="shortcut icon"
+              type="image/png"
+              href="{% static 'images/favicon.png' %}" />
+
+        {% block head %}
+
+            {% include 'includes/head_meta.html' %}
+
+        {% endblock head %}
+
+        {% block css %}
+
+            {% include 'includes/core_css_includes.html' %}
+
+        {% endblock css %}
+
+        {# HEADER JAVASCRIPT #}
+        {# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #}
+
+        <script src="{% static 'js/kinesinlms-project.bundle.js' %}?version={{ KINESINLMS_JAVASCRIPT_VERSION }}"></script>
+
+        <script src="{% static 'tinymce/tinymce.min.js' %}" referrerpolicy="origin"></script>
+
+        <script src="{% static 'js/kinesinlms-composer.bundle.js' %}?version={{ KINESINLMS_JAVASCRIPT_VERSION }}"
+                defer></script>
+
+        {% block header_javascript %}
+            {% comment %}
+        This block should be populated by templates when the page needs
+        extra javascript in the header before the body tag (for example
+        our React component definitions).
+            {% endcomment %}
+        {% endblock header_javascript %}
+
+        {# CSS #}
+        {# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #}
+
+        {% block extra_css %}
+            {% comment %}
+        Extra styles for specific pages in composer should be populated here by templates
+            {% endcomment %}
+        {% endblock extra_css %}
+
+    </head>
+
+    <body {% if csrf_token %}hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'{% endif %}
+          id="composer-base">
+
+        {% block messages %}
+            {% if messages %}
+
+                {% include 'core/toasts.html' %}
+
+            {% endif %}
+        {% endblock messages %}
+
+        {% block sidebar %}
+        {% endblock sidebar %}
+
+        {% block topnav %}
+        {% endblock topnav %}
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+            <div class="navbar-nav main-site-link d-none d-lg-flex">
+                <div class="bg-wrapper w-100 d-flex flex-grow-1">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         height="100%"
+                         width="100%"
+                         viewBox="0 0 100 25"
+                         preserveAspectRatio="none">
+                        <path d="M0,0 L0,25 L93,25 L100,0 Z" style="fill: #000000;" ></path>
+                    </svg>
+                </div>
+                <a class="navbar-brand d-none d-lg-flex text-white"
+                   href="{% url 'marketing:home' %}">{% site_name %}</a>
+            </div>
+
+            <a class="navbar-brand" href="{% url 'composer:home' %}">Composer</a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#composerNavbarSupportedContent"
+                    aria-controls="composerNavbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="composerNavbarSupportedContent" class="collapse navbar-collapse">
+
+                <!-- Mobile-only link -->
+                <ul class="navbar-nav d-lg-none">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'marketing:home' %}">Back to Main Site</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if section == "course_controls" %}active{% endif %}"
+                           href="#"
+                           id="courseControlsNavbarDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-haspopup="true"
+                           aria-expanded="false">Course</a>
+                        <div class="dropdown-menu"
+                             style="margin-right:50px"
+                             aria-labelledby="courseControlsNavbarDropdown">
+                            {% if request.user.is_superuser %}
+                                <a class="dropdown-item" href="{% url 'composer:course_list' %}">List Courses</a>
+                                <a class="dropdown-item" href="{% url 'composer:course_create' %}">Create New Course</a>
+                                <a class="dropdown-item" href="{% url 'composer:course_import_view' %}">Import Course</a>
+                            {% endif %}
+                            <a class="dropdown-item" href="{% url 'composer:course_export_view' %}">Export Course</a>
+
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if section == "block_controls" %}active{% endif %}"
+                           href="#"
+                           id="editBlocksNavbarDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-haspopup="true"
+                           aria-expanded="false">Templates</a>
+
+                        <div class="dropdown-menu"
+                             style="margin-right:50px"
+                             aria-labelledby="editBlocksNavbarDropdown">
+                            <a class="dropdown-item"
+                               href="{% url 'composer:simple_interactive_tool_templates_list' %}">
+                                SimpleInteractiveTool Templates
+                            </a>
+                        </div>
+
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {# Enable when we have settings for composer implemented #}
+                    {% comment %}
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'composer:settings' %}">
+                            <i class="bi bi-gear-fill"></i> Settings
+                        </a>
+                    </li>
+                    {% endcomment %}
+                </ul>
+
+            </div>
+
+        </nav>
+
+        <main>
+            {% block infobar %}
+                {% if title or description or breadcrumbs %}
+                    <!--  info bar -->
+                    <div class="info-bar-wrapper">
+                        <div class="container-fluid breadcrumb info-bar ">
+
+                            <div class="breadcrumb-item">
+                                <a href="{% url 'composer:home' %}">Composer</a>
+                            </div>
+                            {% for breadcrumb in breadcrumbs %}
+                                <div class="breadcrumb-item">
+                                    <a href="{{ breadcrumb.url }}">{{ breadcrumb.label }}</a>
+                                </div>
+                            {% endfor %}
+                            <div class="breadcrumb-item page-title flex-grow-1">
+                                {% if title %}{{ title }}{% endif %}
+                                {% if title and description %}&nbsp;&nbsp;:&nbsp;&nbsp;{% endif %}
+                                {% if description %}<span class="page-description">{{ description | safe }}</span>{% endif %}
+                            </div>
+                            {% block infobar_controls %}
+                                {% comment %} Child templates add infobar_controls things here {% endcomment %}
+                            {% endblock infobar_controls %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endblock infobar %}
+
+            {% block breadcrumb %}
+                {% comment %} Child templates add breadcrumb things here {% endcomment %}
+            {% endblock breadcrumb %}
+
+            {# Any tabs that break up a page into separate sections #}
+
+            {% block section_tabs_content %}
+                {% if section_tabs %}
+                    <nav id="course-edit-tabs"
+                         class="navbar navbar-expand-lg p-0 section-tabs">
+                        <button class="navbar-toggler"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#composerCourseNavbarSupportedContent"
+                                aria-controls="composerCourseNavbarSupportedContent"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div id="composerCourseNavbarSupportedContent"
+                             class="collapse navbar-collapse">
+                            <ul class="navbar-nav nav-tabs">
+                                {% for section_tab in section_tabs %}
+                                    <li class="nav-item">
+                                        <a class="nav-link {% if section_tab.active %}active{% endif %} {% if not section_tab.enabled %}disabled{% endif %}"
+                                           aria-current="page"
+                                           href="{{ section_tab.url }}">{{ section_tab.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </nav>
+                {% endif %}
+            {% endblock section_tabs_content %}
+
+            {% block main_content %}
+
+                {% block section_breadcrumbs %}
+                    {% if section_breadcrumbs %}
+
+                        {% include 'composer/include/section_breadcrumb.html' %}
+
+                    {% endif %}
+                {% endblock section_breadcrumbs %}
+
+            {% endblock main_content %}
+
+            {% block footer %}
+                {% comment %} Child templates add footer things here {% endcomment %}
+            {% endblock footer %}
+
+        </main>
+
+        {% block adminbar %}
+            {% comment %} Child templates add admin bar things here {% endcomment %}
+        {% endblock adminbar %}
+
+        {% block modal %}
+            {% comment %} Child templates add modal things here {% endcomment %}
+        {% endblock modal %}
+
+        {% block javascript %}
+            {% comment %}
+                (Per Django Cookiecutter convention.)
+                This block should contain tags with only code, no src (defer by default). To run
+                with a "defer" so that you run inline code. For example, something like:
+                <script>
+                  window.addEventListener('DOMContentLoaded', () => {
+                    /* Run whatever you want */
+                  });
+                </script>
+            {% endcomment %}
+        {% endblock javascript %}
+
+    </body>
+</html>

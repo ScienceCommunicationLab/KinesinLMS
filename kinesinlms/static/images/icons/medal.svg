@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="122px" height="122px" viewBox="0 0 122 122" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>medal</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="61" cy="61" r="61"></circle>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#FAE58E" offset="0%"></stop>
+            <stop stop-color="#F3C655" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-2">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Mask" fill="#404040" fill-rule="nonzero" xlink:href="#path-1"></use>
+            <circle id="Oval" stroke="#979797" fill="#404040" fill-rule="nonzero" mask="url(#mask-2)" cx="61" cy="61" r="61"></circle>
+            <polygon id="Rectangle" fill="#E83232" fill-rule="nonzero" mask="url(#mask-2)" points="66.5547791 -3 84.098938 -3 70 41 53 41"></polygon>
+            <rect id="Rectangle" stroke="#E3B43C" stroke-width="2" fill-rule="nonzero" mask="url(#mask-2)" x="49" y="39" width="23" height="13" rx="3"></rect>
+            <polygon id="Rectangle" fill="#F46868" fill-rule="nonzero" mask="url(#mask-2)" transform="translate(54.549469, 19.000000) scale(-1, 1) translate(-54.549469, -19.000000) " points="52.5547791 -3 70.098938 -3 56 41 39 41"></polygon>
+            <circle id="Oval" stroke="#E3B43C" stroke-width="2" fill="url(#linearGradient-3)" fill-rule="nonzero" mask="url(#mask-2)" cx="61" cy="71" r="26"></circle>
+            <polygon id="Star" stroke="#E3B43C" fill="#FBE09E" fill-rule="nonzero" mask="url(#mask-2)" points="61 78 52.7710065 82.3262379 54.3426044 73.163119 47.6852088 66.6737621 56.8855032 65.336881 61 57 65.1144968 65.336881 74.3147912 66.6737621 67.6573956 73.163119 69.2289935 82.3262379"></polygon>
+        </g>
+    </g>
+</svg>

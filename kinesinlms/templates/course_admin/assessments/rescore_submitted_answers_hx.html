@@ -1,0 +1,38 @@
+{% load crispy_forms_filters %}
+<div id="rescore-submitted-answers-hx">
+    <p class="rescore-submitted-answers-result">
+      {% if success %}
+          Re-scoring {{ count_rescored }} answers submitted
+          {% if assessment %}to "{{ assessment }}"{% else %}to all assessments{% endif %}
+          {% if student %}by "{{ student }}".{% else %}by all students.{% endif %}
+      {% else %}
+          &nbsp;
+      {% endif %}
+    </p>
+    <div class="card">
+      <div class="card-body">
+        <form>
+            {{ form|crispy }}
+            {% csrf_token %}
+            <button id="btn-rescore-submitted-answers"
+                    type="submit"
+                    hx-post="{% url 'course:course_admin:rescore_submitted_answers' course_run=course.run course_slug=course.slug %}"
+                    hx-swap="innerHTML"
+                    hx-target="#rescore-submitted-answers-hx"
+                    hx-confirm="Are you sure you want to rescore these submitted answers? This action cannot be undone."
+                    class="btn btn-danger me-2">
+                Re-score
+            </button>
+
+            <button id="btn-cancel-rescore-submitted-answers"
+                    hx-get="{% url 'course:course_admin:assessments' course_run=course.run course_slug=course.slug %}"
+                    hx-push-url=true
+                    hx-swap="outerHTML"
+                    hx-target="body"
+                    class="btn btn-secondary me-2">
+                Cancel
+            </button>
+        </form>
+     </div>
+  </div>
+</div>

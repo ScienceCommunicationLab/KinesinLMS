@@ -1,0 +1,165 @@
+/* Base styles for the certificate, wherever it's shown. */
+
+@page {
+  size: landscape;
+  margin: 1cm;
+}
+
+
+.certificate {
+  display: flex;
+  background: #fff;
+  box-sizing: border-box;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: #000;
+  border: 1px solid #c1c1c1;
+  position: relative;
+  padding: 0.65rem;
+  font-family: "Jost", serif;
+
+  .corner-image {
+    position: absolute;
+    padding: 10px;
+  }
+
+  .image-upper-left {
+    left: 0;
+    top: 0;
+  }
+
+  .image-upper-right {
+    right: 0;
+    top: 0;
+  }
+
+  .image-lower-left {
+    left: 0;
+    bottom: 0;
+  }
+
+  .image-lower-right {
+    right: 0;
+    bottom: 0;
+  }
+
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 1rem 0;
+    flex-direction: row;
+
+    .certificate-logo {
+      width: 254px;
+    }
+
+    .certificate-logo:not(:first-child) {
+      margin-left: 1rem;
+    }
+  }
+
+  .certificate-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+
+    .center-content {
+      font-size: 1.3125rem;
+      line-height: 1.5;
+      margin: 0 auto;
+      max-width: 50rem;
+      text-align: center;
+
+      .student-name, .course-name {
+        font-weight: bold;
+        font-size: 1.8rem;
+        margin: 0.2rem 0;
+        min-height: 4rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .course-name {
+        min-height: 6rem;
+      }
+
+      .success-text {
+        margin: 0.5rem 0;
+      }
+
+      .date-awarded {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      .certificate-id {
+        margin-top: 0.5rem;
+        color: #777;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+
+    .wrapper-signatories {
+      text-align: center;
+      margin-top: 2rem;
+
+      .list-signatories {
+        display: flex;
+        justify-content: center;
+        font-family: "Jost", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+        .signatory {
+          margin-left: calc(0.5 * 1rem);
+          margin-right: calc(0.5 * 1rem);
+          width: calc(25% - 1rem);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+
+          img {
+            max-width: 100%;
+            max-height: 5rem;
+            padding: 1.25rem 0.625rem .5rem;
+            height: 100%;
+          }
+
+          .signatory-name {
+            margin-bottom: 0.3125rem;
+            font-size: 1.125rem;
+            min-height: 2.5rem;
+            min-width: 15rem;
+          }
+
+          .signatory-credentials {
+            text-align: center;
+            font-size: 0.75rem;
+            line-height: 1.5;
+
+            .role, .organization {
+              font-size: 0.75rem;
+              line-height: 1.5;
+            }
+          }
+
+        }
+      }
+    }
+  }
+
+}
+
+

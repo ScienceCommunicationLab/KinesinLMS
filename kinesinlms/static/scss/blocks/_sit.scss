@@ -1,0 +1,241 @@
+/* SIMPLE INTERACTIVE TOOL BLOCK */
+/* Generic styles for any SIT */
+
+.sit-header {
+  border-bottom: 1px dotted #aaa;
+  margin-bottom: .5em;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+
+  span {
+    color: #999;
+  }
+
+  h3 {
+    margin-bottom: .5em;
+    flex-grow: 1;
+    max-width: 800px;
+    padding: 0;
+    margin-top: 0.1rem;
+  }
+
+}
+
+
+.block-sit {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  margin-bottom: 2rem !important;
+
+  &.block-fullscreen {
+    height: calc(100vh - 130px);
+  }
+
+  .sit-top-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 0.5rem;
+
+    h3 {
+      font-size: 1rem;
+    }
+  }
+
+  .sit-instructions {
+    border: 1px solid #e6e6e6;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+  }
+
+  .sit-instructions-header {
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .kn-react-component {
+    height: 100%;
+  }
+
+  .sit-wrapper {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    height: 100%;
+    position: relative;
+
+    &.sit-diagramtool {
+      min-height: 650px;
+    }
+
+    &.sit-tabletool {
+      height: unset;
+    }
+
+    .save-controls {
+      margin: 0.2rem;
+      padding: 0.5rem;
+      background: #f1f1f1;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      height: 60px;
+    }
+
+    .controls-bar {
+      display: flex;
+      flex-direction: row;
+      background: #fff;
+      border-top: 1px dotted #aaa;
+      justify-content: flex-end;
+      padding: 0.5rem;
+
+      .sit-score {
+        padding: 0 1em;
+        white-space: nowrap;
+      }
+    }
+
+    .controls-bar-left {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .controls-bar-center {
+      display: flex;
+      flex-direction: row;
+      flex-grow: 0;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .controls-bar-right {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 300px;
+
+    }
+
+    .sit-saving-notice {
+      font-size: .875rem; /* Matches toast */
+      margin-right: .8rem;
+    }
+
+    .spinner-border {
+      width: 1rem;
+      height: 1rem;
+      margin-right: 0.2rem;
+    }
+
+    .fa-check {
+      color: green;
+    }
+
+    .btn-save {
+      min-width: 120px;
+      margin: 0 0.5rem;
+    }
+
+    .sit-toast-container {
+      position: fixed !important;
+      top: 100px;
+      z-index: 100;
+    }
+
+    .sit-toast {
+      width: 200px;
+      justify-content: end;
+    }
+
+    .toast-body {
+      margin: 0 1rem 0 0;
+      text-align: right;
+      padding: 0;
+    }
+
+    .toast {
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .kn-custom-node{
+      background-color: #fff;
+    }
+
+  }
+
+  .react-canvas {
+    min-height: 500px;
+
+    @media print {
+      > * {
+        transform: scale(var(--scale-ratio, 1)) !important;
+      }
+    }
+  }
+
+  /* Styles for TABLETOOL-type SIT */
+  table {
+    height: 100%;
+    width: 100%;
+
+    textarea {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  /* Styles for DIAGRAM-type SIT */
+  .diagram-provider-flow {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .dnd-flow {
+
+      display: flex;
+      flex-direction: row;
+      flex-grow: 1;
+
+      aside {
+        border-right: 1px solid #eee;
+        padding: 15px 10px;
+        font-size: 12px;
+        background: #fcfcfc;
+      }
+
+      aside > * {
+        margin-bottom: 10px;
+        cursor: grab;
+      }
+
+      aside .description {
+        margin-bottom: 10px;
+      }
+
+      .react-flow-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        .react-flow {
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+        }
+      }
+    }
+  }
+}

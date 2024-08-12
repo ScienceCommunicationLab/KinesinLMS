@@ -1,0 +1,107 @@
+{% load static core_tags %}
+
+{% comment %}
+This footer appears on all 'marketing' pages of the site available to all users, logged in or not.
+{% endcomment %}
+
+<footer>
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-12 col-lg-4 mt-4 mb-4">
+
+                <a class="navbar-brand" href="{% url 'marketing:home' %}">{% site_name %}</a>
+
+                <div class="kn-background">
+                    A simple description of this site goes here.
+                    <br />
+                    <a href="{% url 'marketing:about' %}" class="read-more">Read more about this site.</a>
+
+                </div>
+                <div class="kn-copyright">© All rights reserved except where noted.</div>
+
+            </div>
+
+            <div class="col-12 col-lg-4 mt-4 mb-4">
+                <div class="kn-site-map">
+                    <h1>SITEMAP</h1>
+                    <nav>
+
+                        <h2>MAIN PAGES</h2>
+                        <ul>
+                            <li>
+                                <a href="{% url 'catalog:index' %}">Course Catalog</a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'news:news-list' %}">News</a>
+                            </li>
+
+                            {% if request.user.is_authenticated %}
+                                <li>
+                                    <a href="{% url 'dashboard:index' %}">My Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="#">Forum</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+
+                        <h2>MORE INFO...</h2>
+                        <ul>
+                            <li>
+                                <a href="{% url 'marketing:get_started' %}">Get Started</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'marketing:about' %}">About Us</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'speakers:speakers-list' %}">Course Speakers</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'help:main' %}">Help</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'marketing:faq' %}">FAQ</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'marketing:customize_cookies' %}">Cookies</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'marketing:contact' %}">Contact Us</a>
+                            </li>
+                        </ul>
+
+                        <h2>LEGAL</h2>
+                        <ul>
+                            <li>
+                                <a href="{% url 'marketing:honor_code' %}">Honor Code</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'marketing:tos' %}">Terms of Service</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'marketing:privacy_policy' %}">Privacy Policy</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4 mt-4 newsletter-column">
+                <div class="about-newsletter-signup">
+                    <h1>NEWSLETTER</h1>
+                    <p>
+                        Don't miss out! Sign up for our email newsletter to
+                        get the latest news and updates.
+                    </p>
+                    {% comment %}
+                        Newsletter sign up form can go here.
+                    {% endcomment %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>

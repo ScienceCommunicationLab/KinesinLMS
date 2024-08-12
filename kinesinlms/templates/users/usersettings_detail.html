@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% load static crispy_forms_tags %}
+
+{% block title %}User: {{ object.username }}{% endblock %}
+
+{% block main_content %}
+
+    <style>
+      .user-profile-wrapper table {
+        background-color: #ffffffdd;
+      }
+
+      .private-wrapper {
+        border: 1px dotted #999;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        background-color: #f1f1f1;
+      }
+
+      #submit-id-submit {
+        margin-top: 2rem;
+      }
+
+      .form-text {
+        margin-left: 2rem;
+      }
+    </style>
+
+    <div class="container mb-5 user-profile-wrapper">
+        <!-- Public info -->
+        <div class="row">
+            <div class="col-12 mx-auto">
+
+                <div>
+
+                    <h1>My Courses Settings</h1>
+                    <p style="max-width: 800px;margin-bottom: 3em;">
+                        Use this page to control the options KinesinLMS
+                        provides to you.
+                    </p>
+
+                </div>
+
+                <div style="min-height:800px;">{% crispy form %}</div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock main_content %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% block main_content %}
+
+  <div class="container">
+
+    <h1>{{ pathway.display_name }}</h1>
+
+    <div style="margin-bottom:2em;">
+      <button class="btn btn-primary">Enroll</button>
+      <button class="btn {% if can_edit %} btn-danger {% else %} disabled {% endif %}">Edit</button>
+    </div>
+
+    {% for learning_object in pathway.learning_objects %}
+
+      <div style="display:flex;flex-direction: column">
+
+        <div class="card mb-4 text-only-card" style="max-width:400px;">
+          <div class="card-header bg-primary text-white">
+            <i class="bi bi-camera-video"></i>
+            {{ learning_object.type }}
+          </div>
+          {% if learning_object.type == "VIDEO" %}
+            <img src="https://img.youtube.com/vi/{{ learningObject.json_content.video_id }}/0.jpg"
+                 alt="Thumbnail for this video" />
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title ">{{ learning_object.display_name }}</h5>
+          </div>
+          <div class="card-footer bg-transparent border-light">
+            <div class="tags">
+              {% for tag in pathway.tags.all %}<span class="badge bg-dark">{{ tag.name }}</span>{% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div style="margin:.5em 0 1em;
+                    display:flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 400px">
+          <i class="bi bi-three-dots-vertical"></i>
+          <i class="bi bi-arrow-down-circle-fill"></i>
+        </div>
+      </div>
+
+    {% endfor %}
+    <div style="width:400px;
+                align-items: center;
+                display:flex;
+                flex-direction: column;
+                margin-bottom: 5em">
+      <div style="border:1px solid #ccc;border-radius: 5px; padding:1em 2em;">End</div>
+    </div>
+  </div>
+  <!-- /container -->
+
+{% endblock main_content %}

@@ -1,0 +1,74 @@
+{% extends "course/course_base_default_page.html" %}
+
+{% load core_tags unit_extras %}
+
+{% block course_sub_nav %}
+
+    {% include 'course/search_component.html' with course=course current_search_text=search_text search_again=True %}
+
+{% endblock course_sub_nav %}
+
+{% block page_content %}
+
+    <div class="row mt-3 course-search">
+        <div class="col">
+
+            <div class="search-title">
+                <h1>Search Results</h1>
+                <div class="results-count text-secondary">
+                    {% if search_results %}
+                        Found {{ num_results }} items.
+                        Showing page {{ page_obj.number }} of
+                        {{ page_obj.paginator.num_pages }}.
+                    {% endif %}
+                </div>
+                <p>
+                    Your search term appears in the following
+                    units in this course ...
+                </p>
+            </div>
+
+            <div class="search-results">
+
+                {% if search_results %}
+                    {% for block in search_results %}
+                        <div class="search-result">
+                            <div class="result-unit">{% block_links block.id course.id %}</div>
+                            <div class="result-text">
+                                {% if block.headline %}...{{ block.headline|safe }}...{% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    ( No results found )
+                {% endif %}
+            </div>
+
+            <div class="pagination">
+                <div class="step-controls">
+                    <div class="step-links step-prev">
+                        {% if page_obj.has_previous %}
+                            <a class="btn btn-secondary"
+                               href="?search_text={{ search_text }}&page=1">«&nbsp;first</a>
+                            <a class="btn btn-secondary"
+                               href="?search_text={{ search_text }}&page={{ page_obj.previous_page_number }}">
+                            previous</a>
+                        {% endif %}
+                    </div>
+
+                    <div class="step-current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</div>
+
+                    <div class="step-links step-next">
+                        {% if page_obj.has_next %}
+                            <a class="btn btn-secondary"
+                               href="?search_text={{ search_text }}&page={{ page_obj.next_page_number }}">next</a>
+                            <a class="btn btn-secondary"
+                               href="?search_text={{ search_text }}&page={{ page_obj.paginator.num_pages }}">
+                               last&nbsp;»</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page_content %}

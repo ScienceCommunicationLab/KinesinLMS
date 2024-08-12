@@ -1,0 +1,22 @@
+{% load tz static %}
+
+<div class="release-datetime-info">
+    <div class="beaker-holder">
+        <img src="{% static 'images/icons/beaker.svg' %}"
+             alt="Image of beaker with bubbles, suggesting something is brewing and is not quite" />
+    </div>
+    <div class="release-datetime-label ">This unit has not been released yet.</div>
+    <div class="release-datetime">
+        <div class="text-muted d-flex flex-row">
+            <i class="bi bi-calendar"></i>&nbsp;&nbsp;Release date:
+            {% timezone 'US/Pacific' %}
+                {{ unit_release_datetime|localtime|date:"M d, Y P e" }}
+            {% endtimezone %}
+        </div>
+        <div class="text-muted">
+            <i class="bi b-globe ms-2"
+                data-bs-title="{{ unit_release_datetime|utc|date:'M d, Y H:i e' }}"
+                data-bs-toggle="tooltip"></i>
+        </div>
+    </div>
+</div>

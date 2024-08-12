@@ -1,0 +1,80 @@
+{% extends "course/unit.html" %}
+{% load static %}
+{% load i18n %}
+{% load react %}
+{% load core_tags unit_extras %}
+
+{% comment  %}
+This is a custom template for the PYSJ, LE and SYR courses. It is meant to show a list of
+assessments all on one page, interspersed with content, where each assessment can be edited
+without having to navigate to another page.
+{% endcomment %}
+
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'course/css/my-responses.css' %}"/>
+{% endblock %}
+
+
+{% block unit_content %}
+
+    <!-- Page Content -->
+    <div id="unit-content" class="my-responses">
+
+        {% include 'course/quicknav/quicknav.html' with course_nav=course_nav %}
+
+        <div id="unit-title-container" class="unit-title-container">
+            <h1 class="unit-title">
+                {{ course_unit.display_name|default_if_none:"" }}
+            </h1>
+            <div class="bookmark-container">
+                {% react_render component="Bookmark" props=bookmark_info %}
+            </div>
+        </div>
+
+        <div>
+            {{ course_unit.html_content | safe }}
+        </div>
+
+
+        {% for group in custom_unit_data.groups %}
+
+            {% for header in group.headers %}
+                {% if header.step %}
+                    <div class="step-wrapper">
+                        <div class="step-marker">Step {{ header.step }}</div>
+                        {% if header.text %}
+                            <div class="step-text">{{ header.text }}</div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <h{{ header.level }}>{{ header.text }}</h{{ header.level }}>
+                {% endif %}
+            {% endfor %}
+
+            {% if group.content %}
+                <div class="group-content">
+                    {{ group.content | safe }}
+                </div>
+            {% endif %}
+
+            {% if group.unit_blocks %}
+                <div class="mr-group">
+                    {% for unit_block in group.unit_blocks %}
+                        <div style="margin-bottom: 4rem;">
+                            {% include 'course/blocks/assessment.html' with hide_label=True block=unit_block.block show_revisit_link=True %}
+                            {% comment %}
+                            Figure out how to link back to original node in course. Then add here:
+                             <a href="#">( Revisit {{ block.display_name }}  )</a>
+                            {% endcomment %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+
+    </div>
+{% endblock unit_content %}
+

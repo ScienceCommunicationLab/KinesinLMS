@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="65px" height="80px" viewBox="0 0 65 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>book</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" fill-rule="nonzero">
+            <path d="M7.09678506,0.5 L0.980898917,6.18803631 L7.35510071,73.5 L62,73.5 C63.3807119,73.5 64.5,72.3807119 64.5,71 L64.5,3 C64.5,1.61928813 63.3807119,0.5 62,0.5 L7.09678506,0.5 Z" id="Rectangle" stroke="#A96C07" fill="#F5A623"></path>
+            <polygon id="Path-2" fill="#FFFFFF" points="5.52741089 6.51481934 8.55352173 3.73186646 61.9105591 3.73186646 61.9105591 72.1393799 59 76.1334717 5.52741089 76.1334717"></polygon>
+            <path d="M0.5,6.5 L0.5,79.5 L56,79.5 C57.3807119,79.5 58.5,78.3807119 58.5,77 L58.5,9 C58.5,7.61928813 57.3807119,6.5 56,6.5 L0.5,6.5 Z" id="Rectangle" stroke="#A96C07" fill="#F5A623"></path>
+            <path d="" id="Path" stroke="#979797"></path>
+            <rect id="Rectangle" fill-opacity="0.5" fill="#484747" x="15" y="25" width="31" height="10"></rect>
+            <rect id="Rectangle" fill-opacity="0.5" fill="#898888" x="15" y="40" width="31" height="3"></rect>
+            <rect id="Rectangle" fill-opacity="0.5" fill="#898888" x="15" y="46" width="31" height="3"></rect>
+        </g>
+    </g>
+</svg>

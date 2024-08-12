@@ -1,0 +1,29 @@
+{% load static core_tags %}
+
+<div id="course-unit-header" class="course-unit-header">
+
+    <div class="course-unit-info">
+
+        <div class="course-unit-sequence">
+            {% if content_index_label %}
+                {{ content_index_label }}
+            {% else %}
+                (No index)
+            {% endif %}
+        </div>
+        <div class="course-unit-name">Unit: {{ course_unit.display_name }}</div>
+
+        <button id="btn-edit-course-unit-info"
+                hx-target="#course-unit-header"
+                hx-swap="outerHTML"
+                hx-get="{% url 'composer:edit_course_unit_info_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id %}"
+                class="btn btn-light btn-sm ms-auto">
+            <i class="bi-pencil-fill"></i>
+        </button>
+    </div>
+
+    {% if course_unit.html_content %}
+        <div class="course-unit-header-html-content">{% render_html_content course_unit %}</div>
+    {% endif %}
+
+</div>

@@ -1,0 +1,21 @@
+.learning-library {
+
+    min-height: $min-content-height;
+
+    .learning-item {
+
+        .card-body {
+            min-height: 10rem;
+        }
+    }
+
+    .col-view {
+        width: 8rem;
+        text-align: center;
+    }
+
+    .col-short-description {
+        width: 30rem;
+    }
+
+}

@@ -1,0 +1,51 @@
+{
+  "rowHeaders": [
+    "Mentorship provided by research  team leader (PI)",
+    "Collegiality and collaborative  nature of the research team  members,",
+    "Degree of alignment between the  potential thesis research projects  and my research interests,",
+    "Degree of alignment between  average time to degree for trainees in research and my own  expectations for time to degree,",
+    "The type of funding available  (e.g., RA, TA, PA),",
+    "The length of funding available  (1 yr., 2 yrs., etc.),",
+    "The degree of flexibility in how  many and which hours of the day  I am expected to be in lab each week",
+    "Ability to be myself in this research group without fear  of alienation or negative repercussions,",
+    "The size of the research group and  the infrastructure for communication in the group",
+    "Access to resources beyond the  group to support my success (e.g., equipment, professional  development opportunities, community),",
+    "Other:,",
+    "Other:,",
+    "Other:,"
+  ],
+  "allowAddRemoveRow": false,
+  "columnDefinitions": [
+    {
+      "style": {
+        "width": "35%"
+      },
+      "Header": "Factors to Consider",
+      "columnType": "static"
+    },
+    {
+      "Header": "Rotation Score (0–4)",
+      "columns": [
+        {
+          "Header": "#1",
+          "accessor": "rotation_1"
+        },
+        {
+          "Header": "#2",
+          "accessor": "rotation_2"
+        },
+        {
+          "Header": "#3",
+          "accessor": "rotation_3"
+        }
+      ],
+      "accessor": "mentor_description",
+      "columnType": "userEntry"
+    },
+    {
+      "Header": "Notes",
+      "accessor": "notes",
+      "columnType": "userEntry"
+    }
+  ]
+}

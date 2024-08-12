@@ -1,0 +1,146 @@
+{% extends "course/course_base_default_page.html" %}
+
+{% load react core_tags %}
+
+{% load static %}
+
+{% load core_tags unit_extras %}
+
+{% comment %}
+This view if for when we want to show a Block in its own window.
+{% endcomment %}
+
+{% block extra_css %}
+    {{ block.super }}
+    {% if course_custom_css_filename %}
+        <!-- course custom css styles  -->
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'course/css/custom/' %}{{ course_custom_css_filename }}" />
+    {% endif %}
+{% endblock extra_css %}
+
+{% block topnav %}
+
+    {% include 'includes/top_nav_slim.html' %}
+
+{% endblock topnav %}
+
+{% block main_content %}
+
+    <div class="course-wrapper">
+
+        <div id="stand-alone-block-info"
+             class="container-fluid"
+             style="border-bottom: 1px dotted #333">
+            <div class="row">
+                <div class="col-12 col-md-7">
+                    <table class="mb-2 mt-2">
+                        <tr>
+                            <td style="min-width: 5rem;">Course:</td>
+                            <td>{{ course.display_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Unit:</td>
+                            <td>{{ course_unit.display_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Block:</td>
+                            <td>{{ current_block.id }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-12 col-md-3 no-print d-flex flex-column align-items-center justify-content-center mb-2 mb-md-0">
+                    <div class="text-muted small me-5">
+                        This page was opened from a {% site_name %} course.
+                        Close this browser tab or click below to return to the unit.
+                    </div>
+                </div>
+                <div class="col-12 col-md-2 no-print d-flex flex-column align-items-center justify-content-center  mb-2 mb-md-0">
+                    <a class="btn btn-secondary"
+                       style="min-width: 10rem"
+                       href="{% url 'course:unit_page' course_slug=course.slug course_run=course.run module_slug=module_slug section_slug=section_slug unit_slug=unit_slug %}">
+                        Back to Unit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="course-unit-container" class="container">
+
+        <div id="unit-content" class="mt-1 mb-3 mt-5" style="min-height:90vh">
+
+            <!-- block  id: {{  current_block.id }} type : {{ current_block.type }} slug : {{ current_block.slug }} -->
+            <!-- order: {{ current_block.parent_unit }}-->
+
+            {% if current_block.type == 'VIDEO' %}
+
+                {% include 'course/blocks/video.html' with block=current_block %}
+
+            {% elif current_block.type == "SURVEY" %}
+
+                {% include 'course/blocks/survey.html' with block=current_block %}
+
+            {% elif current_block.type == "ASSESSMENT" %}
+
+                {% include 'course/blocks/assessment.html' with block=current_block %}
+
+            {% elif current_block.type == "HTML_CONTENT" %}
+
+                {% include 'course/blocks/html_content.html' with block=current_block %}
+
+            {% elif current_block.type == "CALLOUT" %}
+
+                {% include 'course/blocks/callout.html' with block=current_block %}
+
+            {% elif current_block.type == "ANSWER_LIST" %}
+
+                {% include 'course/blocks/answer_list.html' with block=current_block %}
+
+            {% elif current_block.type == "FORUM_TOPIC" %}
+
+                {% include 'course/blocks/forum_topic.html' with block=current_block %}
+
+            {% elif current_block.type == "SIMPLE_INTERACTIVE_TOOL" %}
+
+                {% if current_block.simple_interactive_tool.tool_type == "DIAGRAM" %}
+
+                    {% include 'course/blocks/diagram.html' with block=current_block %}
+
+                {% elif current_block.simple_interactive_tool.tool_type == "TABLETOOL" %}
+
+                    {% include 'course/blocks/tabletool.html' with block=current_block %}
+
+                {% else %}
+                    <div class="text-muted">
+                        Cannot render '{{ block.simple_interactive_tool.tool_type }}' interaction.
+                        <br />
+                        Please contact support for help.
+                    </div>
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div id="course-license-wrapper">
+
+        {% include 'course/course-license-default.html' %}
+
+    </div>
+
+{% endblock main_content %}
+
+{% block footer %}
+    {% react_print %}
+{% endblock footer %}
+
+{% block adminbar %}
+    {% if request.user.is_staff or request.user.is_superuser %}
+
+        {% include 'core/admin_control_bar.html' %}
+
+    {% endif %}
+{% endblock adminbar %}

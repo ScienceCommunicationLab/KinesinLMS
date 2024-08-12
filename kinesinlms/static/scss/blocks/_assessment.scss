@@ -1,0 +1,177 @@
+
+.block-assessment {
+  margin-bottom: 1em;
+
+  .block-html-content {
+    padding-bottom: 0.5rem;
+  }
+
+  .assessment-component-holder {
+
+    .assessment-read-only-answer {
+      width: 100%;
+      margin-top: 1rem;
+      margin-right: 2rem;
+      padding-right: 2rem;
+
+      blockquote {
+        padding-left: 1rem;
+        border-left: 3px solid #aaa;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 150px;
+      }
+    }
+  }
+
+  .assessment-label {
+    font-weight: bold;
+  }
+
+  .assessment-header {
+    border-bottom: 1px dotted #aaa;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 0 0 0.4rem;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    width: 100%;
+    margin-bottom: 0.6rem;
+
+
+    .assessment-name {
+      flex-grow: 1;
+      margin: 0;
+      padding: 0;
+    }
+
+    span {
+      color: #999;
+    }
+
+    h3 {
+      margin-bottom: .5em;
+      margin-top: 0;
+    }
+  }
+
+
+  .assessment-header-icon-block {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  .assessment-header-icon-image-company {
+    background: url("../images/icons/buildings.png");
+    background-size: contain;
+    width: 60px;
+    height: 60px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .assessment-intro-text {
+    align-content: center;
+    font-family: "Jost", "Verdana", sans-serif;
+    line-height: 1.5em;
+    font-size: 1em;
+    padding: 10px 10px 0 20px;
+  }
+
+  .assessment-header-icon-image-msp {
+    background: url("../images/icons/plan.png");
+    background-size: contain;
+    width: 60px;
+    height: 60px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+.assessment-component {
+  padding: 10px 0;
+  width: 100%;
+
+  .form-check {
+    .form-check-input {
+      cursor: pointer;
+    }
+
+    .form-check-label {
+      cursor: pointer;
+    }
+  }
+
+  .assessment-control-bar {
+    display: flex;
+    flex-direction: row;
+    margin: .5em 0;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+
+    .submit-button, .spinner-button {
+      min-width: 9rem;
+    }
+
+    .answer-status-wrapper {
+      flex-grow: 2;
+      min-height: 2.5rem;
+      display: flex;
+      flex-direction: row;
+      border: 1px dotted #e1e1e1;
+      border-radius: 5px;
+
+      .answer-status {
+        padding-left: 1rem;
+        padding-top: 0.5rem;
+        display: inline-block;
+
+        .answer-explanation {
+          margin: 0.5rem 0.5rem 0.5rem 1.5rem;
+        }
+
+      }
+
+    }
+
+    .answer-scores {
+      padding-top: 0.5rem;
+      min-height: 2.5rem;
+      display: inline-block;
+    }
+
+    &.htmx-request {
+      .submit-button {
+        display: none;
+      }
+
+      .htmx-indicator {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .answer-status {
+        display: none !important;
+      }
+    }
+
+
+  }
+
+}
+
+
+.assessment-control-bar .message {
+  margin-left: 20px;
+}
+
+.assessment-component textarea {
+  width: 100%;
+  min-height: 100px;
+}

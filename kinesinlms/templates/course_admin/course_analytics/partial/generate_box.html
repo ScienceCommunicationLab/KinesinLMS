@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col col-12" style="min-height:600px; padding:0">
+
+
+        <div class="generate-box">
+
+
+            <a style="margin-top: 5rem"
+                    {% if current_cohort %}
+               hx-get="{% url 'course:course_admin:course_analytics:student_cohort_progress_generate_hx' course_run=course.run course_slug=course.slug cohort_id=current_cohort.id %}"
+                    {% else %}
+               hx-get="{% url 'course:course_admin:course_analytics:student_progress_generate_hx' course_run=course.run course_slug=course.slug %}"
+                    {% endif %}
+               hx-trigger="click"
+               hx-target="#student-progress-report"
+               hx-swap="innerHTML"
+               class="btn btn-primary">
+                Generate Report
+            </a>
+
+            <div style="margin-top:5rem; max-width:40rem; text-align:center;"
+                 class="d-flex flex-row justify-content-center">
+                <p> The student progress report typically takes a minute or two to generate.<br/>
+                    Click "Generate Report" to
+                    create a student progress report for this cohort.</p>
+            </div>
+        </div>
+    </div>
+</div>

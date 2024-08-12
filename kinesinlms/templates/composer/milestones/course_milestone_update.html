@@ -1,0 +1,37 @@
+{% extends "composer/composer_base.html" %}
+{% load tz %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+{% block main_content %}
+
+    {{ block.super }}
+
+    <div class="container-fluid composer-content course">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="card mt-4">
+                    <div class="card-header">
+                        Edit Course Milestone
+                    </div>
+                    <div class="card-body">
+                        <form action="{% url 'composer:course_milestone_update' course_id=course.id pk=milestone.id %}" method="post">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <a href="{% url 'composer:course_milestones_list' course_id=course.id %}"
+                               type="button"
+                               class="btn btn-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Update
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content %}

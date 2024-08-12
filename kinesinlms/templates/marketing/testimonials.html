@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load static i18n %}
+
+{% block main_content %}
+    <div class="container marketing-page kn-testimonials">
+        
+        <div class="kn-page-header">
+            <h1>Testimonials</h1>
+        </div>
+
+        <h2>...about this site</h2>
+        {% if site_testimonials %}
+        {% for testimonial in site_testimonials %}
+            <div class="testimonial">
+                <div class="testimonial-quote">{{ testimonial.quote }}</div>
+                <p class="testimonial-name">- {{ testimonial.name }}</p>
+            </div>
+        {% endfor %}
+        {% else %}
+            <p>No testimonials yet. Check back soon!</p>
+        {% endif %}
+
+        <h2>...about our courses</h2>
+        {% if courses %}
+        {% for course in courses %}
+            {% if course.testimonials %}
+                <h3>{{ course.display_name }}</h3>
+                {% for testimonial in course.testimonials %}
+                    <div class="testimonial">
+                        <div class="testimonial-quote">{{ testimonial.quote }}</div>
+                        <p class="testimonial-name">- {{ testimonial.name }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        {% else %}
+            <p>No course testimonials yet. Check back soon!</p>
+        {% endif %}
+    </div>
+{% endblock main_content %}

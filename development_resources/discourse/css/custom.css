@@ -1,0 +1,31 @@
+.d-header {
+    box-shadow: None !important;
+    border-bottom: 1px dotted #888 !important;
+    margin-top: 0px !important;
+}
+.text-logo {
+    font-size: 16px !important;
+}
+
+.b-header .widget-link {
+    font-size: 14px;
+}
+
+.topic-owner .topic-body .cooked:after {
+    content: "(Click “Reply” to add your post.)";
+    font-style: italic;
+    color: #999;
+}
+
+.d-header-wrap .title:after {
+    font-weight: bold;
+    font-size: 1.2rem;
+    content: '\00a0 forum';
+    color: #888;
+}
+
+.category-title-header {
+    padding-bottom: 1rem !important;
+    background-color: #f9f9f9 !important;
+}
+

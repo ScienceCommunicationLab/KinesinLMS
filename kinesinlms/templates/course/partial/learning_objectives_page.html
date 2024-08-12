@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-12 col-xl-9">
+        {% if course_unit.type == "MODULE_LEARNING_OBJECTIVES" %}
+            <p>These are the learning objectives for this module:</p>
+        {% elif course_unit.type == "SECTION_LEARNING_OBJECTIVES" %}
+            <p>These are the learning objectives for this lesson:</p>
+        {% endif %}
+        <ul>
+            {% if learning_objectives %}
+                {% for learning_objective in learning_objectives %}
+                    <li>
+                        {{ learning_objective.description }}
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+</div>

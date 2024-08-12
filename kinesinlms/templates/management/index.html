@@ -1,0 +1,155 @@
+{% extends "management/management_base.html" %}
+
+{% load static i18n core_tags %}
+
+{% block management_content %}
+    <h2 class="mt-4">Site Management</h2>
+    <p>Manage this site's profile as well as courses offered and student users.</p>
+    <div class="management-group">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 card-deck">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Site Profile</div>
+                    <div class="card-body">Settings for the current site.</div>
+                    <div class="card-footer d-flex flex-row justify-content-end">
+                        <a class="btn btn-primary"
+                           href="{% url 'management:site_profile' %}">Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Site Features</div>
+                    <div class="card-body">
+                        Certain site features (e.g. Learning Library) can be turned on and off.
+                        You can toggle them here.
+                    </div>
+                    <div class="card-footer d-flex flex-row justify-content-end">
+                        <a class="btn btn-primary"
+                           href="{% url 'management:site_features' %}">Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Courses</div>
+                    <div class="card-body">Manage courses running on this site.</div>
+                    <div class="card-footer d-flex flex-row justify-content-end">
+                        <a class="btn btn-primary" href="{% url 'management:courses_list' %}">Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Students</div>
+                    <div class="card-body">Manage students registered with this site.</div>
+                    <div class="card-footer d-flex flex-row justify-content-end">
+                        <a class="btn btn-primary" href="{% url 'management:students_manage' %}">Manage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="mt-3">Provider Management</h2>
+    <p>"Providers" link KinesinLMS to external services. Use this section to manage these external services (like forums and surveys).</p>
+    <div class="management-group">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 card-deck">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Badge Provider</div>
+                    <div class="card-body">
+                        Configure a Badge Provider to
+                        provider badges for accomplishments,
+                        such as passing a course.
+                    </div>
+                    <div class="card-footer d-flex flex-row justify-content-between  align-items-center">
+                        <div>
+                            {% get_badge_provider_enabled as badge_provider_enabled %}
+                            {% if badge_provider_enabled %}
+                                <div class="text-success">
+                                    <i class="bi bi-check-square"></i>
+                                    Active
+                                </div>
+                            {% else %}
+                                <span class="text-muted">Inactive</span>
+                            {% endif %}
+                        </div>
+                        <a class="btn btn-primary" href="{% url 'management:badge_provider' %}">Configure</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Forum Provider</div>
+                    <div class="card-body">
+                        Configure a Forum Provider to
+                        enable forums for courses.
+                    </div>
+                    <div class="card-footer d-flex flex-row justify-content-between align-items-center">
+                        <div>
+                            {% get_forum_provider_enabled as forum_provider_enabled %}
+                            {% if forum_provider_enabled %}
+                                <div class="text-success">
+                                    <i class="bi bi-check-square"></i>
+                                    Active
+                                </div>
+                            {% else %}
+                                <span class="text-muted">Inactive</span>
+                            {% endif %}
+                        </div>
+                        <a class="btn btn-primary" href="{% url 'management:forum_provider' %}">Configure</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Email Automation Provider</div>
+                    <div class="card-body">
+                        Configure an email automation provider
+                        to enable automations for events like
+                        course enrollment, unenrollment or passing a course.
+                    </div>
+                    <div class="card-footer d-flex flex-row justify-content-between  align-items-center">
+                        <div>
+                            {% get_email_automation_provider_enabled as email_automation_provider_enabled %}
+                            {% if email_automation_provider_enabled %}
+                                <div class="text-success">
+                                    <i class="bi bi-check-square"></i>
+                                    Active
+                                </div>
+                            {% else %}
+                                <span class="text-muted">Inactive</span>
+                            {% endif %}
+                        </div>
+                        <a class="btn btn-primary"
+                           href="{% url 'management:email_automation_provider' %}">Configure</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Survey Providers</div>
+                    <div class="card-body">
+                        Configure one or more survey providers to
+                        embed surveys in courses.
+                    </div>
+                    <div class="card-footer d-flex flex-row justify-content-between  align-items-center">
+                        <div>
+                            {% get_survey_provider_enabled as survey_provider_enabled %}
+                            {% if survey_provider_enabled %}
+                                <div class="text-success">
+                                    <i class="bi bi-check-square"></i>
+                                    Active
+                                </div>
+                            {% else %}
+                                <span class="text-muted">Inactive</span>
+                            {% endif %}
+                        </div>
+                        <a class="btn btn-primary"
+                           href="{% url 'management:survey_provider_list' %}">Configure</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock management_content %}

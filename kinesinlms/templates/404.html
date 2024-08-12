@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% load static core_tags %}
+
+{% block title %}
+  Page not found
+{% endblock title %}
+
+{% block main_content %}
+
+  <style>
+    .nothing-here-background {
+      background-image: url("{% static 'images/misc/nothing-here-1.jpg' %}") !important;
+      background-size: cover;
+      background-position: bottom;
+      background-repeat: no-repeat;
+    }
+  </style>
+
+  <div id="page-404">
+
+    <div class="nothing-here-background">
+      <div class="nothing-here-text">
+        <mark>There's nothing here.</mark>
+      </div>
+    </div>
+
+    <div class="image-attribution">
+      Photo&nbsp;by&nbsp;<a href="https://unsplash.com/@lobosnico?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Nicolas Lobos</a>&nbsp;on&nbsp;<a href="https://unsplash.com/photos/person-walking-near-brown-rock-kGtFjYdm7DI?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+    </div>
+
+    <div class="main-404-message">
+      <div class="message-wrapper">
+        <h1>{% blocktranslate %}404 Error: Page not found{% endblocktranslate %}</h1>
+        {% blocktranslate %}
+              There is no page at this location.<br />
+              Please try navigating again, or 
+              contact us if you need help finding something.
+            {% endblocktranslate %}
+      </div>
+    </div>
+
+  </div>
+
+{% endblock main_content %}

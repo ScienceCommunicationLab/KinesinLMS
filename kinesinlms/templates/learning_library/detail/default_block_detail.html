@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load static i18n %}
+
+{% block main_content %}
+
+  <div class="container learning-library video-block-detail">
+
+    <div class="row">
+      <div class="col-12">
+        <h1>Block Details</h1>
+        <table class="table table-bordered">
+          <tr>
+            <td style="width:200px;">Name</td>
+            <td>
+              {% if library_block.display_name %}
+                  {{ library_block.display_name }}
+              {% else %}
+                  <span class="text-muted fst-italic">( None )</span>
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td>Type</td>
+            <td>{{ library_block.type }}</td>
+          </tr>
+          <tr>
+            <td>UUID</td>
+            <td>{{ library_block.uuid }}</td>
+          </tr>
+          <tr>
+            <td>Short Description:</td>
+            <td>{{ library_block.short_description | safe }}</td>
+          </tr>
+          <tr>
+            <td>HTML Content:</td>
+            <td>{{ library_block.html_content | safe }}</td>
+          </tr>
+
+          {% block custom_block_table_rows %}
+
+          {% endblock custom_block_table_rows %}
+
+        </table>
+      </div>
+    </div>
+
+    {% block custom_block_content %}
+
+    {% endblock custom_block_content %}
+
+  </div>
+
+{% endblock main_content %}

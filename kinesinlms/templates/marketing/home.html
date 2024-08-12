@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% load static i18n core_tags waffle_tags %}
+
+{% block og %}
+    <meta property="og:title" content="{% site_name %} homepage" />
+    {% comment %}
+   
+    <meta property="og:image"
+          content="{% static 'images/open-graph/your-open-graph-image.png' %}" />
+    {% endcomment %}
+    <meta property="og:url" content="{% site_url %}" />
+    <meta property="og:description"
+          content="{% site_name %} is dedicated to bringing you helpful online courses." />
+{% endblock og %}
+
+{% block main_content %}
+    <div class="home-page">
+
+        {% include 'marketing/include/hero.html' %}
+
+        <div class="feature-bar">
+            <div class="beta-message ms-3">
+                <span>
+                    {% site_name %} is in active development.
+                    <a href="{% url 'marketing:contact' %}"
+                       style="padding-bottom:0.2rem;
+                              text-decoration: underline;
+                              text-decoration-style: dotted;
+                              text-underline-offset: 3px">Let us know how we're doing.</a>
+                </span>
+            </div>
+        </div>
+        <div class="container-fluid courses-list">
+            <div class="row">
+                <div class="col-12">
+                    <div class="courses-list-title">
+                        <h2>Our Courses</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 ">
+                {% for course_description in course_descriptions %}
+                    <div class="col">
+
+                        {% include 'marketing/components/course_card.html' with course_description=course_description %}
+
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <section class="kn-features">
+            {# one or more sections highlighting this site's features. #}
+            {% switch "SPEAKERS" %}
+
+            {% include 'marketing/include/feature_bar_speakers.html' %}
+
+        {% endswitch %}
+
+        {% include 'marketing/include/feature_bar_peer_interaction.html' %}
+
+        {% switch "TESTIMONIALS" %}
+
+        {% include 'marketing/include/feature_bar_testimonials.html' %}
+
+    {% endswitch %}
+
+    {% include 'marketing/include/feature_bar_newsletter.html' %}
+    {% include 'marketing/include/feature_bar_start_now.html' %}
+
+</section>
+</div>
+{% endblock main_content %}

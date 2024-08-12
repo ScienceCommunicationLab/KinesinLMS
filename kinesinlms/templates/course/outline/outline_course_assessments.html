@@ -1,0 +1,95 @@
+{% load static %}
+{% load i18n %}
+{% load react %}
+{% load mptt_tags %}
+{% load core_tags unit_extras %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Course Assessments : {{  course.display_name }}</title>
+    {% include 'includes/head_meta.html' %}
+    {% include 'includes/core_css_includes.html' %}
+    <link href="{% static 'css/course_outline.css' %}" rel="stylesheet">
+    <style>
+        .unit {
+            margin-left: 0;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div id="course_outline" class="container">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="title mt-5 mb-5">
+                Course Outline : Assessments Only
+            </div>
+
+            <table class="table table-bordered">
+                <tr>
+                    <td style="width:80px;">Course</td>
+                    <td>{{ course.display_name }}</td>
+                </tr>
+                <tr>
+                    <td>Slug</td>
+                    <td>{{ course.slug }}</td>
+                </tr>
+                <tr>
+                    <td>Run</td>
+                    <td>{{ course.run }}</td>
+                </tr>
+                <tr>
+                    <td>Outline</td>
+                    <td>
+                        <a href="{% url 'course:outline_course' course_slug=course.slug course_run=course.run %}">
+                            View Full Outline</a>
+                    </td>
+                </tr>
+                {% if course.playlist_url %}
+                    <tr>
+                        <td>Video Playlist</td>
+                        <td><a href="{{ course.playlist_url }}" target="_blank">{{ course.playlist_url }}</a></td>
+                    </tr>
+                {% endif %}
+
+            </table>
+
+            <div class="course-outline-content">
+                {% recursetree module_nodes %}
+                    {% if node.type == "MODULE" %}
+                        <h1>Module: {{ node.display_name }}</h1>
+                    {% elif node.type == "SECTION" %}
+                        <h2>Section: {{ node.display_name }}</h2>
+                    {% elif node.type == "UNIT" %}
+                        <div class="unit">
+                            {% for block in node.unit.contents.all %}
+                                {% if not block.hidden %}
+                                    <!-- block -->
+                                    {% if  block.type == "ASSESSMENT" %}
+                                        <h3>Unit : {{ node.display_name }}</h3>
+                                        {% include 'course/outline/outline_assessment.html' with block=block course_unit=node.unit %}
+                                    {% endif %}
+                                    <!-- /block -->
+                                {% endif %}
+                            {% endfor %}
+
+                        </div>
+                    {% endif %}
+                    {% if not node.is_leaf_node %}
+                        {{ children }}
+                    {% endif %}
+
+                {% endrecursetree %}
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

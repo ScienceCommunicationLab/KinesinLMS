@@ -1,0 +1,17 @@
+{% load tz %}
+<div class="release-datetime d-flex flex-row" style="margin:0.25rem 0 0.25rem 0.75rem;">
+    <div>
+        <i class="bi bi-calendar"></i> <span class="ms-2">Available:</span>
+    </div>
+    <div class="d-flex flex-column" style="margin-left:0.5rem;">
+        <div>
+            {% timezone 'US/Pacific' %}
+                {{ node.release_datetime|localtime|date:"M d, Y P e" }}
+            {% endtimezone %}
+        </div>
+        <div class="text-muted">
+            {{ node.release_datetime|utc|date:"M d, Y H:i e" }}
+        </div>
+    </div>
+
+</div>

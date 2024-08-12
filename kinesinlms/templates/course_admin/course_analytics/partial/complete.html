@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-12 d-flex flex-row align-items-end">
+        <div class="text-muted d-flex flex-column w-100">
+            <div>
+                Cohort:
+                {% if student_progress_report.cohort %}
+                    {{ student_progress_report.cohort.name }}
+                {% else %}
+                    {% if request.user.is_superuser or request.user.is_staff %}
+                        ( All cohorts )
+                    {% else %}
+                        ( All cohorts you have access to )
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div>Students: {{ student_progress_report.num_students }}</div>
+            <div>Generated on {{ student_progress_report.generation_date }}</div>
+        </div>
+        <a style="margin-top: 1.5rem;
+                  min-width:120px"
+           {% if current_cohort %} hx-get="{% url 'course:course_admin:course_analytics:student_cohort_progress_generate_hx' course_run=course.run course_slug=course.slug cohort_id=current_cohort.id %}" {% else %} hx-get="{% url 'course:course_admin:course_analytics:student_progress_generate_hx' course_run=course.run course_slug=course.slug %}" {% endif %}
+           hx-trigger="click"
+           hx-target="#student-progress-report"
+           hx-swap="innerHTML"
+           class="btn btn-dark">Regenerate</a>
+        <a style="margin-top: 1.5rem;
+                  min-width:170px"
+           href="{% url 'course:course_admin:course_analytics:student_progress_report_download' course_slug=course.slug course_run=course.run pk=student_progress_report.id %}"
+           class="btn btn-success ms-3">
+            <i class="bi bi-file-earmark-arrow-down"></i> Download (csv)
+        </a>
+    </div>
+</div>
+<div class="legend">
+    <div class="event-box">
+        <i class="bi bi-square-fill me-2" style="color:{{ bar_colors.units }}"></i> Units
+    </div>
+    <div class="event-box">
+        <i class="bi bi-square-fill me-2" style="color:{{ bar_colors.videos }}"></i> Videos
+    </div>
+    <div class="event-box">
+        <i class="bi bi-square-fill me-2"
+           style="color:{{ bar_colors.assessments }}"></i> Assessments
+    </div>
+    <div class="event-box">
+        <i class="bi bi-square-fill me-2" style="color:{{ bar_colors.surveys }}"></i> Surveys
+    </div>
+    {% if course.has_sits %}
+        <div class="event-box">
+            <i class="bi bi-square-fill me-2" style="color:{{ bar_colors.sits }}"></i> SITs
+        </div>
+    {% endif %}
+</div>
+<div class="row">
+    <div class="col-12 mt-3 p-0" style="min-height:600px; ">
+        {% include 'course_admin/course_analytics/partial/reports/student_progress_report.html' %}
+    </div>
+</div>

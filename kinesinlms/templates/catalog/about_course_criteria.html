@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load static i18n core_tags %}
+
+{% block meta_description %}
+    Criteria for passing the "{{ course.display_name }}" course on {% site_name %}.
+{% endblock meta_description %}
+
+{% block extra_css %}
+    {{ block.super }}
+    {% if course_description.custom_stylesheet %}
+        <link rel="stylesheet" type="text/css" href="{% static course_description.custom_stylesheet_url %}"/>
+    {% endif %}
+{% endblock %}
+
+{% block main_content %}
+
+    <style>
+        .about-course-criteria {
+            margin-top: 2rem;
+            min-height: 900px;
+        }
+
+        .criteria-wrapper {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+
+    <div class="container catalog about-course-criteria" style="margin-bottom: 20rem;">
+
+        <h2>Criteria for Passing "{{ course_description.course.display_name }}"</h2>
+
+        <div class="row criteria-wrapper ">
+
+            <div class="col-12 col-md-8 d-flex flex-column">
+
+                <h3><i class="bi bi-info-circle"></i> About this course...</h3>
+
+                {% if course_description.overview %}
+                    {{ course_description.overview | safe }}
+                {% else %}
+                    &nbsp;
+                {% endif %}
+
+                <div class="mt-4">
+                    <a class="btn btn-primary mb-4"
+                       href="{% url 'catalog:about_page' course_slug=course_description.course.slug course_run=course_description.course.run %}">
+                        Read more about this course
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="col-12 col-md-4">
+                <img class="img img-fluid w-100"
+                     src="{% static course_description.thumbnail_url %}"
+                     alt="Card image cap">
+
+            </div>
+        </div>
+        <div class="row criteria-wrapper">
+            <div class="col-12 mt-3 ">
+                {% if badge_class %}
+                    {% if badge_class.criteria %}
+                        <h3><i class="bi bi-check"></i> Criteria</h3>
+                        {{ badge_class.criteria | safe }}
+                    {% else %}
+                        <span class="text-muted">( No criteria defined for this badge. )</span>
+                    {% endif %}
+                {% else %}
+                    <span class="text-muted">( No badge defined for this course. Please contact support for help. )</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row criteria-wrapper">
+            <div class="col-12 mt-3 ">
+                <h3><i class="bi bi-flag"></i> Milestones</h3>
+
+                <div class="overview-text">
+                    The following "milestones" must be achieved in order to pass this course.
+                </div>
+
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width: 20rem;">Milestone</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for milestone in required_milestones %}
+                        <tr>
+                            <td scope="row">
+                                {{ milestone.name }}
+                            </td>
+                            <td>
+                                {{ milestone.description }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="row criteria-wrapper">
+            <div class="col-12 mt-3">
+                <h3><i class="bi bi-grid-fill"></i> Modules</h3>
+                <p>This is a complete list of the modules available in the course (the student is not required to
+                    interact with all of them to pass).</p>
+
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tr>
+                        <th style="width: 20rem;">Module Name</th>
+                        <th style="width: 20rem;">Number of Assessments</th>
+                        <th style="width: 20rem;">Number of Activities</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for module_info in modules_info %}
+                        <tr>
+                            <td>
+                                {{ module_info.display_name }}
+                            </td>
+                            <td>
+                                {{ module_info.number_of_assessments }}
+                            </td>
+                            <td>
+                                {{ module_info.number_of_sits }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td class="text-muted"> {{ total_num_assessments }} assessments total</td>
+                        <td class="text-muted"> {{ total_num_sits }} activities total</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,104 @@
+/*
+
+
+Styles for showing complete course or parts of course in a basic, printable outline.
+
+Err on the side of simplicity and printability.
+
+ */
+
+#course-outline {
+  padding: 2rem 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+img {
+  max-width: 800px;
+}
+
+.table {
+  border: 1px solid #333 !important;
+}
+
+
+.title {
+  padding: 2rem 0 2rem;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.outline-module {
+  text-transform: uppercase;
+  margin-top: 2.5em;
+  font-size: 1.6em;
+  background: #F1f1f1;
+  border-right: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.outline-section {
+  text-transform: uppercase;
+  margin-top: 3rem;
+  font-size: 1.4em;
+  border-bottom: 0 !important;
+  border-bottom: 1px solid #555 !important;
+  padding-bottom: 1rem;
+}
+
+.outline-unit {
+  margin-top: 3rem;
+  font-size: 1.2em;
+  border-bottom: 0 !important;
+  padding-bottom: 1rem;
+  border-bottom: 1px dotted #555 !important;
+}
+
+.unit {
+}
+
+.unit h2 {
+  font-size: 1.3rem;
+}
+
+.unit h3 {
+  margin-top: 1em;
+  font-size: 1.2em;
+  color: #717171;
+  border-bottom: 0 !important;
+}
+
+.graded-marker {
+  margin-bottom: 0.5rem;
+}
+
+.summary-marker {
+  margin-bottom: 0.5rem;
+}
+
+
+.block-assessment {
+  margin-top: 2rem;
+}
+
+.block-sit {
+  margin-top: 2rem;
+}
+
+
+.video {
+  border: 10px solid #ccc;
+  border-radius: 10px;
+  position: inherit;
+  padding: 3rem !important;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: center;
+  background-color: #f9f9f9;
+  max-width: 700px;
+}

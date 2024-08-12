@@ -1,0 +1,30 @@
+Hello,
+
+{% if course_program %}
+As you are associated with the {{ course_program }} program, you are requested to
+register with KinesinLMS so that you can be automatically enrolled in
+the '{{ course_name }}' course.
+{% else %}
+You are requested to register with KinesinLMS so that
+you can be automatically enrolled in the '{{ course_name }}' course.
+{% endif %}
+
+Register now at this URL:
+
+{{ registration_url }}
+
+{% if invitee_email %}
+Please make sure to register with the email address {{ invitee_email }}
+as this is the email address we are expecting for registration and course enrollment.
+{% endif %}
+
+Once you register on the KinesinLMS platform you will be automatically
+enrolled in the '{{ course_name }}' course. You will receive an email letting you
+know that you are enrolled in the course and how to access the course.
+
+For more information please email courses@kinesinlms.org
+or reach out to your program administration.
+
+- The KinesinLMS Team
+
+{% include 'core/email/email_footer_txt.html' %}

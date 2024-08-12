@@ -1,0 +1,37 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+{% block main_content %}
+
+    {{ block.super }}
+
+    <div class="container-fluid composer-content course">
+        <div class="row mt-4" >
+            <div class="col-12 col-lg-8 ">
+                <div class="card ">
+                    <div class="card-header">{% blocktrans %}New Milestone{% endblocktrans %}</div>
+                    <div class="card-body">
+                        <form action="{% url 'composer:course_milestone_create' course_id=course.id %}"
+                              method="post">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <a href="{% url 'composer:course_milestones_list' course_id=course.id %}"
+                               type="button"
+                               class="btn btn-secondary">{% blocktrans %}Cancel{% endblocktrans %}</a>
+                            <button type="submit" class="btn btn-primary">{% blocktrans %}Create{% endblocktrans %}</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-3">
+                <p>{% blocktrans %}Create a milestone to track a student's progress in this course.{% endblocktrans %}</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content %}

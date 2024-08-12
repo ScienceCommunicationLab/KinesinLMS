@@ -1,0 +1,38 @@
+{% load i18n %}
+<div id="course-item-default-cohort-forum-group-status"
+     class="forum-item-status">
+
+    {% if default_cohort_forum_group %}
+       <div class="d-flex flex-row">
+            <i class="bi bi-check-square text-success me-2"></i> {% blocktrans %}Created{% endblocktrans %}
+        </div>
+    {% else %}
+
+        {% if not forum_provider %}
+
+            {% include "composer/forum/forum_item_status/no_forum_provider_warning.html" %}
+
+        {% else %}
+
+            <div class="alert alert-warning">
+                {% blocktranslate trimmed %}
+                    No forum group set up to group students from the DEFAULT cohort in
+                    this course.
+                {% endblocktranslate %}
+            </div>
+            <div>
+                <a hx-get="{% url 'composer:create_forum_item_hx' course_id=course.id forum_item_slug='DEFAULT_COHORT_FORUM_GROUP' %}"
+                   hx-target="#course-item-default-cohort-forum-group-status"
+                   hx-swap="outerHTML"
+                   class="btn btn-primary mb-2">
+                    {% blocktranslate trimmed %}
+                        Create&nbsp;DEFAULT Cohort Group
+                    {% endblocktranslate %}
+                </a>
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>

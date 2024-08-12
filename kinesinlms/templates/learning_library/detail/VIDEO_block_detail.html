@@ -1,0 +1,37 @@
+{% extends "learning_library/detail/default_block_detail.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% block custom_block_table_rows %}
+    <tr>
+        <td>Video ID</td>
+        <td>{{ library_block.video_id }}</td>
+    </tr>
+    <tr>
+        <td>Video Thumbnail URL</td>
+        <td>{{ library_block.thumbnail_url }}</td>
+    </tr>
+    <tr>
+        <td>Video Header</td>
+        <td>{{ library_block.video_header }}</td>
+    </tr>
+{% endblock custom_block_table_rows %}
+
+{% block custom_block_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe width="854"
+                        height="480"
+                        src="https://www.youtube.com/embed/{{ block.video_id }}"
+                        style="border:none"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen=""></iframe>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock custom_block_content %}

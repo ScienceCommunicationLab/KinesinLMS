@@ -1,0 +1,49 @@
+{% extends "management/management_base.html" %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+
+{% block management_content %}
+
+
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead class="table-light">
+            <tr>
+                <th>Student</th>
+                <td>Badge Class</td>
+                <td>issued_on</td>
+                <td>URL</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% if badge_assertions %}
+                {% for badge_assertion in badge_assertions %}
+                    <tr>
+                        <td>{{ badge_assertion.recipient }}</td>
+                        <td>{{ badge_assertion.badge_class }}</td>
+                        <td>{{ badge_assertion.issued_on }}</td>
+                        <td>
+                            <a href="{{ badge_assertion.badge_image_url }}"
+                               class="btn btn-primary">
+                                View Badge
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4"
+                        style="height:10rem;">
+                        <div  class="d-flex flex-column align-items-center justify-content-center w-100 h-100">
+                            <span class="text-muted">( No badges awarded yet in this course. )</span>
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}

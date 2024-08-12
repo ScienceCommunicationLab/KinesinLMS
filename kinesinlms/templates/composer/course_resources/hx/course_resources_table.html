@@ -1,0 +1,52 @@
+<table id="course-resources-table" class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th style="width:20%;min-width:20rem;">Name</th>
+            <th style="width:40%;min-width:15rem">Description</th>
+            <th style="width:40%">Resource</th>
+            <th style="text-align:center">Edit</th>
+            <th style="text-align:center">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if course.course_resources.exists %}
+            {% for course_resource in course.course_resources.all %}
+                <tr id="row-course-resource-{{ course_resource.id }}">
+                    <td>{{ course_resource.name }}</td>
+                    <td>{{ course_resource.description }}</td>
+                    <td>
+                        {% if course_resource.resource_file %}
+                            <a href="{{ course_resource.resource_file.url }}" target="_blank">{{ course_resource.resource_file.url }}</a>
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center">
+                        <a class="btn btn-primary"
+                           href="{% url 'composer:course_resource_update' course_id=course.id pk=course_resource.id %}">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                    </td>
+                    <td style="text-align: center">
+                        <a class="btn btn-danger"
+                           hx-confirm="Are you sure you want to delete course resource '{{ course_resource.name }}'?"
+                           hx-target="#course-resources-table"
+                           hx-trigger="click"
+                           hx-delete="{% url 'composer:course_resource_delete_hx' course_id=course.id pk=course_resource.id %}"
+                           hx-swap="outerHTML">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center">
+                    <div class="no-items-box">
+                        <div class="no-items">No course resources have been added to this course.</div>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

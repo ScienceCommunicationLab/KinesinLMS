@@ -1,0 +1,90 @@
+{% load static i18n %}
+{% load crispy_forms_filters %}
+{% load core_tags %}
+
+<div id="block-edit-card-{{ block.id }}"
+     class="card block-edit-card block-edit-card-active">
+
+    <div class="card-header bg-primary bg-opacity-50">
+
+        <div class="block-edit-header-info">
+
+            <i class="bi bi-box" style="margin-left:0.75rem;"></i>
+
+            <div style="margin-left:0.5rem;">
+                {{ block.type_display_name|upper }}
+                {% if block.type == "ASSESSMENT" %}
+                    {% if panel_form.unit_block.label %}
+                        <span class="text-muted">
+                                ( {{ panel_form.unit_block.label }} )
+                            </span>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="header-actions">
+
+            <div class="me-4">
+                <strong>Slug</strong>: {{ block.slug|show_none_for_none }}
+                <strong>ID</strong>: {{ block.id }}
+            </div>
+            
+            {% comment %}
+                Not convinced it's a good idea to allow delete while editing. Feels like this
+                will often get absent-mindedly clicked when user really wants to just close
+                the edit window. So commenting out for now.
+
+                <button data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        title="Delete block"
+                        hx-confirm="Are you sure you want to delete this {{ block.type }} block ?"
+                        hx-trigger="click"
+                        hx-delete="{% url 'composer:edit_course_unit_block_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id pk=block.id %}"
+                        hx-swap="outerHTML"
+                        hx-target="#course-unit-block-{{block.id}}"
+                        class="btn btn-danger btn-delete-block">
+                    <i class="bi bi-x"></i>
+                </button>
+            {% endcomment %}
+
+        </div>
+    </div>
+
+    <div class="panel-set-wrapper">
+
+        <div class="panel-tabs">
+            <ul id="panel-navs-{{ block.id }}"
+                class="nav nav-tabs">
+                {% for panel_tab in panel_set.tabs %}
+                    <li class="nav-item">
+                        <button class="nav-link {% if current_panel_slug == panel_tab.panel_slug %}active{% endif %}"
+                                aria-current="page"
+                                hx-get="{% url 'composer:blocks:edit_block_panel_set_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id pk=block.id %}?panel_slug={{ panel_tab.panel_slug }}"
+                                hx-target="#course-unit-block-{{ block.id }}"
+                                hx-swap="outerHTML">
+                            {{ panel_tab.label }}
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div id="panels-content-{{ block.id }}"
+             class="panels-content">
+
+            <form id="panel-form-{{ block.id }}-{{ current_panel_slug }}"
+                  hx-post="{% url 'composer:blocks:edit_block_panel_set_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id pk=block.id %}?panel_slug={{ current_panel_slug }}"
+                  hx-target="#course-unit-block-{{ block.id }}"
+                  hx-swap="outerHTML">
+
+                <div id="panel-{{ block.id }}-{{ current_panel_slug }}" class="panel">
+                    {% include panel_set.current_panel.template_name %}
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

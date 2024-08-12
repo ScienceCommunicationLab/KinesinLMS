@@ -1,0 +1,72 @@
+<div class="chart-holder d-flex flex-column flex-grow-1 align-items-center justify-content-center"
+     style="min-height:200px; max-height:400px;">
+    {% if basic_chart %}
+        <canvas id="basicChart-{{ basic_chart.slug }}"></canvas>
+        <script>
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const config = {
+                    type: 'bar',
+                    data: {
+                        datasets: [
+                            {% for item in basic_chart.graph_data %}
+                                {
+                                    label: "{{item.label}}",
+                                    data: {{ item.data|safe }},
+                                    backgroundColor: "{{ item.bar_color }}"
+                                },
+                            {% endfor %}
+                        ]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                {% if basic_chart.legend_position %}
+                                    display: true,
+                                    position: '{{basic_chart.legend_position}}'
+                                {% endif %}
+                            }
+                        },
+                        scales: {
+                            x: {
+                                min: "{{ basic_chart.start_datetime|date:'Y-m-d' }}",
+                                max: "{{ basic_chart.end_datetime|date:'Y-m-d' }}",
+                                maxBarThickness: 25,
+                                offset: true,
+                                stacked: true,
+                                type: "time",
+                                time: {
+                                    unit: 'day',
+                                    round: 'day',
+                                    displayFormats: {
+                                        day: 'M/d'
+                                    }
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                stacked: true
+                            }
+                        }
+                    }
+                }
+                const ctx = document.getElementById("basicChart-{{ basic_chart.slug }}").getContext("2d");
+                const myChart = new Chart(ctx, config);
+                window.addEventListener('afterprint', () => {
+                    myChart.resize();
+                });
+
+            })
+
+
+        </script>
+    {% else %}
+        <div class="text-muted">
+            ( no data )
+        </div>
+    {% endif %}
+</div>

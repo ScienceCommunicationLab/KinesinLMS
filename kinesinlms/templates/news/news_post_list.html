@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load tz %}
+{% load static i18n %}
+
+{% block main_content %}
+    <div class="container news" style="padding-top:40px;">
+        {% if newspost_list %}
+            <div class="row news-post-list">
+                {% for news_post in newspost_list %}
+                    <div class="col-md-4 col-12 ms-0 pl-0" style="margin-bottom:10px;">
+                        <div class="card card-default">
+                            {% if news_post.status == 0 %}
+                                <div class="ribbon-wrapper">
+                                    <div class="ribbon red">Draft</div>
+                                </div>
+                            {% endif %}
+                            <a href="{% url 'news:news-post-detail' news_post.slug %}">
+                                {% if news_post.featured_image %}
+                                    <img class="card-img-top"
+                                         src="{{ news_post.featured_image.url }}"
+                                         alt="{{ news_post.featured_image_alt }}" />
+                                {% else %}
+                                {% endif %}
+                            </a>
+                            <div class="card-body">
+                                <h2 class="card-title">{{ news_post.title }}</h2>
+                                <p class="card-text text-muted h6">
+                                    By:
+                                    {% if news_post.author %}
+                                        {{ news_post.author.name }}
+                                    {% else %}
+                                        KinesinLMS Team
+                                    {% endif %}
+                                    <span style="color:#ddd">|</span> {{ news_post.published_on |date:"DATE_FORMAT" }}
+                                </p>
+                                <p class="card-text">{{ news_post.excerpt }}</p>
+                                <a href="{% url 'news:news-post-detail' news_post.slug %}"
+                                   class="btn btn-primary">Read More
+                                &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+
+        <div class="d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 500px;">
+            <div class="alert alert-light">( No news posts defined. )</div>
+        </div>
+
+        {% endif %}
+    </div>
+{% endblock main_content %}

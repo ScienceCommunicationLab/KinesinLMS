@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% block main_content %}
+
+  <div class="container-fluid learning-library video-block-detail">
+
+    <div class="row">
+      <div class="col-12">
+        <h1>Course Unit Details</h1>
+        <table class="table table-bordered">
+          <tr>
+            <td style="width:200px;">Name</td>
+            <td>
+              {% if course_unit.display_name %}
+                {{ course_unit.display_name }}
+              {% else %}
+                <span class="text-muted fst-italic">( None )</span>
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td>Slug</td>
+            <td>{{ course_unit.slug }}</td>
+          </tr>
+          <tr>
+            <td>Type</td>
+            <td>{{ course_unit.type }}</td>
+          </tr>
+          <tr>
+            <td>UUID</td>
+            <td>{{ course_unit.uuid }}</td>
+          </tr>
+          <tr>
+            <td>Short Description:</td>
+            <td>{{ course_unit.short_description | safe }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock main_content %}

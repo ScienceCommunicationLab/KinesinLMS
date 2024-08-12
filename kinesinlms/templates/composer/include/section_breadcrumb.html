@@ -1,0 +1,23 @@
+<!-- composer section breadcrumbs -->
+<div class="info-bar-wrapper section-info-bar-wrapper">
+    <div class="container-fluid breadcrumb info-bar ">
+        {% for section_breadcrumb in section_breadcrumbs %}
+            <div class="breadcrumb-item">
+                <a href="{{ section_breadcrumb.url }}">
+                    {{ section_breadcrumb.label }}
+                </a>
+            </div>
+        {% endfor %}
+        <div class="breadcrumb-item page-title">
+            {% if section_title %}
+                {{ section_title }}
+            {% endif %}
+            {% if section_title and section_description %}
+                &nbsp;&nbsp;:&nbsp;&nbsp;
+            {% endif %}
+            {% if section_description %}
+                <span class="page-description">{{ section_description | safe }}</span>
+            {% endif %}
+        </div>
+    </div>
+</div>

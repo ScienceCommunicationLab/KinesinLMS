@@ -1,0 +1,59 @@
+{% load core_tags unit_extras %}
+<div class="block block-assessment" id="assessment_{{ block.assessment.slug }}">
+
+    {% if block.html_content %}
+        {% render_html_content block %}
+    {% endif %}
+    {% if hide_label %}
+
+    {% else %}
+        <div class="assessment-name">
+            <h3>Assessment: {% get_assessment_label block course_unit %}</h3>
+        </div>
+    {% endif %}
+
+
+    {% if block.assessment.graded %}
+        {% include 'course/partial/marker_graded.html' %}
+    {% endif %}
+    {% if unit_block.include_in_summary %}
+        {% include 'course/partial/marker_summary.html' %}
+    {% endif %}
+
+    {% if block.assessment.question %}
+        <div class="assessment-question">
+
+            {% comment %}
+            If we want to start showing a summary of each
+            assessment, we can use the block's display_name property.
+            {% if block.display_name %}
+                <div class="assessment-display-name">
+                    {{ block.display_name }}
+                </div>
+            {% endif %}
+
+            {% endcomment %}
+            <span class="question-text">{{ block.assessment.question | safe }}</span>
+
+
+            <div style="border:1px dotted #000; border-radius: 1rem; padding: 0.5rem; margin:1rem; min-height:5rem;">
+
+                {% if block.assessment.type == "POLL" or block.assessment.type == "MULTIPLE_CHOICE" %}
+                    <p>
+                        <em><strong>Choices</strong>:
+                            {% if  block.assessment.definition_json.allowMultiple %}
+                                ( allow multiple )
+                            {% endif %}
+                        </em>
+                    </p>
+                    <ul>
+                        {% for choice in block.assessment.definition_json.choices %}
+                            <li>{{ choice.text }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+    {% endif %}
+</div>

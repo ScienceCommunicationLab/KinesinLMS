@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% load static core_tags %}
+
+{% block main_content %}
+    <section class="container container-fluid marketing-page speakers-list">
+        <div class="row">
+            <div class="col col-12">
+                <h1>Course Speakers</h1>
+                <p>These speakers appear in courses on this site.</p>
+            </div>
+        </div>
+        {% if speakers %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 card-deck">
+                {% for speaker in speakers %}
+                    <div class="col">
+                        <div class="card course-card">
+                            <a href="{% url "speakers:speaker-detail" speaker_slug=speaker.slug %}">
+                                {% if speaker.headshot_url %}
+                                    <img class="card-img-top card-image img-fluid speaker-image"
+                                         src="{{ speaker.headshot_url }}"
+                                         alt="Headshot of {{ speaker.full_name }}, a speaker in a course on KinesinLMS" />
+                                {% endif %}
+                            </a>
+                            <div class="card-body">
+                                <div class="speaker-name">{{ speaker.full_name }}</div>
+                                <div class="speaker-title">{{ speaker.title|safe|default_if_none:"" }}</div>
+                                <div class="speaker-institution">{{ speaker.institution|safe|default_if_none:"" }}</div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="bio-link">
+                                    <a href="{% url 'speaker:speaker-detail' speaker_slug=speaker.slug %}"
+                                       class="btn btn-dark">View bio</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 500px;">
+                <div class="alert alert-light">( No speakers defined. )</div>
+            </div>
+        {% endif %}
+    </section>
+{% endblock main_content %}

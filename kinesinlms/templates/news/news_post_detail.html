@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% block main_content %}
+    <div class="container news news-post-detail" style="padding-top:40px;">
+        {% if newspost.status == 0 %}<div class="draft-message">DRAFT</div>{% endif %}
+        <div class="row post-header">
+            <div class="col-12 col-xl-7">
+                <div class="post-title-block">
+                    <h1>{{ newspost.title }}</h1>
+                    <div class="author">
+                        By:
+                        {% if newspost.author %}
+                            {{ newspost.author.name }}
+                        {% else %}
+                            KinesinLMS Team
+                        {% endif %}
+                    </div>
+                    <div class="publish-date">Date: {{ newspost.published_on |date:"DATE_FORMAT" }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row news-post-content">
+            <div class="col-12 col-xl-7">
+                <div class="featured-image">
+                    {% if newspost.featured_image %}
+                        <img src="{{ newspost.featured_image.url }}"
+                             alt="{{ newspost.featured_image_alt }}" />
+                        <div class="image-credit">
+                            {% if newspost.featured_image_credit %}{{ newspost.featured_image_credit |safe }}{% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="news-post-content">{{ newspost.content |safe }}</div>
+            </div>
+
+        </div>
+    </div>
+{% endblock main_content %}

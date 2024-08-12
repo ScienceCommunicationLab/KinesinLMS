@@ -1,0 +1,21 @@
+{% load tz %}
+
+<div class="release-datetime-info" id="nav-node-{{ node.id }}-release-date-info">
+    <div class="release-datetime-label">
+        This {{ node.type | lower }} is not available yet.
+    </div>
+    <div class="release-datetime">
+
+        <div class="text-align:center">
+            <strong><i class="bi bi-calendar"></i>&nbsp;Release date:</strong>
+        </div>
+        <div>
+            {% timezone 'US/Pacific' %}
+                {{ node.release_datetime|localtime|date:"M d, Y P e" }}
+            {% endtimezone %}
+        </div>
+        <div class="text-muted">
+            {{ node.release_datetime|utc|date:"M d, Y H:i e" }}
+        </div>
+    </div>
+</div>

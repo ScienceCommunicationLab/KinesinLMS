@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_filters %}
+
+
+{% block main_content %}
+
+
+    <div class="container" style="min-height:800px; margin-top:4rem;">
+        <div class="row">
+            <div class="col">
+
+                <h2>Create a new Badge Assertion</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input type="submit" value="Save" class="btn btn-primary">
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

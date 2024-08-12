@@ -1,0 +1,87 @@
+{% load static core_tags %}
+<div class="certificate-wrapper">
+
+    <!-- Show certificate meta and actual certificate -->
+    <div class="certificate">
+
+        <div class="corner-image image-upper-left">
+            <img alt="corner decoration" src="{% static 'certificates/images/upper-left-corner.png' %}">
+        </div>
+        <div class="corner-image image-upper-right">
+            <img alt="corner decoration" src="{% static 'certificates/images/upper-right-corner.png' %}">
+        </div>
+        <div class="corner-image image-lower-left">
+            <img alt="corner decoration" src="{% static 'certificates/images/bottom-left-corner.png' %}">
+        </div>
+        <div class="corner-image image-lower-right">
+            <img alt="corner decoration" src="{% static 'certificates/images/bottom-right-corner.png' %}">
+        </div>
+
+        <div class="logo-container">
+            <img alt="Certificate icon"
+                 class="certificate-logo"
+                 src="{% static 'certificates/images/site-logo-certificate.png' %}">
+        </div>
+
+        <div class="certificate-content">
+
+            <div class="center-content">
+                <div class="student-name">
+                    {{ certificate.student_name }}
+                </div>
+                <div class="success-text">
+                    successfully completed, received a passing grade, and was awarded <br/>
+                    this {% site_name %} Certificate of Completion in
+                </div>
+                <div class="course-name">
+                    {{ certificate.course_name }}
+                </div>
+
+                <div class="date-awarded">
+                    <div class="label">
+                        Date awarded&nbsp;:&nbsp;
+                    </div>
+                    <div class="date">
+                        {{ certificate.created_at | date }}
+                    </div>
+                </div>
+
+                <div class="certificate-id">
+                    Certificate ID&nbsp;:&nbsp;
+                    {{ certificate.uuid }}
+                </div>
+
+                <div class="wrapper-signatories">
+                    <div class="list-signatories">
+
+                        {% for signatory_info in custom_certificate.signatories %}
+                            <div class="signatory">
+                                <img src="{% static 'certificates/images/' %}{{ signatory_info.signature_image }}"
+                                        {% if signatory_info.name %}
+                                     alt="{{ signatory_info.name }}"
+                                        {% endif %}>
+
+                                {% if signatory_info.name %}
+                                    <div class="signatory-name">{{ signatory_info.name }}</div>
+                                {% endif %}
+
+                                <div class="signatory-credentials">
+                                    {% if signatory_info.title %}
+                                        <div class="role">{{ signatory_info.title }}</div>
+                                    {% endif %}
+                                    {% if signatory_info.organzation %}
+                                        <div class="organization">{{ signatory_info.organzation }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

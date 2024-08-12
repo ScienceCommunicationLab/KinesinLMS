@@ -1,0 +1,60 @@
+{% extends "course/course_base_default_page.html" %}
+{% load static tz react core_tags %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'custom_app/css/peer-review-journal.css' %}"/>
+{% endblock extra_css %}
+
+
+{% block course_sub_nav %}
+    {{ block.super }}
+    <div class="course-sub-nav">
+        <div class="course-breadcrumb custom-app">
+            <div class="title">{{ custom_app.display_name }}</div>
+            <div class="description">{{ custom_app.short_description }}</div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block page_content %}
+
+    <!-- Page Content -->
+    <div class="container peer-review-journal-container">
+
+        <h1>My Research Plan</h1>
+
+        <p>THIS IS TEMPORARY TEXT. JUST ADDING SOMETHING TO FILL OUT THIS PAGE.
+            My Research Plan is a peer review journal, but only if you want it to be.
+            Certain questions you answer in the course are gathered here in one place
+            in order to give you one complete view of your research plan.</p>
+        <p>Furthermore, you can allow other classmates, or even any member of {% site_name %}
+            to offer comments on your plan. (Just use the controls at right.)</p>
+        <p>Any changes you make to answers here will also be reflected in the course itself.</p>
+
+        {% for app_item in custom_app.items.all %}
+            <h1>App Item</h1>
+            <div class="node node-assessment">
+                <div>
+                    {{ app_item.html_content | safe }}
+                </div>
+                <div class="assessment-question">
+                    {{ app_item.assessment.question | safe }}
+                </div>
+                <div class="assessment-component-holder">
+                    <!-- By definition, all assessments in Peer Review Journal should be
+                         long form text entry assessments -->
+                    Answer: {{ app_item.assessment.answers.first.answer_text }}
+                </div>
+            </div> <!-- ./node-assessment -->
+
+        {% endfor %}
+
+    </div>
+
+{% endblock page_content %}
+
+{% block unit_controls_bottom %}
+{% endblock unit_controls_bottom %}
+

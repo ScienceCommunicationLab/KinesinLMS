@@ -1,0 +1,44 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+{% block main_content %}
+
+    {{ block.super }}
+
+    <div class="container-fluid composer-content course">
+
+        <div class="row mt-4">
+            <div class="col-12 col-lg-8">
+                <div class="card">
+                    <div class="card-header">{% blocktrans %}New Educator Course Resource{% endblocktrans %}</div>
+                    <div class="card-body">
+                        <form action="{% url 'composer:educator_course_resource_create' course_id=course.id %}"
+                              enctype="multipart/form-data"
+                              method="post">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <a href="{% url 'composer:resources_list' course_id=course.id %}"
+                               type="button"
+                               class="btn btn-secondary">{% trans "Cancel" %}</a>
+                            <button type="submit" class="btn btn-primary">{% trans "Create" %}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3">
+                <p>
+                    {% blocktrans %}
+                    Create an educator resource for this course. Educators resources are files available only 
+                    to educators who have been assigned to this course as "course staff." This might include things like
+                    educator guides or special resources to be used in a live class.
+                    {% endblocktrans %}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content %}

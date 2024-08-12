@@ -1,0 +1,34 @@
+
+.course-speakers {
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+}
+
+.speaker {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.profile-pic-container {
+}
+
+.profile-pic-container img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    object-position: center top;
+
+}
+
+
+.info-name {
+    font-weight: bold;
+}
+
+.info-university {
+    font-style: italic;
+}
+
+.bio {
+    margin-top: 1rem;
+}

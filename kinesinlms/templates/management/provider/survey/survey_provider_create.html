@@ -1,0 +1,28 @@
+{% extends "management/management_base.html" %}
+
+{% load static i18n management_tags %}
+{% load crispy_forms_filters %}
+
+{% block management_content %}
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">{% trans "Create a Survey Provider" %}</div>
+                <div class="card-body">
+                    <form id="survey-provider-form"
+                          action="{% url 'management:survey_provider_create' %}"
+                          method="post">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                        {% include 'management/provider/survey/include/survey_env_status.html' %}
+                        <button id="id_save_btn" class="btn btn-primary btn-lg mr-2" type="submit">{% trans "Create" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <strong>Managing Survey Providers</strong>
+            <p>( Help content here... )</p>
+        </div>
+    </div>
+{% endblock management_content %}

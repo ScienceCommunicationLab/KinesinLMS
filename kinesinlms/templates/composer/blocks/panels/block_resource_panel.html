@@ -1,0 +1,55 @@
+{% load static i18n %}
+
+<style>
+  .resource-list-wrapper {
+    margin-top: 0.5rem;
+    min-height: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    padding: 0;
+  }
+
+  .resource-list-wrapper .table {
+    padding: 0;
+  }
+</style>
+
+<div class="card">
+
+    <div class="card-body panel-content">
+
+        <div class="d-flex flex-row justify-content-between align-items-end">
+            <div>
+                <label for="block-{{ block.id }}-resources">{% blocktrans %}Block Resources{% endblocktrans %}</label>
+            </div>
+            <div>
+                <a class="btn btn-secondary"
+                   hx-get="{% url 'composer:blocks:add_block_resource_hx' course_id=course.id pk=block.id %}"
+                   hx-target="#block-resources-modal-dialog"
+                   hx-swap="innerHTML">{% blocktrans %}Add Resource{% endblocktrans %}</a>
+            </div>
+        </div>
+
+        <div class="resource-list-wrapper">
+            {% if block.resources %}
+                {% include 'composer/blocks/block_resources_table.html' %}
+            {% else %}
+                <div style="text-align: center;">{% blocktrans %}( No resources for this block. ){% endblocktrans %}</div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="card-footer action-buttons">
+
+        <button id="btn-done-panel-{{ block.id }}-{{ current_panel_slug }}"
+                hx-get="{% url 'composer:blocks:view_course_unit_block_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id pk=block.id %}"
+                type="button"
+                class="btn btn-secondary btn-sm action-button">{% blocktrans %}Done{% endblocktrans %}</button>
+
+    </div>
+
+</div>

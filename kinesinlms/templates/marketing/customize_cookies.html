@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% load static i18n core_tags %}
+
+{% block extra_css %}
+    <style>
+      .card-body {
+        min-height: 20rem;
+      }
+    </style>
+{% endblock %}
+{% block main_content %}
+    <div class="container marketing-page kn-customize-cookies">
+        <div class="row">
+            <div class="col-12">
+                <h2>Cookies on {% site_name %}</h2>
+                <p>
+                    We use cookies on this site to help provide a useful experience.
+                    Some cookies are essential to the site experience. Others are optional
+                    and are related to the analytics we use to understand how people use the site.
+                    You can opt out of the optional cookies below.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header">Optional Cookies</div>
+                    <div class="card-body">
+                        <p>
+                            We may use third-party services to help us
+                            understand how people use our site. These services use cookies to track
+                            your activity on the site.
+                        </p>
+                        <p>
+                            For more information, read our <a href="{% url 'marketing:privacy_policy' %}">privacy
+                            policy</a>.
+                        </p>
+                        <p>You can opt in or out to these cookies using the control below :</p>
+                    </div>
+                    <div class="card-footer">
+                        {% analytics_cookie_value request as analytics_cookie %}
+                        <div id="cookie-opt-control" class="w-100">
+                            {% if analytics_cookie %}
+                                <div class="cookie-status d-flex flex-row align-items-center ">
+                                    {% if analytics_cookie == "ACCEPT" %}
+                                        <div class="w-100">You are currently opted-in to analytics cookies.</div>
+                                        <a href="{% url 'marketing:customize_cookies' %}?action=reject"
+                                           class="btn btn-sm btn-secondary">
+                                            <span style="color:#f8b8b8">Reject&nbsp;Analytics&nbsp;Cookies</span>
+                                        </a>
+                                    {% else %}
+                                        <div class="w-100">You are currently opted-out of analytics cookies.</div>
+                                        <a href="{% url 'marketing:customize_cookies' %}?action=accept"
+                                           class="btn btn-sm btn-secondary">
+                                            <span style="color:#d2fad2">Accept&nbsp;Analytics&nbsp;Cookies</span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <a href="{% url 'marketing:customize_cookies' %}?action=accept"
+                                   class="btn btn-sm btn-secondary">
+                                    <span style="color:#d2fad2">Accept&nbsp;Analytics&nbsp;Cookies</span>
+                                </a>
+                                <a href="{% url 'marketing:customize_cookies' %}?action=reject"
+                                   class="btn btn-sm btn-secondary">
+                                    <span style="color:#f8b8b8">Reject&nbsp;Analytics&nbsp;Cookies</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="card">
+                    <div class="card-header">Essential Cookies</div>
+                    <div class="card-body">
+                        <p>
+                            These cookies are essential to the site experience. At the moment,
+                            we only use a few essential cookies, mainly to remember your
+                            login status and, for each course you've taken, what was the last
+                            unit you visited (that way we can return you to the right unit when
+                            you open a course).
+                        </p>
+                        <p>
+                            <strong>Essential cookies are only set by us and only for this site.
+                                None involve third
+                            parties.</strong>
+                        </p>
+                        <p>
+                            You cannot disable these cookies, but you can delete them by clearing cookies
+                            for this site from your browser.
+                        </p>
+                    </div>
+                    <div class="card-footer text-muted">You cannot disable these cookies</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

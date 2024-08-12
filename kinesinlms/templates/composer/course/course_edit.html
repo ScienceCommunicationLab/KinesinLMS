@@ -1,0 +1,87 @@
+{% extends "composer/composer_base.html" %}
+{% load crispy_forms_tags %}
+{% load static i18n %}
+
+{% block extra_css %}
+    {{ block.super }}
+{% endblock %}
+
+{% block main_content %}
+
+    <div class="course-contents-edit-page">
+
+        {% include "composer/include/course_content_nav.html" %}
+
+        <div id="course-unit-wrapper">
+            {% comment %}
+            This spinner is controlled by HTMx
+            {% endcomment %}
+            <div id="load-unit-spinner-wrapper"
+                 class="htmx-indicator">
+                <div class="spinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="spinner-message">Loading...</div>
+                </div>
+            </div>
+
+            <div id="course-unit-contents">
+                {% if course_unit %}
+                    {% include 'composer/course/course_unit_edit.html' %}
+                {% endif %}
+            </div> 
+
+        </div> 
+
+    </div>
+
+{% endblock main_content %}
+
+{% block modal %}
+
+    {% if course_unit %}
+
+        {# ADD BLOCK MODAL  #}
+        {# ..............................................................................  #}
+
+        <div id="add-block-modal"
+             class="modal fade modal-xl add-block-modal"
+             tabindex="-1"
+             aria-labelledby="add-block-modal-label"
+             aria-hidden="true">
+            {% include "composer/course/dialogs/add_block_modal_dialog.html" %}
+        </div>
+
+        {# ADD BLOCK RESOURCES MODAL  #}
+        {# ..............................................................................  #}
+
+        <div id="block-resources-modal"
+             class="modal fade"
+             tabindex="-1">
+            <div id="block-resources-modal-dialog"
+                 class="modal-dialog">
+            </div>
+        </div>
+
+        <script>
+
+            const blockResourcesModal{{ block.id }} = new bootstrap.Modal(document.getElementById("block-resources-modal"))
+
+            htmx.on("htmx:beforeSwap", (e) => {
+                if (e.detail.target.id === "block-resources-modal-dialog") {
+                    if (!e.detail.xhr.response) {
+                        blockResourcesModal{{ block.id }}.hide();
+                    }
+                }
+            })
+            htmx.on("htmx:afterSwap", (e) => {
+                if (e.detail.target.id === "block-resources-modal-dialog") {
+                    blockResourcesModal{{ block.id }}.show();
+                }
+            })
+
+
+        </script>
+    {% endif %}
+{% endblock modal %}

@@ -1,0 +1,94 @@
+{% comment %}
+{% if milestone.message %}
+
+    <div class="alert alert-secondary">
+        <div class="mb-2">
+            {{ milestone.message|safe }}
+        </div>
+
+        {% if milestone.items %}
+            <div class="d-flex flex-row align-items-center">
+                <div class="checkbox-holder">
+                    {% if milestone.progress_achieved %}
+                        <i class="bi bi-check text-success"></i>
+                    {% endif %}
+                </div>
+                {% if milestone.count_requirement %}
+                  You completed {{ milestone.progress_count }}
+                  of {{ milestone.item_count }}
+                  {% if milestone.count_graded_only %}graded{% endif %}
+                  items.
+                {% elif milestone.min_score_requirement %}
+                  You scored {{ milestone.progress_score_achieved }}
+                  of {{ milestone.progress_score_possible }}
+                  points.
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}
+{% endcomment %}
+
+<h2 class="activity-header">{{ milestone.item_type }} Progress</h2>
+
+<table class="table table-bordered milestone-progress">
+
+    <thead>
+    <tr>
+      <th>{{ milestone.item_type }}</th>
+        <th>Required</th>
+        <th>Completed</th>
+        {% if milestone.min_score_requirement %}
+        <th>Points possible</th>
+        <th>Points achieved</th>
+        {% endif %}
+        <th>Unit</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    {% for item in milestone.items %}
+        <tr>
+            <td class="question-text">
+                {{ item.title|safe }}
+            </td>
+
+            <td>
+                {% if item.graded %}
+                    <i class="bi bi-award-fill"></i>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if item.completed %}
+                    <i class="bi bi-check  text-success"></i>
+                {% endif %}
+            </td>
+
+            {% if milestone.min_score_requirement %}
+            <td>{{ item.max_score }}</td>
+            <td>{{ item.score }}</td>
+            {% endif %}
+
+            <td>
+
+                <a href="{% url 'course:unit_page' course_slug=course.slug course_run=course.run module_slug=item.module_node_slug section_slug=item.section_node_slug unit_slug=item.unit_node_slug %}"
+                   target="_blank"
+                   class="btn btn-secondary-outline d-print-none">
+                    <i class="bi bi-box-arrow-up-right"></i>&nbsp;Unit&nbsp;{{ item.module_node_content_index|default_if_none:"0" }}.{{ item.section_node_content_index }}.{{ item.unit_node_content_index }}
+                </a>
+
+                <div class="d-none d-print-block">
+                    {{ item.module_node_content_index }}.{{ item.section_node_content_index }}.{{ item.unit_node_content_index }}
+                </div>
+
+            </td>
+        </tr>
+    {% endfor %}
+
+
+    </tbody>
+
+</table>
+

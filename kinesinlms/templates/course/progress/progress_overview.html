@@ -1,0 +1,91 @@
+{% extends "course/progress/course_progress_base.html" %}
+
+{% load static %}
+
+{% load tz %}
+
+{% block course_progress_content %}
+
+    <div class="course-progress">
+
+        {% if course_passed %}
+            <div class="row course-passed">
+                <div class="col-md-6 col-12 d-flex flex-row align-items-center justify-content-center justify-content-md-start mb-4 mb-md-0">
+                    <img alt="Badge icon"
+                         class="award-icon"
+                         src="{% static 'images/icons/medal.svg' %}" />
+                    <div class="course-passed-info">
+                        <div class="course-passed-label">You passed this course!</div>
+                        <div class="course-passed-date-label">Passed date: {{ course_passed.created_at | date }}</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 d-flex flex-row align-items-center justify-content-center justify-content-md-end mt-md-0 mt-2">
+                    <div class="d-flex flex-row">
+
+                        {% if course_awards_badges and user_badges_enabled and course_passed_badge_class %}
+                            {% comment %}
+                            User passed course and deserves a badge. If they have one, show it.
+                            If they don't, give them an option to create it.
+                            {% endcomment %}
+
+                            {% include 'badges/badge_assertion/badge_assertion_control.html' %}
+
+                        {% endif %}
+
+                        {% if course_awards_certificates and certificate_url %}
+                            <a class="btn btn-primary"
+                               style="min-width:120px"
+                               href="{{ certificate_url }}"
+                               aria-expanded="false">View Certificate</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row" style="margin-top:2rem;">
+            <div class="col-12">
+                {% if course_passed %}
+                    <h2>You reached these milestones and passed the course:</h2>
+                {% else %}
+                    <h2>You must reach these milestones to pass the course:</h2>
+                {% endif %}
+                {% if required_milestones %}
+
+                    {% include "course/progress/partial/progress_table.html" with course=course milestones=required_milestones show_badge_fields=True %}
+
+                {% else %}
+                    <div class="alert-wrapper">
+                        <div class="alert alert-light" role="alert">No milestones defined for passing this course.</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if non_required_milestones %}
+            <div class="row" style="margin-top:4rem;">
+                <div class="col-12">
+                    <h2>These aren't required, but it's great if you can achieve them!</h2>
+
+                    {% include "course/progress/partial/progress_table.html" with course=course milestones=non_required_milestones show_badge_fields=show_non_required_badge_fields %}
+
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock course_progress_content %}
+
+
+
+{% block unit_controls_bottom %}
+    <!-- no course controls -->
+{% endblock unit_controls_bottom %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script type="text/javascript"
+            async
+            src="https://platform.twitter.com/widgets.js"></script>
+{% endblock javascript %}

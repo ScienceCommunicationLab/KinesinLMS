@@ -1,0 +1,91 @@
+{% load core_tags %}
+{% load management_tags unit_extras %}
+
+{% get_static_table_dict_for_tabletool sit as static_table %}
+
+
+<div id="simple-interactive-tool-{{ sit.id }}"
+     class="block block-sit">
+
+    <div class="block-header-markers">
+        {% if sit.graded and is_read_only == False %}
+            {% include 'course/partial/marker_graded.html' %}
+        {% endif %}
+        {% if unit_block.include_in_summary %}
+            {% include 'course/partial/marker_summary.html' %}
+        {% endif %}
+    </div>
+
+    <h3>
+        <span>Table Activity {% if unit_block.read_only %}Review{% endif %}:</span>
+        {% if unit_block.label %}
+            {{ unit_block.label }}
+        {% endif %}
+
+        {% if unit_block.label and block.simple_interactive_tool.name %}
+            :
+        {% endif %}
+
+        {# If author defined a name on the SIT model use that, otherwise #}
+        {# look for a name on the Block model. #}
+        {% if block.simple_interactive_tool.name %}
+            {{ block.simple_interactive_tool.name|default_if_none:"" }}
+        {% elif block.display_name %}
+            {{ block.display_name }}
+        {% endif %}
+
+    </h3>
+
+
+    <div class="row block-embedded-content">
+        <div class="col-12 col-xl-9">
+            <div class="sit-html-content block-embedded-content">
+                {% if block.html_content %}
+                    {% if unit_block.index_label %}
+                        {{ unit_block.index_label }}.&nbsp;
+                    {% endif %}
+                    {% render_html_content block %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if is_read_only %}
+        <div class="text-muted no-print">
+            <span class="badge bg-warning">Read only</span> This table activity is not editable in
+            this unit.
+        </div>
+    {% else %}
+        {# We only show instructions if table is editable and instructions exist #}
+        {% if block.simple_interactive_tool.instructions %}
+            <h4>Instructions</h4>
+            {{ block.simple_interactive_tool.instructions | safe }}
+        {% endif %}
+    {% endif %}
+
+    <h4>Table Activity:</h4>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            {% for header_column in static_table.header_columns %}
+                <th style="min-width:100px;">
+                    {{ header_column.name| safe }}
+                </th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in static_table.rows %}
+            <tr>
+                {% for cell in row.cells %}
+                    <td>{{ cell.content| safe }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+

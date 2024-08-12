@@ -1,0 +1,44 @@
+{% load static i18n core_tags %}
+
+<header>
+
+    {% include 'includes/hx/accept_cookie_banner.html' %}
+
+    <nav id="site-top-nav"
+         class="navbar navbar-expand-xl navbar-dark bg-dark"
+            {% if current_course_tab and request.session.hide_main_nav %}
+         style="display:none;"
+            {% endif %}>
+
+        {% if current_course_tab %}
+            {% comment %}
+            Only show this option when user is viewing course.
+            {% endcomment %}
+            <a id="btnHideTopNav"
+               class="btn"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               title="Hide main navigation">
+                <i class="bi bi-caret-up-fill" style="color:#fff"></i>
+            </a>
+        {% endif %}
+
+        <a class="navbar-brand" href="{% url 'marketing:home' %}">
+            <img class="kn-courses-logo d-print-none"
+                 alt="Site logo"
+                 src="{% static 'images/logos/site-logo.png' %}"
+                 style="max-height:40px;"/>
+        </a>
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+    </nav>
+</header>

@@ -1,0 +1,116 @@
+{% load core_tags unit_extras %}
+{% load assessment_tags %}
+
+<div id="assessment_{{ block.assessment.slug }}"
+     class="block block-assessment">
+
+    {% if block.display_name and block.display_name != "" %}
+        <h2>{{ block.display_name }}</h2>
+    {% endif %}
+
+    <div class="block-html-content">
+        {% render_html_content block %}
+    </div>
+
+    {% if hide_label %}
+        {# pass #}
+    {% else %}
+        <div class="assessment-header">
+
+            {% if unit_block.read_only %}
+
+            {% else %}
+                <div class="block-header-markers">
+                    {% if block.assessment.graded %}
+                        {% include 'course/partial/marker_graded.html' %}
+                    {% endif %}
+                    {% if unit_block.include_in_summary %}
+                        {% include 'course/partial/marker_summary.html' %}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <h3 class="assessment-name">
+                <span>Assessment{% if unit_block.read_only %} (Read Only){% endif %}:</span>
+                {% get_assessment_label block course_unit %}
+            </h3>
+
+            {% if block.assessment.graded == False %}
+                <span class="text-muted">( optional )</span>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+    {% if block.assessment.question %}
+
+        <div class="assessment-question mt-2">
+
+            {% if unit_block.index_label %}
+                <div class="d-flex flex-row">
+                <div>
+                    {{ unit_block.index_label }}.&nbsp;
+                </div>
+            {% endif %}
+
+            <div class="w-100 question-text">
+                {{ block.assessment.question | safe }}
+            </div>
+
+            {% if unit_block.index_label %}
+                </div>
+            {% endif %}
+
+            {% if show_revisit_link %}
+                <div class="d-flex flex-row justify-content-end w-100">
+                    <a target="_blank"
+                       class="btn btn-link"
+                       href="/courses/{{ course.slug }}/{{ course.run }}/shortcut/assessments/{{ unit_block.slug }}">
+                        Revisit {{ block.assessment.slug }} in original unit
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+    {% endif %}
+
+
+    <div class="assessment-component-holder">
+
+        {% if block.assessment.type == "LONG_FORM_TEXT" %}
+            {% if block_view_context == "COMPOSER" %}
+                {# Don't show any answer when viewing this block in composer #}
+                <label for="block-{{ block.id }}-textarea" class="sr-only">Text entry area for this assessment</label>
+                <textarea id="block-{{ block.id }}-textarea" class="form-control" rows="5" disabled></textarea>
+            {% elif unit_block.read_only or course.has_finished %}
+                <div class="assessment-read-only-answer">
+                    <p class="text-muted"><em>
+                        {% if course.has_finished %}
+                            The course has finished.&nbsp;
+                        {% endif %}
+                        You answered:
+                    </em></p>
+                    <blockquote style="white-space: pre-wrap">
+                        {% get_assessment_readonly_answer_text unit_block request.user %}
+                    </blockquote>
+                </div>
+            {% else %}
+                {% build_submitted_answer_form block.assessment user course course_unit as long_form_text_entry_form %}
+                {% include "course/blocks/assessment/long_form_text_hx.html" with form=long_form_text_entry_form %}
+            {% endif %}
+
+        {% elif block.assessment.type == "MULTIPLE_CHOICE" and not course.has_finished %}
+            {% build_submitted_answer_form block.assessment user course course_unit as multiple_choice_form %}
+            {% include "course/blocks/assessment/multiple_choice_hx.html" with form=multiple_choice_form %}
+
+        {% elif block.assessment.type == "POLL" and not course.has_finished %}
+            {% build_submitted_answer_form block.assessment user course course_unit as multiple_choice_form %}
+            {% include "course/blocks/assessment/poll_hx.html" with form=multiple_choice_form %}
+
+        {% elif block.assessment.type == "DONE_INDICATOR" %}
+            {% build_submitted_answer_form block.assessment user course course_unit as done_indicator_form %}
+            {% include "course/blocks/assessment/done_indicator_hx.html" with form=done_indicator_form %}
+
+        {% endif %}
+    </div>
+</div>

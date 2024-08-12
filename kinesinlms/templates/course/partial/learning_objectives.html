@@ -1,0 +1,22 @@
+{% comment %}
+Learning objectives content
+{% endcomment %}
+{% if learning_objectives %}
+    <div class="collapse" id="collapse-learning-objectives">
+        <div class="block block-callout learning-objectives-content">
+            <div class="icon-block">
+                <div class="icon-image"></div>
+            </div>
+            <div class="callout-text">
+                <h3 class="mt-3">Learning objectives for this unit:</h3>
+                <ul>
+                    {% for learning_objective in learning_objectives %}
+                        <li>
+                            {{ learning_objective.description|safe }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,56 @@
+{% load static marketing_tags %}
+
+{% home_page_testimonials as testimonials %}
+{% if testimonials %}
+    <div class="feature-row kn-testimonials">
+        <div class="feature-container">
+            <div class="col-graphic">
+                <div id="testimonial-carousel" class="carousel slide" data-bs-ride="true">
+                    <div class="carousel-indicators">
+                        {% for testimonial in testimonials %}
+                            <button type="button"
+                                    {% if forloop.counter0 == 0 %}class="active" aria-current="true"{% endif %}
+                                    data-bs-target="#testimonial-carousel"
+                                    data-bs-slide-to="{{ forloop.counter0 }}"
+                                    aria-label="Testimonial {{ forloop.counter }}"></button>
+                        {% endfor %}
+                    </div>
+                    <div class="carousel-inner">
+                        {% for testimonial in testimonials %}
+                            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                                <div class="testimonial-wrapper">
+                                    <p class="testimonial">{{ testimonial.quote }}</p>
+                                    <p class="testimonial-source">{{ testimonial.name }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev"
+                       href="#testimonial-carousel"
+                       role="button"
+                       data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next"
+                       href="#testimonial-carousel"
+                       role="button"
+                       data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-content">
+                <h2>Rave Reviews</h2>
+                <p>Users tell us they enjoy and benefit from our courses. Here are a few testimonials.</p>
+                <p>
+                    <a class="btn btn-secondary" href="{% url 'marketing:testimonials' %}">Read more testimonials
+                    >></a>
+                </p>
+            </div>
+        </div>
+        <!-- ./feature-container-->
+    </div>
+    <!-- ./feature-row-->
+{% endif %}

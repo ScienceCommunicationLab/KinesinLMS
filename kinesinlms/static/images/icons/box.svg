@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="49px" height="56px" viewBox="0 0 49 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>Untitled</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="83.0016786%" y1="15.9912417%" x2="-8.12379354%" y2="109.905737%" id="linearGradient-1">
+            <stop stop-color="#DDBA83" offset="0%"></stop>
+            <stop stop-color="#FFE9C6" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="45.111864%" y1="59.8576249%" x2="67.241541%" y2="15.2904972%" id="linearGradient-2">
+            <stop stop-color="#DDBA83" offset="0%"></stop>
+            <stop stop-color="#E0BF89" offset="4.72%"></stop>
+            <stop stop-color="#EED1A4" offset="27.45%"></stop>
+            <stop stop-color="#F7DEB7" offset="50.7%"></stop>
+            <stop stop-color="#FDE6C2" offset="74.57%"></stop>
+            <stop stop-color="#FFE9C6" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="22.6632033%" y1="117.200154%" x2="69.0791897%" y2="2.90647966%" id="linearGradient-3">
+            <stop stop-color="#DDBA83" offset="0%"></stop>
+            <stop stop-color="#E0BF89" offset="4.72%"></stop>
+            <stop stop-color="#EED1A4" offset="27.45%"></stop>
+            <stop stop-color="#F7DEB7" offset="50.7%"></stop>
+            <stop stop-color="#FDE6C2" offset="74.57%"></stop>
+            <stop stop-color="#FFE9C6" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="61.9051901%" y1="55.880724%" x2="-6.61099692%" y2="22.0376323%" id="linearGradient-4">
+            <stop stop-color="#DDBA83" offset="0%"></stop>
+            <stop stop-color="#B09361" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="if_Added_shipment_2414195" fill-rule="nonzero">
+            <g id="sugar_18_" transform="translate(1.000000, 1.000000)">
+                <polygon id="Shape" fill="url(#linearGradient-1)" points="23.583 27.097 23.83 54.037 0 40.547 0 13.625 0 13.618"></polygon>
+                <polygon id="Shape" fill="url(#linearGradient-2)" points="23.58 27.091 35.572 20.159 46.932 13.593 23.495 0.12 13.737 5.729 0 13.625"></polygon>
+            </g>
+            <polygon id="Shape" fill="url(#linearGradient-3)" points="24.58 28.091 37.381 20.692 13.791 7.272 1 14.625"></polygon>
+            <path d="M37.068,21.372 C36.982,21.372 36.895,21.35 36.816,21.304 L13.538,7.704 C13.3,7.565 13.22,7.259 13.359,7.02 C13.498,6.782 13.804,6.702 14.043,6.841 L37.32,20.441 C37.558,20.58 37.639,20.886 37.5,21.125 C37.407,21.283 37.24,21.372 37.068,21.372 Z" id="Shape" fill="#D6BF98"></path>
+            <polyline id="Shape" fill="url(#linearGradient-4)" points="24.58 28.091 47.932 14.593 47.917 41.571 24.58 55.037 24.583 28.097"></polyline>
+            <g id="sugar_13_" fill="#8F7448">
+                <path d="M24.581,55.613 L0.484,41.837 L0.5,14.335 L24.495,0.543 L48.432,14.303 L48.417,41.86 L48.167,42.004 L24.581,55.613 Z M1.484,41.257 L24.578,54.461 L47.416,41.282 L47.431,14.882 L24.495,1.697 L1.5,14.914 L1.484,41.257 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

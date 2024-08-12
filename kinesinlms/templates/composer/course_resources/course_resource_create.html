@@ -1,0 +1,46 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% load crispy_forms_filters %}
+
+{% block extra_css %}
+
+{% endblock extra_css %}
+
+{% block main_content %}
+
+    {{ block.super }}
+
+    <div class="container-fluid composer-content course">
+        <div class="row mt-4" style="margin-bottom:300px;">
+            <div class="col-12 col-lg-8">
+                <div class="card">
+                    <div class="card-header">{% trans "New Course Resource" %}</div>
+                    <div class="card-body">
+                        <form action="{% url 'composer:course_resource_create' course_id=course.id %}"
+                              enctype="multipart/form-data"
+                              method="post">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <a href="{% url 'composer:resources_list' course_id=course.id %}"
+                               type="button"
+                               class="btn btn-secondary">{% trans "Cancel" %}</a>
+                            <button type="submit" class="btn btn-primary">{% trans "Create" %}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-3">
+                {% blocktrans %}
+                Create a course resource for this course. Course resources are
+                files available for download from the 'home' tab in a course. Usually
+                these are files that are applicable to the entire course, not just one unit.
+                {% endblocktrans %}
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content %}

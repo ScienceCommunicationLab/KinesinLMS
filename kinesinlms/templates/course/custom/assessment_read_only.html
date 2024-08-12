@@ -1,0 +1,22 @@
+<div class="assessment-read-only">
+  <h5>
+    Assessment: {{ assessment_data.slug }}
+  </h5>
+
+  <div class="assessment-question">
+    <span class="question-text">{{ assessment_data.question | safe }}</span>
+  </div>
+
+  <p class="your-answer-label">Your answer:</p>
+  <div class="answer-read-only">
+      {% if assessment_data.answer_text %}
+          {{ assessment_data.answer_text }}
+      {% else %}
+        ( No answer yet ...)
+      {% endif %}
+  </div>
+</div>
+{% comment %}
+Figure out how to link back to original node in course. Then add here:
+ <a href="#">( Revisit {{ block.display_name }}  )</a>
+{% endcomment %}

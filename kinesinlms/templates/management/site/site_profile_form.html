@@ -1,0 +1,36 @@
+{% extends "management/management_base.html" %}
+
+{% load static i18n %}
+
+{% load crispy_forms_filters %}
+
+{% block management_content %}
+
+    <div class="row">
+        <div class="col-lg-6 col-12">
+
+            <form action="{% url 'management:site_profile' %}" method="post">
+                <div class="card ms-auto">
+                    <div class="card-header">Edit Site Profile</div>
+
+                    <div class="card-body">
+
+                        <p>Use this form to manage the top-level settings for this site.</p>
+
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="action-buttons">
+                            <button class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+{% endblock management_content %}

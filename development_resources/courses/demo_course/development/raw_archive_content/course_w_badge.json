@@ -1,0 +1,1283 @@
+{
+    "document_type": "kinesinlms:course_export",
+    "metadata": {
+        "exporter_version": "1.0.0",
+        "export_date": "2024-03-11T06:30:01.585408+00:00"
+    },
+    "course": {
+        "slug": "DEMO",
+        "run": "SP",
+        "display_name": "Demo Course",
+        "short_name": "Demo Course",
+        "start_date": "2021-01-11T08:00:00Z",
+        "end_date": null,
+        "advertised_start_date": "Anytime, self-paced",
+        "enrollment_start_date": "2021-01-04T08:00:00Z",
+        "enrollment_end_date": null,
+        "admin_only_enrollment": false,
+        "self_paced": true,
+        "enable_course_outline": true,
+        "days_early_for_beta": 120,
+        "enable_certificates": true,
+        "token": "DEMO_SP",
+        "custom_apps": [],
+        "catalog_description": {
+            "title": "Demo Course",
+            "blurb": "A quick introduction to this e-learning platform.",
+            "overview": "This course gives you a quick introduction to this e-learning platform. We'll brief you on how to take a course, use the navigation and interact in the forum.",
+            "about_content": "",
+            "sidebar_content": "",
+            "thumbnail": "demo_sp_thumbnail.png",
+            "visible": true,
+            "hex_theme_color": "777777",
+            "hex_title_color": "000000",
+            "custom_stylesheet": null,
+            "trailer_video_url": null,
+            "syllabus_url": null,
+            "effort": "1 hour total",
+            "duration": "",
+            "audience": null,
+            "features": null,
+            "order": 5
+        },
+        "course_root_node": {
+            "slug": "DEMO_SP",
+            "display_name": "DEMO_SP",
+            "type": "ROOT",
+            "purpose": null,
+            "node_url": "/courses/DEMO/SP/content/",
+            "release_datetime": null,
+            "content_index": 0,
+            "display_sequence": 0,
+            "unit": null,
+            "children": [
+                {
+                    "slug": "getting-started",
+                    "display_name": "Getting Started",
+                    "type": "MODULE",
+                    "purpose": null,
+                    "node_url": "/courses/DEMO/SP/content/getting-started/",
+                    "release_datetime": null,
+                    "content_index": 1,
+                    "display_sequence": 1,
+                    "unit": null,
+                    "children": [
+                        {
+                            "slug": "introduction",
+                            "display_name": "Introduction",
+                            "type": "SECTION",
+                            "purpose": null,
+                            "node_url": "/courses/DEMO/SP/content/getting-started/introduction/",
+                            "release_datetime": null,
+                            "content_index": 1,
+                            "display_sequence": 1,
+                            "unit": null,
+                            "children": [
+                                {
+                                    "slug": "welcome-to-the-demo-course",
+                                    "display_name": "Welcome to the Demo Course",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/introduction/welcome-to-the-demo-course/",
+                                    "release_datetime": null,
+                                    "content_index": 1,
+                                    "display_sequence": 1,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "53a8b123-25ad-4f37-8616-36b5534e08e1",
+                                        "slug": "welcome-to-the-demo-course",
+                                        "display_name": "Welcome to the Demo Course",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": null,
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "b64feda7-1ad4-4424-ad9c-fbc760202845",
+                                                    "uuid": "b90c9923-818e-45a6-952e-d754a21a4d1f",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<img class=\"img img-fluid mb-3\" src=\"{% block_resource_url 'dont-worry-only-demo.png' %}\"><p>We're going to introduce you to the basics of taking a course on this e-learning platform. But don't worry, there's no pressure and it won't take lots of time. We'll give you just enough info so you can start one of our real courses. The whole demo course will probably take about thirty minutes, tops.</p>\r\n<p>We built this platform from the ground up to provide you with a simple, clean and effective learning environment.</p>\r\n<p><span style=\"font-size: 1em;\">Even though this course is a demo, you should still try to finish this it, because if you do you'll get a very fancy, very printable certificate of achievement. Who doesn't like certificates of achievement? </span></p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": [
+                                                        {
+                                                            "type": "IMAGE",
+                                                            "uuid": "407ba6ee-ee98-425e-8f07-dff315ab3f6b",
+                                                            "file_name": "dont-worry-only-demo.png"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "slug": "getting-around",
+                            "display_name": "Getting Around",
+                            "type": "SECTION",
+                            "purpose": null,
+                            "node_url": "/courses/DEMO/SP/content/getting-started/getting-around/",
+                            "release_datetime": null,
+                            "content_index": 2,
+                            "display_sequence": 2,
+                            "unit": null,
+                            "children": [
+                                {
+                                    "slug": "site-navigation",
+                                    "display_name": "Site Navigation",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/getting-around/site-navigation/",
+                                    "release_datetime": null,
+                                    "content_index": 1,
+                                    "display_sequence": 1,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "abf1f59e-1704-4bf0-bfe5-0879f948c180",
+                                        "slug": "site-navigation",
+                                        "display_name": "Site Navigation",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": null,
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "27223a64-a361-46db-a300-4e84350d4551",
+                                                    "uuid": "6d494028-b2c6-4d27-bba4-465d280613dc",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p><img alt=\"Generic diagram of confusing website navigation.\" class=\"img img-fluid \" src=\"{% block_resource_url 'nav-illo.png' %}\"/></p>\r\n<p>\"Oh great,\" you say. \"One more website navigation system to figure out.\" But don't worry, we've tried to keep our navigation system as simple as possible.</p>\r\n<h3>Two Navigation Bars</h3>\r\n<p>There are two different navigation areas you should know about. Once you've got a handle on those, you should be able to navigate between top-level areas on this site as well access content and features specific to a course you might be viewing.</p>\r\n<p>This a diagram showing you where the two main navigation bars appear on the KinesinLMS website:</p>\r\n<p><img alt=\"Image describing location of two navigation bars.\" src=\"{% block_resource_url 'demo-course-ui-diagram.png' %}\"  class=\"img-thumbnail img-fluid \" /></p>\r\n<ol>\r\n<li><b>Top navigation bar</b>: This nav bar helps you get around all of KinesinLMS..</li>\r\n<li><b>Courses navigation bar</b>: You will only see this navigation bar once you've enrolled in and started a course. It provides access to features within that course.</li>\r\n</ol>\r\n<p></p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": [
+                                                        {
+                                                            "type": "IMAGE",
+                                                            "uuid": "bef767bb-bc92-4d7a-a240-864ac8b92c1f",
+                                                            "file_name": "nav-illo.png"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                },
+                                {
+                                    "slug": "enrolling-in-a-course",
+                                    "display_name": "Enrolling in a Course",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/getting-around/enrolling-in-a-course/",
+                                    "release_datetime": null,
+                                    "content_index": 2,
+                                    "display_sequence": 2,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "69ac2e34-ef16-4feb-8ea3-70d34679f9bc",
+                                        "slug": "enrolling-in-a-course",
+                                        "display_name": "Enrolling in a Course",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": null,
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "caf46f90-31da-4461-a321-2caa93a2358e",
+                                                    "uuid": "9d3d3bd0-d5aa-4804-94b6-37af2f01893c",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p>When you visit this site, you'll immediately see a list of courses we're offering at the moment. They're listed in the front page just beneath the marketing image.</p>\r\n<p>Each course is listed in its own card:</p>\r\n<p><img alt='An image showing the parts of a course \"card\" in the catalog.' src=\"{% block_resource_url 'course-card-details.png' %}\" class=\"img-thumbnail img-fluid\"/></p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": [
+                                                        {
+                                                            "type": "IMAGE",
+                                                            "uuid": "407ba6ee-ee98-425e-8f07-dff315ab3f63",
+                                                            "file_name": "course-card-details.png"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                },
+                                {
+                                    "slug": "course-navigation",
+                                    "display_name": "Course Navigation",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/getting-around/course-navigation/",
+                                    "release_datetime": null,
+                                    "content_index": 3,
+                                    "display_sequence": 3,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "47f9c4ea-6f65-4c62-854d-5e5ca75bcdc2",
+                                        "slug": "course-navigation",
+                                        "display_name": "Course Navigation",
+                                        "short_description": "",
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": "",
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 1,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "85efb80f-c2b6-4b12-92b7-ad44524a1bf6",
+                                                    "uuid": "454017c4-dbd0-4346-9963-5f307d9a07e4",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p>In a course, you step through \"units\" of content, where a unit is a single page of content. A unit can include text, videos, assessments and so on.</p>\n<p>Units are grouped into sections and sections grouped into modules. You click the \"Course\" tab in the course navigation bar to start viewing this content. If you've viewed this course before, you'll be placed in the last unit you viewed. Otherwise you'll start at the first unit in the course.</p>\n<p>You can now step through each unit with the forward and backward arrows on the right side of the screen.</p>\n<p><img class=\"img-thumbnail img-fluid \" src=\"{% block_resource_url 'demo-course-content-navigation.png' %}\" alt=\"Illustration of course content navigation buttons.\" /></p>\n<p>Meanwhile, you have two options if you want to see a summary of the course contents:</p>\n<ul>\n<li><strong>Course contents nav button:</strong> clicking this button shows a slide-out navigation bar on the left side of the screen with a list of all modules, sections and units in the course.</li>\n<li><strong>Course contents \"quick nav\" button</strong>: clicking this button to show the course in a navigable grid.</li>\n</ul>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": [
+                                                        {
+                                                            "type": "IMAGE",
+                                                            "uuid": "407ba6ee-ee98-425e-8f07-dff315ab3f6c",
+                                                            "file_name": "demo-course-content-navigation.png"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "slug": "interacting-with-content",
+                            "display_name": "Interacting with Content",
+                            "type": "SECTION",
+                            "purpose": null,
+                            "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-content/",
+                            "release_datetime": null,
+                            "content_index": 3,
+                            "display_sequence": 3,
+                            "unit": null,
+                            "children": [
+                                {
+                                    "slug": "interacting-with-video",
+                                    "display_name": "Interacting with Video",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-content/interacting-with-video/",
+                                    "release_datetime": null,
+                                    "content_index": 1,
+                                    "display_sequence": 1,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "e4c1cf5e-6251-499b-b3b1-54a36687d562",
+                                        "slug": "interacting-with-video",
+                                        "display_name": "Interacting with Video",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": null,
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "9bbedbae-1040-420d-b6f4-10fed43667bd",
+                                                    "uuid": "07141100-6e51-4670-9a33-52a1596705ee",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p>KinesinLMS uses the YouTube video player for displaying videos. Here's a quick recap of the controls for a desktop browser (if you're using a mobile browser the user interface might look slightly different).</p>\n<p><img class=\"img-thumbnail img-fluid\" src=\"{% block_resource_url 'video-controls.png' %}\"/></p>\n<h3>Example Video</h3>\n<p>Here's a live example of the video player. It's a video from iBiology about the Amazonian rainforest. Feel free to experiment with video controls.</p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": [
+                                                        {
+                                                            "type": "IMAGE",
+                                                            "uuid": "9397bec6-8ecb-4768-b122-896a928e3c93",
+                                                            "file_name": "video-controls.png"
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 1,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "VIDEO",
+                                                    "slug": "cddd79bf-a380-4986-b520-130750ecb7ea",
+                                                    "uuid": "39c65814-d1d9-4827-a0e4-a41e9078c2d3",
+                                                    "display_name": "",
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": null,
+                                                    "json_content": {
+                                                        "header": "",
+                                                        "video_id": "eA1XcORWmpU"
+                                                    },
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                },
+                                {
+                                    "slug": "entering-text",
+                                    "display_name": "Entering Text",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-content/entering-text/",
+                                    "release_datetime": null,
+                                    "content_index": 2,
+                                    "display_sequence": 2,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "8868d4b7-c06e-4fbb-ba90-fa5a5b6b52e0",
+                                        "slug": "entering-text",
+                                        "display_name": "Entering Text",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": null,
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "9031d3e8-9586-405f-8a78-da2ca7e3571c",
+                                                    "uuid": "308da844-ee49-4a27-911e-b088a0075d2c",
+                                                    "display_name": null,
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p><p>Below you'll find an example of a simple text entry assessment. This kind of assessement allows the student to enter simple text. Go ahead and type something and submit it. When you hit <strong>Submit</strong> you'll see a small green check, meaning your answer has been saved.</p>\n<p>If you want to go back and change your response, you can. Just start typing in the text area and you'll see the <strong>Submit</strong> button become enabled. When you're finished making changes, just click the <strong>Submit</strong> button again to save your changes.</p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            },
+                                            {
+                                                "label": "",
+                                                "index_label": null,
+                                                "block_order": 1,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "ASSESSMENT",
+                                                    "slug": "c46562e9-e0c8-4770-ac1c-cea22d1a1622",
+                                                    "uuid": "86eef4e7-b4a1-407b-b221-0153cc3ccc96",
+                                                    "display_name": "Example Long-form Question",
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": null,
+                                                    "json_content": null,
+                                                    "assessment": {
+                                                        "type": "LONG_FORM_TEXT",
+                                                        "slug": "example-long-form-question",
+                                                        "question": "What kinds of courses would you like to see on KinesinLMS?",
+                                                        "question_as_statement": null,
+                                                        "definition_json": {},
+                                                        "solution_json": null,
+                                                        "explanation": null,
+                                                        "show_answer": false,
+                                                        "show_slug": false,
+                                                        "attempts_allowed": null,
+                                                        "has_correct_answer": false,
+                                                        "complete_mode": "ALWAYS_ENABLED",
+                                                        "graded": true
+                                                    },
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                },
+                                {
+                                    "slug": "entering-multiple-choice",
+                                    "display_name": "Entering Multiple Choice",
+                                    "type": "UNIT",
+                                    "purpose": "DEFAULT",
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-content/entering-multiple-choice/",
+                                    "release_datetime": null,
+                                    "content_index": 3,
+                                    "display_sequence": 3,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "1e12503c-c370-4914-90f2-ac89a25cb92f",
+                                        "slug": "entering-multiple-choice",
+                                        "display_name": "Entering Multiple Choice",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": "",
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "bad8a0df-e2b8-406e-b3e0-952264df7e4b",
+                                                    "uuid": "bad8a0df-e2b8-406e-b3e0-952264df7e4b",
+                                                    "display_name": null,
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "When taking a course, you'll often encounter assessments that test your knowledge with simple multiple choice questions. \n\nAn example of one is below. Give it a try.",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            },
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 1,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "ASSESSMENT",
+                                                    "slug": null,
+                                                    "uuid": "35d770be-b7ad-43ef-826a-53c9e76958fc",
+                                                    "display_name": null,
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": null,
+                                                    "json_content": null,
+                                                    "assessment": {
+                                                        "type": "MULTIPLE_CHOICE",
+                                                        "slug": "assessment_id_49b0837a-cb6f-11ee-b10d-787b8ad58057",
+                                                        "question": "Which scientist coined the term “cells” from microscopic observations of slices of cork?",
+                                                        "question_as_statement": null,
+                                                        "definition_json": {
+                                                            "choices": [
+                                                                {
+                                                                    "text": "Walther Flemming",
+                                                                    "choice_key": "A"
+                                                                },
+                                                                {
+                                                                    "text": "Robert Hooke",
+                                                                    "choice_key": "B"
+                                                                },
+                                                                {
+                                                                    "text": "Isaac Newton",
+                                                                    "choice_key": "C"
+                                                                },
+                                                                {
+                                                                    "text": "Antonie van Leeuvenhoek",
+                                                                    "choice_key": "D"
+                                                                }
+                                                            ]
+                                                        },
+                                                        "solution_json": {
+                                                            "join": "AND",
+                                                            "correct_choice_keys": [
+                                                                "B"
+                                                            ]
+                                                        },
+                                                        "explanation": null,
+                                                        "show_answer": true,
+                                                        "show_slug": true,
+                                                        "attempts_allowed": null,
+                                                        "has_correct_answer": false,
+                                                        "complete_mode": "DISABLED_ON_COMPLETE",
+                                                        "graded": true
+                                                    },
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                },
+                                {
+                                    "slug": "interactive-tables",
+                                    "display_name": "Interactive Tables",
+                                    "type": "UNIT",
+                                    "purpose": "DEFAULT",
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-content/interactive-tables/",
+                                    "release_datetime": null,
+                                    "content_index": 4,
+                                    "display_sequence": 4,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "ee8deb77-8763-430b-ac33-3669b4cb8540",
+                                        "slug": "interactive-tables",
+                                        "display_name": "Interactive Tables",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": "",
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "6d55f98f-0d28-4e30-bc80-e0b06a43bd7b",
+                                                    "uuid": "6d55f98f-0d28-4e30-bc80-e0b06a43bd7b",
+                                                    "display_name": null,
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "Another type of assessment you might encounter is an \"interactive table.\" In this type of assessment, you'll be asked to fill out a table with information, which might include adding new rows for additional information.\n\nAn example of an interactive table is shown below.",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            },
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 1,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "SIMPLE_INTERACTIVE_TOOL",
+                                                    "slug": null,
+                                                    "uuid": "e6e1fe38-ce24-4167-88c8-21350c94c7f8",
+                                                    "display_name": null,
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": null,
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": {
+                                                        "slug": "example-interactive-table",
+                                                        "name": "Example Interactive Table",
+                                                        "tool_type": "TABLETOOL",
+                                                        "instructions": "Create a list of your favorite restaurants and their best dishes.",
+                                                        "graded": true,
+                                                        "definition": {
+                                                            "default_rows": [],
+                                                            "allow_add_row": true,
+                                                            "allow_remove_row": true,
+                                                            "column_definitions": [
+                                                                {
+                                                                    "header": "Restaurant Name",
+                                                                    "column_id": "name",
+                                                                    "default_cell_type": "USER_ENTRY"
+                                                                },
+                                                                {
+                                                                    "header": "Best dish",
+                                                                    "column_id": "best_dish",
+                                                                    "default_cell_type": "USER_ENTRY"
+                                                                },
+                                                                {
+                                                                    "header": "Comments",
+                                                                    "column_id": "comments",
+                                                                    "default_cell_type": "USER_ENTRY"
+                                                                }
+                                                            ],
+                                                            "initial_empty_rows": 3
+                                                        },
+                                                        "template": null
+                                                    },
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                },
+                                {
+                                    "slug": "interactive-diagrams",
+                                    "display_name": "Interactive Diagrams",
+                                    "type": "UNIT",
+                                    "purpose": "DEFAULT",
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-content/interactive-diagrams/",
+                                    "release_datetime": null,
+                                    "content_index": 5,
+                                    "display_sequence": 5,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "103c4a3d-5be0-4187-9725-283ffa9375b9",
+                                        "slug": "interactive-diagrams",
+                                        "display_name": "Interactive Diagrams",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": "",
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "1a65740f-c192-48ae-b34a-d7724acfd8be",
+                                                    "uuid": "1a65740f-c192-48ae-b34a-d7724acfd8be",
+                                                    "display_name": null,
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "Another assessment interaction you'll encounter is a \"diagram\" assessment, where you're asked to create a diagram explaining a concept or expressing an idea in a visual way.\n\nShown below is a simple form of this \"Interactive Diagram\" assessment. Try dragging out some shapes and connecting them. It's easy!",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            },
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 1,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "SIMPLE_INTERACTIVE_TOOL",
+                                                    "slug": null,
+                                                    "uuid": "746c1df2-0b19-4347-bb24-4e253d80e803",
+                                                    "display_name": null,
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": null,
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": {
+                                                        "slug": "example-interactive-diagram",
+                                                        "name": "Interactive Diagram",
+                                                        "tool_type": "DIAGRAM",
+                                                        "instructions": "Try dragging out a couple shapes and connecting them.",
+                                                        "graded": true,
+                                                        "definition": {
+                                                            "tray_nodes_type": "GENERIC",
+                                                            "tray_instructions": "Drag and drop the nodes to create a workflow",
+                                                            "open_mentor_type_popup_after_add": false
+                                                        },
+                                                        "template": null
+                                                    },
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                },
+                                {
+                                    "slug": "task-completion",
+                                    "display_name": "Task Completion",
+                                    "type": "UNIT",
+                                    "purpose": "DEFAULT",
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-content/task-completion/",
+                                    "release_datetime": null,
+                                    "content_index": 6,
+                                    "display_sequence": 6,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "afa570a4-3202-49db-80f7-1b229381634b",
+                                        "slug": "task-completion",
+                                        "display_name": "Task Completion",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": "",
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "b0ec361a-4087-4bb5-a2ff-c010f57631a6",
+                                                    "uuid": "b0ec361a-4087-4bb5-a2ff-c010f57631a6",
+                                                    "display_name": null,
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "At certain times you'll be asked to complete a task outside the course platform, and then indicate you've done it. \n\nBelow is an example of a \"Done\" indicator that allows you to mark that you've completed a task. Go ahead and click it.",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            },
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 1,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "ASSESSMENT",
+                                                    "slug": null,
+                                                    "uuid": "f228bec1-0c18-44a2-acae-238b266e859d",
+                                                    "display_name": null,
+                                                    "short_description": null,
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": null,
+                                                    "json_content": null,
+                                                    "assessment": {
+                                                        "type": "DONE_INDICATOR",
+                                                        "slug": "assessment_id_c8ace1be-cb74-11ee-b10d-787b8ad58057",
+                                                        "question": "Click the checkbox to indicate you've completed the task.",
+                                                        "question_as_statement": null,
+                                                        "definition_json": {
+                                                            "done_indicator_label": "I have completed this assessment."
+                                                        },
+                                                        "solution_json": null,
+                                                        "explanation": null,
+                                                        "show_answer": true,
+                                                        "show_slug": true,
+                                                        "attempts_allowed": null,
+                                                        "has_correct_answer": false,
+                                                        "complete_mode": "DISABLED_ON_COMPLETE",
+                                                        "graded": true
+                                                    },
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "slug": "interacting-with-the-discussion-forum",
+                            "display_name": "Interacting with the Discussion Forum",
+                            "type": "SECTION",
+                            "purpose": null,
+                            "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-the-discussion-forum/",
+                            "release_datetime": null,
+                            "content_index": 4,
+                            "display_sequence": 4,
+                            "unit": null,
+                            "children": [
+                                {
+                                    "slug": "discussion-topics",
+                                    "display_name": "Discussion Topics",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-the-discussion-forum/discussion-topics/",
+                                    "release_datetime": null,
+                                    "content_index": 1,
+                                    "display_sequence": 1,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "9fc00437-a027-4fef-b242-0e804cc837e4",
+                                        "slug": "discussion-topics",
+                                        "display_name": "Discussion Topics",
+                                        "short_description": "",
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": "",
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 1,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "64b6c43f-6b94-4c86-a5b4-2f3f95e84fb8",
+                                                    "uuid": "77936c22-da00-4ac0-bc2c-2e9dce20152f",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<h3>When It's Time to Discuss...</h3>\r\n\r\n<p>When it's time to discuss various topics in a course with your fellow students, you'll use the discussion forum. The discussion forum gives you a way to post questions or comments under a topic or respond to another student's post.</p>\r\n\r\n<p>KinesinLMS uses the powerful forum software created by <a href=\"https://discourse.org/\" target=\"_blank\">Discourse</a> to power our discussion forum. Discourse provides a <a href=\"https://meta.discourse.org/t/discourse-new-user-guide/96331\" target=\"_blank\">new user guide</a> for people using their forum, but our own instructions here should be enough to get you going. ( You can always check the Discourse new user guide to get more details on a forum feature. )</p>\r\n\r\n<h2>Inline Discussion Prompt</h2>\r\n\r\n<p>Individual discussion topics are embedded directly in the course content (see image below). You can review the current posts in this topic directly in the unit. If you're ready to contribute, you simply click the \"Join the discussion\" button to jump to the topic in the forum where you can add your own thoughts. A new browser window will open the discussion forum, set to the current topic. Watch the video above for a few tips on the user interface you'll use in the discussion forum</p>\r\n\r\n<p>You can also use the \"Forum Topics\" tab in the Course navigation bar to get a list of links to each discussion topic available in the course. Clicking a link will take you to that topic in the forum.</p>\r\n\r\n<img style=\"margin: 2rem 0\" class=\"img img-thumbnail\" src=\"{% block_resource_url 'discussion-prompt.png'%}\" alt=\"Graphic demonstrating how a student can click the 'join the discussion' button to open this particular topic in the forum in a new browser tab.\"/>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": [
+                                                        {
+                                                            "type": "IMAGE",
+                                                            "uuid": "bef767bb-bc92-4d7a-a240-864ac8b92c11",
+                                                            "file_name": "discussion-prompt.png"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                },
+                                {
+                                    "slug": "discussion-topic-practice",
+                                    "display_name": "Discussion Topic Practice",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/getting-started/interacting-with-the-discussion-forum/discussion-topic-practice/",
+                                    "release_datetime": null,
+                                    "content_index": 2,
+                                    "display_sequence": 2,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "455c82dd-2f23-4baa-a378-c37b1f9294ac",
+                                        "slug": "discussion-topic-practice",
+                                        "display_name": "Discussion Topic Practice",
+                                        "short_description": "",
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": "",
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "2d373ad3-da6e-44af-bcd0-855e6b2ea928",
+                                                    "uuid": "d52bd535-aba9-45ff-a6ef-bf54725475f8",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p>Now that you know how the discussion prompts work, take a moment to review the current responses to the \"e-Learning Course Experience\" topic shown in the discussion prompt widget below. (Note that the discussion prompt widget allows you to scroll through the current responses without having to opening the forum.)</p>\r\n\r\n<p>Then, click the \"Join the discussion\" button to contribute your own thoughts to the discussion in the forum!</p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            },
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 1,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "FORUM_TOPIC",
+                                                    "slug": "2ad8ce06-c1b1-409f-a45d-cc92e61aa7e5",
+                                                    "uuid": "ba9ba7ea-2f2c-460c-babc-bfcfee9cba33",
+                                                    "display_name": "Discuss : e-Learning Course Experience",
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p>Have you taken an online course before? If so, what was your experience?</p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "slug": "finishing-up",
+                    "display_name": "Finishing Up",
+                    "type": "MODULE",
+                    "purpose": null,
+                    "node_url": "/courses/DEMO/SP/content/finishing-up/",
+                    "release_datetime": null,
+                    "content_index": 2,
+                    "display_sequence": 2,
+                    "unit": null,
+                    "children": [
+                        {
+                            "slug": "checking-progress",
+                            "display_name": "Checking Progress",
+                            "type": "SECTION",
+                            "purpose": null,
+                            "node_url": "/courses/DEMO/SP/content/finishing-up/checking-progress/",
+                            "release_datetime": null,
+                            "content_index": 1,
+                            "display_sequence": 1,
+                            "unit": null,
+                            "children": [
+                                {
+                                    "slug": "your-progress",
+                                    "display_name": "Your Progress",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/finishing-up/checking-progress/your-progress/",
+                                    "release_datetime": null,
+                                    "content_index": 1,
+                                    "display_sequence": 1,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "2cdf4c66-1ff4-4bcb-9fed-3f0e90ec0ca2",
+                                        "slug": "your-progress",
+                                        "display_name": "Your Progress",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": null,
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "23c4a7ec-77a0-491e-8b7c-b6795479e637",
+                                                    "uuid": "f8a58f9f-0c3a-42b4-98a2-fa95b2ee9009",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p>As you go along in a course, you'll be asked to complete tasks, write short entries, and perhaps even answer some assessment questions. Depending on the course, completing some or all of those tasks may be required in order to receive a certificate.</p>\r\n<p>To view your current progress towards completion, you can click the the <strong>Progress</strong> tab in the course navigation bar. This page will show all tasks required and your progress towards each.</p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "slug": "finishing-the-course",
+                            "display_name": "Finishing the Course",
+                            "type": "SECTION",
+                            "purpose": null,
+                            "node_url": "/courses/DEMO/SP/content/finishing-up/finishing-the-course/",
+                            "release_datetime": null,
+                            "content_index": 2,
+                            "display_sequence": 2,
+                            "unit": null,
+                            "children": [
+                                {
+                                    "slug": "certificates",
+                                    "display_name": "Certificates",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/finishing-up/finishing-the-course/certificates/",
+                                    "release_datetime": null,
+                                    "content_index": 1,
+                                    "display_sequence": 1,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "de79cd54-97e9-422a-82a6-7fe719341634",
+                                        "slug": "certificates",
+                                        "display_name": "Certificates",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": null,
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "7e33d8b4-d196-434c-94a1-804c54dba3ae",
+                                                    "uuid": "80f4e8bd-3e2d-4e6d-8751-dd6ceb0f4faf",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p>Everybody loves getting a certificate. And you so will you when you successfully complete certain courses on KinesinLMS. </p>\r\n<p>You will earn a certificate as soon as you successfully finish enough tasks to complete the course. Each course has its own requirements for completion...check the <strong>progress</strong> tab to see how you're doing.</p>\r\n<p>When you've met the requirements to pass the course, the <strong>certificate</strong> tab will show you an html-version of your certificate. To get a PDF version, simply print that page and save to PDF. (The page is formatted to print on a single page.)</p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                },
+                                {
+                                    "slug": "onward",
+                                    "display_name": "Onward",
+                                    "type": "UNIT",
+                                    "purpose": null,
+                                    "node_url": "/courses/DEMO/SP/content/finishing-up/finishing-the-course/onward/",
+                                    "release_datetime": null,
+                                    "content_index": 2,
+                                    "display_sequence": 2,
+                                    "unit": {
+                                        "type": "STANDARD",
+                                        "uuid": "de30e04e-8f42-4e9c-b210-415de6a2ae80",
+                                        "slug": "onward",
+                                        "display_name": "Onward",
+                                        "short_description": null,
+                                        "course_only": false,
+                                        "enable_template_tags": true,
+                                        "html_content": null,
+                                        "json_content": null,
+                                        "status": "PUBLISHED",
+                                        "unit_blocks": [
+                                            {
+                                                "label": null,
+                                                "index_label": null,
+                                                "block_order": 0,
+                                                "hide": false,
+                                                "read_only": false,
+                                                "include_in_summary": false,
+                                                "block": {
+                                                    "type": "HTML_CONTENT",
+                                                    "slug": "52a6a1e9-44d4-4721-b4e7-ce17e6787b5d",
+                                                    "uuid": "069e7e75-e139-4a34-9902-1917a87ac860",
+                                                    "display_name": null,
+                                                    "short_description": "",
+                                                    "course_only": false,
+                                                    "enable_template_tags": true,
+                                                    "html_content": "<p>You're finished!</p>\r\n<p>That's right. You should be ready now to take one of our courses.\r\n<p>If you have any issues using the system, don't hesitate to contact us.</p>",
+                                                    "json_content": null,
+                                                    "assessment": null,
+                                                    "simple_interactive_tool": null,
+                                                    "speakers": [],
+                                                    "learning_objectives": [],
+                                                    "resources": []
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "enable_badges": true,
+        "milestones": [
+            {
+                "course_token": "DEMO_SP",
+                "slug": "all_assessments",
+                "name": "All DEMO assessments",
+                "description": "Answer all assessments in the DEMO course.",
+                "count_graded_only": false,
+                "type": "CORRECT_ANSWERS",
+                "count_requirement": 3,
+                "required_to_pass": true
+            },
+            {
+                "course_token": "DEMO_SP",
+                "slug": "all_sits",
+                "name": "All DEMO Interactive Tools",
+                "description": "Interact with the table and diagram 'interactive tools' in the DEMO course.",
+                "count_graded_only": false,
+                "type": "SIMPLE_INTERACTIVE_TOOL_INTERACTIONS",
+                "count_requirement": 2,
+                "required_to_pass": true
+            },
+            {
+                "course_token": "DEMO_SP",
+                "slug": "all_videos",
+                "name": "All DEMO videos",
+                "description": "Watch all the videos in DEMO.",
+                "count_graded_only": false,
+                "type": "VIDEO_PLAYS",
+                "count_requirement": 2,
+                "required_to_pass": false
+            }
+        ],
+        "course_resources": [
+            {
+                "uuid": "8e77a119-5cb3-4a68-83a6-ce45877e2a61",
+                "name": "Test Course Resource",
+                "description": "Test .txt file."
+            }
+        ],
+        "speakers": [],
+        "surveys": [
+        ],
+        "badge_classes": [
+            {
+                "slug": "passed-course",
+                "type": "COURSE_PASSED",
+                "name": "Passed DEMO SP Course",
+                "provider": "badgr",
+                "external_entity_id": "gACPtikzSYux_El7ddIx1g",
+                "open_badge_id": "https://api.badgr.io/public/badges/gACPtikzSYux_El7ddIx1g",
+                "image_url": "https://api.badgr.io/public/badges/gACPtikzSYux_El7ddIx1g/image",
+                "description": "Badge represents completion of the DEMO_SP course.",
+                "criteria": "Additional criteria"
+            }
+        ],
+        "learning_objectives": [],
+        "cohorts": [
+            {
+                "institution": null
+            }
+        ],
+        "simple_interactive_tool_templates": [],
+        "certificate_template": {
+            "signatories": [],
+            "custom_template_name": null
+        },
+        "enable_enrollment_survey": false,
+        "enrollment_survey": null,
+        "course_home_content": "Welcome to the Sample Course\nThis is where you can place information for a custom 'home' tab for a particular course."
+    }
+}

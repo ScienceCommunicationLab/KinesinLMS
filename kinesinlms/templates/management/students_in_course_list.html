@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+
+{% block main_content %}
+
+
+    <div class="container" style="margin-top:3rem; margin-bottom:10rem;">
+        <h2>Students in course {{ course }}</h2>
+        <table class="table table-bordered">
+
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th style="text-align: center">Email</th>
+                {% if user.is_superuser %}
+                    <th>Actions</th>
+                {% endif %}
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for enrollment in enrollments %}
+                <tr>
+                    <td>
+                        {{ enrollment.student.username }}
+                    </td>
+                    <td>
+                        {{ enrollment.student.email }}
+                    </td>
+
+                    <td>
+                        {% if user.is_superuser %}
+                            <table >
+                                <tr >
+                                    <td style="border:0;">
+                                        Add to Discourse groups for course {{ enrollment.course.token }} :
+                                    </td>
+                                    <td style="border:0; width:150px;">
+                                        <a href="{% url 'management:add_student_to_discourse_groups_for_course' course_run=course.run course_slug=course.slug user_id=enrollment.student.id %}"
+                                           class="btn btn-primary">Add&nbsp;to&nbsp;{{ course.token }}&nbsp;Discourse&nbsp;Groups</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+{% endblock main_content %}
+
+
+

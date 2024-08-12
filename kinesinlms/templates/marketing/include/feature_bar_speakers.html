@@ -1,0 +1,51 @@
+{% load static %}
+
+<style>
+  #block-speaker-video.htmx-swapping {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+  }
+
+  #block-speaker-video {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+  }
+</style>
+Ï
+<div class="feature-row kn-instructors">
+    <div class="feature-container">
+        <div class="col-graphic d-flex flex-column">
+
+            <div class="d-flex flex-column">
+
+
+                <div style="background:#000; border-radius:0.5rem; overflow: hidden; ">
+
+                    {% include 'marketing/hx/speaker_video.html' %}
+
+
+                </div>
+
+                <div class="d-flex flex-row justify-content-center">
+                    <button id="btn-new-speaker-video"
+                            hx-get="{% url 'marketing:speaker_hx' %}?previous={{ random_speaker.id }}"
+                            hx-target="#block-speaker-video"
+                            hx-swap="outerHTML swap:1s"
+                            class=" mt-2 btn btn-light"
+                            style="background-color:rgba(0, 0, 0, 0.2)">Meet Another Speaker ...</button>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-content">
+            <h2>World-class Instructors</h2>
+            <p>Our courses feature videos by top scientists and teachers from around the world.</p>
+            <p>
+                <a class="btn btn-secondary" href="{% url 'speakers:speakers-list' %}">More about our speakers
+                >></a>
+            </p>
+        </div>
+    </div>
+    <!-- ./feature-container-->
+</div>

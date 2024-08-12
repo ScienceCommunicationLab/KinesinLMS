@@ -1,0 +1,13 @@
+<div class="block-icon summary-marker"
+     data-bs-toggle="tooltip"
+     data-bs-placement="top"
+     title="This activity is part of the course summary">
+    {% if course.summary_icon %}
+        <i class="{{ course.summary_icon }}"></i>
+    {% else %}
+        <span class="badge text-bg-light" style="background-color: #ddd !important;">Course Summary</span>
+    {% endif %}
+    {% if is_outline %}
+        This activity is part of the course summary.
+    {% endif %}
+</div>

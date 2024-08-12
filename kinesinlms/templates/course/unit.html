@@ -1,0 +1,304 @@
+{% extends "course/course_base.html" %}
+
+{% load react %}
+
+{% load static %}
+
+{% load core_tags unit_extras %}
+
+{% block sidebar %}
+    {{ block.super }}
+{% endblock sidebar %}
+
+{% block extra_css %}
+
+    {{ block.super }}
+
+    {% if course_custom_css_filename %}
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'course/css/custom/' %}{{ course_custom_css_filename }}" />
+    {% endif %}
+
+    <style></style>
+
+{% endblock %}
+
+{% block course_nav %}
+    {{ block.super }}
+{% endblock course_nav %}
+
+{% block course_sub_nav %}
+
+    {{ block.super }}
+
+    <div data-bs-toggle="tooltip" title="Course contents">
+        <button type="button"
+                class="btn btn-light d-print-none course-nav-button course-contents-button"
+                title="Course contents"
+                id="sidebarCollapse"
+                style="margin-right: 1em"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#course-left-nav-off-canvas">
+            <i class="bi bi-list"></i>
+        </button>
+    </div>
+
+    <div data-bs-toggle="tooltip" title="Quick Nav">
+        <button type="button"
+                aria-label="Show 'quicknav' navigation"
+                class="btn btn-light d-print-none course-nav-button quicknav-button"
+                data-bs-toggle="modal"
+                data-bs-target="#quickNavModal">
+            <img src="{% static 'images/icons/quick_nav.svg' %}"
+                 alt="Quick nav icon: click to view Quick Nav"
+                 style="width:1.5rem" />
+        </button>
+    </div>
+
+    <div class="ms-3">
+        <small class="text-muted">
+            {% if full_content_index %}Unit {{ full_content_index }}{% endif %}
+        </small>
+    </div>
+
+    {% if admin_message %}
+        <small class="text-muted">
+            <i class="bi bi-exclamation-circle-fill"></i>&nbsp;<strong>NOTE:</strong> {{ admin_message }}
+        </small>
+    {% endif %}
+
+    <div class="action-buttons d-print-none ms-auto me-0">
+
+        {% if prev_unit_node_url %}
+            <a class="btn btn-back btn-secondary course-nav-button"
+               aria-label="Previous unit navigation button"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               href="{{ prev_unit_node_url }}"
+               title="Previous unit : {{ prev_unit_node_name }}">
+                <i class="bi bi-caret-left-fill"></i>
+            </a>
+        {% endif %}
+        <a class="btn btn-forward btn-secondary course-nav-button"
+           aria-label="Next unit navigation button"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           {% if next_unit_node_url %}href="{{ next_unit_node_url }}"{% endif %}
+           {% if next_unit_node_name == None %} {% if unreleased_content %} title="( This is the last availabe unit of the course. )" {% else %} title="( This is the last unit of the course. )" {% endif %}
+           {% else %}
+           title="Next unit : {{ next_unit_node_name }}"
+           {% endif %}>
+
+            {% if next_unit_node_name %}
+                <i class="bi bi-caret-right-fill"
+                   aria-hidden="true"
+                   title="Move forward arrow"></i>
+            {% else %}
+                <i class="bi bi-stop-circle"
+                   aria-hidden="true"
+                   title="Stop image. Course is complete."></i>
+            {% endif %}
+
+        </a>
+    </div>
+{% endblock course_sub_nav %}
+
+{% block course_content %}
+
+    <div id="course-unit-container"
+         class="container{% if use_fluid %}-fluid{% endif %}">
+        <div id="unit-content" class="mt-1 mb-3">
+
+            {% include 'course/quicknav/quicknav.html' with course_nav=course_nav %}
+
+            <div id="unit-title-container">
+                <h1 class="unit-title">
+
+                    {% if course_unit.type == "MODULE_LEARNING_OBJECTIVES" or course_unit.type == "SECTION_LEARNING_OBJECTIVES" %}
+                        {% if course_unit.display_name %}
+                            {{ course_unit.display_name|safe|default_if_none:"" }}
+                        {% elif course_unit.type == "MODULE_LEARNING_OBJECTIVES" %}
+                            Module Learning Objectives
+                        {% elif course_unit.type == "SECTION_LEARNING_OBJECTIVES" %}
+                            Lesson Learning Objectives
+                        {% endif %}
+                    {% else %}
+                        <span class="d-none d-print-inline">Unit:</span>
+                        {{ course_unit.display_name|safe|default_if_none:"" }}
+                    {% endif %}
+                </h1>
+
+                {% if learning_objectives and course_unit.type != "SECTION_LEARNING_OBJECTIVES" and course_unit.type != "MODULE_LEARNING_OBJECTIVES" %}
+                    {# Show a button to toggle the unit learning objectives collapse block #}
+                    <div data-bs-toggle="tooltip"
+                         data-bs-placement="top"
+                         title="Learning objectives"
+                         class="learning-objectives-link-container d-print-none">
+                        <a class="btn btn-default"
+                           data-bs-toggle="collapse"
+                           href="#collapse-learning-objectives"
+                           role="button"
+                           aria-expanded="false"
+                           aria-controls="collapseExample">
+                            <i class="bi bi-info-circle-fill"></i>
+                        </a>
+                    </div>
+                {% endif %}
+
+                <div class="bookmark-container d-print-none">
+                    {% if unit_is_released %}
+
+                        {% include 'course/hx/bookmark_hx.html' %}
+
+                        {% comment %}
+                    {% react_render component="Bookmark" props=bookmark_info %}
+                        {% endcomment %}
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if course_unit.type == "MODULE_LEARNING_OBJECTIVES" or course_unit.type == "SECTION_LEARNING_OBJECTIVES" %}
+                {% comment %}
+            Just a basic list of LOs.
+                {% endcomment %}
+
+                {% include 'course/partial/learning_objectives_page.html' with learning_objectives=learning_objectives %}
+
+            {% else %}
+                {% comment %}
+            Special formatting of LOs.
+            This include will create a collapse div and use for a list of the learning objectives associated
+            with all the blocks on this page.
+                {% endcomment %}
+
+                {% include 'course/partial/learning_objectives.html' with learning_objectives=learning_objectives %}
+
+            {% endif %}
+
+            {% comment %}
+            Units might have html content that should be rendered before blocks (if any exist).
+            This is a convenience as some Units have HTML and nothing else, so we don't
+            want to have to create an HTML block in this case.
+            HTML structure below should closely match HTML block.
+            {% endcomment %}
+            {% if course_unit.html_content %}
+                <div id="unit-html-content" class="section mb-3">
+                    <div class="row">
+                        <div class="col-12 col-xl-9">{% render_html_content course_unit %}</div>
+                        <div class="col-xl-3 sidebar-content">{{ course_unit.json_content.sidebar_content | safe }}</div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if unit_is_released %}
+                {% if unit_blocks %}
+                    {% for unit_block in unit_blocks %}
+                        {% with unit_block.block as block %}
+                            {% if not block.hidden %}
+
+                                <!-- block  id: {{  block.id }} type : {{ block.type }} slug : {{ block.slug }} -->
+                                <!-- order: {{ block.parent_unit }}-->
+
+                                {% if course_unit.type == "ROADMAP" and block.type == "SIMPLE_INTERACTIVE_TOOL" %}
+                                    <div class="no-print btn-standalone-block"
+                                         data-bs-toggle="tooltip"
+                                         data-bs-placement="left"
+                                         title="View {{ block.simple_interactive_tool.tool_type }} in separate window">
+                                        <a class="btn btn-light"
+                                           target="_blank"
+                                           href="{% url 'course:block_page' course_slug=course.slug course_run=course.run module_slug=module_slug section_slug=section_slug unit_slug=unit_slug block_id=block.id %}">
+                                            <i class="bi bi-arrow-up-right"></i>
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                                {% if block.type == 'VIDEO' %}
+
+                                    {% include 'course/blocks/video.html' %}
+
+                                {% elif block.type == "HTML_CONTENT" %}
+
+                                    {% include 'course/blocks/html_content.html' %}
+
+                                {% elif block.type == "FILE_RESOURCE" %}
+
+                                    {% include 'course/blocks/file_resource.html' %}
+
+                                {% elif block.type == "SURVEY" %}
+
+                                    {% include 'course/blocks/survey.html' %}
+
+                                {% elif block.type == "ASSESSMENT" %}
+
+                                    {% include 'course/blocks/assessment.html' %}
+
+                                {% elif block.type == "CALLOUT" %}
+
+                                    {% include 'course/blocks/callout.html' %}
+
+                                {% elif block.type == "ANSWER_LIST" %}
+
+                                    {% include 'course/blocks/answer_list.html' %}
+
+                                {% elif block.type == "FORUM_TOPIC" %}
+
+                                    {% include 'course/blocks/forum_topic.html' %}
+
+                                {% elif block.type == "SIMPLE_INTERACTIVE_TOOL" %}
+
+                                    {% if block.simple_interactive_tool.tool_type == "DIAGRAM" %}
+
+                                        {% include 'course/blocks/diagram.html' %}
+
+                                    {% elif block.simple_interactive_tool.tool_type == "TABLETOOL" %}
+
+                                        {% include 'course/blocks/tabletool.html' %}
+
+                                    {% else %}
+                                        <div class="text-muted">
+                                            Cannot render '{{ block.simple_interactive_tool.tool_type }}'
+                                            interaction.
+                                            <br />
+                                            Please contact support for help.
+                                        </div>
+                                    {% endif %}
+
+                                {% elif block.type == "EXTERNAL_TOOL_VIEW" %}
+
+                                    {% include 'course/blocks/external_tool_view.html' %}
+
+                                {% endif %}
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+
+                {% include 'course/partial/unit_not_released.html' with unit_release_datetime=unit_release_datetime %}
+
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="course-license-wrapper">
+
+        {% include 'course/course-license-default.html' %}
+
+    </div>
+
+{% endblock course_content %}
+
+{% block adminbar %}
+    {% if request.user.is_staff or request.user.is_superuser %}
+        {% include 'core/admin_control_bar.html' %}
+    {% endif %}
+{% endblock adminbar %}
+
+{% block footer %}
+
+    {{ block.super }}
+
+    {% react_print %}
+
+{% endblock footer %}

@@ -1,0 +1,42 @@
+{% extends "course/course_base_default_page.html" %}
+
+{% load tz %}
+
+{% block course_sub_nav %}
+    <div class="course-subnav-label">A list of bookmarks you've made for this course.</div>
+{% endblock course_sub_nav %}
+
+{% block sidebar %}
+    {#  Don't show sidebar on home page #}
+{% endblock sidebar %}
+
+{% block page_content %}
+
+    {{ block.super }}
+
+    <div class="course-bookmarks">
+        {% if bookmarks %}
+            {% for bookmark in bookmarks %}
+                <div class="bookmark-item">
+                    <div class="bookmark-icon">
+                        <a href="{{ bookmark.unit_node.node_url }}">
+                            <i class="bi bi-bookmark-fill"></i>
+                        </a>
+                    </div>
+                    <div class="bookmark-info">
+                        <a href="{{ bookmark.unit_node.node_url }}">Unit: {{ bookmark.unit_node.unit.display_name }}</a>
+                        <div style="color: #aaa;">{{ bookmark.created_at | localtime }}</div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>( You haven't bookmarked any pages yet. )</p>
+        {% endif %}
+    </div>
+
+{% endblock page_content %}
+
+{% block unit_controls_bottom %}
+    {# no course controls #}
+{% endblock unit_controls_bottom %}

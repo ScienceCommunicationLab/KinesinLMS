@@ -1,0 +1,169 @@
+/*
+STYLES:
+Only add styles specific to the DiagramTool here.
+More generic styles applicable to all SITs should
+go in sit.scss in the Django app.
+ */
+
+:global(.kn-custom-node) {
+  $text-color: #222;
+
+  // Make sure some styles appear on the print preview (e.g., background colors).
+  -webkit-print-color-adjust: exact;
+
+  padding: 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: $text-color;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &:global(.readonly) {
+    cursor: default;
+  }
+
+  :global(.kn-custom-node-text) {
+    /*font-family: jetbrains-mono, Monospace, serif;
+    text-transform: uppercase;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+
+    &:not(:global(.readonly)) {
+      cursor: text;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &:hover:not(:global(.readonly)), &:focus:not(:global(.readonly)) {
+      background-color: scale-color($text-color, $lightness: 95%);
+    }
+
+    // Placeholder styles when the contenteditable is empty and not focused.
+    &:empty:not(:focus):after {
+      // Using the actual 'placeholder' attribute on the HTML element as content.
+      content: attr(placeholder);
+      color: scale-color($text-color, $lightness: 50%);
+      cursor: text;
+      // Make sure this pseudo-element does not 'catch' the click events (otherwise it blocks the cursor from entering
+      // the contenteditable box on the first click).
+      pointer-events: none;
+    }
+  }
+}
+
+:global(.kn-custom-node-category) {
+  border-radius: 30px !important;
+}
+
+:global(.react-canvas.readonly) {
+  > svg {
+    cursor: default !important;
+    pointer-events: none !important;
+
+    g {
+      cursor: default !important;
+      pointer-events: none !important;
+      >path:nth-child(2) {
+        // 2nd path is the background/hover element, the 1st one is the link itself.
+        visibility: hidden !important;
+      }
+    }
+  }
+}
+
+:global(.tools-widget) {
+  max-width: 50px;
+  height: 200px;
+  border-bottom-right-radius: 0.5rem;
+  background-color: rgb(255, 255, 255, 0.5);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+:global(.content) {
+  display: flex;
+  flex-grow: 1;
+}
+
+:global(.layer) {
+  position: relative;
+  flex-grow: 1;
+}
+
+
+:global(.color-control) {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  align-items: center;
+  margin: 0 1rem;
+}
+
+
+:global(.btn-duplicate) {
+  margin: 0 0.8rem 0 0;
+}
+
+:global(.btn-reset) {
+  min-width: 80px;
+  margin: 0 0.5rem;
+}
+
+:global(.btn-save) {
+  min-width: 120px;
+  margin: 0 0.5rem;
+}
+
+:global(.btn-light) {
+  border-color: #999;
+}
+
+:global(.twitter-picker) {
+  top: -178px;
+}
+
+:global(.color-picker-popover) {
+  position: absolute;
+  z-index: 2;
+}
+
+:global(.color-picker-cover) {
+  position: fixed;
+  padding: 10px;
+}
+
+:global(.tools-controls) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: 60px;
+  padding: 10px;
+  background-color: #e5e5e5 !important;
+  border-bottom-right-radius: 0.5rem;
+
+
+  :global(.btn) {
+    margin-bottom: 10px !important;
+  }
+
+  :global(.btn-zoom-fit) {
+    margin-bottom: 2rem;
+  }
+}

@@ -1,0 +1,15 @@
+
+.loader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1em;
+}
+
+
+.loader .spinner{
+  padding: 0;
+  height: 40px;
+  width: 40px;
+  margin-right: .2em;
+}

@@ -1,0 +1,128 @@
+{% load static %}
+{% load i18n %}
+{% load react %}
+{% load mptt_tags %}
+{% load core_tags unit_extras %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Course Outline : {{  course.display_name  }}</title>
+    {% include 'includes/head_meta.html' %}
+    {% include 'includes/core_css_includes.html' %}
+    <link href="{% static 'css/course_outline.css' %}" rel="stylesheet">
+</head>
+
+
+<body>
+
+
+<div id="course_outline" class="container">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="title mt-5 mb-5">
+                Course Outline
+            </div>
+
+            <table class="table table-bordered">
+                <tr>
+                    <td style="width:80px;">Course</td>
+                    <td>{{ course.display_name }}</td>
+                </tr>
+                <tr>
+                    <td>Slug</td>
+                    <td>{{ course.slug }}</td>
+                </tr>
+                <tr>
+                    <td>Run</td>
+                    <td>{{ course.run }}</td>
+                </tr>
+                <tr>
+                    <td>Assessments</td>
+                    <td>
+                        <a href="{% url 'course:outline_course' course_slug=course.slug course_run=course.run %}?filter=assessments">View
+                            Assessments-only Outline</a></td>
+                </tr>
+                {% if course.playlist_url %}
+                    <tr>
+                        <td>Video Playlist</td>
+                        <td><a href="{{ course.playlist_url }}" target="_blank">{{ course.playlist_url }}</a></td>
+                    </tr>
+                {% endif %}
+
+            </table>
+
+            <div class="course-outline-content">
+                {% recursetree module_nodes %}
+                    {% if node.type == "MODULE" %}
+                        <h1 class="outline-module">
+                            Module {{ node.content_index }} : {{ node.display_name }}
+                        </h1>
+                    {% elif node.type == "SECTION" %}
+                        <h2 class="outline-section">
+                            Section {{ node.parent.content_index }}.{{ node.content_index }} : {{ node.display_name }}
+                        </h2>
+                    {% elif node.type == "UNIT" %}
+                        <h3 class="outline-unit">
+                            Unit {{ node.parent.parent.content_index }}.{{ node.parent.content_index }}.{{ node.content_index }}: {{ node.display_name }}</h3>
+
+                        <div class="unit">
+                            {% if node.unit.html_content %}
+                                {{ node.unit.html_content | safe }}
+                            {% endif %}
+
+                            {% learning_objectives course_unit=node.unit unit_node=node as learning_objectives %}
+                            {% if learning_objectives %}
+                                {% if node.unit.type != "MODULE_LEARNING_OBJECTIVES" and node.unit.type != "SECTION_LEARNING_OBJECTIVES" %}
+                                    <p><em>Unit Learning Objectives</em></p>
+                                {% endif %}
+                                {% with node.unit as course_unit %}
+                                    {% include 'course/partial/learning_objectives_page.html' %}
+                                {% endwith %}
+                            {% endif %}
+
+                            {% for unit_block in node.unit.unit_blocks.all %}
+                                {% with unit_block.block as block %}
+                                    {% if not block.hidden %}
+                                        {% if block.type == 'VIDEO' %}
+                                            {% include 'course/blocks/video.html' %}
+                                        {% elif block.type == "ASSESSMENT" %}
+                                            {% include 'course/outline/outline_assessment.html' with block=block course_unit=node.unit %}
+                                        {% elif block.type == "HTML_CONTENT" %}
+                                            {% include 'course/blocks/html_content.html' %}
+                                        {% elif block.type == "CALLOUT" %}
+                                            {% include 'course/blocks/callout.html' %}
+                                        {% elif block.type == "ANSWER_LIST" %}
+                                            {% include 'course/blocks/answer_list.html' %}
+                                        {% elif block.type == "SIMPLE_INTERACTIVE_TOOL" %}
+                                            {% with block.simple_interactive_tool as sit %}
+                                                {% if sit.tool_type == "TABLETOOL" %}
+                                                    {% include 'course/outline/outline_tabletool.html' %}
+                                                {% elif sit.tool_type == "DIAGRAM" %}
+                                                    {% include 'course/outline/outline_diagram.html' %}
+                                                {% else %}
+                                                    <p>( simple interactive tool {{ sit }})</p>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endwith %}
+                            {% endfor %}
+
+                        </div>
+                    {% endif %}
+                    {% if not node.is_leaf_node %}
+                        {{ children }}
+                    {% endif %}
+
+                {% endrecursetree %}
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

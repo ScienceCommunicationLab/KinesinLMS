@@ -1,0 +1,34 @@
+<table
+       id='invited-users'
+       hx-confirm="Are you sure you want to delete this invited user?"
+       hx-target="#invited-users"
+       hx-swap="outerHTML"
+       class="table table-bordered">
+    <thead>
+    <tr>
+        <td>Email</td>
+        <td>Email Sent</td>
+        <td>Cohort</td>
+        <td style="min-width:15rem;">Registered</td>
+        <td class="text-center">Delete</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for invite_user in invite_users %}
+        <tr>
+            <td>{{ invite_user.email }}</td>
+            <td>{{ invite_user.email_sent_date }}</td>
+            <td>{{ invite_user.cohort.name }}</td>
+            <td>{{ invite_user.registered_date|default_if_none:"( waiting for response )" }}</td>
+            <td class="text-center">
+                {% if not invite_user.registered_date %}
+                    <a hx-delete="{% url 'course:course_enrollment:delete_invite_user_hx' course_run=course.run course_slug=course.slug invite_user_id=invite_user.id %}"
+                       class="btn btn-danger">
+                        <i class="bi bi-trash3-fill"></i>
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,59 @@
+{
+  "max_rows": 5,
+  "allow_add_row": false,
+  "allow_remove_row": false,
+  "column_definitions": [
+    {
+      "header": "Potential Roles of a Primary Research Advisor",
+      "column_id": "role_of_advisor",
+      "default_cell_type": "USER_ENTRY"
+    },
+    {
+      "header": "My Role Priorities",
+      "column_id": "my_role_priorities",
+      "default_cell_type": "USER_ENTRY"
+    }
+  ],
+  "default_rows": [
+    {
+      "row_id": 1,
+      "cells": [
+        {
+          "cell_type": "STATIC",
+          "column_id": "role_of_advisor",
+          "default_value": "<p><strong>Developing as a Researcher:</strong></p><p>Mentors who help me:</p><ul><li>Develop my technical research skills</li><li>Develop my intellectual research skills</li><li>Develop ethical and responsible research practices</li><li>Develop confidence as a researcher</li><li>Develop independence as a researcher</li><li>Develop my identity as a researcher</li><li>Learn to accurately assess my disciplinary knowledge and skills</li><li>Brainstorm ideas and provide feedback to improve my work </li><li>Stay accountable so I make quality and timely progress in my work </li><li>Learn how to conduct high quality research </li></ul>"
+        }
+      ]
+    },
+    {
+      "row_id": 2,
+      "cells": [
+        {
+          "cell_type": "STATIC",
+          "column_id": "role_of_advisor",
+          "default_value": "<p><strong>Developing a Career:</strong></p><p>Mentors who:</p><ul><li>Help me network and meet professionals in my community </li><li>Help me build my professional identity and brand or value</li><li>Help me explore career options</li><li>Advocate for and support me</li><li>Be a sponsor for me in career settings, including highlighting my work and accomplishments</li><li>Provide access to opportunities and resources that will advance my work and career (e.g., internships, lab space, funding)</li><li>Model the values, attitudes, and behaviors that I aspire to emulate in my work and career</li></ul>"
+        }
+      ]
+    },
+    {
+      "row_id": 3,
+      "cells": [
+        {
+          "cell_type": "STATIC",
+          "column_id": "role_of_advisor",
+          "default_value": "<p><strong>Developing as a Professional:</strong></p><p>Mentors who:</p><ul><li>Help me develop my writing skills (i.e., research articles, grants, popular science articles, books, curriculum)</li><li>Help me develop my presentation skills </li><li>Help me learn how to collaborate effectively</li><li>Help me develop my awareness of justice, equity, diversity, and inclusion issues in research environments</li><li>Help me develop my ability to address challenges that may arise for me and others in marginalized and underrepresented groups</li><li>Provide professional development training to advance my work and career</li><li>Model professional behavior in my discipline</li></ul>"
+        }
+      ]
+    },
+     {
+      "row_id": 4,
+      "cells": [
+        {
+          "cell_type": "STATIC",
+          "column_id": "role_of_advisor",
+          "default_value": "<p><strong>Maintaining Health & Well-being:</strong></p><p>Mentors who:</p><ul><li>Provide emotional support</li><li>Provide support to help me maintain my mental and physical health and well-being as I navigate the ups and downs of my work and career</li><li>Help me find a work-life balance</li><li>Provide a “safe” space for me to be me</li><li>Listen to me without judgment</li><li>Help me find my place and develop a sense of belonging in academia and the research environment</li><li>Help me deal with and respond productively to critical feedback</li><li>Model strategies for maintaining health and well-being </li></ul>"
+        }
+      ]
+    }
+  ]
+}

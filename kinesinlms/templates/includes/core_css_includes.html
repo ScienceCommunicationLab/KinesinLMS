@@ -1,0 +1,13 @@
+{% load static %}
+
+{# WEB FONTS #}
+<!-- "Jost" is for our usual headers and subheads throughout the site, including in courses -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Jost&display=swap"
+      rel="stylesheet" />
+{# PROJECT CSS FILES #}
+{% comment %}
+  All CSS files are built from an assortment of linked SCSS via sass and stored in project.css.
+{% endcomment %}
+<link href="{% static 'css/project.css' %}" rel="stylesheet" />

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n core_tags %}
+
+{% block main_content %}
+
+    <div class="container" style="min-height:800px; margin-top:4rem;">
+        <div class="row">
+            <div class="col">
+                <h1>{% blocktrans %}Badge Image Not Found{% endblocktrans %}</h1>
+                <p>
+                    {% support_email as current_support_email %}
+                    {% blocktrans trimmed %}
+                        We had trouble finding your badge image. Please try again
+                        or contact <a href="{{ current_support_email }} ">{{ current_support_email }}</a> for help.
+                    {% endblocktrans %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

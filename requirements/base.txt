@@ -1,0 +1,134 @@
+# Python package manager
+pip>=24.0
+
+# World timezone definitions, modern and historical
+pytz==2024.1 # https://github.com/stub42/pytz
+
+# A Python slugify application that handles unicode.
+python-slugify==8.0.4  # https://github.com/un33k/python-slugify
+
+# A fork of PIL, the Python Imaging Library
+Pillow==10.3.0 # https://github.com/python-pillow/Pillow
+
+# Password hashing library
+argon2-cffi==23.1.0 # https://github.com/hynek/argon2_cffi
+
+# Whitenoise for static assets
+whitenoise==6.7.0  # https://github.com/evansd/whitenoise
+
+# Libraries for async tasks
+# Celery for running async tasks
+celery==5.4.0  # pyup: < 5.0,!=4.4.7  # https://github.com/celery/celery
+# Redis as database for celery tasks
+redis==5.0.6 # https://github.com/antirez/redis
+hiredis==2.3.2  # https://github.com/redis/hiredis-py
+
+# for periodic tasks
+# We're not using this, but maybe should. Right now we have Heroku-based cron-tab
+# calling a method every day that checks for any survey reminders to go out...
+django-celery-beat==2.6.0  # https://github.com/celery/django-celery-beat
+
+# Django
+# ------------------------------------------------------------------------------
+
+django==5.0.6 # pyup: < 3.0  # https://www.djangoproject.com/
+django-environ==0.11.2  # https://github.com/joke2k/django-environ
+django-model-utils==4.5.1  # https://github.com/jazzband/django-model-utils
+django-allauth==0.63.3  # https://github.com/pennersr/django-allauth
+django-crispy-forms==2.2  # https://github.com/django-crispy-forms/django-crispy-forms
+crispy-bootstrap5==2024.2  # https://github.com/django-crispy-forms/django-crispy-forms
+django-redis==5.4.0  # https://github.com/niwinz/django-redis
+
+# Django REST Framework
+djangorestframework==3.15.2  # https://github.com/encode/django-rest-framework
+# The only reason we need cors headers is when Angular client tests from diff URL
+django-cors-headers==4.4.0
+
+# React FTW! Just components, mind you, not a complete SPA.
+# This library helps position React component in rendered template.
+django-react-templatetags==8.0.0
+
+# For JSON logging...mostly for Tracker
+python-json-logger==2.0.7
+
+# For JSON field validation
+jsonschema==4.22.0
+
+# Need lxml for cleaning HTML, exporting, etc.
+lxml[html_clean]==5.2.2
+
+# For tags!
+django-taggit==5.0.1
+
+# Implementing a tree structure for organizing units in courses.
+django-mptt==0.16.0
+
+# Need requests for sending events to AWS for logging
+requests==2.32.3
+
+# Need BeautifulSoup4 to help read incoming Open edX exports
+beautifulsoup4==4.12.3
+
+# Need boto3 for sending events to Lambda.
+boto3==1.34.130
+
+# My fork of pydiscourse. It didn't have the
+# correct method for removing a user from a group
+-e git+https://github.com/danielmcquillen/pydiscourse.git@master#egg=pydiscourse
+
+# DMcQ : For slack messenging
+slack_sdk==3.29.0
+
+# Dang bots!
+django-recaptcha==4.0.0
+
+# Secure admin and staff logins
+django-allauth-2fa==0.11.1
+
+# DMcQ : Using django-bleach to filter incoming assessments in DRF
+django-bleach==3.1.0
+
+# I need this library to deserialize to dataclasses, which is helpful when
+# for example doing a course import and including a 'import_config' object at the top level.
+djangorestframework-dataclasses==1.3.1
+
+# We're using django-simple-history to track author changes to course content.
+django-simple-history==3.7.0
+
+# Brute force protection
+django-defender==0.9.8
+
+# using django-filter for admin pages (students list)
+django-filter==24.2
+
+# using factories in application code like Composer
+factory-boy==3.3.0  # https://github.com/FactoryBoy/factory_boy
+
+# Help serialize, deserialize json structures for JSON fields
+dataclasses-json==0.6.7
+
+# Rich editing
+django-tinymce==4.1.0
+
+# PDF certificates
+reportlab==4.2.0
+
+# For various analytics reporting
+pandas==2.2.2
+
+# Using django-pandas to help work with analytics from db
+django-pandas==0.6.7
+
+# For Open API docs generation
+drf-spectacular==0.27.2
+
+# For LTI...
+pyjwt==2.8.0
+cryptography==42.0.8
+
+# For turning features on and off easily
+django-waffle==4.1.0
+
+# Support markdown in composer and rendering content
+markdown==3.3.6
+django-markdownify==0.9.5

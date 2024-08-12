@@ -1,0 +1,28 @@
+
+{% comment %}
+Holds breadcrumbs, page title and description.
+{% endcomment %}
+
+<!--  info bar -->
+<div class="info-bar-wrapper">
+    <div class="container-fluid breadcrumb info-bar ">
+        {% for breadcrumb in breadcrumbs %}
+            <div class="breadcrumb-item">
+                <a href="{{ breadcrumb.url }}">
+                    {{ breadcrumb.label }}
+                </a>
+            </div>
+        {% endfor %}
+        <div class="breadcrumb-item page-title">
+            {% if title %}
+                {{ title }}
+            {% endif %}
+            {% if title and description %}
+                &nbsp;&nbsp;:&nbsp;&nbsp;
+            {% endif %}
+            {% if description %}
+                <span class="page-description">{{ description | safe }}</span>
+            {% endif %}
+        </div>
+    </div>
+</div>

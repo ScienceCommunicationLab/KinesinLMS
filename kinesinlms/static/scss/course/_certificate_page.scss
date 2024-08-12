@@ -1,0 +1,74 @@
+/* Styles for the main certificate page in the course, including compontents on that page (not just the cert). */
+
+.course-certificate-page {
+
+
+  .certificate-wrapper {
+    margin-bottom: 10rem;
+  }
+
+  .certificate {
+    box-shadow: 0 .05rem .2rem 0 #e1e1e1 !important;
+    min-height: 40rem;
+  }
+
+
+  .certificate-download {
+    width: 100%;
+    min-height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 1rem 0;
+
+    .download-message {
+      max-width: 40rem;
+      text-align: center;
+    }
+
+    .download-button {
+      margin-top: 0.5rem;
+    }
+  }
+
+}
+
+
+@media print {
+
+  .course-certificate-page {
+
+    .certificate-download {
+      display: none;
+    }
+
+    .certificate-wrapper {
+      margin: 0 !important;
+    }
+
+    .certificate {
+      box-shadow: none;
+    }
+
+    .container {
+      margin: 0;
+      width: 100%;
+      max-width: none;
+    }
+
+    #top-nav {
+      display: none !important
+    }
+
+    .bug-bar,
+    .top-nav,
+    .course-info-bar-wrapper,
+    .course-nav-wrapper,
+    #course-subnav-wrapper,
+    .header-wrapper,
+    #footer-wrapper {
+      display: none !important;
+    }
+  }
+}

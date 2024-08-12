@@ -1,0 +1,38 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+{% load crispy_forms_tags %}
+
+{% block main_content %}
+    {{ block.super }}
+    <div class="container-fluid composer-content course">
+
+        <div class="row mt-4">
+            <div class="col-12 col-lg-8">
+                <div class="card">
+                    <div class="card-header">{% blocktrans %}New Course Survey {% endblocktrans %}</div>
+                    <div class="card-body">
+                        <form action="{% url 'composer:course_survey_create' course_id=course.id %}"
+                              enctype="multipart/form-data"
+                              method="post">
+                            {% csrf_token %}
+                            {% crispy form %}
+                            <a href="{% url 'composer:course_surveys_list' course_id=course.id %}"
+                               type="button"
+                               class="btn btn-secondary">{% trans "Cancel" %}</a>
+                            <button type="submit" class="btn btn-primary">{% trans "Create" %}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3">
+                {% blocktrans %}
+                Surveys should be created in an external survey provider and then
+                added here. Note: you must have a survey provider defined to add course surveys.
+                {% endblocktrans %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

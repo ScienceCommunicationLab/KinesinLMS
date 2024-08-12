@@ -1,0 +1,12 @@
+Hi {{ informal_name }},
+
+We are interested in your thoughts on the "{{ course.name }}" course.
+Please fill out this survey when you have time:
+
+{{ survey_url }}
+
+Thank you for your participation. We look forward to hearing your thoughts and suggestions.
+
+{% include 'survey/base/default_closing.txt' %}
+
+

@@ -1,0 +1,36 @@
+{% load i18n %}
+<div id="forum-item-course-forum-category-status" 
+     class="forum-item-status">
+
+    {% if course_forum_category %}
+       <div class="d-flex flex-row">
+            <i class="bi bi-check-square text-success me-2"></i> {% blocktrans %}Created{% endblocktrans %}
+        </div>
+    {% else %}
+
+        {% if not forum_provider %}
+
+            {% include "composer/forum/forum_item_status/no_forum_provider_warning.html" %}
+
+        {% else %}
+
+            <div class="alert alert-warning">
+                {% blocktranslate trimmed %}
+                    No forum category has been set up for this course.
+                {% endblocktranslate %}
+            </div>
+            <div>
+                <a hx-get="{% url 'composer:create_forum_item_hx' course_id=course.id forum_item_slug='COURSE_FORUM_CATEGORY' %}"
+                   hx-target="#forum-item-course-forum-category-status"
+                   hx-swap="outerHTML"
+                   class="btn btn-primary mb-2">
+                    {% blocktranslate trimmed %}
+                        Create&nbsp;Forum&nbsp;Category
+                    {% endblocktranslate %}
+                </a>
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+</div>

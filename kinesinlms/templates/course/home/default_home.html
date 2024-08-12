@@ -1,0 +1,28 @@
+{% extends "course/home/course_home_base.html" %}
+{% load tz core_tags i18n %}
+
+{% block course_home_page_content %}
+
+    {% comment  %}
+    Show custom course home tab content if the author created it,
+    otherwise just show a generic welcome message.
+    {% endcomment %}
+
+    {% if course.course_home_content %}
+        {{ course.course_home_content|safe }}
+    {% else %}
+
+        <h1>
+            {% blocktrans %}
+                Welcome to the '{{ course.display_name }}' course.
+            {% endblocktrans %}
+        </h1>
+        <p>
+            {% blocktrans %}
+                Click the 'course' tab above to start the course.
+            {% endblocktrans %}
+        </p>
+
+    {% endif %}
+
+{% endblock %}

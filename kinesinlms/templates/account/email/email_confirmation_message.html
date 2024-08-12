@@ -1,0 +1,26 @@
+{% load account core_tags %}
+{% user_display user as user_display %}
+{% load i18n %}
+{% autoescape off %}
+
+    {% blocktrans with current_site_name=current_site.name current_site_domain=current_site.domain current_support_email=support_email %}
+
+        <p>Hello from {{ current_site_name }},</p>
+
+        <p>You're receiving this e-mail because user {{ user_display }} has given your email as the e-mail address
+            to connect to their account on in {{ current_site_name }}.</p>
+
+        <p>To confirm this is correct, go to <a href="{{ activate_url }}" target="_blank">{{ activate_url }}</a></p>
+
+        <p>If you have trouble getting your account activated, please contact us at {{ current_support_email }}
+            and we'll help you out!</p>
+
+        Thanks for your interest!
+        - The {{ current_site_name }} team
+
+    {% endblocktrans %}
+
+{% endautoescape %}
+
+{% include 'core/email/email_footer.html' %}
+

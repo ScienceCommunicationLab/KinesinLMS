@@ -1,0 +1,31 @@
+<div class="posts-wrapper">
+    <div class="posts">
+        {% if topic_posts %}
+            {% for post in topic_posts %}
+                <div class="post">
+                    <div class="post-avatar">
+                        <img src="{{ post.avatar_template }}" alt="avatar image"/>
+                    </div>
+                    <div class="post-cooked">
+                        <div class="content">
+                            {{ post.cooked|safe }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div>
+                There are no posts in this topic yet. You can be the first!
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% if topic_url %}
+    <div class="topic-controls">
+        <a class="btn btn-primary"
+           href="{{ topic_url }}"
+           target="_blank">
+            Join the discussion
+        </a>
+    </div>
+{% endif %}

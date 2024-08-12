@@ -1,0 +1,72 @@
+{% load tz %}
+<div class="catalog-action-buttons d-flex">
+
+    {% comment %} User is enrolled in this course. {% endcomment %}
+
+    {% comment %} VIEW COURSE button {% endcomment %}
+    <a id="view_course_btn"
+            {% if user_can_access_course %}
+       href="{% url 'course:course_home_page' course_slug=course.slug course_run=course.run %}"
+       class="btn btn-primary"
+            {% else %}
+       href="#"
+       data-bs-toggle="tooltip"
+       data-bs-placement="top"
+       title="This button will be enabled when the course starts."
+       class="btn btn-light"
+       disabled
+            {% endif %}
+    >
+        View&nbsp;Course
+    </a>
+
+
+    {% comment %} UNENROLL button {% endcomment %}
+    <form action="{{ unenrollment_url }}" method="post">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-secondary" value="Unenroll"/>
+    </form>
+
+
+    <div class="comment">
+
+        {% if course_description.course.has_started %}
+
+            {% if user_can_access_course %}
+                You are currently enrolled in this course.
+            {% else %}
+                {% comment %} Course has started but for some reason user is not allowed to access {% endcomment %}
+                You are currently enrolled but are not allowed to access the course at this time.
+            {% endif %}
+
+        {% else %}
+
+            <div class="d-flex flex-column">
+                <div>You are currently enrolled in this course.</div>
+                <div>
+                    Course&nbsp;starts :
+                    {% timezone 'US/Pacific' %}
+                        {{ course_description.course.start_date|localtime|date:"M d, Y P e" }}
+                    {% endtimezone %}
+                    <i class="bi b-globe ms-2"
+                       data-bs-title="{{ course_description.course.start_date|utc|date:"M d, Y H:i e" }}"
+                       data-bs-toggle="tooltip"></i>
+
+                </div>
+
+            </div>
+
+
+
+            {% if user.is_superuser %}
+                (You are a superuser, so you can view the course now.)
+            {% elif user.is_staff %}
+                (You are staff, so you can view the course now.)
+            {% elif is_beta_tester %}
+                (You are a beta-tester, so you can access course now.)
+            {% endif %}
+
+        {% endif %}
+    </div>
+
+</div>

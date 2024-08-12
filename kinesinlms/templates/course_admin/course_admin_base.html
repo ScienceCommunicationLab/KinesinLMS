@@ -1,0 +1,111 @@
+{% extends "course/course_base_default_page.html" %}
+
+{% load static %}
+
+{% load tz %}
+
+{% load core_tags unit_extras %}
+
+{% block header_javascript %}
+    {{ block.super }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+{% endblock header_javascript %}
+
+{% block sidebar %}
+    {#  Don't show sidebar on course admin pages #}
+{% endblock sidebar %}
+
+{% block course_sub_nav %}
+    <ul class="nav" id="course-admin-nav">
+        {% can_view_course_admin_analytics request.user course as show_analytics %}
+        {% if show_analytics %}
+            <li id="tab-course-analytics"
+                class="nav-item {% if current_course_admin_tab == 'course_analytics' %}active{% endif %}">
+                <a class="nav-link"
+                   href="{% url 'course:course_admin:course_analytics:index' course_slug=course.slug course_run=course.run %}">
+                    <i class="bi bi-bar-chart-line-fill text-danger-emphasis"></i> Analytics
+                </a>
+            </li>
+        {% endif %}
+        {% can_view_course_admin_cohorts request.user course as show_cohorts %}
+        {% if show_cohorts %}
+            <li id="tab-course-cohorts"
+                class="nav-item {% if current_course_admin_tab == 'course_cohorts' %}active{% endif %}">
+                <a class="nav-link"
+                   href="{% url 'course:course_admin:cohorts:index' course_slug=course.slug course_run=course.run %}">
+                    <i class="bi bi-collection text-danger-emphasis"></i> Cohorts
+                </a>
+            </li>
+        {% endif %}
+        {% can_view_course_admin_enrollment request.user course as show_enrollment %}
+        {% if show_enrollment %}
+            <li id="tab-course-enrollment"
+                class="nav-item {% if current_course_admin_tab == 'course_enrollment' %}active{% endif %}">
+                <a class="nav-link"
+                   href="{% url 'course:course_admin:course_enrollment:index' course_slug=course.slug course_run=course.run %}">
+                    <i class="bi bi-file-person text-danger-emphasis"></i> Enrollment
+                </a>
+            </li>
+        {% endif %}
+        {% can_view_course_admin_assessments request.user course as show_assessments %}
+        {% if show_assessments %}
+            <li id="tab-course-assessments"
+                class="nav-item {% if current_course_admin_tab == 'course_assessments' %}active{% endif %}">
+                <a class="nav-link"
+                   href="{% url 'course:course_admin:assessments' course_slug=course.slug course_run=course.run %}">
+                    <i class="bi bi-file-person text-danger-emphasis"></i> Assessments
+                </a>
+            </li>
+        {% endif %}
+        {% can_view_course_admin_resources request.user course as show_resources %}
+        {% if show_resources %}
+            <li id="tab-course-resources"
+                class="nav-item {% if current_course_admin_tab == 'resources' %}active{% endif %}">
+                <a class="nav-link"
+                   href="{% url 'course:course_admin:resources' course_slug=course.slug course_run=course.run %}">
+                    <i class="bi bi-files text-danger-emphasis"></i> Resources
+                </a>
+            </li>
+        {% endif %}
+
+    </ul>
+{% endblock course_sub_nav %}
+
+{% block page_content %}
+
+    <div id="course-admin-content">
+
+        {% if course_admin_breadcrumbs %}
+            <nav id="course-admin-breadcrumbs" aria-label="breadcrumb" class=" mt-3">
+                <ol class="breadcrumb">
+                    {% for breadcrumb in course_admin_breadcrumbs %}
+                        <li class="breadcrumb-item" aria-current="page">
+                            {% if breadcrumb.url %}
+                                <a href="{{ breadcrumb.url }}">{{ breadcrumb.label }}</a>
+                            {% else %}
+                                {{ breadcrumb.label }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        {% endif %}
+        <div class="title-bar">
+            <h2>{{ course_admin_page_title }}</h2>
+            <div>
+                {% block title_bar_controls %}
+                {% endblock title_bar_controls %}
+            </div>
+        </div>
+
+        {% block course_admin_content %}
+        {% endblock course_admin_content %}
+
+    </div>
+
+{% endblock page_content %}
+
+{% block unit_controls_bottom %}
+{% endblock unit_controls_bottom %}

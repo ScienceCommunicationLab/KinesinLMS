@@ -1,0 +1,30 @@
+{% extends "composer/composer_base.html" %}
+
+{% load static i18n %}
+
+{% block main_content %}
+    <div class="container-fluid composer-content">
+
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <h1>{% blocktrans %}Create a New Course{% endblocktrans %}</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-8"
+                 style="margin-bottom:5rem">
+                {% include 'composer/course/course_form.html' %}
+            </div>
+            <div class="col-12 col-lg-3">
+                <p>
+                    {% blocktrans %}
+                    Use this form to create a new course. After saving, you can
+                    start adding content to the course.
+                    {% endblocktrans %}
+                </p>
+            </div>
+        </div>
+
+    </div>
+{% endblock main_content %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load static i18n crispy_forms_tags crispy_forms_filters %}
+
+{% block extra_css %}
+    {{ block.super }}
+    {% if course_description.custom_stylesheet %}
+        <link rel="stylesheet" type="text/css" href="{% static course_description.custom_stylesheet_url %}"/>
+    {% endif %}
+{% endblock %}
+
+{% block main_content %}
+
+    <div class="container-fluid enrollment-survey-page" style="background-color: {{ "#"|add:course.catalog_description.hex_theme_color }};">
+
+        <form id="enrollment-survey-form"
+              method="POST"
+              action="{% url 'catalog:enrollment_survey' course_run=course.run course_slug=course.slug %}"
+              class="password_set">
+            {% csrf_token %}
+            <div class="card">
+                <div class="card-header">
+                    Enrollment Survey for "{{ course.display_name }}"
+                </div>
+                <div class="card-body">
+                    {{ enrollment_answer_form|crispy }}
+                </div>
+                <div class="card-footer">
+                    <input id="btn-submit-survey"
+                           type="submit"
+                           value="Complete Enrollment"
+                           class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+{% endblock main_content %}

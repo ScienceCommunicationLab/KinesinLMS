@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="406px" height="445px" viewBox="0 0 406 445" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>beaker</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M237,153.92511 L398.848966,396.342063 C408.04889,410.121686 404.336311,428.750289 390.556689,437.950213 C385.625127,441.242756 379.828435,443 373.898752,443 L32.1012475,443 C15.532705,443 2.10124753,429.568542 2.10124753,413 C2.10124753,407.070317 3.8584915,401.273625 7.15103414,396.342063 L168,155.422907 L168,23.0265487 L155.013422,10.6145984 C154.026406,9.67125524 153.468083,8.36531964 153.468083,7 C153.468083,4.23857625 155.706659,2 158.468083,2 L246.531917,2 C247.897237,2 249.203172,2.55832316 250.146516,3.5453396 C252.054472,5.54162716 251.982865,8.70664213 249.986578,10.6145984 L237,23.0265487 L237,153.92511 Z" id="Combined-Shape" stroke="#979797" stroke-width="3" fill="#D8D8D8" fill-rule="nonzero" stroke-linejoin="round"></path>
+        <path d="M309.237646,262.122466 L398.848966,396.342063 C408.04889,410.121686 404.336311,428.750289 390.556689,437.950213 C385.625127,441.242756 379.828435,443 373.898752,443 L32.1012475,443 C15.532705,443 2.10124753,429.568542 2.10124753,413 C2.10124753,407.070317 3.8584915,401.273625 7.15103414,396.342063 L95.9318999,263.366317 L309.237646,262.122466 Z" id="Triangle" stroke="#979797" stroke-width="3" fill="#AFAFAF" fill-rule="nonzero" stroke-linejoin="round"></path>
+        <circle id="Oval" stroke="#979797" fill="#D8D8D8" fill-rule="nonzero" cx="145.5" cy="343.5" r="18.5"></circle>
+        <circle id="Oval" stroke="#979797" fill="#D8D8D8" fill-rule="nonzero" cx="252" cy="305" r="12"></circle>
+        <circle id="Oval" stroke="#979797" fill="#D8D8D8" fill-rule="nonzero" cx="186" cy="293" r="12"></circle>
+        <circle id="Oval" stroke="#979797" fill="#D8D8D8" fill-rule="nonzero" cx="233.5" cy="380.5" r="18.5"></circle>
+    </g>
+</svg>

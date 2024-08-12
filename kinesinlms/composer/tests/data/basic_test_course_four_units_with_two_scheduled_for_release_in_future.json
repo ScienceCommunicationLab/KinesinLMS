@@ -1,0 +1,223 @@
+{
+  "comment": "This course example has one unit that should be scheduled to be released sometime in the future. Use it to test that the availability timing is set up correctly on import",
+  "slug": "TEST",
+  "run": "2022",
+  "display_name": "Test Course (Instructor-led)",
+  "short_name": "Test Course (2022)",
+  "start_date": "2022-05-01T00:00:00Z",
+  "end_date": "2022-06-01T00:00:00Z",
+  "advertised_start_date": "Anytime, self-paced",
+  "enrollment_start_date": "2022-01-01T00:00:00Z",
+  "enrollment_end_date": null,
+  "self_paced": true,
+  "days_early_for_beta": 90.0,
+  "enable_certificates": true,
+  "enable_badges": true,
+  "catalog_description": {
+    "title": "Test Course",
+    "slug": "TEST",
+    "blurb": "A test blurb for this course catalog description.",
+    "overview": "A test overview for this course catalog description.",
+    "about_content": "<div>About content. Usually there's a lot of html here</div>",
+    "sidebar_content": "",
+    "visible": true,
+    "hex_theme_color": "e1e1e1",
+    "hex_title_color": "ffffff",
+    "custom_stylesheet": null,
+    "trailer_video_url": null,
+    "effort": "03:00 hours/week",
+    "order": 5,
+    "duration": "Test duration",
+    "audience": "Test audience",
+    "features": [
+      "some feature",
+      "another feature"
+    ]
+  },
+  "surveys": [
+    {
+      "type": "PRE_COURSE",
+      "provider": "qualtrics-kinesinlms",
+      "send_reminder_email": false,
+      "url": "https://example.com/pre_course_survey_url"
+    },
+    {
+      "type": "POST_COURSE",
+      "provider": "qualtrics-kinesinlms",
+      "send_reminder_email": true,
+      "days_delay": 10,
+      "url": "https://example.com/post_course_survey_url"
+    },
+    {
+      "type": "FOLLOW_UP",
+      "provider": "qualtrics-kinesinlms",
+      "send_reminder_email": true,
+      "days_delay": 50,
+      "url": "https://example.com/follow_up_survey_url"
+    }
+  ],
+  "course_root_node": {
+    "slug": "test_sp",
+    "display_sequence": 0,
+    "children": [
+      {
+        "type": "MODULE",
+        "slug": "test-module-0",
+        "display_sequence": 0,
+        "display_name": "Test Module",
+        "children": [
+          {
+            "type": "SECTION",
+            "slug": "test-section-1",
+            "display_sequence": 1,
+            "display_name": "Test Section",
+            "children": [
+              {
+                "type": "UNIT",
+                "slug": "test-unit-1",
+                "display_sequence": 1,
+                "children": [],
+                "display_name": "Test Unit",
+                "comment": "should be released...",
+                "release_datetime": "2022-05-01T00:00:00Z",
+                "unit": {
+                  "type": "STANDARD",
+                  "display_name": "Example Unit #1",
+                  "course_only": false,
+                  "slug": "welcome-to-the-test-course",
+                  "unit_blocks": [
+                    {
+                      "label": null,
+                      "block_order": 1,
+                      "hide": false,
+                      "read_only": false,
+                      "block": {
+                        "type": "HTML_CONTENT",
+                        "course_only": false,
+                        "version": 0,
+                        "html_content": "<p>This unit 1 of  a test course</p>"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "UNIT",
+                "slug": "test-unit-2",
+                "display_sequence": 2,
+                "children": [],
+                "display_name": "Test Unit 2",
+                "comment": "should be released...",
+                "release_datetime": "2022-05-01T00:00:00Z",
+                "unit": {
+                  "type": "STANDARD",
+                  "display_name": "Example Unit #2",
+                  "course_only": false,
+                  "slug": "unit-2",
+                  "unit_blocks": [
+                    {
+                      "label": null,
+                      "block_order": 1,
+                      "hide": false,
+                      "read_only": false,
+                      "block": {
+                        "type": "HTML_CONTENT",
+                        "course_only": false,
+                        "version": 0,
+                        "html_content": "<p>This unit 2 of a test course</p>"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "UNIT",
+                "slug": "test-unit-3",
+                "display_sequence": 3,
+                "children": [],
+                "display_name": "Test Unit 3",
+                "comment": "should NOT be released until aug 1, 2030...",
+                "release_datetime": "2030-08-01T00:00:00Z",
+                "unit": {
+                  "type": "STANDARD",
+                  "display_name": "Example Unit #3",
+                  "course_only": false,
+                  "slug": "unit-3",
+                  "unit_blocks": [
+                    {
+                      "label": null,
+                      "block_order": 2,
+                      "hide": false,
+                      "read_only": false,
+                      "block": {
+                        "type": "HTML_CONTENT",
+                        "course_only": false,
+                        "version": 0,
+                        "html_content": "<p>This unit 3 of a test course</p>"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "UNIT",
+                "slug": "test-unit-4",
+                "display_sequence": 4,
+                "children": [],
+                "display_name": "Test Unit 4",
+                "comment": "should NOT be released until sept 1, 2030...",
+                "release_datetime": "2030-09-01T00:00:00Z",
+                "unit": {
+                  "type": "STANDARD",
+                  "display_name": "Example Unit #4",
+                  "course_only": false,
+                  "slug": "unit-4",
+                  "unit_blocks": [
+                    {
+                      "label": null,
+                      "block_order": 1,
+                      "hide": false,
+                      "read_only": false,
+                      "block": {
+                        "type": "HTML_CONTENT",
+                        "course_only": false,
+                        "version": 0,
+                        "html_content": "<p>This unit 4 of a test course</p>"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "type": "ROOT",
+    "display_name": "TEST_SP",
+    "node_url": "/courses/TEST/SP/content/"
+  },
+  "milestones": [
+    {
+      "slug": "all_assessments",
+      "name": "All assessments",
+      "description": "Answer all assessments.",
+      "type": "CORRECT_ANSWERS",
+      "count_requirement": 1,
+      "required_to_pass": true
+    }
+  ],
+  "speakers": [],
+  "badge_classes": [
+    {
+      "slug": "TEST_2022-course-passed",
+      "name": "Test 2022 Course Passed",
+      "type": "COURSE_PASSED",
+      "provider": "BADGR",
+      "external_entity_id": "g4OK8WfFTeym5aRTn0djMA",
+      "open_badge_id": "https://api.badgr.io/public/badges/g4OK8WfFTeym5aRTn0djMA-HOg",
+      "image_url": "https://api.badgr.io/public/badges/c87tAYNdSVWTlWijeG-g4OK8WfFTeym5aRTn0djMA/image",
+      "criteria": "Criteria to be defined..."
+    }
+  ]
+}

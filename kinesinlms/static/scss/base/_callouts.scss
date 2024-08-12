@@ -1,0 +1,63 @@
+/* Callouts all follow the same basic styles, which are defined here
+   They are customized for a particular type of callout, like video
+   or recommended reading, by additional styles just below this one.
+ */
+
+.block-callout {
+  padding: 0;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+
+  .icon-block {
+    background-color: #e1e1e1;
+    align-content: center;
+    padding: 20px;
+
+    .icon-image {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
+    }
+  }
+
+  .callout-text {
+    max-width: 900px;
+    align-content: center;
+    line-height: 1.5em;
+    font-size: 1em;
+    padding: 10px 10px 10px 20px;
+
+    h2 {
+      margin-top: .7em;
+      text-transform: capitalize;
+    }
+  }
+}
+
+
+/* Modify callout styles for Video callouts */
+.simple-callout {
+  border: 1px dotted #aaa;
+  padding: 1rem;
+  border-radius: 5px;
+  background: #fff;
+}
+
+
+/* Modify callout styles for Recommended Reading callouts */
+.reading-callout {
+  border: 1px dotted #ddd;
+
+  .icon-block {
+    background-color: #f1f1f1;
+
+    .icon-image {
+      background: url(../images/icons/book.svg) no-repeat;
+      background-size: contain;
+    }
+  }
+}

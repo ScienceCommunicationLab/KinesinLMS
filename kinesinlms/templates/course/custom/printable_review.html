@@ -1,0 +1,112 @@
+{% extends "course/unit.html" %}
+{% load react %}
+{% load core_tags unit_extras %}
+{% load static %}
+
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'course/css/printable-review.css' %}"/>
+{% endblock %}
+
+{% block unit_content %}
+
+    <div id="unit-content" class="printable-review">
+
+        {% include 'course/quicknav/quicknav.html' with course_nav=course_nav %}
+
+        <div id="unit-title-container" class="unit-title-container">
+            <h1 class="unit-title">
+                {% if course_unit.display_name %}
+                    {{ course_unit.display_name }} :
+                {% endif %} Print Version </h1>
+            <div class="bookmark-container">
+                {% react_render component="Bookmark" props=bookmark_info %}
+            </div>
+        </div>
+
+        <div class="kn-print-intro d-print-none">
+            <div class="intro-icon-block">
+                <div class="intro-icon-image"></div>
+            </div>
+            <div class="intro-text">
+                {% if course_unit.html_content %}
+                    {{ course_unit.html_content | safe }}
+                {% else %}
+                    This page provides a single page to print a simple, uncluttered view of your plan.
+                    Go to <b>File</b> in your web browser and click <b>Print</b>.
+                    We recommend saving it as a PDF. If you wish to do so, then you would click Open or Save as PDF in
+                    the printer window.
+                {% endif %}
+            </div>
+        </div>
+
+
+        {% for group in custom_unit_data.groups %}
+
+            {% for header in group.headers %}
+                {% if header.step %}
+                    <div class="step-wrapper">
+                        <div class="step-marker">Step {{ header.step }}</div>
+                        {% if header.text %}
+                            <div class="step-text">{{ header.text }}</div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <h{{ header.level }}>{{ header.text }}</h{{ header.level }}>
+                {% endif %}
+            {% endfor %}
+
+            {% if group.content %}
+                <div class="group-content">
+                    {{ group.content | safe }}
+                </div>
+            {% endif %}
+
+            {% comment %} GROUP BLOCKS {% endcomment %}
+            {% if group.unit_blocks %}
+                <div class="pr-group">
+
+                    {% for unit_block in group.unit_blocks %}
+
+                        {% get_assessment_readonly_data unit_block request.user as assessment_data %}
+
+                        {% comment %}
+              We don't use the assessment_read_only.html include here because
+              we want to render answers a bit differently in the printable review.
+            {% endcomment %}
+
+                        <div class="assessment-read-only">
+
+                            <div class="assessment-question">
+                                {% if unit_block.label %}
+                                    <span class="assessment-slug">
+                                        {{ unit_block.label }}.
+                                    </span>
+                                {% endif %}
+                                {% if assessment_data.question_as_statement %}
+                                    <span class="question-text">{{ assessment_data.question_as_statement | safe }}</span>
+                                {% else %}
+                                    <span class="question-text">{{ assessment_data.question | safe }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="answer-read-only">
+                                {% if assessment_data.answer_text %}
+                                    {{ assessment_data.answer_text }}
+                                {% else %}
+                                    ( No answer yet ...)
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+{% endblock unit_content %}
+

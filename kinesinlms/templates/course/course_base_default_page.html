@@ -1,0 +1,17 @@
+{% extends "course/course_base.html" %}
+
+{% comment %}
+This is the base template for all **non-unit** course pages, such as the progress tab,
+the bookmarks tab, and so on. It is not used for the unit pages, which are rendered
+using the unit.html template.
+{% endcomment %}
+
+{% block course_content %}
+
+    <div id="course-page-container" class="container">
+
+        {% block page_content %}{# Used by templates for pages other than the Unit template #}{% endblock %}
+
+    </div>
+
+{% endblock course_content %}

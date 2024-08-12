@@ -1,0 +1,44 @@
+{% load react %}
+{% load static %}
+{% load core_tags unit_extras %}
+
+<div id="block_{{ block.id }}" class="block block-file-resource">
+
+    {% if block_view_context == "COMPOSER" %}
+        {# pass #}
+    {% else %}
+        {% if request.user.is_staff or request.user.is_superuser %}
+            {% if show_admin_controls and course.edit_status.mode == "EDIT" %}
+                <a href="{% url 'composer:edit_block' block_id=block.id %}"
+                   target="_blank"
+                   style="position:relative;
+                          left:-70px;
+                          top:40px"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Edit this FILE_RESOURCE block"
+                   class="btn btn-secondary">
+                    <i class="bi bi-pencil"></i>
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% if block.display_name and block.display_name != "" %}<h2>{{ block.display_name }}</h2>{% endif %}
+
+    <div class="section">
+        <div class="row">
+            <div class="col-12">
+                {% if block.block_resources.exists %}
+                    {% for block_resource in block.block_resources.all %}
+                        {% include 'course/blocks/include/file_resource_widget.html' %}
+                    {% endfor %}
+                {% else %}
+                    {# When block_resource is not defined, the widget will show an empty 'no file' message #}
+                    {% include 'course/blocks/include/file_resource_widget.html' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>

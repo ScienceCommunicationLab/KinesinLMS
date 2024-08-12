@@ -1,0 +1,20 @@
+{% extends "management/management_base.html" %}
+{% load static %}
+
+
+{% block sidebar %}
+    <!-- Don't show sidebar on certificate page -->
+{% endblock %}
+
+
+{% block management_content %}
+
+    {% if custom_certificate_template %}
+        {% include custom_certificate_template %}
+    {% else %}
+        {% include 'course/certificate/certificate_default.html' %}
+    {% endif %}
+
+{% endblock management_content %}
+
+

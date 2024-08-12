@@ -1,0 +1,67 @@
+{% extends "composer/composer_base.html" %}
+
+{% load i18n %}
+
+{% block main_content %}
+    <div class="container-fluid" style="margin-bottom:10rem;">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-row justify-content-between align-items-end mb-2">
+                    <div class="d-flex flex-column justify-content-start">
+                        <h1 class="composer-page-header">{% trans "Course Resources" %}</h1>
+                        <div>
+                            {% blocktrans %}Course resources are
+                            files available for download from the 'home' tab in a course. {% endblocktrans %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <a href="{% url 'composer:course_resource_create' course_id=course.id %}"
+                           class="btn btn-primary">{% blocktrans %}Add Course Resource {% endblocktrans %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+
+                    {% include 'composer/course_resources/hx/course_resources_table.html' %}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h1 class="composer-page-header">{% trans "Educator Course Resources" %}</h1>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-12 col-lg-6 d-flex flex-row align-items-end">
+                {% blocktrans %}
+                Educator course resources are
+                files or content that are meant for educators only.
+                To see this content in the course's "Course Admin" tab,
+                a user must be in the EDUCATOR group and
+                have been assigned as a course educator for the course.
+                {% endblocktrans %}
+            </div>
+            <div class="col-12 col-lg-6 d-flex flex-row justify-content-end align-items-end ">
+                <a href="{% url 'composer:educator_course_resource_create' course_id=course.id %}"
+                   class="btn btn-primary">{% blocktrans %}Add Educator Course Resource{% endblocktrans %}</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+
+                    {% include 'composer/course_resources/hx/educator_course_resources_table.html' %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

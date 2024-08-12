@@ -1,0 +1,35 @@
+{% extends "course/course_base_default_page.html" %}
+{% load static tz react %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'custom_app/css/peer-review-journal.css' %}"/>
+{% endblock extra_css %}
+
+{% block sidebar %}
+    <!-- no course nav -->
+{% endblock %}
+
+{% block course_sub_nav %}
+    {{ block.super }}
+    <div class="course-sub-nav">
+        <div class="course-breadcrumb custom-app">
+            <div class="title">{{ custom_app.display_name }}</div>
+            <div class="description">{{ custom_app.short_description }}</div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block page_content %}
+
+    <div class="custom-app-simple-html">
+        {{ custom_app.description | safe }}
+    </div>
+
+
+{% endblock page_content %}
+
+{% block unit_controls_bottom %}
+{% endblock unit_controls_bottom %}
+

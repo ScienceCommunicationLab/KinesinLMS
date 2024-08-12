@@ -1,0 +1,12 @@
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+
+<div class="card-body bg-primary" style="--bs-bg-opacity: .1;">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form|crispy }}
+</div>
+
+
+

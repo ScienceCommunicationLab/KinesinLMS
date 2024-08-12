@@ -1,0 +1,22 @@
+{% extends "course_admin/course_admin_base.html" %}
+{% block course_admin_content %}
+    <div class="row" id="delete-submitted-answers">
+        <div class="col-12 col-lg-8 d-flex flex-column">
+          <p>
+            Use this form to delete answers submitted to assessments in this course, so that they can be re-submitted by students.
+          </p>
+          <p>
+            <em>Student progress may be affected by this action,</em>
+            but any students who have already achieved their assessment milestone or passed the course will not lose
+            these achievements.
+          </p>
+          <p>
+            To delete all answers submitted to all assessments by all students, leave the form fields blank.
+          </p>
+          <p>
+            Optionally select an individual student and/or assessment to delete only the answers submitted by that student / to that assessment.
+          </p>
+          {% include "course_admin/assessments/delete_submitted_answers_hx.html" %}
+        </div>
+    </div>
+{% endblock course_admin_content %}

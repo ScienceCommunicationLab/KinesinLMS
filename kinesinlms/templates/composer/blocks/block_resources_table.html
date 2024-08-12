@@ -1,0 +1,50 @@
+{% load i18n %}
+
+<table id="block-{{ block.id }}-resources-table"
+       hx-get="{% url 'composer:blocks:block_resources_list_hx' course_id=course.id pk=block.id %}"
+       hx-trigger="block{{ block.id }}ResourceAdded from:body"
+       hx-target="this"
+       class="table table-bordered ">
+    <thead>
+    <tr>
+        <th>{% translate 'Type' %}</th>
+        <th>URL</th>
+        <th>uuid</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if block.block_resources %}
+        {% for block_resource in block.block_resources.all %}
+            <tr>
+                <td>
+                    {{ block_resource.resource.type }}
+                </td>
+                <td>{{ block_resource.resource.url }}</td>
+                <td>
+                <span class="text-muted">
+                    {{ block_resource.resource.uuid }}
+                </span>
+                </td>
+                <td style="width:2rem;">
+                    <a hx-delete="{% url 'composer:blocks:delete_block_resource_hx' course_id=course.id block_id=block.id pk=block_resource.id %}"
+                       hx-target="#block-{{ block.id }}-resources-table"
+                       class="btn btn-danger">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="4">
+                <div>
+                    <p class="text-muted text-center">
+                        {% translate 'No resources' %}
+                    </p>
+                </div>
+            </td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>

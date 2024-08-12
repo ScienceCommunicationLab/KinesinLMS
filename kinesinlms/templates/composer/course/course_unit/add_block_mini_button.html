@@ -1,0 +1,40 @@
+{% comment %}
+A simple 'add block here' button that opens a dialog to add a new block.
+
+This template expects the following variables to be defined in the context:
+
+- insert_index: The index of the block in the page, if it were inserted here.
+- disabled:     Show in disabled state, just to keep screen layout the same.
+
+Remember that this button is shown multiple times on the same page, before each
+block and at the end of the page. So the insert_index is required to know where
+to insert the new block.
+
+{% endcomment %}
+
+<div class="d-flex flex-row w-100 justify-content-center"
+     style="height:50px;">
+    <div class="position-absolute">
+        <svg class="dotted-line"
+             xmlns="http://www.w3.org/2000/svg"
+             style="position:absolute; height:50px;">
+            <line x1="0" y1="0" x2="0" y2="100%" stroke="#000" stroke-width="1" stroke-dasharray="3"></line>
+        </svg>
+    </div>
+    <div class="position-absolute">
+        <a id="add-block-button-{{ before_block_id }}"
+                {% if disabled or add_block_btn_disabled %}
+           disabled
+                {% else %}
+           hx-get="{% url 'composer:show_add_block_modal_dialog_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id %}?before_block_id={{ before_block_id }}"
+           hx-target="#add-block-modal"
+           hx-swap="innerHTML"
+           data-bs-toggle="modal"
+           data-bs-target="#add-block-modal"
+           data-bs-title="Add a new block here"
+                {% endif %}
+           class="btn btn-light btn-sm mt-2 connector-add-block-button {% if disabled or add_block_btn_disabled %} disabled {% endif %}">
+            <i class="bi bi-box"></i>
+        </a>
+    </div>
+</div>

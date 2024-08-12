@@ -1,0 +1,40 @@
+{% load static %}
+
+{% if show_admin_controls %}
+    <div id="admin-controls-wrapper" class="d-print-none">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 d-flex flex-row align-items-center">
+                    <div class="controls-label">Admin controls</div>
+                    <div class="admin-controls">
+                        {% if admin_edit_url %}
+                            <a target="_blank"
+                               class="me-3 btn btn-outline-dark"
+                               href="{% url 'composer:course_edit_unit_node' course_id=course.id unit_node_id=current_unit_node_id %}">
+                                Edit&nbsp;Unit
+                            </a>
+                        {% endif %}
+                        <a class="btn btn-outline-dark d-print-none"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="right"
+                           title="Hide Admin Controls"
+                           href="{% url 'management:toggle_admin_controls' %}?show_admin_controls=False">
+                            <i class="bi bi-x"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <a target="_blank"
+       class="position-absolute btn "
+       style="bottom: 2px;
+              right: 10px"
+       data-bs-toggle="tooltip"
+       data-bs-placement="right"
+       title="Show admin controls"
+       href="{% url 'management:toggle_admin_controls' %}?show_admin_controls=True">
+        <i class="bi bi-gear-fill"></i>
+    </a>
+{% endif %}

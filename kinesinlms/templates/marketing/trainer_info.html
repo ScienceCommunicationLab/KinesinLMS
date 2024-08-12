@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% load static i18n core_tags %}
+
+
+
+{% block main_content %}
+
+  <style>
+
+    .kn-page-header h1 {
+      color: #3c3c3c;
+      font: normal 1.6em "Jost", "Helvetica Neue", "Open Sans", "Verdana", sans-serif;
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .trainer-info-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .trainer-info-text {
+      width: 100%;
+      max-width: 500px;
+      min-width: 250px;
+      margin-right: 50px;
+    }
+
+    .trainer-info-form {
+      width: 100%;
+      max-width: 500px;
+      min-width: 250px;
+      padding-bottom: 10em;
+    }
+
+    .trainer-info-form form {
+      background: #d3e8fa !important;
+      border-radius: 5px !important;
+      padding: 2em;
+    }
+
+  </style>
+
+
+  <section class="container">
+
+    <div class="kn-page-header">
+      <h1>Faculty or Staff Interested in Requiring<br>Our Courses for Their Trainees</h1>
+    </div>
+
+    <div class="trainer-info-wrapper">
+
+      <div class="trainer-info-text ">
+
+        <p> Several people let us know they are, or are considering, making one of our courses a requirement for their
+          trainees (undergrad, grad or postdoc). We are very excited to hear this! If you are planning to make this course a
+          requirement, we ask that you share a little info in the following form.
+
+        </p>
+
+        <p><b>Please use this form to let us know how you are planning to implement the course in your training program
+          and if there are ways we can help.</b> We will then follow up with you to see
+          how it went. The information you provide will help us iterate the course as well as design resources for other
+          groups/programs who wish to require this course for their trainees in the future.
+        </p>
+
+        <p>Thank you!</p>
+        <p><em>The {% site_name %} Team</em></p>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+      </div>
+
+      <div class="trainer-info-form">
+        <form action="/kn-trainer-info/" method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <input type="submit" value="Submit" class="btn btn-submit">
+        </form>
+      </div>
+    </div>
+
+
+  </section>
+
+
+{% endblock %}

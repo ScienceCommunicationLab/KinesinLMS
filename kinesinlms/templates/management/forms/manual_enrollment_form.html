@@ -1,0 +1,19 @@
+{% load static i18n core_tags %}
+{% load crispy_forms_filters %}
+<form id="manual-enrollment-form"
+      novalidate
+      action="{% url 'management:students_manual_enrollment' %}" method="post">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <a href="{% url 'management:students_manage' %}"
+       id="btn-cancel"
+       type="button"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+    <button id="btn-enroll"
+            type="submit"
+            class="btn btn-primary">
+        Enroll
+    </button>
+</form>

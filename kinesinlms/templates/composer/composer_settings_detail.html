@@ -1,0 +1,49 @@
+{% extends "composer/composer_base.html" %}
+{% load static crispy_forms_filters %}
+
+{% block infobar %}
+    {% comment %}
+    Hide infobar.
+    {% endcomment %}
+{% endblock %}
+
+{% block main_content %}
+
+    <div class="container" style="min-height:800px;">
+        <div class="row pt-4">
+            <div class="col-12">
+                <div class="d-flex flex-row align-items-center">
+                    <h2 class="w-100">Composer Settings</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4" style="margin-bottom:300px;">
+            <div class="col-12">
+                <form action="{% url 'composer:settings' %}"
+                      method="post">
+                    <div class="card ms-auto">
+                        <div class="card-header">
+                            Update Composer Settings
+                        </div>
+                        <div class="card-body">
+
+                            {% csrf_token %}
+                            {{ form | crispy }}
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="ms-auto">
+                                <button type="submit"
+                                        class="btn btn-primary">
+                                    Update
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

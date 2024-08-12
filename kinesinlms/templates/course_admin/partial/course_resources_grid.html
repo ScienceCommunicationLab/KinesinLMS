@@ -1,0 +1,238 @@
+{% load core_tags %}
+<div id="course-resources-list">
+
+    <div class="row">
+        <div class="col-12 col-lg-10">
+            <h3 class="mb-2">Course Content</h3>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-12 col-lg-10">
+            <table class="table table-bordered resources-table">
+                <thead>
+                    <tr>
+                        <th class="col-type">Type</th>
+                        <th class="col-title">Title</th>
+                        <th class="col-description">Description</th>
+                        <th class="col-resource">Resource</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for module in course_module_resources %}
+                        <tr>
+                            <td colspan="4" class="module-header">
+                                <div class="module-title">Module {{ module.content_index }}: {{ module.display_name }}</div>
+                            </td>
+                        </tr>
+
+                        {% for module_resource in module.resource_items %}
+
+                            <tr class="row-{{ module_resource.type }}">
+
+                                <td class="cell-icon cell-{{ module_resource.type }}"
+                                    style="text-align: center">
+                                    {% if module_resource.type == "infographic" %}
+                                        <i class="bi bi-chart-pie"></i>
+                                    {% elif module_resource.type == "video" %}
+                                        <i class="bi bi-film"></i>
+                                    {% elif module_resource.type == "file" %}
+                                        <i class="bi bi-file-earmark"></i>
+                                    {% elif module_resource.type == "web" %}
+                                        <i class="bi bi-link"></i>
+                                    {% else %}
+                                        <i class="bi bi-{{ module_resource.type }}"></i>
+                                    {% endif %}
+                                </td>
+
+                                <td class="col-title">
+                                    <div style="text-align: left">
+                                        {% if module_resource.type == "web" %}
+                                            <a href="{{ module_resource.url }}" target="_blank">{{ module_resource.title|show_none_for_none }}</a>
+                                        {% elif module_resource.title %}
+                                            {{ module_resource.title }}
+                                        {% else %}
+                                            ( no title )
+                                        {% endif %}
+                                    </div>
+                                    {% if module_resource.title_note %}<div class="title-note">{{ module_resource.title_note | safe }}</div>{% endif %}
+                                    <div>
+                                        {% for tag in module_resource.tags %}<span class="badge bg-light tag-{{ tag }}">{{ tag }}</span>{% endfor %}
+                                    </div>
+
+                                </td>
+
+                                <td class="col-description">
+                                    {% if module_resource.video_header %}<div class="text-muted">{{ module_resource.video_header }}</div>{% endif %}
+                                </td>
+
+                                <td class="col-resource">
+
+                                    {% if module_resource.type == "video" and not module_resource.hide %}
+
+                                        <a target="_blank"
+                                           style="min-width:8rem"
+                                           href="{{ module_resource.url }}"
+                                           class="btn btn-primary">
+                                            <i class="bi bi-youtube"></i>&nbsp;View
+                                        </a>
+
+                                        {% if module_resource.video_download %}
+                                            {% comment %}
+                                        Django has no way of accessing sub-attribute like module_resource.video_download.hd.
+                                        So have to use for...in.
+                                            {% endcomment %}
+                                            {% for key, value in module_resource.video_download.items %}
+                                                {% if key == "hd" %}
+                                                    <a href="{{ value }}" class="btn btn-dark" download>
+                                                        <i class="bi bi-cloud-arrow-down"></i>Download&nbsp;High</a>
+                                                {% endif %}
+                                                {% if key == "low" %}
+                                                    <a href="{{ value }}" class="btn btn-dark" download>
+                                                        <i class="bi bi-cloud-arrow-down"></i>Download&nbsp;Low
+                                                    </a>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% if module_resource.video_w_transcript_download %}
+                                            {% for key, value in module_resource.video_w_transcript_download.items %}
+                                                {% if key == "hd" %}
+                                                    <a href="{{ value }}" class="btn btn-dark" download>
+                                                        <i class="bi bi-cloud-arrow-down"></i>&nbsp;High w/ Transcript</a>
+                                                {% endif %}
+                                                {% if key == "low" %}
+                                                    <a href="{{ value }}" class="btn btn-dark" download>
+                                                        <i class="bi bi-cloud-arrow-down"></i>&nbsp;Low w/ Transcript
+                                                    </a>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% if module_resource.transcript_resource_id %}
+                                            <a href="{% url 'course:download_resource' course_run=course.run course_slug=course.slug block_resource_id=resource.transcript_resource_id %}"
+                                               target="_blank"
+                                               class="btn btn-light"
+                                               download>
+                                                <i class="bi bi-cloud-arrow-down"></i>&nbsp;Transcript
+                                            </a>
+                                        {% endif %}
+
+                                    {% elif module_resource.type == "infographic" %}
+
+                                        <a target="_blank"
+                                           href="{{ module_resource.url }}"
+                                           class="btn btn-dark"
+                                           download>
+                                            <i class="bi bi-cloud-arrow-down"></i> {{ module_resource.filetype }}
+                                        </a>
+
+                                    {% elif module_resource.type == "file" %}
+
+                                        <a target="_blank"
+                                           href="{{ module_resource.url }}"
+                                           class="btn btn-dark"
+                                           download>
+                                            <i class="bi bi-cloud-arrow-down"></i> {{ module_resource.filetype }}
+                                        </a>
+
+                                    {% elif module_resource.type == "web" %}
+
+                                        {# nothing #}
+
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                        <tr class="row-assessment">
+                            <td colspan="4" style="text-align:left;">
+                                <div>
+                                    <strong>Assessment Questions</strong>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% if module.assessments %}
+                            {% for assessment in module.assessments %}
+                                <tr class="row-assessment">
+                                    <td class="col-type cell-icon cell-assessment">
+                                        <i class="bi bi-question-circle"></i>
+                                    </td>
+                                    <td class="col-title">{{ assessment.display_name|show_none_for_none }}</td>
+                                    <td class="col-description">{{ assessment.question | safe }}</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4">
+                                    <div class="no-items">
+                                        <div class="text-muted">( No assessment questions for this module. )</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                        <tr class="row-discussion">
+                            <td colspan="4" style="text-align:left;">
+                                <div>
+                                    <strong>Discussion Questions</strong>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% if module.forum_topics %}
+                            {% for forum_topic in module.forum_topics %}
+                                <tr class="row-discussion">
+                                    <td class="cell-icon cell-discussion">
+                                        <i class="bi bi-chat-quote"></i>
+                                    </td>
+                                    <td class="col-title">{{ forum_topic.display_name }}</td>
+                                    <td class="col-description">{{ forum_topic.html_content | safe }}</td>
+                                    <td class="col-resource"></td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4">
+                                    <div class="no-items">
+                                        <div class="text-muted">( No discussion questions for this module. )</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12 col-lg-2 order-first order-lg-last">
+            <div class="legend">
+                <div class="legend-label">Legend:</div>
+                <div class="legend-item ">
+                    <i class="bi bi-question-circle icon-assessment"></i>&nbsp;Assessment
+                </div>
+                <div class="legend-item">
+                    <i class="bi bi-chat-quote icon-discussion"></i>&nbsp;Discussion
+                </div>
+                <div class="legend-item ">
+                    <i class="bi bi-film icon-video"></i>&nbsp;Video
+                </div>
+                <div class="legend-item ">
+                    <i class="bi bi-pie-chart-fill icon-infographic"></i>&nbsp;Infographic
+                </div>
+                <div class="legend-item ">
+                    <i class="bi bi-file-earmark icon-file"></i>&nbsp;File
+                </div>
+                <div class="legend-item">
+                    <i class="bi bi-link icon-web"></i>&nbsp;Web resource
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

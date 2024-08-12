@@ -1,0 +1,29 @@
+[
+  {
+    "model": "course.enrollmentquestion",
+    "fields": {
+      "created_at": "2023-02-28T04:09:45.699Z",
+      "updated_at": "2023-02-28T02:51:57.281Z",
+      "question_type": "MULTIPLE_CHOICE",
+      "question": "Why are you enrolling in this course?",
+      "definition": [
+        {
+          "key": "educator",
+          "value": "I am an educator reviewing this content, or using it in teaching"
+        },
+        {
+          "key": "independent-learner",
+          "value": "I am a learner taking this course independently for my own education"
+        },
+        {
+          "key": "required",
+          "value": "I am a learner taking this course to fulfill a course or program requirement"
+        },
+        {
+          "key": "other",
+          "value": "( other )"
+        }
+      ]
+    }
+  }
+]

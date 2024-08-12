@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load static i18n %}
+
+
+
+{% block infobar %}
+    {{ block.super }}
+{% endblock infobar %}
+
+
+{% block main_content %}
+    <div class="kn-speaker-bio">
+        {% if speaker.video_url %}
+            <div style="background-color: #000;">
+                <div class="container">
+                    <section class="video-header-row" style="background-color: #000;">
+                        <div class="row">
+                            <div class="col-12 col-xl-8" style="width:100%;">
+                                <div class="video-container"
+                                     style="overflow: hidden;position: relative;padding-bottom: 45%;">
+                                    <iframe title="YouTube video introducing {{ speaker.full_name }}"
+                                            src='https://www.youtube.com/embed/{{ speaker.video_url }}?rel=0'
+                                            allowfullscreen
+                                            style="height:100%;left:0;position:absolute;top:0;width:100%;border:none;"></iframe>
+                                </div>
+
+                            </div> <!-- ./col -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+        {% elif speaker.headshot_url %}
+            <div style="border-bottom: 1px dotted #333;">
+                <div class="container ">
+                    <section class="profile-pic-header-row">
+                        <div class="row">
+                            <div class="col-12 col-xl-10">
+                                <div class="profile-pic-container">
+                                    <img src="{{ speaker.headshot_url }}"
+                                         alt="Image of {{ speaker.full_name }}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        {% else %}
+            {# no video or headshot available for this speaker #}
+        {% endif %}
+        <div class="container" style="margin-bottom:25em;">
+            <section style="margin-top:40px;">
+                <div class="row">
+                    <div class="col-12 col-xl-8" >
+                        <h1 class="speaker-header">
+                            <span class="speaker-label">Speaker Bio:</span>
+                            <span class="speaker-name">
+						    {{ speaker.full_name }},
+					        </span>
+                            <span class="speaker-suffix">
+						    {{ speaker.suffix }}
+					        </span>
+                        </h1>
+
+                        {% if speaker.title %}
+                            <p class="speaker-title mt-3">
+                                {{ speaker.title|safe|default_if_none:"" }}
+                            </p>
+                        {% endif %}
+
+                        {% if speaker.institution %}
+                            <p class="speaker-institution mt-3">
+                                {{ speaker.institution|safe|default_if_none:"" }}
+                            </p>
+                        {% endif %}
+
+                        {% if speaker.pronouns %}
+                            <div class="info-pronouns mt-3">
+                                <span class="text-muted">Pronouns: </span> {{ speaker.pronouns }}
+                            </div>
+                        {% endif %}
+
+                        {% if speaker.identities %}
+                            <div class="info-identities" style="margin-top:1rem;">
+                                <span class="text-muted">Identities: </span> {{ speaker.identities }}
+                            </div>
+                        {% endif %}
+
+
+                        <div class="speaker-bio" style="margin-top:1rem;">
+                            {{ speaker.bio|safe|default_if_none:"" }}
+                        </div>
+
+                    </div> <!-- /.col -->
+                    <div class="col-12 col-xl-4" style="margin-top:2rem;">
+
+                        <div class="card">
+                            <div class="card-header" style="background-color: #fff;">
+                                Appears In ...
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <p>This instructor appears in the following courses:</p>
+                                {% for course in speaker.courses.all %}
+                                    <div class="mt-2">
+                                        <a href="{% url 'catalog:about_page' course_run=course.run course_slug=course.slug %}"
+                                           target="_blank">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                            {{ course.display_name }}
+                                        </a>
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+
+                        </div>
+
+                    </div>
+            </section>
+        </div>
+    </div>
+{% endblock main_content %}

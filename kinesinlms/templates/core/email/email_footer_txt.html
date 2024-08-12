@@ -1,0 +1,17 @@
+{% load static core_tags %}
+-------------------
+
+{% site_name %}
+{% site_url %}
+
+{# SOCIAL LINKS FOR EMAIL FOOTER #}
+
+{% facebook_page_url as fb_page_url %}
+{% if fb_page_url %}
+    Facebook: {{ fb_page_url }}
+{% endif %}
+
+{% twitter_page_url as tw_url %}
+{% if tw_url %}
+    Twitter: {{ tw_url }}
+{% endif %}

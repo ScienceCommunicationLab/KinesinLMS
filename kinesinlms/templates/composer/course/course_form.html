@@ -1,0 +1,62 @@
+{% load i18n crispy_forms_filters %}
+
+<form id="course-form"
+      {% if course %} action="{% url 'composer:course_edit_settings' pk=course.id %}" {% else %} action="{% url 'composer:course_create' %}" {% endif %}
+      method="post">
+
+    {% csrf_token %}
+    <div class="card main-card">
+        <div class="card-header">Course Details Form</div>
+        <div class="card-body">{{ form | crispy }}</div>
+        <div class="card-footer">
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-primary">
+                    {% if course %}
+                        Update
+                    {% else %}
+                        Create
+                    {% endif %}
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const dateFieldIDs = [
+      'id_start_date',
+      'id_end_date',
+      'id_enrollment_start_date',
+      'id_enrollment_end_date'
+    ];
+    const options = {
+      localization: {
+        locale: 'en-US',
+        format: 'mm/dd/yyyy HH:mm',
+      },
+      display: {
+        icons: {
+          type: 'icons',
+          time: 'bi bi-clock',
+          date: 'bi bi-calendar',
+          up: 'bi bi-arrow-up',
+          down: 'bi bi-arrow-down',
+          previous: 'bi bi-chevron-left',
+          next: 'bi bi-chevron-right',
+          today: 'bi bi-calendar-check',
+          clear: 'bi bi-trash',
+          close: 'bi bi-xmark'
+        },
+        components: {
+          useTwentyfourHour: true
+        }
+      }
+
+    }
+    dateFieldIDs.forEach(formElementID => {
+      const picker = new tempusDominus.TempusDominus(document.getElementById(formElementID), options);
+    })
+  });
+</script>

@@ -1,0 +1,25 @@
+{% load core_tags %}
+
+<div aria-live="polite"
+     aria-atomic="true"
+     class="bg-dark position-relative">
+    <div class="toast-container position-absolute end-0 p-3"
+         style="z-index:1000;
+                top:60px">
+        {% for message in messages %}
+            <div class="toast align-items-center {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}bg-success text-white {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}bg-danger text-white {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}bg-warning text-dark {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}bg-info text-white {% else %}bg-secondary text-white{% endif %} border-0 border-0 "
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true"
+                 {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} data-bs-delay="40000" data-bs-dismiss="toast" {% else %} data-bs-delay="3000" data-bs-dismiss="toast" {% endif %}>
+                <div class="d-flex">
+                    <div class="toast-body" style="min-width:250px;">{{ message }}</div>
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

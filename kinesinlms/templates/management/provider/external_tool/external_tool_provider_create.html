@@ -1,0 +1,33 @@
+{% extends "management/management_base.html" %}
+
+{% load static i18n management_tags %}
+
+{% load crispy_forms_tags %}
+
+{% block management_content %}
+
+    <div class="row">
+        <div class="col-12 col-lg-8 col-xl-6">
+            <div class="card">
+                <div class="card-header">{% trans "Create an External Tool Provider" %}</div>
+                <div class="card-body">
+                    <form id="external-tool-provider-form"
+                          action="{% url 'management:external_tool_provider_create' %}"
+                          method="post">
+
+                        {% csrf_token %}
+                        {% crispy form %}
+                        
+                        <button id="id_save_btn" class="btn btn-primary btn-lg mr-2" type="submit">{% trans "Create" %}</button>
+
+                    </form> 
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4 col-xl-6">
+            <strong>Managing External Tool Providers</strong>
+            <p>( Help content here... )</p>
+        </div>
+    </div>
+
+{% endblock management_content %}

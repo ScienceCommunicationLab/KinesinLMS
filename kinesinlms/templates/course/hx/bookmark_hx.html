@@ -1,0 +1,24 @@
+{% load core_tags unit_extras %}
+<div id="bookmark-container-{{ course_unit.id }}" class="bookmark-container d-print-none">
+
+    {% get_bookmark request.user course current_unit_node_id as bookmark %}
+
+    <button type="button"
+            hx-get="{% url "course:toggle_bookmark_hx"  course_slug=course.slug course_run=course.run module_slug=module_slug section_slug=section_slug unit_slug=unit_slug %}"
+            hx-target="#bookmark-container-{{ course_unit.id }}"
+            class="btn btn-default bookmark-button"
+            {% comment %}
+            The bootstrap tooltip is hanging around when the HTMx call is made.
+            TODO: Figure out how to get rid of the tooltip before making the HTMx call.
+            {% endcomment %}
+            {# data-bs-toggle="tooltip" #}
+            {# data-bs-placement="top" #}
+            {# aria-label="Bookmark page" #}
+            data-bs-original-title="Toggle bookmark">
+        <i class="bi {% if bookmark %}bi-bookmark-fill{% else %}bi-bookmark{% endif %}"
+           aria-hidden="true"
+           style="font-size: 1.2rem;"></i>
+    </button>
+
+
+</div>

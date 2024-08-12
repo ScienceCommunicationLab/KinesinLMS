@@ -1,0 +1,21 @@
+{% extends "course_admin/course_admin_base.html" %}
+
+{% load static %}
+
+{% load tz i18n %}
+
+{% block course_admin_content %}
+
+    <div class="row">
+        <div class="col-12 mb-3">
+
+            {% include 'course_admin/partial/student_detail_card.html' %}
+
+            <div class="mt-4">
+                <a href="{% url 'course:course_admin:course_enrollment:enrolled_student_events_list' course_slug=course.slug course_run=course_run pk=student.id %}"
+                   class="btn btn-primary">{% trans "View Events" %}</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock course_admin_content %}

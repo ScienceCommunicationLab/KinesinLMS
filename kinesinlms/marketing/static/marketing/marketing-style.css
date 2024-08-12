@@ -1,0 +1,52 @@
+
+.outer-wrapper {
+  color: #fff;
+  padding-top: 60px !important;
+  -webkit-animation: none;
+  -moz-animation: none;
+  animation: none;
+  -webkit-animation-fill-mode: none;
+  -moz-animation-fill-mode: none;
+  animation-fill-mode: none;
+  background-position: center top;
+  background-image: url(/static/images/hero/hero-bg-image.jpg);
+  background-size: auto;
+  background-repeat: no-repeat;
+  height: 340px;
+  max-width: none;
+}
+
+.title {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 65.88078%;
+  margin-left: 17.05961%;
+  box-sizing: border-box;
+  transition: all 0.2s linear 0s;
+  position: relative;
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.5);
+  background: #fff;
+  padding: 20px 30px;
+  min-height: 120px;
+}
+
+.courses-list-title {
+  text-align: center;
+  font-size: 1.3em;
+  margin-bottom: 2em;
+}
+
+.feature-bar {
+  background: linear-gradient(#359ff7, #1c93f6);
+  min-height: 50px;
+}
+
+.courses {
+  margin-top: 3em;
+  margin-bottom: 3em;
+}
+
+
+
+/* Bars on front page */

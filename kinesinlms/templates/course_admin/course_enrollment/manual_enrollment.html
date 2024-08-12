@@ -1,0 +1,60 @@
+{% extends "course_admin/course_admin_base.html" %}
+{% load static %}
+{% load tz %}
+
+{% comment %}
+This form is used by Admins to enroll one or more students in a course.
+{% endcomment %}
+
+{% block course_admin_content %}
+
+    <div class="row">
+        <div class="col-12 col-lg-8 mb-3">
+            <p>
+                Select a cohort below, and then add one or more usernames or emails,
+                separated by new lines.
+            </p>
+            <p>
+                Click "Enroll" to enroll these students in the selected course.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-8 d-flex flex-column"
+             style="margin-bottom:10rem;">
+            <div class="card">
+                <div class="card-body">
+                    {% include 'course_admin/course_enrollment/manual_enrollment_form.html' %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        function initForm() {
+            console.log("init form")
+            const courseSelectElem = document.getElementById('id_course');
+            console.log("courseSelectElem: ", courseSelectElem);
+            if (courseSelectElem) {
+                courseSelectElem.addEventListener('change', event => {
+                    const courseID = courseSelectElem.value;
+                    const selectURL = `/management/hx/cohorts_select/${courseID}/`;
+                    htmx.ajax('GET', selectURL, {target: '#manual-enrollment-form', swap: 'outerHTML'})
+                })
+            }
+        }
+
+        htmx.on("htmx:load", event => {
+            initForm();
+        });
+
+    </script>
+
+
+
+
+
+{% endblock %}

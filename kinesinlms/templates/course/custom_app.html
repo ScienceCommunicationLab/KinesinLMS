@@ -1,0 +1,21 @@
+{% extends "course/course_base_default_page.html" %}
+{% load tz %}
+
+{% block course_sub_nav %}
+  {{ block.super }}
+   <div class="course-sub-nav">
+    <div class="course-breadcrumb custom-app">
+      <div class="title">{{ custom_app.display_name }}</div>
+      <div class="description">{{ custom_app.short_description }}</div>
+    </div>
+   </div>
+{% endblock %}
+
+{% block page_content %}
+  <div class="custom-app-container">
+
+
+  </div>
+{% endblock page_content %}
+
+

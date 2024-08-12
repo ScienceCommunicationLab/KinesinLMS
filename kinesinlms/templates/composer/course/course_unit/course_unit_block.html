@@ -1,0 +1,28 @@
+{% comment %}
+This template holds together the block edit card as well as the add block mini button.
+
+We need these together in one div so that we can do things like delete a block and then
+remove the add block mini button and any other DOM elements related to it.
+
+So, for example, when a block is deleted the htmx call is going to target the top div's
+course-unit-block-(some id) ID.
+
+{% endcomment %}
+
+<div id="block-edit-card-wrapper-{{ unit_block.block.id }}"
+     class="block-edit-card-wrapper">
+
+    <div id="course-unit-block-{{ block.id }}">
+
+        <div id="block-edit-card-{{ block.id }}-before-slot"></div>
+
+        {% include 'composer/course/course_unit/add_block_mini_button.html' with before_block_id=block.id %}
+     
+        {% if editing_block_id == block.id %}
+            {% include 'composer/blocks/block_edit_card_active.html' %}
+        {% else %}
+            {% include 'composer/blocks/block_edit_card_read_only.html' %}
+        {% endif %}
+    </div>
+
+</div>

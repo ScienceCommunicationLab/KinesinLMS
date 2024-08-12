@@ -1,0 +1,38 @@
+{% extends "composer/composer_base.html" %}
+{% load tz %}
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+
+{% block main_content %}
+
+    <div class="container-fluid" style="min-height:800px;">
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="d-flex flex-row align-items-center">
+                    <h2 class="w-100">Delete SimpleInteractiveTool Template</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4" style="margin-bottom:300px;">
+            <form method="post">
+                {% csrf_token %}
+                <p>Are you sure you want to delete SimpleInteractiveTool template "{{ object.name }}"?</p>
+
+                <a href="{% url 'composer:simple_interactive_tool_templates_list' %}"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+                <input class="btn btn-danger"
+                       type="submit"
+                       value="Confirm">
+            </form>
+        </div>
+    </div>
+    
+{% endblock %}

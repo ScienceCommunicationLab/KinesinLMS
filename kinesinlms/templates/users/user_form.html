@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block main_content %}
+
+    <style>
+        .username {
+            padding: 1rem;
+            display: flex;
+            flex-direction: row;
+            border: 1px solid #eee;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+    </style>
+
+    <div class="container mt-4 mb-5 user-profile-wrapper">
+        <div class="row">
+            <div class="col-12 mx-auto ">
+                <h2>Your Courses Profile</h2>
+                <p style="max-width: 800px;margin-bottom: 3em;">You can update your profile information below. Remember,
+                    <strong>only your username is public. Your profile
+                        information is not shared with other students.</strong>
+                    See our <a href="{% url 'marketing:privacy_policy' %}">Privacy Policy</a> for more details.</p>
+                <div class="user-profile">
+                    <form class="form-horizontal" method="post" action="{% url 'users:update' %}">
+                        <label class="col-form-label ">
+                            Username
+                        </label>
+                        <p class="text-muted">(You cannot change your username.)</p>
+                        <div class="username">{{ user.username }}</div>
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="control-group">
+                            <div class="controls">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

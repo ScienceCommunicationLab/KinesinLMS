@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% block infobar %}
+    {{ block.super }}
+{% endblock infobar %}
+
+{% block main_content %}
+    <div class="container catalog">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3 g-3 card-deck pt-5 pb-5 ">
+            {% for course_description in course_descriptions %}
+                <div class="col">
+
+                    {% include 'marketing/components/course_card.html' with course_description=course_description %}
+
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock main_content %}

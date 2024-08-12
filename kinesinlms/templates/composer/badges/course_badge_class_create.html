@@ -1,0 +1,52 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+
+{% load static i18n %}
+
+{% load crispy_forms_filters %}
+
+{% block main_content %}
+    {{ block.super }}
+    <div class="container-fluid composer-content course ">
+        <div class="row mt-4">
+            <div class="col-12 col-lg-8">
+                <div class="card">
+                    <div class="card-header">New Course Badge</div>
+                    <div class="card-body">
+                        <form action="{% url 'composer:course_badge_class_create'  course_id=course.id %}"
+                              method="post">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <a href="{% url 'composer:course_badge_classes_list' course_id=course.id %}"
+                               type="button"
+                               class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3">
+                <p>{% blocktrans %}Create a badge to reward a student for an achievement in a course.{% endblocktrans %}</p>
+                <div class="alert alert-secondary">
+                    {% blocktrans %}
+                    <strong>Note:</strong> In order to complete this form, you must first create the badge class
+                    you want in the remote service (e.g. Badgr), and then copy the information provided by the remote
+                    service and paste below:
+                    <ul class="mt-2">
+                        <li>
+                            <strong>open badge ID</strong> This is usually the full URL of the badge class.
+                        </li>
+                        <li>
+                            <strong>Extenal entity ID</strong> Just the ID string for the badge. This is usually towards the end of the open badge ID.
+                        </li>
+                        <li>
+                            <strong>Image URL</strong>The full URL to the badge image. Probably looks just like the 'open badge ID' url with something like `/image` at the end
+                        </li>
+                    </ul>
+                    {% endblocktrans %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

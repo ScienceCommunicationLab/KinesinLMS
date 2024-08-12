@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="87px" height="59px" viewBox="0 0 87 59" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>printer</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(1.000000, 0.000000)" fill-rule="nonzero">
+            <path d="M1.57442133,27.7998626 L10.7479701,22.845554 C11.1859123,22.609037 11.6758203,22.485199 12.1735488,22.485199 L72.4055022,22.485199 C72.8871305,22.485199 73.3616794,22.6011582 73.7890323,22.823274 L83.3835301,27.8099948 C84.3767802,28.3262345 85,29.3525229 85,30.4719197 L85,55 C85,56.6568542 83.6568542,58 82,58 L3,58 C1.34314575,58 -6.90252123e-15,56.6568542 -7.10542736e-15,55 L-5.77315973e-15,30.4395075 C-5.41862946e-15,29.3371965 0.60451807,28.3236729 1.57442133,27.7998626 Z" id="Rectangle" stroke="#C6C2C2" fill="#E3E2E2"></path>
+            <path d="M0,29.5 L85,29.5" id="Line" stroke="#C6C2C2" stroke-linejoin="round"></path>
+            <rect id="Rectangle" stroke="#D9D7D7" fill="#FFFFFF" x="23.5" y="0.5" width="38" height="26"></rect>
+            <path d="M30.5,8.5 L51.5,8.5" id="Line-2" stroke="#C3C2C2" stroke-linecap="square"></path>
+            <path d="M30.5,13.5 L45.5,13.5" id="Line-2" stroke="#C3C2C2" stroke-linecap="square"></path>
+            <path d="M30.5,18.5 L49.5,18.5" id="Line-2" stroke="#C3C2C2" stroke-linecap="square"></path>
+            <path d="M10.5,41.5 L10.5,55.5 L75.5,55.5 L75.5,41.5 L48.0658722,41.5 L48.0658722,45.4546661 L36.1899719,45.4546661 L36.1899719,41.5 L10.5,41.5 Z" id="Rectangle" stroke="#C7C6C6" fill="#D1D1D1"></path>
+        </g>
+    </g>
+</svg>

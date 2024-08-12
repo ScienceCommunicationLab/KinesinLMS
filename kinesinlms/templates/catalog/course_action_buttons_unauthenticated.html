@@ -1,0 +1,10 @@
+{% comment %} User is not authenticated. {% endcomment %}
+{% load core_tags %}
+<div class="catalog-action-buttons d-flex">
+    <a href="/accounts/signup" class="btn btn-primary">Sign&nbsp;Up</a>
+    <a href="/accounts/login?next=/catalog/{{ course_slug }}/{{ course_run }}" class="btn btn-light">Sign&nbsp;In</a>
+    <div class="comment">
+        To enroll in this class, you first need to <a href="/accounts/signup">sign up</a> to {% site_name %} as a student
+        (or <a href="/accounts/login?next=/catalog/{{ course_slug }}/{{ course_run }}">sign in</a> if you're already a student).
+    </div>
+</div>
