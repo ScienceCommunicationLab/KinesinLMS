@@ -22,19 +22,12 @@ bibliography: paper.bib
 
 # Summary
 
-``KinesinLMS`` is an open-source, Django-based Learning Management System (LMS) designed to be a straightforward
-and easily extendable platform for authoring, managing and delivering online courses. The application was initially
-created by McQuillen Interactive Pty. Ltd for Science Communication Lab (SCL) as part of the iBiology Courses project.
-It has since been refactored into an open source project. The application is particularly suited to teams that 1) want
-to manage and run their own LMS using open-source Python code, 2) want to build something novel and domain-specific
-within that LMS, and 3) only have one or two developers available to do it.
+``KinesinLMS`` is an open-source, Django-based Learning Management System (LMS) designed to be a straightforward and easily extendable platform for authoring, managing and delivering online courses. The application was initially created by McQuillen Interactive Pty. Ltd for Science Communication Lab (SCL) as part of the iBiology Courses project.
+It has since been refactored into an open source project. The application is particularly suited to teams that 1) want to manage and run their own LMS using open-source Python code, 2) want to build something novel and domain-specific within that LMS, and 3) only have one or two developers available to do it.
 
-We present KinesinLMS as a simple, open-source, Django-based LMS suited to custom e-Learning research projects by small
-teams. The application includes course authoring, delivery tools, and integrates with common external services for
-features like badges, forum, email automation and survey management.
+We present KinesinLMS as a simple, open-source, Django-based LMS suited to custom e-Learning research projects by small teams. The application includes course authoring, delivery tools, and integrates with common external services for features like badges, forum, email automation and survey management.
 
-We named the project after kinesin, the small but powerful molecular motor discovered by Dr. Ron Vale and colleagues.
-Dr. Vale is a member of the SCL Board of Directors and the founder of iBiology and iBiology Courses.
+We named the project after kinesin, the small but powerful molecular motor discovered by Dr. Ron Vale and colleagues. Dr. Vale is a member of the SCL Board of Directors and the founder of iBiology and iBiology Courses.
 
 # Software
 
@@ -42,30 +35,18 @@ Dr. Vale is a member of the SCL Board of Directors and the founder of iBiology a
 
 # Statement of Need
 
-Many criteria influence the selection of a Learning Management System (LMS) . However, it is rare that these criteria
-concern the technical complexity of the underlying software. Seldom do they rank the simplicity and approachability of
-the system's architecture or codebase. Yet these factors significantly affect a development team's ability to deploy,
-manage and extend an LMS to support project goals. In various recent papers investigating criteria for selection of an
-LMS, developer concerns are markedly absent.[@sanchez:2024; @spirin:2022]
+Many criteria influence the selection of a Learning Management System (LMS) . However, it is rare that these criteria concern the technical complexity of the underlying software. Seldom do they rank the simplicity and approachability of the system's architecture or codebase. Yet these factors significantly affect a development team's ability to deploy,
+manage and extend an LMS to support project goals. In various recent papers investigating criteria for selection of an LMS, developer concerns are markedly absent.[@sanchez:2024; @spirin:2022]
 
-If an LMS is closed source, or open-source but hosted and managed by an external group, and the research team using
-the LMS does not intend to modify the code or data models in a fundamental way, developer concerns are indeed negligible.
+If an LMS is closed source, or open-source but hosted and managed by an external group, and the research team using the LMS does not intend to modify the code or data models in a fundamental way, developer concerns are indeed negligible.
 
-As web applications become more complex, industry experts are urging developers to both critically assess and work to
-minimize that complexity. As Ruby on Rails creator Heinemeier Hansson extolled in a recent interview, "Simpler. Simpler.
-We've gone through 40 years in the desert…for necessary but temporary complexity…we built bridges to get from A to B,
-and now we're at B and people haven't realized the bridges aren't necessary…individual programmers can understand the
-entire system they're working on.” [@HeinemeierHansson2024]
+As web applications become more complex, industry experts are urging developers to both critically assess and work to minimize that complexity. As Ruby on Rails creator Heinemeier Hansson extolled in a recent interview, "Simpler. Simpler. We've gone through 40 years in the desert…for necessary but temporary complexity…we built bridges to get from A to B,
+and now we're at B and people haven't realized the bridges aren't necessary…individual programmers can understand the entire system they're working on.” [@HeinemeierHansson2024]
 
-KinesinLMS is designed to be straightforward, providing "just enough" LMS for teams conducting innovative e-Learning
-research and services: enough features to start building something novel, including working examples of ways to implement
-rich interactivity, but not so complex the developer is lost in the churn.
+KinesinLMS is designed to be straightforward, providing "just enough" LMS for teams conducting innovative e-Learning research and services: enough features to start building something novel, including working examples of ways to implement rich interactivity, but not so complex the developer is lost in the churn.
 
-To be sure, an LMS -- or any web application -- should leverage newer, more complex technologies when the user interface
-or experience calls for it; in these cases build-heavy tools like Angular or React are hard to avoid, even though they
-bring along a (very) long list of concepts and Node dependencies when integrated into a project. In this regard, KinesinLMS
-espouses moderation, scoping complexity to only the places where it's required, rather than blanket inclusion across an
-entire application.
+To be sure, an LMS -- or any web application -- should leverage newer, more complex technologies when the user interface or experience calls for it; in these cases build-heavy tools like Angular or React are hard to avoid, even though they bring along a (very) long list of concepts and Node dependencies when integrated into a project. In this regard, KinesinLMS
+espouses moderation, scoping complexity to only the places where it's required, rather than blanket inclusion across an entire application.
 
 # Story of the Project
 
