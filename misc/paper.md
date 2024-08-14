@@ -33,7 +33,7 @@ bibliography: paper.bib
 
 We present ``KinesinLMS` as a simple, open-source, Django-based LMS suited to custom e-Learning research projects by small teams. The application includes course authoring, delivery tools, and integrates with common external services for features like badges, forum, email automation and survey management.
 
-We named the project after kinesin, the small but powerful molecular motor discovered by Dr. Ron Vale and colleagues. Dr. Vale is a member of the SCL Board of Directors and the founder of iBiology and iBiology Courses.
+We named the project after kinesin, the small but powerful molecular motor protein discovered by Dr. Ron Vale and colleagues. Dr. Vale is a member of the SCL Board of Directors and the founder of iBiology and iBiology Courses.
 
 # Software
 
