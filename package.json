@@ -52,6 +52,7 @@
     "@types/react-dom": "^18.3.0",
     "@types/styled-components": "^5.1.34",
     "@types/webpack": "^5.28.5",
+    "babel-jest": "^29.7.0",
     "babel-loader": "^9.1.3",
     "css-loader": "^7.1.2",
     "expose-loader": "^5.0.0",
@@ -67,13 +68,14 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
+    "undici": "^6.19.7",
     "webpack": "^5.93.0",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=22"
   },
   "browserslist": [
     "last 2 versions"

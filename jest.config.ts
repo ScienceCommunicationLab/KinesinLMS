@@ -12,4 +12,5 @@ export default {
     "^.+\\.(ts|tsx)$": "babel-jest",
     "^.+\\.(js|jsx)$": "babel-jest",
   },
+  setupFiles: ['./jest.polyfills.js'],
 };
