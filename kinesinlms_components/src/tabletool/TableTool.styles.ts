@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 type ControlsBarProps = {
-    hasNoActions: boolean;
+    hasnoactions: boolean;
 };
 
 export const ControlsBar = styled.div<ControlsBarProps>`
-    ${({ hasNoActions }) => hasNoActions && `
+    ${({ hasnoactions }) => hasnoactions && `
         display: none !important;
     `};
 `;

@@ -11,6 +11,7 @@ describe('TableTool', () => {
     beforeAll(() => server.listen());
     afterEach(() => server.resetHandlers());
     afterAll(() => server.close());
+    window.alert = jest.fn();
 
     it('should POST on the first save and PUT on all following saves', async () => {
         let postCount = 0;
