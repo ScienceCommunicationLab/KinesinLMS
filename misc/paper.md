@@ -68,8 +68,8 @@ For rich user interfaces, two different libraries are used: HTMx and React. Simp
 
 The initial implementation of ``KinesinLMS`` has two examples of React-based assessments that support higher levels of interaction: the "DiagramTool" and "TableTool".  Both tools are highly configurable to support different pedagogical goals. The "Diagram Tool" allows users to build networks of nodes and edges and can be pre-populated with unique question directions, starting information and starting diagrams (Figure 1). The "TableTool" allows users to answer questions in a structured manner and can be pre-populated with specific instructions and custom row and column information (Figure 2).
 
-![The "DiagramTool" component used in a mentor map activity.](images/diagramtool_example_1.png)
-![The "TableTool" component used in an evaluation activity.](images/tabletool_example_1.png)
+![The "DiagramTool" component used in a mentor map activity.\label{fig:diagram_tool_example_1}](images/diagram_tool_example_1.pdf){ width=95% }
+![The "TableTool" component used in an evaluation activity.\label{fig:tabletool_example_1}](images/tabletool_example_1.pdf){ width=95% }
 
 As a standard Django application, ``KinesinLMS` can be deployed to commercial hosting sites or a self-owned server. The documentation describes deployment steps for the popular Heroku service, but any hosting platform suited to standard Django deployments (such as Fly.io or Render.com) could be used.
 
