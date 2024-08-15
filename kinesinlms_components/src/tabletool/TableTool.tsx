@@ -113,7 +113,7 @@ const TableTool: VFC<Props> = ({
                 {!read_only && canAddEmptyRow && <AddRowButton onAdd={addEmptyRow} canAdd={!saving}/>}
             </div>
             <ControlsBar
-                hasNoActions={!showSaveButton}
+                hasnoactions={!showSaveButton }
                 className="controls-bar d-print-none"
             >
                 <div className="controls-bar-left"></div>
