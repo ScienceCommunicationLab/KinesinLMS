@@ -25,12 +25,12 @@ const TableCellCss = css`
 `;
 
 interface TableHeaderProps {
-    amountOfColumns: number;
+    amountofcolumns: number;
 }
 
 export const TableHeader = styled.th<TableHeaderProps>`
   ${TableCellCss};
-  width: ${({ amountOfColumns }) => 100 / amountOfColumns}%;
+  width: ${({ amountofcolumns }) => 100 / amountofcolumns}%;
 `;
 
 export const TableCell = styled.td`

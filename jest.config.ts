@@ -1,5 +1,10 @@
 export default {
   clearMocks: true,
+  // Have to add this testEnvironmentOptions to avoid an error when running jest
+  // https://github.com/mswjs/msw/issues/1786
+  testEnvironmentOptions: {
+    customExportConditions: [''],
+  },
   testEnvironment: "jsdom",
   testMatch: [
     "<rootDir>/kinesinlms_components/**/*.test.ts",

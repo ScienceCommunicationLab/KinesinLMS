@@ -12,7 +12,7 @@ const EditableTableTool: VFC<Props> = ({
     headers,
     rows,
 }) => {
-    const amountOfColumns = headers.filter(header => header.columnId !== DELETE_ROW_COLUMN_ID).length;
+    const amountofcolumns = headers.filter(header => header.columnId !== DELETE_ROW_COLUMN_ID).length;
 
     return (
         <Table>
@@ -20,7 +20,7 @@ const EditableTableTool: VFC<Props> = ({
                 <TableRow>
                     {headers.map(header => (
                         <TableHeader
-                            amountOfColumns={amountOfColumns}
+                            amountofcolumns={amountofcolumns}
                             key={header.columnId}
                         >
                             {header.value}
