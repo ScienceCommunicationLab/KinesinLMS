@@ -44,7 +44,7 @@ We named the project after kinesin, the small but powerful molecular motor prote
 
 # Statement of Need
 
-Many criteria can influence the selection of a Learning Management System (LMS). In the literature, there are several examples of the criteria that can be used to choose an LMS appropriate to one’s particular situation [@sanchez:2024; @spirin:2022]. However, it is rare that these criteria listed concern the technical complexity of the underlying software. Seldom do they rank the simplicity and approachability of the system's architecture or codebase. Yet these factors significantly affect a development team's ability to deploy, manage and extend an LMS to support project goals. In those papers investigating criteria for selection of an LMS, developer concerns are markedly absent [@sanchez:2024; @spirin:2022].
+Many criteria can influence the selection of a Learning Management System (LMS). In the literature, there are several examples of the criteria that can be used to choose an LMS appropriate to one’s particular situation [@sanchez:2024; @spirin:2022]. However, it is rare that these criteria listed concern the technical complexity of the underlying software. Seldom do they rank the simplicity and approachability of the system's architecture or codebase. Yet these factors significantly affect a development team's ability to deploy, manage and extend an LMS to support project goals. In those papers investigating criteria for selection of an LMS, developer concerns are markedly absent.
 
 If an LMS is closed source, or open-source but hosted and managed by an external group, and the team using the LMS does not intend to modify the code or data models in a fundamental way, developer concerns are indeed negligible. However, in cases where the project requires unique question/assessment types or other deviations from the chosen LMS’s standard features, look-and-feel, or functionality, the complexity of the underlying LMS code, and the resources needed to change and maintain the LMS become critical.
 
@@ -70,7 +70,7 @@ Complex features that would be hard to manage internally are offloaded to extern
 
 For rich user interfaces, two different libraries are used: HTMx and React. Simple interactions are handled by HTMx, a JavaScript library that reintroduces the concept of "hypertext" to achieve rich interactivity with less overhead than the more involved client-side frameworks like React, Angular, or Svelte.[@Gross2024]. Meanwhile, in places where the user interface complexity is very high, such as a custom drag-and-drop node diagram tool, React is used.
 
-The initial implementation of ``KinesinLMS`` has two examples of React-based assessments that support higher levels of interaction: the "DiagramTool" and "TableTool". Both tools are highly configurable to support different pedagogical goals. In the figures below, the "DiagramTool" and "TableTool" are shown in the context of a course on mentorship in scientific research communities.  Each tool communicates with the ``KinesinLMS`` server via a simple API implemented with the Django Rest Framework library.
+The initial implementation of ``KinesinLMS`` has two examples of React-based assessments that support higher levels of interaction: the "DiagramTool" and "TableTool".  Both tools are highly configurable to support different pedagogical goals. The "Diagram Tool" allows users to build networks of nodes and edges and can be pre-populated with unique question directions, starting information and starting diagrams (Figure 1). The "TableTool" allows users to answer questions in a structured manner and can be pre-populated with specific instructions and custom row and column information (Figure 2).
 
 ![The "DiagramTool" component used in a mentor map activity.](images/diagramtool_example_1.png)
 ![The "TableTool" component used in an evaluation activity.](images/tabletool_example_1.png)
@@ -79,6 +79,6 @@ As a standard Django application, ``KinesinLMS` can be deployed to commercial ho
 
 # Acknowledgements
 
-Work on KinesinLMS was supported by the National Institute for General Medical Sciences grants #5R25GM116704 and #1R25GM139147.
+Work on KinesinLMS was supported by the National Institute for General Medical Sciences grants #5R25GM116704 and #1R25GM139147. We thank Rosa Veguilla and Elie Maksoud of SCL for user experience contributions and Benjamin Van Renterghem and Jill Vogel for code contributions.
 
 # References
