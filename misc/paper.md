@@ -38,10 +38,6 @@ We present ``KinesinLMS` as a simple, open-source, Django-based LMS suited to cu
 
 We named the project after kinesin, the small but powerful molecular motor protein discovered by Dr. Ron Vale and colleagues. Dr. Vale is a member of the SCL Board of Directors and the founder of iBiology and iBiology Courses.
 
-# Software
-
--
-
 # Statement of Need
 
 Many criteria can influence the selection of a Learning Management System (LMS). In the literature, there are several examples of the criteria that can be used to choose an LMS appropriate to one’s particular situation [@sanchez:2024; @spirin:2022]. However, it is rare that these criteria listed concern the technical complexity of the underlying software. Seldom do they rank the simplicity and approachability of the system's architecture or codebase. Yet these factors significantly affect a development team's ability to deploy, manage and extend an LMS to support project goals. In those papers investigating criteria for selection of an LMS, developer concerns are markedly absent.
