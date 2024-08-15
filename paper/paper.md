@@ -34,7 +34,7 @@ bibliography: paper.bib
 
 ``KinesinLMS`` is an open-source, Django-based Learning Management System (LMS) designed to be a straightforward and easily extendable platform for authoring, managing, and delivering online courses. The application was initially developed by McQuillen Interactive Pty. Ltd for the non-profit Science Communication Lab (SCL) to serve as the online course delivery platform for the iBiology Courses project [@Schnoes2024]. It has since been refactored into an open source project. The application is particularly suited to teams that 1) want to manage and run their own LMS using open-source Python code, 2) want to build something novel and domain-specific within that LMS, and 3) only have one or two developers available to do it.
 
-We present ``KinesinLMS` as a simple, open-source, Django-based LMS suited to custom e-Learning projects by small teams. The application includes course authoring, delivery tools, and integrates with common external services for features like badges, forums, email automation, and survey management.
+We present ``KinesinLMS`` as a simple, open-source, Django-based LMS suited to custom e-Learning projects by small teams. The application includes course authoring, delivery tools, and integrates with common external services for features like badges, forums, email automation, and survey management.
 
 We named the project after kinesin, the small but powerful molecular motor protein discovered by Dr. Ron Vale and colleagues. Dr. Vale is a member of the SCL Board of Directors and the founder of iBiology and iBiology Courses.
 
