@@ -73,6 +73,6 @@ As a standard Django application, ``KinesinLMS``can be deployed to commercial ho
 
 # Acknowledgements
 
-Work on ``KinesinLMS`` was supported by the National Institute for General Medical Sciences grants #5R25GM116704 and #1R25GM139147. The authors thank Rosa Veguilla and Elie Maksoud of SCL for user experience contributions and Benjamin Van Renterghem and Jill Vogel for code contributions.
+Work on ``KinesinLMS`` was supported by the National Institute for General Medical Sciences grants #5R25GM116704 and #1R25GM139147. The authors would like to thank Rosa Veguilla and Elie Maksoud of SCL for user experience contributions and Benjamin Van Renterghem and Jill Vogel for code contributions.
 
 # References
