@@ -72,7 +72,7 @@ The initial implementation of ``KinesinLMS`` has two examples of React-based ass
 ![The "DiagramTool" component used in a mentor map activity.\label{fig:diagram_tool_example_1}](images/diagram_tool_example_1.pdf){ width=95% }
 ![The "TableTool" component used in an evaluation activity.\label{fig:tabletool_example_1}](images/tabletool_example_1.pdf){ width=95% }
 
-As a standard Django application, ``KinesinLMS``can be deployed to commercial hosting sites or a self-owned server. The documentation describes deployment steps for the popular Heroku service, but any hosting platform suited to standard Django deployments (such as Fly.io or Render.com) could be used.
+As a standard Django application, ``KinesinLMS``can be deployed to commercial hosting sites or a self-hosted server. The documentation describes deployment steps for the popular Heroku service, but any hosting platform suited to standard Django deployments (such as Fly.io or Render.com) could be used.
 
 # Acknowledgements
 
