@@ -17,6 +17,9 @@ authors:
   - name: Alexandra M. Schnoes
     orcid: https://orcid.org/0000-0003-2727-7758
     affiliation: 2
+  - name: Rose Veguilla
+    affiliation: 2
+
 
 affiliations:
  - name: McQuillen Interactive Pty. Ltd.
