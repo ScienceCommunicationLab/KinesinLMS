@@ -27,7 +27,7 @@ affiliations:
  - name: Science Communication Lab
    index: 2
 
-date: (Draft)
+date: August 16, 2024
 
 bibliography: paper.bib
 
