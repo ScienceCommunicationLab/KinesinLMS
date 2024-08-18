@@ -7,6 +7,7 @@ tags:
   - Learning Management System
   - Online Courses
   - e-Learning
+  - science education
   - Django
   - Python
 
