@@ -78,8 +78,10 @@ class TestLTILaunchProcess(TestCase):
 
     def test_login_url(self):
         """
-        The first step in an LTIv1.3 launch is to login to the platform.
-        Make sure we're creating the correct data in this request.
+        The first step in an LTIv1.3 launch is to get the external tool to
+        log back into the KinesinLMS. This is sometimes called the "login request."
+        Make sure we're creating the correct data in this request that's going
+        out to the tool.
         """
         login_url = self.external_tool_service.get_tool_login_url(
             user=self.enrolled_user
@@ -141,24 +143,26 @@ class TestLTILaunchProcess(TestCase):
 
         authorize_redirect_uri = reverse("lti:lti_authorize_redirect")
 
-        expected_login_hint = f"c_{self.course.id}_b_{self.block.id}_u_{self.enrolled_user.anon_username}"
+        expected_login_hint = (
+            f"c_{self.course.id}_b_{self.block.id}_u_{self.enrolled_user.anon_username}"
+        )
 
         # These are the parameters that the tool sends back to us
         # after the user has authenticated.
         request_from_tool_params = {
             "scope": "openid",
-            "response_type": "id_token",  
+            "response_type": "id_token",
             "client_id": self.external_tool_provider.client_id,
             "redirect_uri": self.external_tool_provider.launch_uri,
-            "login_hint": expected_login_hint,  
+            "login_hint": expected_login_hint,
             # Represents the state parameter from OAuth flow, for CSRF mitigation
             # This is just a CSRF token.
-            "state": "sample-state",  
-             # LTIv1.3 requires response mode to always be 'form_post'
-            "response_mode": "form_post", 
-            "nonce": "sample-nonce", 
+            "state": "sample-state",
+            # LTIv1.3 requires response mode to always be 'form_post'
+            "response_mode": "form_post",
+            "nonce": "sample-nonce",
             "prompt": "none",  # The platform should not prompt the user for authentication again
-            "lti_message_hint": expected_login_hint, 
+            "lti_message_hint": expected_login_hint,
         }
 
         # Create a test client to simulate the HTTP request
@@ -171,10 +175,8 @@ class TestLTILaunchProcess(TestCase):
         # submits the ID token back to the tool.
         self.assertEqual(response.status_code, 200, "Expected a 200 response")
 
-        # Assert that the redirect URL is the expected target link URI
-        expected_redirect_uri = self.external_tool_provider.launch_uri
-        self.assertEqual(
-            response["Location"],
-            expected_redirect_uri,
-            "Redirect URI did not match the expected target link URI",
-        )
+        # Assert that the form in the returned HTML has the correct action URL
+        response_text = response.content.decode('utf-8')
+        expected_form_action = 'action="https://example.com/launch"'
+
+        self.assertContains(response_text, expected_form_action)
