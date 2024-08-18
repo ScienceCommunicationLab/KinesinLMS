@@ -255,11 +255,19 @@ class ExternalToolView(Trackable):
     )
 
     # Per the LTI 1.3 standard:
-    #        Each LTI Link connected to a particular resource
-    #        MUST contain a platform unique identifier named resource_link_id.
+    #
+    #           Each LTI Link connected to a particular resource
+    #           MUST contain a platform unique identifier named resource_link_id.
+    #
+    # ...and in another spot the standard describes the rational for this id:
+    #
+    #           LTI uses the resource_link_id property to help platforms and tools differentiate 
+    #           amongst multiple links embedded in a single context. While all the links within a 
+    #           context will share the same context_id, each LTI resource link will have a platform 
+    #           wide unique resource link ID. 
     #
     # So essentially anytime we have a button saying "Launch External Tool"
-    # we need to have a unique identifier for that link.
+    # we need to have a globally unique identifier for that link.
     #
     # We use the uuid attached to this model instance as part of that unique identifier
     # Use our own AutoCharField to generate the unique uuid identifier.

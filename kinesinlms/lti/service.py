@@ -218,7 +218,7 @@ class ExternalToolLTIService:
         claims_dc.nonce = tool_request.nonce
         claims_dc.set_timestamp()  # sets the 'iat' and 'exp'
         claims_dc.iss = etp.issuer
-        claims_dc.aud = etp.client_id
+        claims_dc.aud = str(etp.client_id)
         claims_dc.sub = etp.get_sub(user)
 
         claims = asdict(claims_dc)
@@ -239,7 +239,7 @@ class ExternalToolLTIService:
                 ],
             },
             LTIParamName.RESOURCE_LINK.value: {
-                "id": self.external_tool_view.id,
+                "id": self.external_tool_view.resource_link_id,
                 # title and description are optional
                 # "title": self.external_tool_view.title,
                 # "description": self.external_tool_view.description,
