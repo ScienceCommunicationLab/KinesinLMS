@@ -172,8 +172,9 @@ class ExternalToolLTIService:
         user: User,
     ) -> dict:  # noqa: F841
         """
-        Authorize a user to access the tool resource (represented by this instance's
-        external_tool_view) and return the claims data that should be included.
+        Authorize a user to access the tool resource in the context of a particular
+        unit in a course (represented by this instance's external_tool_view) and return the 
+        claims data that should be included.
 
         This is the second step in the LTI 1.3 OIDC login process, where we've
         already sent the initial login request to the external tool (step #1), and
@@ -199,7 +200,14 @@ class ExternalToolLTIService:
         #   How do we make sure the request is valid in terms of LTI 1.3
         #   and the user is authenticated before proceeding?
 
-        external_tool_provider = external_tool_view
+        etp:ExternalToolProvider = self.external_tool_provider
+        if external_tool_view.external_tool_provider != etp:
+            # This service is currently tied to a single ExternalToolProvider
+            # So we need to make sure the ExternalToolView is associated with the same one.
+            # (There could be external tool views with different providers in the same course,
+            # in which case the caller should have configured this service with the correct
+            # provider before calling this method.)
+            raise Exception("ExternalToolView has a different ExternalToolProvider.")
         
         # TODO: Figure out how we can get a full URL back to the course
         #       unit that the user was on when they clicked the link.
@@ -209,15 +217,15 @@ class ExternalToolLTIService:
         claims_dc = LTI1v3ClaimsData()
         claims_dc.nonce = tool_request.nonce
         claims_dc.set_timestamp()  # sets the 'iat' and 'exp'
-        claims_dc.iss = self.external_tool_provider.issuer
-        claims_dc.aud = external_tool_provider.client_id
-        claims_dc.sub = self.external_tool_provider.get_sub(user)
+        claims_dc.iss = etp.issuer
+        claims_dc.aud = etp.client_id
+        claims_dc.sub = etp.get_sub(user)
 
         claims = asdict(claims_dc)
 
         lti_v3_1_claims = {
-            LTIParamName.DEPLOYMENT_ID.value: self.external_tool_provider.deployment_id,
-            LTIParamName.TARGET_LINK_URI.value: self.external_tool_provider.launch_uri,
+            LTIParamName.DEPLOYMENT_ID.value: etp.deployment_id,
+            LTIParamName.TARGET_LINK_URI.value: etp.launch_uri,
             LTIParamName.ROLES.value: [
                 # Static value for now until we figure out options
                 "http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"
