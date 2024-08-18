@@ -6,9 +6,9 @@ tags:
   - LMS
   - Learning Management System
   - Online Courses
+  - e-Learning
   - Django
   - Python
-  - e-Learning
 
 authors:
   - name: Daniel McQuillen
