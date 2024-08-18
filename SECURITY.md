@@ -3,11 +3,11 @@
 Science Communication Lab takes the security of our software products and services seriously, 
 including all of the open source code repositories managed through our GitHub organizations, such as GitHub.
 
-If you believe you have found a security vulnerability in our open source projects, please report it to us through coordinated disclosure.
+If you believe you have found a security vulnerability in our software projects, please report it to us through coordinated disclosure.
 
 Please do not report security vulnerabilities through public GitHub issues, discussions, or pull requests.
 
-Instead, please send an email to contact@scicommlab.org.
+Instead, please send an email to info@scicommlab.org.
 
 Please include as much of the information listed below as you can to help us better understand and resolve the issue:
 
