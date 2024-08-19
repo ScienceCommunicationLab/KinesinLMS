@@ -42,7 +42,8 @@ SCL funded the work with support from the National Institute for General Medical
 [iBiology Courses](https://courses.ibiology.org) is an e-learning site dedicated to helping university students and
 post-graduate researchers become better scientists and enhance career and professional development. The iBiology Courses
 e-Learning platform was built from scratch after the team struggled to find a simple platform that could be managed by
-one person but flexible enough for SCL's unique e-learning research goals.
+one person but flexible enough for SCL's unique e-learning research goals. (If you want to get sense of what a KinesinLMS course
+looks like, you could take one of the free courses on iBiology Courses. The UI there is an earlier version of KinesinLMS.)
 
 In 2023, SCL was funded by a supplementary grant from the National Institute for General Medical Sciences to make this custom
 e-Learning platform open source and available to the broader scientific community. KinesinLMS is the result of that effort!
