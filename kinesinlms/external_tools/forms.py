@@ -45,6 +45,7 @@ class ExternalToolProviderForm(ModelForm):
                 "login_url",
                 "launch_uri",
                 "public_keyset_url",
+                "client_id"
             ),
             HTML(deployment_id_div),
         )
