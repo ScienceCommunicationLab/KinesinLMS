@@ -45,8 +45,7 @@ e-Learning platform was built from scratch after the team struggled to find a si
 one person but flexible enough for SCL's unique e-learning research goals. (If you want to get sense of what a KinesinLMS course
 looks like, you could take one of the free courses on iBiology Courses. The UI there is an earlier version of KinesinLMS.)
 
-In 2023, SCL was funded by a supplementary grant from the National Institute for General Medical Sciences to make this custom
-e-Learning platform open source and available to the broader scientific community. KinesinLMS is the result of that effort!
+In 2023, SCL was funded by a supplementary grant from the National Institute for General Medical Sciences to make this custom e-Learning platform open source and available to the broader scientific community. KinesinLMS is the result of that effort!
 
 ## Features
 
@@ -71,6 +70,10 @@ Here's a quick list of some of the features KinesinLMS does give you:
 - Course search
 - Course bookmarks
 - LTI 1.3 connection to external tools (in development)
+
+## Funding
+
+KinesinLMS was supported by a supplementary grant from the National Institute for General Medical Sciences (#1R25GM139147).
 
 ## License
 
