@@ -1,7 +1,6 @@
 {% extends "management/management_base.html" %}
 {% load static i18n management_tags %}
 
-
 {% block management_content %}
 
     <div class="d-flex flex-row justify-content-between mb-1 align-items-center">
@@ -73,10 +72,10 @@
                         {% endif %}
                     </td>
                     <td>
-                        {{ external_tool_provider.deployment_id }}
+                        {{ external_tool_provider.client_id }}
                     </td>
                     <td>
-                        {{ external_tool_provider.client_id }}
+                        {{ external_tool_provider.deployment_id }}
                     </td>
                     <td style="text-align: center;">
                         <a href="{% url 'management:external_tool_provider_update' external_tool_provider.id %}"
