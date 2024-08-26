@@ -310,7 +310,10 @@ LOGGING = {
             "formatter": "verbose",
         }
     },
-    "root": {"level": "DEBUG", "handlers": ["console"]},
+    "root": {
+        "level": "DEBUG",
+        "handlers": ["console"],
+    },
 }
 
 # CACHES
@@ -522,7 +525,6 @@ TINYMCE_DEFAULT_CONFIG = {
         # "hr",
         # "code",
     ],
-    
     "paste_block_drop": False,
     "toolbar": "undo redo | formatselect |  bold italic forecolor backcolor emoticons | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |  removeformat | link image uploadimage | help",
     "convert_urls": False,

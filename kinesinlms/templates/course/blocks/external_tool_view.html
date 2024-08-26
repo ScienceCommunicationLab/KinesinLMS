@@ -1,31 +1,29 @@
 {% comment %} Block that renders an external tool view. At the moment, that just
 means a button that launches the tool in a separate tab. But in the future, it
-could be an iframe or something else. {% endcomment %} {% load lti_extras %}
+could be an iframe or something else. {% endcomment %}
+
+{% load lti_extras %}
 
 <div id="block_{{ block.id }}" class="block block-external-tool-view">
   {% if block_view_context == "COMPOSER" %}
 
-  <div class="text-muted">This is an external tool.</div>
-  <div>
-    <ul>
-      <li>Tool Provider: {{ block.external_tool_view.tool_provider }}</li>
-      <li>Launch URL: {{ block.external_tool_view.launch_url }}</li>
-    </ul>
-  </div>
+    <div class="text-muted">This is an external tool.</div>
+    <div>
+      <ul>
+        <li>Tool Provider: {{ block.external_tool_view.tool_provider }}</li>
+        <li>Launch URL: {{ block.external_tool_view.launch_url }}</li>
+      </ul>
+    </div>
 
   {% else %}
 
-  <h3>External Tool</h3>
+    <h3>External Tool</h3>
 
-  {# TODO: support iframe launch, etc. #}
+    {# TODO: support iframe launch, etc. #}
 
-  <a
-    href="{% get_external_tool_login_url block.external_tool_view %}"
-    target="_blank"
-    class="btn btn-primary mt-2"
-  >
-    Launch Tool
-  </a>
+    <a href="{% get_external_tool_login_url block.external_tool_view %}"
+       target="_blank"
+       class="btn btn-primary mt-2">Launch Tool</a>
 
   {% endif %}
 </div>

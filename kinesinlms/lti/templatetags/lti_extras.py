@@ -42,4 +42,6 @@ def get_external_tool_login_url(context, external_tool_view: ExternalToolView) -
 
     login_url = lti_service.get_tool_login_url(user=user)
 
+    logger.info(f"get_external_tool_login_url(): login_url = {login_url}")
+
     return login_url
