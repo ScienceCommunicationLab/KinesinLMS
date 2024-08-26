@@ -845,6 +845,9 @@ def unit_page(request,
     except Exception:
         logger.error("Could not create cookie to save user's last_viewed_unit")
 
+    if current_unit_node:
+        logger.debug(f"Viewing page: {current_unit_node.display_name}")
+
     return response
 
 
