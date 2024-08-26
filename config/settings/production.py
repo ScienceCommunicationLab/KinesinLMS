@@ -265,7 +265,20 @@ LOGGING = {
         'kinesinlms.badges': {
             'level': 'DEBUG',
             'handlers': ['console']
-        }
+        },
+
+        # Quiet down loggers from dependencies.
+        # Otherwise heroku logs get really messy.
+        'boto3': {
+            'level': 'CRITICAL',
+            'handlers': ['console']
+        },
+        'botocore': {
+            'level': 'CRITICAL',
+            'handlers': ['console']
+        },
+
+        
     }
 }
 
