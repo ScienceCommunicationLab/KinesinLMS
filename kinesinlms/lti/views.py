@@ -2,25 +2,32 @@ import logging
 from django.conf import settings
 from django.shortcuts import render
 from django.views import View
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+import base64
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
-from kinesinlms.external_tools.models import ExternalToolProvider
-from kinesinlms.lti.models import (
-    LTI1v3ClaimsData,
-    ToolAuthRequestData,
-)
+from django.contrib.auth.decorators import login_required
+from kinesinlms.learning_library.models import UnitBlock
+from kinesinlms.course.models import Course, Enrollment, CourseUnit
+from kinesinlms.external_tools.models import ExternalToolProvider, ExternalToolView
+from kinesinlms.lti.models import ToolAuthRequestData
 from kinesinlms.lti.service import ExternalToolLTIService
-import base64
+from kinesinlms.course.utils_access import can_access_course
 
 logger = logging.getLogger(__name__)
 
+# Views for use by External Tool
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-class LTIAuthorizeRedirect(View):  # OAuthLibMixin,
+
+class LTIAuthorizeRedirect(View):
     """
-    This view handles the tool's initial OIDC callback for LTIv1.3. Remember that LTIv1.3
-    follows the "third party initiated flow" variant of the OIDC process.
-
+    This view handles the external tool's initial OIDC callback for LTIv1.3.
+    It's not for direct access by the KinesinLMS user.
+    Remember that LTIv1.3 follows the "third party initiated flow" variant of the OIDC process.
     """
 
     def get(self, request, *args, **kwargs):
@@ -232,3 +239,84 @@ class JwksInfoView(View):
 
 
 jwks_info_view = JwksInfoView.as_view()
+
+
+# Views for KinesinLMS Templates
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+@login_required
+def lti_launch(
+    request,
+    course_slug: str,
+    course_run: str,
+    course_unit: int,
+    block_id: int,
+):
+    """
+    This view is the first step in the LTI login process. It's called by the
+    user clicking an HTMx-enabled button in the course unit. This view
+    will then perform the first part of the OIDC login process with the
+    external tool. If all goes well, the external tool will
+    The user will be sent to this URL in order to initiate the LTI login process.
+
+    Args:
+        request:        The request from the user.
+        course_slug:    The slug of the course.
+        course_run:     The run of the course.
+        course_unit:    The ID of the course unit.
+        block_id:       The ID of the block.
+
+    Returns:
+        HTTP response that redirects the user to the external tool's login URL.
+
+    """
+
+    # As with any request for unit content, we have to make sure user
+    # has access to the course and unit at the current time.
+
+    course = get_object_or_404(Course, slug=course_slug, run=course_run)
+    if request.user.is_superuser or request.user.is_staff:
+        pass
+    else:
+        enrollment = get_object_or_404(
+            Enrollment,
+            student=request.user,
+            course=course,
+            active=True,
+        )
+        if not can_access_course(request.user, course, enrollment=enrollment):
+            raise PermissionDenied()
+
+    try:
+        course_unit = CourseUnit.objects.get(pk=course_unit, course=course)
+    except CourseUnit.DoesNotExist:
+        raise PermissionDenied()
+
+    try:
+        unit_block = UnitBlock.objects.get(block_id=block_id, course_unit=course_unit)
+    except ExternalToolView.DoesNotExist:
+        logger.error(
+            f"ExternalToolView with block_id {block_id} "
+            f"and course_unit {course_unit} not found."
+        )
+        return HttpResponse(status=400)
+
+    try:
+        block = unit_block.block
+        external_tool_view = getattr(block, "external_tool_view", None)
+        if not external_tool_view:
+            raise Exception("No ExternalToolView found.")
+    except Exception as e:
+        logger.error(f"Error getting ExternalToolView: {e}")
+        return HttpResponse(status=400)
+
+    lti_service = ExternalToolLTIService(
+        external_tool_view=external_tool_view, course=course
+    )
+
+    # Build the login URL for the external tool with the required GET
+    # parameters for the OIDC login process.
+    login_url = lti_service.get_tool_login_url(user=request.user)
+
+    return redirect(login_url)

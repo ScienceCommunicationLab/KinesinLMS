@@ -1,8 +1,19 @@
-{% comment %} Block that renders an external tool view. At the moment, that just
+{% comment %} 
+Block that renders an external tool view. At the moment, that just
 means a button that launches the tool in a separate tab. But in the future, it
-could be an iframe or something else. {% endcomment %}
+could be an iframe or something else. 
 
-{% load lti_extras %}
+The launch process involves
+1. The initial URL points to a view in KinesinLMS, which creates an LTI launch
+   request and returns a "redirect" to the user's browser
+2. The browser follows the redirect to the LTI tool provider, which authenticates
+   the user and then redirects back to the 'callback' view method in KinesinLMS
+3. The callback view method processes the LTI launch request and then redirects
+   to the actual tool URL
+
+{% endcomment %}
+
+{% load static lti_extras %}
 
 <div id="block_{{ block.id }}" class="block block-external-tool-view">
   {% if block_view_context == "COMPOSER" %}
@@ -21,7 +32,7 @@ could be an iframe or something else. {% endcomment %}
 
     {# TODO: support iframe launch, etc. #}
 
-    <a href="{% get_external_tool_login_url block.external_tool_view %}"
+    <a href="{% url 'lti:lti_launch' course_slug=course.slug course_run=course.run course_unit=course_unit.id block_id=block.id %}"
        target="_blank"
        class="btn btn-primary mt-2">Launch Tool</a>
 
