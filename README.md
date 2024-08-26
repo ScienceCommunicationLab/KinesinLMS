@@ -73,7 +73,7 @@ Here's a quick list of some of the features KinesinLMS does give you:
 
 ## Funding
 
-KinesinLMS was supported by a supplementary grant from the National Institute for General Medical Sciences (#1R25GM139147).
+KinesinLMS was supported by grants #5R25GM116704 and #1R25GM139147 from the National Institute for General Medical Sciences.
 
 ## License
 

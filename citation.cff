@@ -7,6 +7,8 @@ authors:
 - family-names: "Schnoes"
   given-names: "Alexandra"
   orcid: "https://orcid.org/0000-0003-2727-7758"
+- family-names: "Veguilla"
+  given-names: "Rosa"
 title: "KinesinLMS"
 version: 0.0.1
 date-released: 2024-08-12
