@@ -16,7 +16,7 @@ authors:
     ordid: https://orcid.org/0009-0004-6149-4400
     affiliation: 1
   - name: Rose Veguilla
-    orcid: 
+    orcid: https://orcid.org/0009-0009-4054-1622
     affiliation: 2
   - name: Shannon Behrman
     orcid: 
