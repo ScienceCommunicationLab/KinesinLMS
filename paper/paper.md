@@ -84,6 +84,6 @@ As a standard Django application, ``KinesinLMS``can be deployed to commercial ho
 
 # Acknowledgements
 
-We would like to acknowledge Elie Maksoud, Benjamin Van Renterghem, and Jillian Vogel for their support and contributions to this project. Work on ``KinesinLMS`` was supported by the National Institute for General Medical Sciences grants R25GM116704 and R25GM139147. The funders had no role in study design, data collection and analysis, decision to publish, or preparation of the manuscript.
+We would like to acknowledge Elie Maksoud, Benjamin Van Renterghem, and Jillian Vogel for their support and contributions to this project. We would also like to thank Ron Vale for initiating the larger scientific effort this project is a part of, and for obtaining the original funding that led to this software. Work on ``KinesinLMS`` was supported by the National Institute for General Medical Sciences grants R25GM116704 and R25GM139147. The funders had no role in study design, data collection and analysis, decision to publish, or preparation of the manuscript.
 
 # References
