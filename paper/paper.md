@@ -54,7 +54,7 @@ To be sure, an LMS -- or any web application -- should leverage newer, more comp
 
 # Story of the Project
 
-``KinesinLMS`` started as a home-grown LMS to support iBiology Courses, a website that offers free online courses to life science trainees. The project was funded by the National Institute for General Medical Sciences (grant numbers R25GM116704 and R25GM139147). [@Schnoes2024]
+``KinesinLMS`` started as a home-grown LMS to support iBiology Courses, a website that offers free online courses to life science trainees. The project was funded by the National Institute for General Medical Sciences. [@Schnoes2024]
 
 In the first iteration of the iBiology Courses project, the research team ran a self-hosted, highly-customized version of Open edX. However, the high complexity in maintaining and modifying the Open edX system became a significant problem for the one-person development team. The analytics portion of the project was practically unusable. After a fruitless search for a simpler, open-source LMS that met the project's requirements, SCL authorized the development of a new,  custom LMS based on Django. Over the last three years, this system has successfully supported more than 10 fully-featured courses and over 8,000 graduate and postdoc students with 99.99% uptime and overwhelmingly positive reviews, while at the same time greatly increasing the velocity with which the team can make updates and add new features.
 
