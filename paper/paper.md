@@ -15,10 +15,17 @@ authors:
   - name: Daniel McQuillen
     ordid: https://orcid.org/0009-0004-6149-4400
     affiliation: 1
+  - name: Rose Veguilla
+    orcid: 
+    affiliation: 2
+  - name: Shannon Behrman
+    orcid: 
+    affiliation: 2
+  - name: Sarah Goodwin
+    orcid: 
+    affiliation: 2
   - name: Alexandra M. Schnoes
     orcid: https://orcid.org/0000-0003-2727-7758
-    affiliation: 2
-  - name: Rose Veguilla
     affiliation: 2
 
 
