@@ -22,7 +22,7 @@ authors:
     orcid: 
     affiliation: 2
   - name: Sarah Goodwin
-    orcid: 
+    orcid: https://orcid.org/0000-0003-4686-0914
     affiliation: 2
   - name: Alexandra M. Schnoes
     orcid: https://orcid.org/0000-0003-2727-7758

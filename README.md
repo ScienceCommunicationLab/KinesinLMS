@@ -37,7 +37,7 @@ That's because the "Composer" feature is especially raw at the moment, although 
 KinesinLMS originated as a custom e-Learning platform developed
 by [McQuillen Interactive](https://www.mcquilleninterative.com)
 for [Science Communication Lab (SCL)](https://www.sciencecommunicationlab.org/) as part of SCL's iBiology Courses project.
-SCL funded the work with support from the National Institute for General Medical Sciences (grants #5R25GM116704 and #1R25GM139147).
+SCL funded the work with support from the National Institute for General Medical Sciences (grants numbers R25GM116704 and R25GM139147).
 
 [iBiology Courses](https://courses.ibiology.org) is an e-learning site dedicated to helping university students and
 post-graduate researchers become better scientists and enhance career and professional development. The iBiology Courses
@@ -73,7 +73,7 @@ Here's a quick list of some of the features KinesinLMS does give you:
 
 ## Funding
 
-KinesinLMS was supported by grants #5R25GM116704 and #1R25GM139147 from the National Institute for General Medical Sciences.
+KinesinLMS was supported by grant numbers R25GM116704 and R25GM139147 from the National Institute for General Medical Sciences.
 
 ## License
 

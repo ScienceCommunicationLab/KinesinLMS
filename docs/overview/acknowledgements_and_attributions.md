@@ -4,7 +4,7 @@
 
 ## Project Funding
 
-KinesinLMS was developed with support from the National Institute for General Medical Sciences (grants #5R25GM116704 and #1R25GM139147).
+KinesinLMS was developed with support from the National Institute for General Medical Sciences (grants numbers R25GM116704 and R25GM139147).
 
 ## Libraries
 
