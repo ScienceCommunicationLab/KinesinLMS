@@ -19,7 +19,7 @@ authors:
     orcid: https://orcid.org/0009-0009-4054-1622
     affiliation: 2
   - name: Shannon Behrman
-    orcid: 
+    orcid: https://orcid.org/0000-0001-5236-0559
     affiliation: 2
   - name: Sarah Goodwin
     orcid: https://orcid.org/0000-0003-4686-0914
