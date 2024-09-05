@@ -80,17 +80,36 @@ class LTIToolLoginData:
 
 
 class LTIParamName(Enum):
+
+    SUB = "sub"
+    GIVEN_NAME = "given_name"
+    FAMILY_NAME = "family_name"
+    NAME = "name" # name full
+    EMAIL = "email"
+    PICTURE = "picture" # user image
+
     DEPLOYMENT_ID = "https://purl.imsglobal.org/spec/lti/claim/deployment_id"
     TARGET_LINK_URI = "https://purl.imsglobal.org/spec/lti/claim/target_link_uri"
-    ROLES = "https://purl.imsglobal.org/spec/lti/claim/roles"
-    RESOURCE_LINK = "https://purl.imsglobal.org/spec/lti/claim/resource_link"
     LTI_VERSION = "https://purl.imsglobal.org/spec/lti/claim/version"
     MESSAGE_TYPE = "https://purl.imsglobal.org/spec/lti/claim/message_type"
-    CONTEXT = "https://purl.imsglobal.org/spec/lti/claim/context"
-    LAUNCH_PRESENTATION = "https://purl.imsglobal.org/spec/lti/claim/launch_presentation"
+    
     TOOL_PLATFORM = "https://purl.imsglobal.org/spec/lti/claim/tool_platform"
     ENDPOINT = "https://purl.imsglobal.org/spec/lti/claim/endpoint"
 
+    # Source ID is an optional id. It's institution-specific and often sourced directly from an LMS or SIS. 
+    # It serves as a bridge between the tool and the institution’s internal user identifiers.
+    LIS = "https://purl.imsglobal.org/spec/lti/claim/lis"
+    LIS_PERSON_SOURCE_ID = "person_sourcedid"
+    LIS_COURSE_OFFERING_ID = "course_offering_sourcedid"
+    LIS_COURSE_SECTION_ID = "course_section_sourcedid"
+    RESOURCE_LINK = "https://purl.imsglobal.org/spec/lti/claim/resource_link"
+    ROLES = "https://purl.imsglobal.org/spec/lti/claim/roles"
+    CONTEXT = "https://purl.imsglobal.org/spec/lti/claim/context"
+    LAUNCH_PRESENTATION = "https://purl.imsglobal.org/spec/lti/claim/launch_presentation"
+    TOOL_CONSUMER_INSTANCE = "https://purl.imsglobal.org/spec/lti/claim/tool_consumer_instance"
+    ROLE_SCOPE_MENTOR = "https://purl.imsglobal.org/spec/lti/claim/role_scope_mentor"
+    CUSTOM = "https://purl.imsglobal.org/spec/lti/claim/custom"
+    
 
 class LTIContextType(Enum):
     COURSE_TEMPLATE = "http://purl.imsglobal.org/vocab/lis/v2/course#CourseTemplate"

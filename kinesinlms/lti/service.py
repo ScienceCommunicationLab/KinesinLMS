@@ -6,7 +6,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 import logging
 
+from kinesinlms.core.utils import get_current_site_profile
+from kinesinlms.core.models import SiteProfile
 from kinesinlms.course.models import Course
+from kinesinlms.external_tools.constants import LTI1P3InstitutionCoreRoles
 from kinesinlms.external_tools.models import ExternalToolView, ExternalToolProvider
 from kinesinlms.learning_library.models import Block
 from kinesinlms.lti.models import (
@@ -173,7 +176,7 @@ class ExternalToolLTIService:
     ) -> dict:  # noqa: F841
         """
         Authorize a user to access the tool resource in the context of a particular
-        unit in a course (represented by this instance's external_tool_view) and return the 
+        unit in a course (represented by this instance's external_tool_view) and return the
         claims data that should be included.
 
         This is the second step in the LTI 1.3 OIDC login process, where we've
@@ -200,7 +203,7 @@ class ExternalToolLTIService:
         #   How do we make sure the request is valid in terms of LTI 1.3
         #   and the user is authenticated before proceeding?
 
-        etp:ExternalToolProvider = self.external_tool_provider
+        etp: ExternalToolProvider = self.external_tool_provider
         if external_tool_view.external_tool_provider != etp:
             # This service is currently tied to a single ExternalToolProvider
             # So we need to make sure the ExternalToolView is associated with the same one.
@@ -208,11 +211,14 @@ class ExternalToolLTIService:
             # in which case the caller should have configured this service with the correct
             # provider before calling this method.)
             raise Exception("ExternalToolView has a different ExternalToolProvider.")
-        
+
         # TODO: Figure out how we can get a full URL back to the course
         #       unit that the user was on when they clicked the link.
         course_unit_url = None
 
+        site_profile: SiteProfile = get_current_site_profile()
+
+        # BASIC LTI 1.3 CLAIMS...
         # Prepare basic LTI 1.3 claims (replace with your actual data)
         claims_dc = LTI1v3ClaimsData()
         claims_dc.nonce = tool_request.nonce
@@ -223,20 +229,23 @@ class ExternalToolLTIService:
 
         claims = asdict(claims_dc)
 
+        # EXTRA LTI 1.3 CLAIMS...
+        # Add extra claims for LTI 1.3
         lti_v3_1_claims = {
             LTIParamName.DEPLOYMENT_ID.value: etp.deployment_id,
-            LTIParamName.TARGET_LINK_URI.value: etp.launch_uri,
+            # Per LTIv1.3 spec, this should be 'LtiResourceLinkRequest'
+            LTIParamName.MESSAGE_TYPE.value: "LtiResourceLinkRequest",
+            # We're only supporting LTIv1.3 for now
+            LTIParamName.LTI_VERSION.value: "1.3.0",
             LTIParamName.ROLES.value: [
                 # Static value for now until we figure out options
-                "http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"
+                LTI1P3InstitutionCoreRoles.STUDENT.value
             ],
             LTIParamName.CONTEXT.value: {
                 "id": self.course.token,
                 "label": self.course.token,
                 "title": self.course.display_name,
-                "type": [
-                    LTIContextType.COURSE_OFFERING.value
-                ],
+                "type": [LTIContextType.COURSE_OFFERING.value],
             },
             LTIParamName.RESOURCE_LINK.value: {
                 "id": self.external_tool_view.resource_link_id,
@@ -244,16 +253,36 @@ class ExternalToolLTIService:
                 # "title": self.external_tool_view.title,
                 # "description": self.external_tool_view.description,
             },
-            # We're only supporting LTIv1.3 for now
-            LTIParamName.LTI_VERSION.value: "1.3.0",
-            # Per LTIv1.3 spec, this should be 'LtiResourceLinkRequest'
-            LTIParamName.MESSAGE_TYPE.value: "LtiResourceLinkRequest",
-
+            LTIParamName.TOOL_PLATFORM.value: {
+                "guid": site_profile.uuid,
+                "contact_email": settings.CONTACT_EMAIL,
+                "description": site_profile.description,
+                "name": site_profile.site.name,
+                "url": site_profile.site.domain,
+                # Not sure what 'product_family_code' is...
+                # "product_family_code": "ExamplePlatformVendor-Product",
+                # Don't need version...
+                #"version": "1.0",
+            },
+            LTIParamName.TARGET_LINK_URI.value: etp.launch_uri,
             LTIParamName.LAUNCH_PRESENTATION.value: {
                 "document_target": self.external_tool_view.launch_type,
                 "return_url": course_unit_url,
+                # "height": 400,
+                # "width": 800,
             },
+            LTIParamName.CUSTOM.value: {
+                # DMcQ: Using this for testing with JupyterHub
+                # See: https://ltiauthenticator.readthedocs.io/en/latest/lti13/getting-started.html
+                "lms_username": user.username,
+            }
 
+            # TODO:
+            #LTIParamName.LIS.value: {
+            #    LTIParamName.LIS_PERSON_SOURCE_ID.value: "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
+            #    LTIParamName.LIS_COURSE_OFFERING_ID.value: "example.edu:SI182-F16",
+            #    LTIParamName.LIS_COURSE_SECTION_ID.value: "example.edu:SI182-001-F16"
+            #},
             # TODO: Consider other claims:
             # "given_name": "Meh",
             # "family_name": "Average",
@@ -264,23 +293,20 @@ class ExternalToolLTIService:
             #     "name": "Some LMS",
             #     "product_family_code": "KinesinLMS"
             # }
-            
             # TODO: Implement claim for AGS scope
             # See examples in the LTI 1.3 spec https://www.imsglobal.org/spec/lti-ags/v2p0#example-service-claims  ...
-            # This claim MUST be included in LTI messages if any of the Assignment 
+            # This claim MUST be included in LTI messages if any of the Assignment
             # and Grade Services are accessible by the tool in the context of the LTI message.
             # LTIParamName.ENDPOINT.value: {
             #   "scope": [
-            #     
+            #
             #   ]
             # }
-
             # TODO: Do we need names roles service
             # "https://purl.imsglobal.org/spec/lti-nrps/claim/namesroleservice": {
             #   "context_memberships_url": "https://demo.moodle.net/mod/lti/services.php/CourseSection/47/bindings/2/memberships",
             #   "service_versions": ["1.0", "2.0"]
             # }
-
         }
 
         claims |= lti_v3_1_claims
