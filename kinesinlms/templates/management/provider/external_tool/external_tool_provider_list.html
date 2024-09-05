@@ -22,6 +22,7 @@
             <td>{% trans "URLs" %}</td>
             <td style="width:7rem;">{% trans "Client ID" %}</td>
             <td style="width:9rem;">{% trans "Deployment ID" %}</td>
+            <td style="width:10rem;">{% trans "Issuer" %}</td>
             <td style="text-align: center; width: 8rem;">{% trans "Edit" %}</td>
             <td style="text-align: center; width: 8rem;">{% trans "Delete" %}</td>
         </tr>
@@ -76,6 +77,9 @@
                     </td>
                     <td>
                         {{ external_tool_provider.deployment_id }}
+                    </td>
+                    <td>
+                        {{ external_tool_provider.issuer }}
                     </td>
                     <td style="text-align: center;">
                         <a href="{% url 'management:external_tool_provider_update' external_tool_provider.id %}"
