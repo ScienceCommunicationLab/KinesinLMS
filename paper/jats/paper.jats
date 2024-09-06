@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.2 20190208//EN"
+                  "JATS-publishing1.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.2" article-type="other">
+<front>
+<journal-meta>
+<journal-id></journal-id>
+<journal-title-group>
+<journal-title>Journal of Open Source Software</journal-title>
+<abbrev-journal-title>JOSS</abbrev-journal-title>
+</journal-title-group>
+<issn publication-format="electronic">2475-9066</issn>
+<publisher>
+<publisher-name>Open Journals</publisher-name>
+</publisher>
+</journal-meta>
+<article-meta>
+<article-id pub-id-type="publisher-id">0</article-id>
+<article-id pub-id-type="doi">N/A</article-id>
+<title-group>
+<article-title>KinesinLMS: A Simple and Practical Learning Management
+System for (Very) Small Teams</article-title>
+</title-group>
+<contrib-group>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0009-0004-6149-4400</contrib-id>
+<name>
+<surname>McQuillen</surname>
+<given-names>Daniel</given-names>
+</name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0009-0009-4054-1622</contrib-id>
+<name>
+<surname>Veguilla</surname>
+<given-names>Rose</given-names>
+</name>
+<xref ref-type="aff" rid="aff-2"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0001-5236-0559</contrib-id>
+<name>
+<surname>Behrman</surname>
+<given-names>Shannon</given-names>
+</name>
+<xref ref-type="aff" rid="aff-2"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0003-4686-0914</contrib-id>
+<name>
+<surname>Goodwin</surname>
+<given-names>Sarah</given-names>
+</name>
+<xref ref-type="aff" rid="aff-2"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0003-2727-7758</contrib-id>
+<name>
+<surname>Schnoes</surname>
+<given-names>Alexandra M.</given-names>
+</name>
+<xref ref-type="aff" rid="aff-2"/>
+</contrib>
+<aff id="aff-1">
+<institution-wrap>
+<institution>McQuillen Interactive Pty. Ltd.</institution>
+</institution-wrap>
+</aff>
+<aff id="aff-2">
+<institution-wrap>
+<institution>Science Communication Lab</institution>
+</institution-wrap>
+</aff>
+</contrib-group>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-08-16">
+<day>16</day>
+<month>8</month>
+<year>2024</year>
+</pub-date>
+<volume>¿VOL?</volume>
+<issue>¿ISSUE?</issue>
+<fpage>¿PAGE?</fpage>
+<permissions>
+<copyright-statement>Authors of papers retain copyright and release the
+work under a Creative Commons Attribution 4.0 International License (CC
+BY 4.0)</copyright-statement>
+<copyright-year>2022</copyright-year>
+<copyright-holder>The article authors</copyright-holder>
+<license license-type="open-access" xlink:href="https://creativecommons.org/licenses/by/4.0/">
+<license-p>Authors of papers retain copyright and release the work under
+a Creative Commons Attribution 4.0 International License (CC BY
+4.0)</license-p>
+</license>
+</permissions>
+<kwd-group kwd-group-type="author">
+<kwd>LMS</kwd>
+<kwd>Learning Management System</kwd>
+<kwd>Online Courses</kwd>
+<kwd>e-Learning</kwd>
+<kwd>science education</kwd>
+<kwd>Django</kwd>
+<kwd>Python</kwd>
+</kwd-group>
+</article-meta>
+</front>
+<body>
+<sec id="summary">
+  <title>Summary</title>
+  <p><monospace>KinesinLMS</monospace> is an open-source, Django-based
+  Learning Management System (LMS) designed to be a straightforward and
+  easily extendable platform for authoring, managing, and delivering
+  online courses. The application was initially developed by McQuillen
+  Interactive for the non-profit Science Communication Lab (SCL) to
+  serve as the online course delivery platform for the iBiology Courses
+  project
+  (<xref alt="Schnoes &amp; Nguyen, 2024" rid="ref-Schnoes2024" ref-type="bibr">Schnoes
+  &amp; Nguyen, 2024</xref>). It has since been refactored into an open
+  source project. The application is particularly suited to small teams
+  that 1) want to manage and run their own LMS using open-source Python
+  code, 2) want to build something novel and domain-specific within that
+  LMS, and 3) only have one or two developers available to do it. The
+  application includes course authoring, delivery tools, and integrates
+  with common external services for features like badges, forums, email
+  automation, and survey management.</p>
+  <p>We named the project after kinesin, the small but powerful
+  molecular motor protein discovered by Dr. Ron Vale and colleagues.
+  Dr. Vale is a member of the SCL Board of Directors and the founder of
+  iBiology and iBiology Courses.</p>
+</sec>
+<sec id="statement-of-need">
+  <title>Statement of Need</title>
+  <p>Many criteria can influence the selection of a Learning Management
+  System (LMS). In the literature, there are several examples of the
+  criteria that can be used to choose an LMS appropriate to one’s
+  particular situation
+  (<xref alt="sanchez:2024?" rid="ref-sanchezU003A2024" ref-type="bibr"><bold>sanchez:2024?</bold></xref>;
+  <xref alt="spirin:2022?" rid="ref-spirinU003A2022" ref-type="bibr"><bold>spirin:2022?</bold></xref>).
+  However, it is rare that these proposed criteria concern the technical
+  complexity of the underlying software. Seldom do they rank the
+  simplicity and approachability of the system’s architecture or
+  codebase. Yet these factors significantly affect a development team’s
+  ability to deploy, manage and extend an LMS to support project goals.
+  In those papers investigating criteria for selection of an LMS,
+  developer concerns are markedly absent.</p>
+  <p>If an LMS is closed source, or open-source but hosted and managed
+  by an external group, and the team using the LMS does not intend to
+  modify the code or data models in a fundamental way, developer
+  concerns are indeed negligible. However, in cases where the project
+  requires unique question/assessment types or other deviations from the
+  chosen LMS’s standard features, look-and-feel, or functionality, the
+  complexity of the underlying LMS code, and the resources needed to
+  change and maintain the LMS, become critical.</p>
+  <p>As web applications become more complex, industry experts are
+  urging developers to both critically assess and work to minimize that
+  complexity. As Ruby on Rails creator Heinemeier Hansson extolled in a
+  recent interview, “Simpler. Simpler. We’ve gone through 40 years in
+  the desert…for necessary but temporary complexity…we built bridges to
+  get from A to B, and now we’re at B and people haven’t realized the
+  bridges aren’t necessary…individual programmers can understand the
+  entire system they’re working on.”
+  (<xref alt="Hansson, 2024" rid="ref-HeinemeierHansson2024" ref-type="bibr">Hansson,
+  2024</xref>)</p>
+  <p><monospace>KinesinLMS</monospace> is designed to be
+  straightforward, providing “just enough” LMS for teams conducting
+  innovative e-Learning services and research: enough features to start
+  building something novel, including working examples of ways to
+  implement rich interactivity, but not so complex the developer is lost
+  in the churn.</p>
+  <p>To be sure, an LMS – or any web application – should leverage
+  newer, more complex technologies when the user interface or experience
+  calls for it; in these cases build-heavy tools like Angular or React
+  are hard to avoid, even though they bring along a (very) long list of
+  concepts and Node dependencies when integrated into a project. In this
+  regard, <monospace>KinesinLMS</monospace>espouses moderation, scoping
+  complexity to only the places where it’s required, rather than blanket
+  inclusion across an entire application.</p>
+</sec>
+<sec id="story-of-the-project">
+  <title>Story of the Project</title>
+  <p><monospace>KinesinLMS</monospace> started as a home-grown LMS to
+  support iBiology Courses, a website that offers free online courses to
+  life science trainees. The project was funded by the National
+  Institute for General Medical Sciences.
+  (<xref alt="Schnoes &amp; Nguyen, 2024" rid="ref-Schnoes2024" ref-type="bibr">Schnoes
+  &amp; Nguyen, 2024</xref>)</p>
+  <p>In the first iteration of the iBiology Courses project, the
+  research team ran a self-hosted, highly-customized version of Open
+  edX. However, the high complexity in maintaining and modifying the
+  Open edX system became a significant problem for the one-person
+  development team. The analytics portion of the project was practically
+  unusable. After a fruitless search for a simpler, open-source LMS that
+  met the project’s requirements, SCL authorized the development of a
+  new, custom LMS based on Django. Over the last three years, this
+  system has successfully supported more than 10 fully-featured courses
+  and over 8,000 graduate and postdoc students with 99.99% uptime and
+  overwhelmingly positive reviews, while at the same time greatly
+  increasing the velocity with which the team can make updates and add
+  new features.</p>
+  <p>In 2023, the NIH awarded the project a supplemental grant to
+  transform and generalize the iBiology Courses LMS into a generic, open
+  source system that other teams in science education can use for their
+  e-Learning research efforts. This rewrite included a large number of
+  improvements as well as developer-focused documentation on setting up
+  and managing the system.</p>
+</sec>
+<sec id="implementation-overview">
+  <title>Implementation Overview</title>
+  <p><monospace>KinesinLMS</monospace>follows standard conventions
+  established by the Django team and further extended by the “Django
+  Cookiecutter” project
+  (<xref alt="Greenfield &amp; Contributors, 2024" rid="ref-RoyGreenfield2024" ref-type="bibr">Greenfield
+  &amp; Contributors, 2024</xref>). It uses one PostgreSQL database for
+  persistence, Redis for a cache, and Celery for asynchronous tasks.
+  Bootstrap 5.3 is used for a reliable, responsive, and accessible user
+  interface. Django is based on the well-established straightforward
+  Model-View-Template pattern, which makes it easier to understand the
+  application’s existing components as well as add new features.</p>
+  <p>Complex features that would be hard to manage internally are
+  offloaded to external resources. The developer is meant to set up
+  these ‘providers’ via the <monospace>KinesinLMS</monospace>dashboard.
+  The providers are meant to be generic so that the developer can write
+  a subclass for a particular commercial service. In the initial
+  implementation, forums are hosted on Discourse, badges are hosted in
+  Badgr.com, surveys are hosted on Qualtrics, and email automations are
+  hosted in ActiveCampaign.</p>
+  <p>For rich user interfaces, two different libraries are used: HTMx
+  and React. Simple interactions are handled by HTMx, a JavaScript
+  library that reintroduces the concept of “hypertext” to achieve rich
+  interactivity with less overhead than the more involved client-side
+  frameworks like React, Angular, or
+  Svelte.(<xref alt="Gross et al., 2024" rid="ref-Gross2024" ref-type="bibr">Gross
+  et al., 2024</xref>). Meanwhile, in places where the user interface
+  complexity is very high, such as a custom drag-and-drop node diagram
+  tool, React is used.</p>
+  <p>The initial implementation of <monospace>KinesinLMS</monospace> has
+  two examples of React-based assessments that support higher levels of
+  interaction: the “DiagramTool” and the “TableTool”. Both tools are
+  highly configurable to support different pedagogical goals. The
+  “Diagram Tool” allows users to build networks of nodes and edges and
+  can be pre-populated with unique question directions, starting
+  information and starting diagrams (Figure 1). The “TableTool” allows
+  users to answer questions in a structured manner and can be
+  pre-populated with specific instructions and custom row and column
+  information (Figure 2).</p>
+  <p><named-content content-type="image">The “DiagramTool” component
+  used in a mentor map
+  activity.<styled-content id="figU003Adiagram_tool_example_1"></styled-content></named-content>
+  <named-content content-type="image">The “TableTool” component used in
+  an evaluation
+  activity.<styled-content id="figU003Atabletool_example_1"></styled-content></named-content></p>
+  <p>As a standard Django application,
+  <monospace>KinesinLMS</monospace>can be deployed to commercial hosting
+  sites or a self-hosted server. The documentation describes deployment
+  steps for the popular Heroku service, but any hosting platform suited
+  to standard Django deployments (such as Fly.io or Render.com) could be
+  used.</p>
+</sec>
+<sec id="acknowledgements">
+  <title>Acknowledgements</title>
+  <p>We would like to acknowledge Elie Maksoud, Benjamin Van Renterghem,
+  and Jillian Vogel for their support and contributions to this project.
+  We would also like to thank Ron Vale for initiating the larger
+  scientific effort this project is a part of, and for obtaining the
+  original funding that led to this software. Work on
+  <monospace>KinesinLMS</monospace> was supported by the National
+  Institute for General Medical Sciences grants R25GM116704 and
+  R25GM139147. The funders had no role in study design, data collection
+  and analysis, decision to publish, or preparation of the
+  manuscript.</p>
+</sec>
+</body>
+<back>
+<ref-list>
+  <title></title>
+  <ref id="ref-Schnoes2024">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Schnoes</surname><given-names>Noah H.</given-names><suffix>Alexandra M. AND Green</suffix></name>
+        <name><surname>Nguyen</surname><given-names>Ronald D. AND Goodwin</given-names><suffix>Thi A. AND Vale</suffix></name>
+      </person-group>
+      <article-title>Bridging gaps in traditional research training with iBiology courses</article-title>
+      <source>PLOS Biology</source>
+      <publisher-name>Public Library of Science</publisher-name>
+      <year iso-8601-date="2024-01">2024</year><month>01</month>
+      <volume>22</volume>
+      <issue>1</issue>
+      <uri>https://doi.org/10.1371/journal.pbio.3002458</uri>
+      <pub-id pub-id-type="doi">10.1371/journal.pbio.3002458</pub-id>
+      <fpage>1</fpage>
+      <lpage>5</lpage>
+    </element-citation>
+  </ref>
+  <ref id="ref-Gross2024">
+    <element-citation publication-type="book">
+      <person-group person-group-type="author">
+        <name><surname>Gross</surname><given-names>Carson</given-names></name>
+        <name><surname>Stepinski</surname><given-names>Adam</given-names></name>
+        <name><surname>Akşimşek</surname><given-names>Deniz</given-names></name>
+      </person-group>
+      <source>Hypermedia systems</source>
+      <publisher-loc>Columbia, SC</publisher-loc>
+      <year iso-8601-date="2024">2024</year>
+    </element-citation>
+  </ref>
+  <ref id="ref-HeinemeierHansson2024">
+    <element-citation>
+      <person-group person-group-type="author">
+        <name><surname>Hansson</surname><given-names>David Heinemeier</given-names></name>
+      </person-group>
+      <article-title>DHH - ruby on rails, 37signals, and the future of web development</article-title>
+      <publisher-name>YouTube</publisher-name>
+      <year iso-8601-date="2024-03">2024</year><month>03</month>
+      <uri>https://youtu.be/rEZNbM4MUdo?t=3919</uri>
+    </element-citation>
+  </ref>
+  <ref id="ref-RoyGreenfield2024">
+    <element-citation>
+      <person-group person-group-type="author">
+        <name><surname>Greenfield</surname><given-names>Daniel Roy</given-names></name>
+        <name><surname>Contributors</surname><given-names>Cookiecutter Django</given-names></name>
+      </person-group>
+      <article-title>Cookiecutter/cookiecutter-django: Cookiecutter django is a framework for jumpstarting production-ready django projects quickly</article-title>
+      <year iso-8601-date="2024">2024</year>
+      <uri>https://github.com/cookiecutter/cookiecutter-django</uri>
+    </element-citation>
+  </ref>
+</ref-list>
+</back>
+</article>

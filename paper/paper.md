@@ -1,5 +1,4 @@
 ---
-
 title: 'KinesinLMS: A Simple and Practical Learning Management System for (Very) Small Teams'
 
 tags:
@@ -13,7 +12,7 @@ tags:
 
 authors:
   - name: Daniel McQuillen
-    ordid: https://orcid.org/0009-0004-6149-4400
+    orcid: https://orcid.org/0009-0004-6149-4400
     affiliation: 1
   - name: Rose Veguilla
     orcid: https://orcid.org/0009-0009-4054-1622
@@ -28,17 +27,14 @@ authors:
     orcid: https://orcid.org/0000-0003-2727-7758
     affiliation: 2
 
-
 affiliations:
- - name: McQuillen Interactive Pty. Ltd.
-   index: 1
- - name: Science Communication Lab
-   index: 2
+  - name: McQuillen Interactive Pty. Ltd.
+    index: 1
+  - name: Science Communication Lab
+    index: 2
 
 date: August 16, 2024
-
 bibliography: paper.bib
-
 ---
 
 # Summary
