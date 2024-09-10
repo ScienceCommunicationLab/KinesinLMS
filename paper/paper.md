@@ -12,19 +12,19 @@ tags:
 
 authors:
   - name: Daniel McQuillen
-    orcid: https://orcid.org/0009-0004-6149-4400
+    orcid: 0009-0004-6149-4400
     affiliation: 1
   - name: Rose Veguilla
-    orcid: https://orcid.org/0009-0009-4054-1622
+    orcid: 0009-0009-4054-1622
     affiliation: 2
   - name: Shannon Behrman
-    orcid: https://orcid.org/0000-0001-5236-0559
+    orcid: 0000-0001-5236-0559
     affiliation: 2
   - name: Sarah Goodwin
-    orcid: https://orcid.org/0000-0003-4686-0914
+    orcid: 0000-0003-4686-0914
     affiliation: 2
   - name: Alexandra M. Schnoes
-    orcid: https://orcid.org/0000-0003-2727-7758
+    orcid: 0000-0003-2727-7758
     affiliation: 2
 
 affiliations:
