@@ -37,4 +37,4 @@ class TestDashboardViews(TestCase):
         response = self.client.get(index_url)
         self.assertEqual(response.status_code, 200)
         context_enrollments = [course['enrollment'] for course in response.context['courses_info']]
-        self.assertQuerysetEqual(Enrollment.objects.filter(student=self.enrolled_user), context_enrollments)
+        self.assertQuerySetEqual(Enrollment.objects.filter(student=self.enrolled_user), context_enrollments)
