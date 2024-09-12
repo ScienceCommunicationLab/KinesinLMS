@@ -191,8 +191,13 @@ class JwksInfoView(View):
         if settings.LTI_PLATFORM_PRIVATE_KEY:
             # Load PEM-encoded private key
             private_key_data = settings.LTI_PLATFORM_PRIVATE_KEY.encode("utf-8")
+            backend = default_backend()
+            logger.info(f"private_key_data: {private_key_data}")
+            logger.info(f"backend: {backend}")
             private_key = serialization.load_pem_private_key(
-                private_key_data, password=None, backend=default_backend()
+                private_key_data,
+                password=None,
+                backend=backend,
             )
 
             # Extract public key
