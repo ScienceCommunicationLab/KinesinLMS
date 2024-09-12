@@ -108,9 +108,11 @@ class ExternalToolProvider(Trackable):
     launch_uri = models.URLField(
         null=False,
         blank=False,
-        help_text=_("The launch (target link) URI for this external tool."
-                    "This is the URL to launch the tool once the login process is complete."
-                    "Sometimes this URL is called the 'redirection URI'."),
+        help_text=_(
+            "The launch (target link) URI for this external tool."
+            "This is the URL to launch the tool once the login process is complete."
+            "Sometimes this URL is called the 'redirection URI'."
+        ),
     )
 
     active = models.BooleanField(
@@ -120,8 +122,8 @@ class ExternalToolProvider(Trackable):
         help_text=_("Enable external tool provider."),
     )
 
-    # TODO: 
-    #   Is it that *either* public_keyset_url *or* public_key 
+    # TODO:
+    #   Is it that *either* public_keyset_url *or* public_key
     #   is required for LTI Advantage?
 
     public_keyset_url = models.URLField(
@@ -261,10 +263,10 @@ class ExternalToolView(Trackable):
     #
     # ...and in another spot the standard describes the rational for this id:
     #
-    #           LTI uses the resource_link_id property to help platforms and tools differentiate 
-    #           amongst multiple links embedded in a single context. While all the links within a 
-    #           context will share the same context_id, each LTI resource link will have a platform 
-    #           wide unique resource link ID. 
+    #           LTI uses the resource_link_id property to help platforms and tools differentiate
+    #           amongst multiple links embedded in a single context. While all the links within a
+    #           context will share the same context_id, each LTI resource link will have a platform
+    #           wide unique resource link ID.
     #
     # So essentially anytime we have a button saying "Launch External Tool"
     # we need to have a globally unique identifier for that link.
@@ -278,17 +280,71 @@ class ExternalToolView(Trackable):
         help_text=_("A unique identifier for this external tool view."),
     )
 
+    custom_target_link_uri = models.CharField(
+        verbose_name=_("Custom Target Link URI"),
+        null=True,
+        blank=True,
+        max_length=1000,
+        help_text=_(
+            "A custom target link helps direct to a particular resources in the external tool. If this URL is not defined, the default launch URI of the ExternalToolProvider will be used to launch the tool."
+        ),
+    )
+
+    append_to_default_launch_uri = models.BooleanField(
+        verbose_name=_("Append custom launch URI to default launch URI"),
+        default=False,
+        blank=False,
+        help_text=_(
+            "If True, the 'Custom Target Link URI' will be appended to the default launch URI to create "
+            "a full URL for the 'target_link_uri' sent to the tool when launched."
+            "If False, the 'Custom Target Link URI' will be used as the full URL in the 'target_link_uri'."
+        ),
+    )
+
     @property
-    def launch_url(self) -> Optional[str]:
-        if self.external_tool_provider:
-            return self.external_tool_provider.launch_uri
-        else:
-            # TODO:
-            #       We may want to allow ExternalToolView to define it's own external tool / launch URL
-            #       This would be a 'one off' external tool that wouldn't need to be configured
-            #       as an ExternalToolProvider
+    def target_link_uri(self) -> Optional[str]:
+        """
+        The target link URI for this external tool view. This is the URL that will
+        launch (once the login process is complete) a specific view of the tool for
+        this particular point in the course. So this URL might be a very specific path
+        to a particular resource in the tool.
+
+        If the ExternalToolView does not define a custom launch URI, then we will
+        use the launch URI of the ExternalToolProvider.
+
+        Returns:
+            Optional[str]: _description_
+        """
+
+        if not self.external_tool_provider:
             logger.error(
                 f"Cannot determine launch URL. ExternalToolView '{self}' does "
                 f"not have an ExternalToolProvider"
             )
             return None
+
+        default_launch_uri = self.external_tool_provider.launch_uri
+        if not default_launch_uri:
+            logger.error(
+                f"Cannot determine launch URL. ExternalToolProvider '{self.external_tool_provider}' "
+                f"does not have a launch URI defined"
+            )
+            return None
+
+        if self.custom_target_link_uri:
+            if self.append_to_default_launch_uri:
+                return f"{default_launch_uri}{self.custom_target_link_uri}"
+            else:
+                return self.custom_target_link_uri
+            
+        return default_launch_uri
+    
+    @property
+    def launch_uri(self) -> str:
+        """
+        The launch URI for this external tool view.
+        """
+        if self.external_tool_provider:
+            return self.external_tool_provider.launch_uri
+        return ""
+    

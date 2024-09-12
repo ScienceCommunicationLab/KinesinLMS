@@ -218,6 +218,8 @@ class ExternalToolLTIService:
 
         site_profile: SiteProfile = get_current_site_profile()
 
+        target_link_uri = external_tool_view.target_link_uri
+
         # BASIC LTI 1.3 CLAIMS...
         # Prepare basic LTI 1.3 claims (replace with your actual data)
         claims_dc = LTI1v3ClaimsData()
@@ -264,7 +266,7 @@ class ExternalToolLTIService:
                 # Don't need version...
                 #"version": "1.0",
             },
-            LTIParamName.TARGET_LINK_URI.value: etp.launch_uri,
+            LTIParamName.TARGET_LINK_URI.value: target_link_uri,
             LTIParamName.LAUNCH_PRESENTATION.value: {
                 "document_target": self.external_tool_view.launch_type,
                 "return_url": course_unit_url,

@@ -169,7 +169,7 @@ class HTMLBlockPanelForm(BasePanelModelForm):
             id="image_drop_zone",
             data_course_id=self.course.id,
             data_block_id=self.block.id,
-            hx_encoding="multipart/form-data"
+            hx_encoding="multipart/form-data",
         )
 
         self.helper.layout = Layout(
@@ -183,12 +183,27 @@ class HTMLBlockPanelForm(BasePanelModelForm):
 
 
 class ExternalToolViewPanelForm(BasePanelModelForm):
+    target_link_uri = forms.CharField(
+        label="Target Link URI",
+        required=False,
+        widget=forms.TextInput(
+            attrs={"readonly": "readonly", "class": "form-control-plaintext"}
+        ),
+        help_text=(
+            "This field shows the target link URI for this external tool view. "
+            "It is constructed using the custom launch URI and/or the default launch URI "
+            "from the ExternalToolProvider, depending on the settings."
+        ),
+    )
+
     class Meta:
         model = ExternalToolView
         fields = [
             "external_tool_provider",
             "resource_link_id",
             "launch_type",
+            "custom_target_link_uri",
+            "append_to_default_launch_uri"
         ]
 
     def __init__(self, *args, **kwargs):
@@ -200,6 +215,27 @@ class ExternalToolViewPanelForm(BasePanelModelForm):
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper()
+        self.helper.form_method = "post"
+
+        # Define form layout
+        self.helper.layout = Layout(
+            "external_tool_provider",
+            "resource_link_id",
+            "launch_type",
+            "custom_target_link_uri",
+            "append_to_default_launch_uri",
+            HTML(
+                f"""
+                    <div class="form-group mb-5">
+                    <label for="id_target_link_uri">Target Link URI</label>
+                    <div class="alert alert-info">{self.instance.target_link_uri or ''}</div>
+                    <small class="form-text text-muted">This field shows the target link URI for this external tool view. 
+                    It defaults to the launch URI defined in the External Tool Provider. But you can overrided it using
+                    the 'Custom Launch URI' above.</small>
+                    </div>
+                """
+            ),
+        )
 
     def clean(self):
         cleaned_data = super().clean()
