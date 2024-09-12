@@ -194,11 +194,15 @@ class JwksInfoView(View):
             backend = default_backend()
             logger.info(f"private_key_data: {private_key_data}")
             logger.info(f"backend: {backend}")
-            private_key = serialization.load_pem_private_key(
-                private_key_data,
-                password=None,
-                backend=backend,
-            )
+            try:
+                private_key = serialization.load_pem_private_key(
+                    private_key_data,
+                    password=None,
+                    backend=backend,
+                )
+            except Exception as e:
+                logger.error(f"Error loading private key: {e}")
+                return HttpResponse(status=500)
 
             # Extract public key
             public_key = private_key.public_key()
