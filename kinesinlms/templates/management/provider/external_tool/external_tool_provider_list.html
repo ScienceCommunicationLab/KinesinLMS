@@ -41,6 +41,16 @@
                         {{ external_tool_provider.active }}
                     </td>
                     <td class="d-flex flex-column">
+                        {% if external_tool_provider.login_url %}
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <div style="min-width:6rem">
+                                Login URL:
+                            </div>
+                            <div class="alert alert-info mb-0">
+                                {{ external_tool_provider.login_url }}
+                            </div>
+                        </div>
+                    {% endif %}
                         {% if external_tool_provider.launch_uri %}
                             <div class="d-flex flex-row align-items-center mb-2">
                                 <div style="min-width:6rem">
@@ -48,16 +58,6 @@
                                 </div>
                                 <div class="alert alert-info mb-0">
                                     {{ external_tool_provider.launch_uri }}
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if external_tool_provider.login_url %}
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <div style="min-width:6rem">
-                                    Login URL:
-                                </div>
-                                <div class="alert alert-info mb-0">
-                                    {{ external_tool_provider.login_url }}
                                 </div>
                             </div>
                         {% endif %}
