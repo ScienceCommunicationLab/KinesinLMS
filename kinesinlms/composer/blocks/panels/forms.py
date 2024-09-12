@@ -228,7 +228,7 @@ class ExternalToolViewPanelForm(BasePanelModelForm):
                 f"""
                     <div class="form-group mb-5">
                     <label for="id_target_link_uri">Target Link URI</label>
-                    <div class="alert alert-info">{self.instance.target_link_uri or ''}</div>
+                    <div class="alert alert-info mt-2">{self.instance.target_link_uri or ''}</div>
                     <small class="form-text text-muted">This field shows the target link URI for this external tool view. 
                     It defaults to the launch URI defined in the External Tool Provider. But you can overrided it using
                     the 'Custom Launch URI' above.</small>

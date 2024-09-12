@@ -291,7 +291,7 @@ class ExternalToolView(Trackable):
     )
 
     append_to_default_launch_uri = models.BooleanField(
-        verbose_name=_("Append custom launch URI to default launch URI"),
+        verbose_name=_("Append custom target link URI to default launch URI"),
         default=False,
         blank=False,
         help_text=_(
@@ -336,9 +336,9 @@ class ExternalToolView(Trackable):
                 return f"{default_launch_uri}{self.custom_target_link_uri}"
             else:
                 return self.custom_target_link_uri
-            
+
         return default_launch_uri
-    
+
     @property
     def launch_uri(self) -> str:
         """
@@ -347,4 +347,3 @@ class ExternalToolView(Trackable):
         if self.external_tool_provider:
             return self.external_tool_provider.launch_uri
         return ""
-    

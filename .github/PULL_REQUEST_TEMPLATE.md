@@ -5,7 +5,7 @@
 
 <!-- What's it you're proposing? -->
 
-Checklist:
+## Checklist
 
 - [ ] I've made sure that tests are updated accordingly (especially if adding or updating a template option)
 - [ ] I've updated the documentation or confirm that my change doesn't require any updates
