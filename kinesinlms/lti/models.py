@@ -16,18 +16,21 @@ class LTIToolLoginData:
 
     # PARAMS DEFINED BY OpenID SPEC
     # .........................................
+    # The following three variables are required.
 
-    # The 'issuer', which is essentially this KinesinLMS application.
+    # 1. The 'issuer', which is essentially this KinesinLMS application.
     iss: str = None
 
-    # A 'login hint' represents the user in the context of the current interaction.
+    # 2. A 'login hint' represents the user in the context of the current interaction.
     # KinesinLMS includes the course, user and block information in the hint.
     # The tool must return this hint unaltered.
     login_hint: str = None
 
-    # This is the URL we'll be launching on the tool in the second leg of the OIDC
+    # 3. The 'target_link_uri' is the URL we'll be using to launch the tool in the second leg of the OIDC
     # workflow, if all is well. Essentially, this is the "real" URL we want to the student
     # to get to once all this craziness is done.
+    # In this first step, the tool is only going to use this URL to understand
+    # where the student is intending to go.
     # Per the LTI 1.3 spec:
     #   The target link URI is the actual endpoint for the LTI resource to display;
     #   for example, the url in Deep Linking ltiResourceLink items, or the launch_url
@@ -80,23 +83,22 @@ class LTIToolLoginData:
 
 
 class LTIParamName(Enum):
-
     SUB = "sub"
     GIVEN_NAME = "given_name"
     FAMILY_NAME = "family_name"
-    NAME = "name" # name full
+    NAME = "name"  # name full
     EMAIL = "email"
-    PICTURE = "picture" # user image
+    PICTURE = "picture"  # user image
 
     DEPLOYMENT_ID = "https://purl.imsglobal.org/spec/lti/claim/deployment_id"
     TARGET_LINK_URI = "https://purl.imsglobal.org/spec/lti/claim/target_link_uri"
     LTI_VERSION = "https://purl.imsglobal.org/spec/lti/claim/version"
     MESSAGE_TYPE = "https://purl.imsglobal.org/spec/lti/claim/message_type"
-    
+
     TOOL_PLATFORM = "https://purl.imsglobal.org/spec/lti/claim/tool_platform"
     ENDPOINT = "https://purl.imsglobal.org/spec/lti/claim/endpoint"
 
-    # Source ID is an optional id. It's institution-specific and often sourced directly from an LMS or SIS. 
+    # Source ID is an optional id. It's institution-specific and often sourced directly from an LMS or SIS.
     # It serves as a bridge between the tool and the institution’s internal user identifiers.
     LIS = "https://purl.imsglobal.org/spec/lti/claim/lis"
     LIS_PERSON_SOURCE_ID = "person_sourcedid"
@@ -105,17 +107,21 @@ class LTIParamName(Enum):
     RESOURCE_LINK = "https://purl.imsglobal.org/spec/lti/claim/resource_link"
     ROLES = "https://purl.imsglobal.org/spec/lti/claim/roles"
     CONTEXT = "https://purl.imsglobal.org/spec/lti/claim/context"
-    LAUNCH_PRESENTATION = "https://purl.imsglobal.org/spec/lti/claim/launch_presentation"
-    TOOL_CONSUMER_INSTANCE = "https://purl.imsglobal.org/spec/lti/claim/tool_consumer_instance"
+    LAUNCH_PRESENTATION = (
+        "https://purl.imsglobal.org/spec/lti/claim/launch_presentation"
+    )
+    TOOL_CONSUMER_INSTANCE = (
+        "https://purl.imsglobal.org/spec/lti/claim/tool_consumer_instance"
+    )
     ROLE_SCOPE_MENTOR = "https://purl.imsglobal.org/spec/lti/claim/role_scope_mentor"
     CUSTOM = "https://purl.imsglobal.org/spec/lti/claim/custom"
-    
+
 
 class LTIContextType(Enum):
     COURSE_TEMPLATE = "http://purl.imsglobal.org/vocab/lis/v2/course#CourseTemplate"
     # A "Course Offering" represents a specific instance of a course that is being offered to students during a particular term or period.
     COURSE_OFFERING = "http://purl.imsglobal.org/vocab/lis/v2/course#CourseOffering"
-    # A "Course Section" is a subdivision of a course offering. 
+    # A "Course Section" is a subdivision of a course offering.
     COURSE_SECTION = "http://purl.imsglobal.org/vocab/lis/v2/course#CourseSection"
     # A "Group" refers to a collection of users within a course that is not necessarily tied to a specific section.
     GROUP = "http://purl.imsglobal.org/vocab/lis/v2/course#Group"

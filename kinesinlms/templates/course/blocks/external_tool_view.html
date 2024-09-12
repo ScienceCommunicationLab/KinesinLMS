@@ -20,10 +20,20 @@ The launch process involves
 
     <div class="text-muted">This is an external tool.</div>
     <div>
-      <ul>
-        <li>Tool Provider: {{ block.external_tool_view.tool_provider }}</li>
-        <li>Launch URL: {{ block.external_tool_view.launch_url }}</li>
-      </ul>
+      <table class="table table-bordered table-sm mt-2" style="max-width:50rem;">
+        <tr>
+          <td style="width:12rem;">External Tool Provider</td>
+          <td>{{ block.external_tool_view.external_tool_provider }}</td>
+        </tr>
+        <tr>
+          <td>Launch URI</td>
+          <td> {{ block.external_tool_view.launch_uri }}</td>
+        </tr>
+        <tr>
+          <td>Target Link URI</td>
+          <td>{{ block.external_tool_view.target_link_uri }}</td>
+        </tr>
+      </table>
     </div>
 
   {% else %}
