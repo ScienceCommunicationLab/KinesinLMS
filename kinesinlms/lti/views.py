@@ -323,6 +323,6 @@ def lti_launch(
 
     # Build the login URL for the external tool with the required GET
     # parameters for the OIDC login process.
-    login_url = lti_service.get_tool_login_url(user=request.user)
+    login_url = lti_service.get_tool_login_url(user=request.user, external_tool_view=external_tool_view)
 
     return redirect(login_url)

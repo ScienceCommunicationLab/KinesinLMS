@@ -91,23 +91,47 @@ class ExternalToolLTIService:
     # METHODS
     # --------------------------------------------------
 
-    def get_tool_login_url(self, user: User) -> str:
+    def get_tool_login_url(
+        self,
+        user: User,
+        external_tool_view: ExternalToolView,
+    ) -> str:
         """
         Get a login URL to start the login process on the external tool.
         This is the first step in the LTIv1.3 "third party initiated flow"
         OIDC login process.
+
+        This method needs access to the ExternalToolView, as it has information
+        that is required even in this first "pre-flight" step (e.g. the target_link_uri)
+
+        Args:
+            user: The user that is initiating the login.
+            external_tool_view: The ExternalToolView object that represents the
+                external tool that we're connecting to in the context of a course.
+
+
+
         """
 
         login_hint = self.get_login_hint(user=user)
+        logger.debug("get_tool_login_url():")
 
         if not hasattr(self.external_tool_view, "external_tool_provider"):
             raise Exception("ExternalToolView does not have an ExternalToolProvider.")
+
+        if not external_tool_view:
+            raise ValueError("external_tool_view is required.")
+        if not external_tool_view.target_link_uri:
+            raise Exception("ExternalToolView does not have a target link URI defined.")
 
         etp: ExternalToolProvider = self.external_tool_provider
         if not etp.login_url:
             raise Exception("ExternalToolProvider does not have a login URL.")
         if not etp.launch_uri:
             raise Exception("ExternalToolProvider does not have a launch URI.")
+        
+        target_link_uri = external_tool_view.target_link_uri
+        logger.debug(f" - target_link_uri: {target_link_uri}")
 
         base_login_url = etp.login_url
 
@@ -118,7 +142,7 @@ class ExternalToolLTIService:
             lti_deployment_id=etp.deployment_id,
             client_id=etp.client_id,
             login_hint=login_hint,
-            target_link_uri=etp.launch_uri,
+            target_link_uri=target_link_uri,
             lti_message_hint=login_hint,
         )
         params_encoded = urlencode(login_data.params)
@@ -264,7 +288,7 @@ class ExternalToolLTIService:
                 # Not sure what 'product_family_code' is...
                 # "product_family_code": "ExamplePlatformVendor-Product",
                 # Don't need version...
-                #"version": "1.0",
+                # "version": "1.0",
             },
             LTIParamName.TARGET_LINK_URI.value: target_link_uri,
             LTIParamName.LAUNCH_PRESENTATION.value: {
@@ -277,14 +301,13 @@ class ExternalToolLTIService:
                 # DMcQ: Using this for testing with JupyterHub
                 # See: https://ltiauthenticator.readthedocs.io/en/latest/lti13/getting-started.html
                 "lms_username": user.username,
-            }
-
+            },
             # TODO:
-            #LTIParamName.LIS.value: {
+            # LTIParamName.LIS.value: {
             #    LTIParamName.LIS_PERSON_SOURCE_ID.value: "example.edu:71ee7e42-f6d2-414a-80db-b69ac2defd4",
             #    LTIParamName.LIS_COURSE_OFFERING_ID.value: "example.edu:SI182-F16",
             #    LTIParamName.LIS_COURSE_SECTION_ID.value: "example.edu:SI182-001-F16"
-            #},
+            # },
             # TODO: Consider other claims:
             # "given_name": "Meh",
             # "family_name": "Average",

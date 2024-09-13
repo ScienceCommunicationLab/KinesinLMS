@@ -88,7 +88,8 @@ class TestLTILaunchProcess(TestCase):
         out to the tool.
         """
         login_url = self.external_tool_service.get_tool_login_url(
-            user=self.enrolled_user
+            user=self.enrolled_user,
+            external_tool_view=self.external_tool_view,
         )
         logger.info(f"Login URL: {login_url}")
         self.assertTrue(login_url)

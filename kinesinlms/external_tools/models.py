@@ -115,6 +115,16 @@ class ExternalToolProvider(Trackable):
         ),
     )
 
+    default_target_link_uri = models.CharField(
+        verbose_name=_("Default Target Link URI"),
+        null=True,
+        blank=True,
+        max_length=1000,
+        help_text=_(
+            "The default target_link_uri sent as part of the tool launch. This value can be left empty. This value can also be overridden in Composer when a tool is added to a course unit."
+        ),
+    )
+
     active = models.BooleanField(
         default=False,
         blank=False,
@@ -286,63 +296,45 @@ class ExternalToolView(Trackable):
         blank=True,
         max_length=1000,
         help_text=_(
-            "A custom target link helps direct to a particular resources in the external tool. If this URL is not defined, the default launch URI of the ExternalToolProvider will be used to launch the tool."
-        ),
-    )
-
-    append_to_default_launch_uri = models.BooleanField(
-        verbose_name=_("Append custom target link URI to default launch URI"),
-        default=False,
-        blank=False,
-        help_text=_(
-            "If True, the 'Custom Target Link URI' will be appended to the default launch URI to create "
-            "a full URL for the 'target_link_uri' sent to the tool when launched."
-            "If False, the 'Custom Target Link URI' will be used as the full URL in the 'target_link_uri'."
+            "A custom target link helps direct to a particular resources in the external tool. If this URL is not defined, the default target_link_uri defined in the ExternalTool Provider is used."
         ),
     )
 
     @property
-    def target_link_uri(self) -> Optional[str]:
+    def default_target_link_uri(self) -> Optional[str]:
         """
-        The target link URI for this external tool view. This is the URL that will
+        The default target link URI for this external tool view. This is the URL that will
         launch (once the login process is complete) a specific view of the tool for
         this particular point in the course. So this URL might be a very specific path
         to a particular resource in the tool.
 
-        If the ExternalToolView does not define a custom launch URI, then we will
-        use the launch URI of the ExternalToolProvider.
+        Returns:
+            Optional[str]: _description_
+        """
+        if self.external_tool_provider:
+            return self.external_tool_provider.default_target_link_uri
+        return None
 
+    @property
+    def target_link_uri(self) -> Optional[str]:
+        """
+        The target link URI for this external tool view. In LTIv1.3,
+        sometimes the `target_link_uri` is used by the platform to 
+        tell the tool exactly what resource to show. 
+        
         Returns:
             Optional[str]: _description_
         """
 
-        if not self.external_tool_provider:
-            logger.error(
-                f"Cannot determine launch URL. ExternalToolView '{self}' does "
-                f"not have an ExternalToolProvider"
-            )
-            return None
-
-        default_launch_uri = self.external_tool_provider.launch_uri
-        if not default_launch_uri:
-            logger.error(
-                f"Cannot determine launch URL. ExternalToolProvider '{self.external_tool_provider}' "
-                f"does not have a launch URI defined"
-            )
-            return None
-
         if self.custom_target_link_uri:
-            if self.append_to_default_launch_uri:
-                return f"{default_launch_uri}{self.custom_target_link_uri}"
-            else:
-                return self.custom_target_link_uri
-
-        return default_launch_uri
+            return self.custom_target_link_uri
+        else:
+            return self.default_target_link_uri
 
     @property
     def launch_uri(self) -> str:
         """
-        The launch URI for this external tool view.
+        The launch URI for the ExternalToolProvider that owns this external tool view.
         """
         if self.external_tool_provider:
             return self.external_tool_provider.launch_uri
