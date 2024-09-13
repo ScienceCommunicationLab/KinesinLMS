@@ -53,7 +53,7 @@ As web applications become more complex, industry experts are urging developers 
 
 ``KinesinLMS`` is designed to be straightforward, providing "just enough" LMS for teams conducting innovative e-Learning services and research: enough features to start building something novel, including working examples of ways to implement rich interactivity, but not so complex the developer is lost in the churn.
 
-To be sure, an LMS -- or any web application -- should leverage newer, more complex technologies when the user interface or experience calls for it; in these cases build-heavy tools like Angular or React are hard to avoid, even though they bring along a (very) long list of concepts and Node dependencies when integrated into a project. In this regard, ``KinesinLMS``espouses moderation, scoping complexity to only the places where it's required, rather than blanket inclusion across an entire application.
+To be sure, an LMS -- or any web application -- should leverage newer, more complex technologies when the user interface or experience calls for it; in these cases build-heavy tools like Angular or React are hard to avoid, even though they bring along a (very) long list of concepts and Node dependencies when integrated into a project. In this regard, ``KinesinLMS`` espouses moderation, scoping complexity to only the places where it's required, rather than blanket inclusion across an entire application.
 
 # Story of the Project
 
@@ -65,7 +65,7 @@ In 2023, the NIH awarded the project a supplemental grant to transform and gener
 
 # Implementation Overview
 
-``KinesinLMS``follows standard conventions established by the Django team and further extended by the "Django Cookiecutter" project [@RoyGreenfield2024]. It uses one PostgreSQL database for persistence, Redis for a cache, and Celery for asynchronous tasks. Bootstrap 5.3 is used for a reliable, responsive, and accessible user interface. Django is based on the well-established straightforward Model-View-Template pattern, which makes it easier to understand the application's existing components as well as add new features.
+``KinesinLMS`` follows standard conventions established by the Django team and further extended by the "Django Cookiecutter" project [@RoyGreenfield2024]. It uses one PostgreSQL database for persistence, Redis for a cache, and Celery for asynchronous tasks. Bootstrap 5.3 is used for a reliable, responsive, and accessible user interface. Django is based on the well-established straightforward Model-View-Template pattern, which makes it easier to understand the application's existing components as well as add new features.
 
 Complex features that would be hard to manage internally are offloaded to external resources. The developer is meant to set up these 'providers' via the ``KinesinLMS`` dashboard. The providers are meant to be generic so that the developer can write a subclass for a particular commercial service. In the initial implementation, forums are hosted on Discourse, badges are hosted in Badgr.com, surveys are hosted on Qualtrics, and email automations are hosted in ActiveCampaign.
 
@@ -77,7 +77,7 @@ The initial implementation of ``KinesinLMS`` has two examples of React-based ass
 
 ![The "TableTool" component used in an evaluation activity.\label{fig:tabletool_example_1}](images/tabletool_example_1.png){ width=95% }
 
-As a standard Django application, ``KinesinLMS``can be deployed to commercial hosting sites or a self-hosted server. The documentation describes deployment steps for the popular Heroku service, but any hosting platform suited to standard Django deployments (such as Fly.io or Render.com) could be used.
+As a standard Django application, ``KinesinLMS`` can be deployed to commercial hosting sites or a self-hosted server. The documentation describes deployment steps for the popular Heroku service, but any hosting platform suited to standard Django deployments (such as Fly.io or Render.com) could be used.
 
 # Acknowledgements
 
