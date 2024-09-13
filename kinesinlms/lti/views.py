@@ -191,18 +191,15 @@ class JwksInfoView(View):
         if settings.LTI_PLATFORM_PRIVATE_KEY:
             # Load PEM-encoded private key
             private_key_data = settings.LTI_PLATFORM_PRIVATE_KEY.encode("utf-8")
-            backend = default_backend()
-            logger.info(f"private_key_data: {private_key_data}")
-            logger.info(f"backend: {backend}")
             try:
                 private_key = serialization.load_pem_private_key(
                     private_key_data,
                     password=None,
-                    backend=backend,
+                    backend=default_backend(),
                 )
             except Exception as e:
                 logger.error(f"Error loading private key: {e}")
-                return HttpResponse(status=500)
+                return HttpResponse(status=500, content="Error loading key information.")
 
             # Extract public key
             public_key = private_key.public_key()
