@@ -203,7 +203,6 @@ class ExternalToolViewPanelForm(BasePanelModelForm):
             "resource_link_id",
             "launch_type",
             "custom_target_link_uri",
-            "append_to_default_launch_uri"
         ]
 
     def __init__(self, *args, **kwargs):
@@ -223,15 +222,14 @@ class ExternalToolViewPanelForm(BasePanelModelForm):
             "resource_link_id",
             "launch_type",
             "custom_target_link_uri",
-            "append_to_default_launch_uri",
             HTML(
                 f"""
                     <div class="form-group mb-5">
                     <label for="id_target_link_uri">Target Link URI</label>
                     <div class="alert alert-info mt-2">{self.instance.target_link_uri or ''}</div>
-                    <small class="form-text text-muted">This field shows the target link URI for this external tool view. 
-                    It defaults to the launch URI defined in the External Tool Provider. But you can overrided it using
-                    the 'Custom Launch URI' above.</small>
+                    <small class="form-text text-muted">This field shows the "target link URI" for this external tool view. 
+                    It defaults to the "Launch URL" defined in the External Tool Provider. But you can override it using
+                    the 'Custom Target Link URI' field above.</small>
                     </div>
                 """
             ),
