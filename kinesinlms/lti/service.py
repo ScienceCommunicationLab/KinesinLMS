@@ -256,7 +256,7 @@ class ExternalToolLTIService:
                 # "description": self.external_tool_view.description,
             },
             LTIParamName.TOOL_PLATFORM.value: {
-                "guid": site_profile.uuid,
+                "guid": str(site_profile.uuid),
                 "contact_email": settings.CONTACT_EMAIL,
                 "description": site_profile.description,
                 "name": site_profile.site.name,
