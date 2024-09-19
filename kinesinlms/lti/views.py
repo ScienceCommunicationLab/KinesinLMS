@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
+from django.utils.translation import gettext as _
 import base64
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
@@ -56,9 +57,10 @@ class LTIAuthorizeRedirect(View):
             tool_request: ToolAuthRequestData = self._parse_initial_tool_request(
                 request
             )
-        except Exception as e:
-            logger.error(f"Error parsing initial request: {e}")
-            return HttpResponse(status=400)
+        except Exception:
+            message = "Error parsing initial request"
+            logger.exception(message)
+            return HttpResponse(status=400, content=_(message))
 
         # We can locate the relevant ExternalToolProvider by the client_id
         # passed in from the tool...
@@ -67,20 +69,27 @@ class LTIAuthorizeRedirect(View):
                 client_id=tool_request.client_id
             )
         except ExternalToolProvider.DoesNotExist:
-            logger.error(
-                f"External Tool Provider with client_id {tool_request.client_id} not found."
-            )
-            return HttpResponse(status=400)
+            logger.error(f"client_id {tool_request.client_id} not found.")
+            message = _(
+                "External Tool Provider with client_id %(client_id)s not found."
+            ) % {"client_id": tool_request.client_id}
+            return HttpResponse(status=400, content=message)
 
         # TODO:
         #   Eventually, we should be able to support multiple redirect URIs
         #   for an external tool. For now, just validate against the one possible redirect URI.
         if tool_request.redirect_uri != external_tool_provider.launch_uri:
             logger.error(
-                f"Redirect URI {tool_request.redirect_uri} does not match "
-                f"External Tool Provider {external_tool_provider.launch_uri}"
+                f"Redirect URI {tool_request.redirect_uri} != provider launch uri {external_tool_provider.launch_uri}"
             )
-            return HttpResponse(status=400)
+            user_message = _(
+                "Redirect URI %(redirect_uri)s does not match "
+                "External Tool Provider %(launch_uri)s"
+            ) % {
+                "redirect_uri": tool_request.redirect_uri,
+                "launch_uri": external_tool_provider.launch_uri,
+            }
+            return HttpResponse(status=400, content=user_message)
 
         # Do base OIDC validation
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,10 +104,11 @@ class LTIAuthorizeRedirect(View):
             course, external_tool_view, user = (
                 ExternalToolLTIService.deconstruct_login_hint(tool_request.login_hint)
             )
-        except Exception as e:
+        except Exception:
             # TODO: Handle different types of Exceptions (we have yet to define)
-            logger.error(f"Error deconstructing login hint: {e}")
-            return HttpResponse(status=400)
+            message = "Error deconstructing login hint"
+            logger.exception(message)
+            return HttpResponse(status=400, content=_(message))
 
         # Initialize our service class, so it can do most of the remaining work in this process.
         service = ExternalToolLTIService(
@@ -114,10 +124,11 @@ class LTIAuthorizeRedirect(View):
                 external_tool_view=external_tool_view,
                 user=user,
             )
-        except Exception as e:
+        except Exception:
             # TODO Handle different types of Exceptions (we have yet to define)
-            logger.error(f"Error authorizing tool access: {e}")
-            return HttpResponse(status=400)
+            message = "Error authorizing tool access"
+            logger.exception(message)
+            return HttpResponse(status=400, content=_(message))
 
         # Generate 'launch' info including JWT and return it to user's browser with
         # an autosubmit form to send the user back to the tool
@@ -199,7 +210,9 @@ class JwksInfoView(View):
                 )
             except Exception as e:
                 logger.error(f"Error loading private key: {e}")
-                return HttpResponse(status=500, content="Error loading key information.")
+                return HttpResponse(
+                    status=500, content="Error loading key information."
+                )
 
             # Extract public key
             public_key = private_key.public_key()
