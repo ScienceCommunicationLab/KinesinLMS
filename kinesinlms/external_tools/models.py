@@ -165,7 +165,8 @@ class ExternalToolProvider(Trackable):
         For now, the issuer is just our root domain
         """
         domain = get_domain()
-        return domain
+        url = f"https://{domain}"
+        return url
 
     @property
     def deployment_id(self) -> str:
