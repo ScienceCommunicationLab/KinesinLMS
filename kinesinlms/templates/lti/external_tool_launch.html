@@ -24,6 +24,7 @@ sending the "resource link request" to the tool so the student can start using i
     <form id="external-tool-launch-{{ external_tool_view.id }}"
           action="{{ external_tool_launch_data.launch_url }}"
           method="post"
+          style="display: none;"
           enctype="application/x-www-form-urlencoded">
       {% csrf_token %}
       {% for launch_param_name, launch_param_value in external_tool_launch_data.launch_params.items %}
@@ -36,8 +37,13 @@ sending the "resource link request" to the tool so the student can start using i
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         var form = document.getElementById("external-tool-launch-{{ external_tool_view.id }}");
-        // form.submit();
+        form.submit();
       });
     </script>
+
+    <div class="alert alert-info" role="alert">
+      <p>Opening external tool...</p>
+    </div>
+
   </body>
 </html>
