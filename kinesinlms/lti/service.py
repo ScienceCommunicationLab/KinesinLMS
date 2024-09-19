@@ -313,6 +313,8 @@ class ExternalToolLTIService:
 
         claims |= lti_v3_1_claims
 
+        logger.info(f"#### OUTGOING LTI 1.3 Claims: {claims}")
+
         return claims
 
     def generate_external_tool_launch(
