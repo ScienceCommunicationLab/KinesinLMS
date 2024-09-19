@@ -224,12 +224,20 @@ class ExternalToolLaunchData:
             raise ValueError("No LTI claims to encode.")
         if not settings.LTI_PLATFORM_PRIVATE_KEY:
             raise ValueError("No LTI private key to sign with.")
+        
+
+        # Define the header with the kid
+        headers = {
+            "kid": settings.LTI_PLATFORM_KID,
+            "alg": "RS256"
+        }
 
         # Transform into JWT
         id_token_jwt = jwt.encode(
             self.claims,
             settings.LTI_PLATFORM_PRIVATE_KEY,
             algorithm="RS256",
+            headers=headers
         )
         return id_token_jwt
 

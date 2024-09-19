@@ -580,6 +580,9 @@ if LTI_PLATFORM_PRIVATE_KEY:
 LTI_PLATFORM_JWKS_MAX_AGE_SECONDS = env(
     "LTI_PLATFORM_JWKS_MAX_AGE_SECONDS", default=604800
 )
+# This is the Key "ID" used in the LTI1.3 platform's JWKS. It has to match
+# the "kid" value set in the header of the OpenID Connect token sent during an LTI connection.
+LTI_PLATFORM_KID = env("LTI_PLATFORM_KID", default="lti1.3-key")
 
 # THIRD-PARTY INTEGRATIONS
 # =====================================================
