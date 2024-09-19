@@ -162,6 +162,7 @@ class LTIAuthorizeRedirect(View):
         """
 
         tool_request_params = request.GET if request.method == "GET" else request.POST
+        logger.debug(f"Tool request params: {tool_request_params}")
 
         # TODO: Validation and such...
 
