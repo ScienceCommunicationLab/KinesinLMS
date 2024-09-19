@@ -48,6 +48,12 @@ class SiteProfile(models.Model):
         "third-party email automation provider.",
     )
 
+    description = models.TextField(
+        blank=True,
+        null=True,
+        help_text="A short description of the site.",
+    )
+
     def save(self, *args, **kwargs):
         if not self.site:
             self.site = Site.objects.get_current()
