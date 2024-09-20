@@ -1,4 +1,6 @@
-<img src="kinesinlms_logo.png" alt="KinesinLMS logo" style="max-width: 400px;"/>
+<div style="max-width:500px">
+![KinesinLMS logo](kinesinlms_logo.png)
+</div>
 
 # KinesinLMS
 
