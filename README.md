@@ -1,3 +1,5 @@
+![KinesinLMS logo](kinesinlms_logo.png)
+
 # KinesinLMS
 
 KinesinLMS is a small learning management system (LMS). It's written in Python using the Django web application framework,
