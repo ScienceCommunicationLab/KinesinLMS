@@ -1,6 +1,5 @@
-<div style="max-width:500px">
-<img src="kinesinlms_logo.png" alt="KinesinLMS logo"/>
-</div>
+
+<img src="kinesinlms_logo.png" alt="KinesinLMS logo" width="500"/>
 
 # KinesinLMS
 
