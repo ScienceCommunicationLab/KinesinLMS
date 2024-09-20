@@ -1,4 +1,4 @@
-<img src="kinesinlms_logo.png" alt="KinesinLMS logo" style="max-width: 500px;"/>
+<img src="kinesinlms_logo.png" alt="KinesinLMS logo" style="max-width: 400px;"/>
 
 # KinesinLMS
 
