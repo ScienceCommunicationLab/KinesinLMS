@@ -1,5 +1,6 @@
 import logging
 
+import uuid
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -22,6 +23,12 @@ class TrackingEvent(models.Model):
         indexes = [models.Index(fields=['time', ]),
                    models.Index(fields=['event_type', ])]
         ordering = ('-time',)
+
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            unique=True,
+                            null=False,
+                            blank=False,
+                            editable=True)
 
     event_type = models.CharField(max_length=200, null=True, blank=True, default="1")
 

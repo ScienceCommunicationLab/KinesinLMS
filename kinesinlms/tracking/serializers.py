@@ -167,10 +167,13 @@ class TrackingEventSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(allow_null=True,
                                               required=False,
                                               queryset=User.objects.all())
+    
+    uuid = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = TrackingEvent
         fields = (
+            'uuid',
             'event_type',
             'time',
             'user',
