@@ -38,7 +38,7 @@ That's because the "Composer" feature is especially raw at the moment, although 
 ## Background
 
 KinesinLMS originated as a custom e-Learning platform developed
-by [McQuillen Interactive](https://www.mcquilleninterative.com)
+by [McQuillen Interactive](https://www.mcquilleninteractive.com)
 for [Science Communication Lab (SCL)](https://www.sciencecommunicationlab.org/) as part of SCL's iBiology Courses project.
 SCL funded the work with support from the National Institute for General Medical Sciences (grants numbers R25GM116704 and R25GM139147).
 
