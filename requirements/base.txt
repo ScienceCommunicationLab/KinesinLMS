@@ -2,7 +2,7 @@
 pip>=24.2
 
 # World timezone definitions, modern and historical
-pytz==2024.1 # https://github.com/stub42/pytz
+pytz==2024.2 # https://github.com/stub42/pytz
 
 # A Python slugify application that handles unicode.
 python-slugify==8.0.4  # https://github.com/un33k/python-slugify
@@ -20,7 +20,7 @@ whitenoise==6.7.0  # https://github.com/evansd/whitenoise
 # Celery for running async tasks
 celery==5.4.0  # pyup: < 5.0,!=4.4.7  # https://github.com/celery/celery
 # Redis as database for celery tasks
-redis==5.0.8 # https://github.com/antirez/redis
+redis==5.1.1 # https://github.com/antirez/redis
 hiredis==3.0.0  # https://github.com/redis/hiredis-py
 
 # for periodic tasks
@@ -31,12 +31,12 @@ django-celery-beat==2.7.0  # https://github.com/celery/django-celery-beat
 # Django
 # ------------------------------------------------------------------------------
 
-django==5.1.1 # pyup: < 3.0  # https://www.djangoproject.com/
+django==5.0.9 # pyup: < 3.0  # https://www.djangoproject.com/
 django-environ==0.11.2  # https://github.com/joke2k/django-environ
 django-model-utils==5.0.0  # https://github.com/jazzband/django-model-utils
-django-allauth==64.2.1  # https://github.com/pennersr/django-allauth
+django-allauth[mfa]==65.0.2  # https://github.com/pennersr/django-allauth
 django-crispy-forms==2.3  # https://github.com/django-crispy-forms/django-crispy-forms
-crispy-bootstrap5==2024.2  # https://github.com/django-crispy-forms/django-crispy-forms
+crispy-bootstrap5==2024.10  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==5.4.0  # https://github.com/niwinz/django-redis
 
 # Django REST Framework
@@ -58,7 +58,7 @@ jsonschema==4.23.0
 lxml[html_clean]==5.3.0
 
 # For tags!
-django-taggit==6.0.0
+django-taggit==6.1.0
 
 # Implementing a tree structure for organizing units in courses.
 django-mptt==0.16.0
@@ -70,14 +70,14 @@ requests==2.32.3
 beautifulsoup4==4.12.3
 
 # Need boto3 for sending events to Lambda.
-boto3==1.35.15
+boto3==1.35.34
 
 # My fork of pydiscourse. It didn't have the
 # correct method for removing a user from a group
 -e git+https://github.com/danielmcquillen/pydiscourse.git@master#egg=pydiscourse
 
 # DMcQ : For slack messenging
-slack_sdk==3.32.0
+slack_sdk==3.33.1
 
 # Dang bots!
 django-recaptcha==4.0.0
@@ -114,7 +114,7 @@ django-tinymce==4.1.0
 reportlab==4.2.2
 
 # For various analytics reporting
-pandas==2.2.2
+pandas==2.2.3
 
 # Using django-pandas to help work with analytics from db
 django-pandas==0.6.7

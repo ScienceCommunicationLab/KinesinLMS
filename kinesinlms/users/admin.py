@@ -1,52 +1,49 @@
+from allauth.account.decorators import secure_admin_login
 from django.contrib import admin
+from django.conf import settings
 from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import get_user_model
 
-from kinesinlms.users.forms import UserChangeForm, UserCreationForm
+from kinesinlms.users.forms import UserAdminChangeForm, UserAdminCreationForm
 from kinesinlms.users.models import InviteUser
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
+
+
+if settings.DJANGO_ADMIN_FORCE_ALLAUTH:
+    # Force the `admin` sign in process to go through the `django-allauth` workflow:
+    # https://docs.allauth.org/en/latest/common/admin.html#admin
+    admin.autodiscover()
+    admin.site.login = secure_admin_login(admin.site.login)  # type: ignore[method-assign]
 
 
 @admin.register(InviteUser)
 class InviteUserAdmin(admin.ModelAdmin):
     model = InviteUser
-    list_display = ('id', 'email', 'cohort', 'manual_enrollment', 'registered_date')
+    list_display = ("id", "email", "cohort", "manual_enrollment", "registered_date")
 
 
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
-    form = UserChangeForm
-    add_form = UserCreationForm
-    fieldsets = (("User", {"fields": (
-        "name",
-        "is_test_user",
-        "informal_name",
-        "anon_username",
-        "email_automation_provider_user_id",
-        "career_stage",
-        "gender",
-        "gender_description",
-        "year_of_birth",
-        "why_interested",
-        "agree_to_honor_code")}),) + auth_admin.UserAdmin.fieldsets
-    list_display = ["id",
-                    "username",
-                    "anon_username",
-                    "name",
-                    "email",
-                    "email_automation_provider_user_id",
-                    "date_joined",
-                    "is_superuser",
+    form = UserAdminChangeForm
+    add_form = UserAdminCreationForm
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (_("Personal info"), {"fields": ("name", "email")}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
                     "is_staff",
-                    "is_educator",
-                    "is_test_user",
-                    "year_of_birth",
-                    "career_stage",
-                    "gender",
-                    "gender_description"]
-    search_fields = ["name",
-                     "anon_username",
-                     "email",
-                     "username",
-                     "email_automation_provider_user_id"]
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
+    list_display = ["username", "name", "is_superuser"]
+    search_fields = ["name"]

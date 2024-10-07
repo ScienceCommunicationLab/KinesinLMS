@@ -267,7 +267,7 @@ class TestLTILaunchProcess(TestCase):
         )
         self.assertEqual(
             decoded_jwt[LTIParamName.ROLES.value],
-            ["http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"],
+            ["http://purl.imsglobal.org/vocab/lis/v2/institution/person#Student"],
             f"The '{LTIParamName.ROLES.value}' claim in the JWT is incorrect",
         )
         self.assertEqual(

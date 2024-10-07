@@ -27,8 +27,6 @@ class UserProfilesViewSet(viewsets.ViewSet):
     """
     Returns user profile data, including 'profile-like'
     properties for each course, e.g. reasonForTaking.
-
-    :return:
     """
 
     authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]

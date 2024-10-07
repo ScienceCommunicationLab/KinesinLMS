@@ -241,7 +241,8 @@ if SENTRY_DSN:
 # Tools that generate code samples can use SERVERS to point to the correct domain
 SPECTACULAR_SETTINGS["SERVERS"] = [  # noqa: F405
     {
-        "url": "https://{{ cookiecutter.domain_name }}",
+        # Replace with your domain name...
+        #"url": "https://example.com",
         "description": "Production server",
     },
 ]

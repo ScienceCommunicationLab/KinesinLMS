@@ -48,7 +48,7 @@ class UserFactory(DjangoModelFactory):
     # Don't create settings, it's created via a signal.
 
     @post_generation
-    def password(self, create: bool, extracted: Sequence[Any], **kwargs):   # noqa: F841
+    def password(self, create: bool, extracted: Sequence[Any], **kwargs):  # noqa: FBT001
         password = (
             extracted
             if extracted
@@ -79,7 +79,7 @@ class EducatorFactory(UserFactory):
     """
     Creates a user that belongs to the EDUCATOR group.
     """
-    
+
     @classmethod
     def _after_postgeneration(cls, instance, create, results=None):
         super()._after_postgeneration(instance, create, results)
