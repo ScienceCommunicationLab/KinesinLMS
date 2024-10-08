@@ -13,11 +13,11 @@ class ExternalToolProviderForm(ModelForm):
             "active",
             "type",
             "description",
-            "username_field",
             "api_url",
             "api_key",
             "api_secret",
             "slug",
+            "username_field",
             "login_url",
             "launch_uri",
             "public_keyset_url",
@@ -47,7 +47,12 @@ class ExternalToolProviderForm(ModelForm):
 
         self.helper.layout = Layout(
             Fieldset(
-                None, "active", "name", "type", "description", "username_field", "slug"
+                None,
+                "active",
+                "name",
+                "type",
+                "description",
+                "slug",
             ),
             Fieldset(
                 "API Fields",
@@ -58,6 +63,7 @@ class ExternalToolProviderForm(ModelForm):
             ),
             Fieldset(
                 "LTI Fields",
+                "username_field",
                 "login_url",
                 "launch_uri",
                 "public_keyset_url",

@@ -67,8 +67,8 @@ class ExternalToolProvider(Trackable):
         max_length=50,
         choices=[(tag.name, tag.value) for tag in UsernameField],
         default=UsernameField.USERNAME.name,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         help_text=_(
             "The field in the user model that will be used to identify the user to the tool"
         ),
