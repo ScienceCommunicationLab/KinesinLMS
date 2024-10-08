@@ -14,7 +14,6 @@ from kinesinlms.external_tools.constants import (
     ExternalToolViewLaunchType,
     LTIVersionType,
     ExternalToolProviderType,
-    ConnectionMethodType,
 )
 from kinesinlms.learning_library.models import Block
 
@@ -33,8 +32,15 @@ class UsernameField(Enum):
 
 class ExternalToolProvider(Trackable):
     """
-    External tool provider, connected by LTI v1.3.
-    At the moment the only type of tool we support is a JupyterHub service.
+    An "External tool provider" is a service that provides a tool that can be embedded
+    in KinesinLMS.
+
+    Now usually this tool is going to be provided via LTIv1.3, the standard for embedding
+    external tools in learning management systems.
+
+    However, some services, like Renku, might need a custom integration. So we leave the
+    manner of integration as something dependent on the type of external tool provider.
+
     """
 
     name = models.CharField(
@@ -49,26 +55,10 @@ class ExternalToolProvider(Trackable):
         null=True, blank=True, help_text=_("Description of external tool.")
     )
 
-    lti_version = models.CharField(
-        max_length=100,
-        choices=[(tag.name, tag.value) for tag in LTIVersionType],
-        default=LTIVersionType.LTI_1_3.name,
-        null=False,
-        blank=False,
-    )
-
     type = models.CharField(
         max_length=50,
         choices=[(tag.name, tag.value) for tag in ExternalToolProviderType],
         default=ExternalToolProviderType.JUPYTER_HUB.name,
-        null=False,
-        blank=False,
-    )
-
-    connection_method = models.CharField(
-        max_length=50,
-        choices=[(tag.name, tag.value) for tag in ConnectionMethodType],
-        default=ConnectionMethodType.MANUAL.name,
         null=False,
         blank=False,
     )
@@ -89,9 +79,41 @@ class ExternalToolProvider(Trackable):
         unique=True,
         null=False,
         blank=False,
-        help_text=_(
-            "Slug identifier for provider " "(used in e.g. course json imports)."
-        ),
+        help_text=_("Slug identifier for provider (used in e.g. course json imports)."),
+    )
+
+    # API-based connections:
+    # ~~~~~~~~~~~~~~~~~~~~~~
+
+    api_url = models.URLField(
+        null=True,
+        blank=True,
+        help_text=_("The API endpoint for the external tool."),
+    )
+
+    api_key = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        help_text=_("The API key for the external tool."),
+    )
+    
+    api_secret = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        help_text=_("The API secret for the external tool."),
+    )
+
+    # LTI-based connections:
+    # ~~~~~~~~~~~~~~~~~~~~~~
+
+    lti_version = models.CharField(
+        max_length=100,
+        choices=[(tag.name, tag.value) for tag in LTIVersionType],
+        default=LTIVersionType.LTI_1_3.name,
+        null=False,
+        blank=False,
     )
 
     login_url = models.URLField(
@@ -106,8 +128,8 @@ class ExternalToolProvider(Trackable):
     )
 
     launch_uri = models.URLField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         help_text=_(
             "The launch (target link) URI for this external tool."
             "This is the URL to launch the tool once the login process is complete."
@@ -180,6 +202,23 @@ class ExternalToolProvider(Trackable):
             site_id = 1
 
         return str(site_id)
+
+    @property
+    def api_fields_active(self) -> bool:
+        """
+        Are the API fields active?
+        """
+        return self.type == ExternalToolProviderType.RENKU.name
+
+    @property
+    def lti_fields_active(self) -> bool:
+        """
+        Are the LTI fields active?
+        """
+        return self.type in [
+            ExternalToolProviderType.BASIC_LTI13.name,
+            ExternalToolProviderType.JUPYTER_HUB.name,
+        ]
 
     # --------------------------------------------------
     # METHODS
