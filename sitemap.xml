@@ -2,277 +2,222 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://kinesinelms.github.io/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/CLA/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/contributing/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/license/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/release_notes/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/architecture/api/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/architecture/architecture_overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/architecture/database/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/architecture/email/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/architecture/env_variables/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/architecture/event_tracking/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/architecture/styles/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/architecture/testing/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/badges/badges_overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/badges/creating_badge_classes/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/badges/provider_integration/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course/block_resources/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course/blocks/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course/course_overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/catalog_info/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/course_authoring_guide_overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/course_badges/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/course_contents/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/course_email_automations/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/course_forum/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/course_milestones/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/course_resources/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/course_surveys/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/creating_a_course/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/course_authoring_guide/using_template_tags/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/deployment/heroku/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/deployment/overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/deployment/sentry/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/development/installation_overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/development/local_setup/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/development/running_tests/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/email/email_automation_overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/email/provider_integration/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/email/system_emails/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/forum/connecting_to_forum_service/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/forum/forum_models/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/forum/forum_overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/forum/local_setup/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/forum/provider_integration/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/groups_and_permissions/overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/import_export/overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/marketing/marketing_overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/marketing/testimonials/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/overview/acknowledgements_and_attributions/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/overview/guiding_principles/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/overview/introduction/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/overview/quick_start/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/surveys/survey_integration/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/surveys/survey_providers/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
     <url>
          <loc>https://kinesinelms.github.io/surveys/surveys_overview/</loc>
-         <lastmod>2024-08-12</lastmod>
-         <changefreq>daily</changefreq>
+         <lastmod>2024-10-08</lastmod>
     </url>
 </urlset>
