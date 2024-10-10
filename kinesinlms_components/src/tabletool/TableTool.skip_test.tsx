@@ -1,5 +1,5 @@
 import { setupServer } from 'msw/node';
-import { http, HttpResponse } from 'msw';
+import { http as caller, type HttpHandler } from 'msw';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom'
@@ -17,13 +17,13 @@ describe('TableTool', () => {
         let postCount = 0;
         let putCount = 0;
         server.use(
-            http.post('/api/simple_interactive_tool_submissions', () => {
+            caller.post('/api/simple_interactive_tool_submissions', ({ request }) => {
                 postCount++;
-                return HttpResponse.json({ id: 1 });
+                return Response.json({ id: 1 });
             }),
-            http.put('/api/simple_interactive_tool_submissions/1', () => {
+            caller.put('/api/simple_interactive_tool_submissions/1', ({ request }) => {
                 putCount++;
-                return HttpResponse.json({ id: 1 });
+                return Response.json({ id: 1 });
             }),
         );
         render(

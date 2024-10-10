@@ -1,4 +1,5 @@
 {% extends "management/management_base.html" %}
+
 {% load static i18n management_tags %}
 
 {% load crispy_forms_tags %}
@@ -8,10 +9,13 @@
     <div class="row">
         <div class="col-12 col-lg-8 col-xl-6">
             <div class="card">
-                <div class="card-header">
-                    {% trans "Edit External Tool Provider" %}
-                </div>
+                <div class="card-header">{% trans "Edit External Tool Provider" %}</div>
                 <div class="card-body">
+
+
+                    {% include 'management/provider/external_tool/include/external_tool_provider_form.html' with form_action="update" %}
+
+
                     <form id="external-tool-provider-form"
                           action="{% url 'management:external_tool_provider_update' external_tool_provider.id %}"
                           method="post">
@@ -19,11 +23,7 @@
                         {% csrf_token %}
                         {% crispy form %}
 
-                        <button id="id_save_btn"
-                                class="btn btn-primary btn-lg mr-2"
-                                type="submit">
-                            {% trans "Update" %}
-                        </button>
+                        <button id="id_save_btn" class="btn btn-primary btn-lg mr-2" type="submit">{% trans "Update" %}</button>
 
                     </form>
                 </div>
@@ -36,4 +36,3 @@
     </div>
 
 {% endblock management_content %}
-

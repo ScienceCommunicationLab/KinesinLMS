@@ -1,0 +1,63 @@
+{% load static i18n management_tags %}
+
+{% load crispy_forms_tags %}
+
+<form id="external-tool-provider-form"
+      {% if form_action == "create" %} action="{% url 'management:external_tool_provider_create' %}" {% else %} action="{% url 'management:external_tool_provider_update' external_tool_provider.id %}" {% endif %}
+      method="post">
+
+  {% csrf_token %}
+  {% crispy form %}
+
+  <button id="id_save_btn" class="btn btn-primary btn-lg mr-2" type="submit">
+    {% if form_action == "create" %}
+      {% trans "Create" %}
+    {% else %}
+      {% trans "Update" %}
+    {% endif %}
+  </button>
+
+</form>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+
+    function toggleFormFields() {
+      const selectedType = typeField.value;
+      console.log("toggleFormFields(). selectedType:", selectedType);
+
+      // Set whether LTI and API fields should be disabled based on selected type
+      const apiFieldsEnabled = ["RENKU"].includes(selectedType);
+      const ltiFieldsEnabled = ["JUPYTER_HUB", "BASIC_LTI13"].includes(selectedType);
+
+      const toggleFieldset = (fieldsetID, isEnabled) => {
+        console.log("toggleFieldset(). fieldsetID:", fieldsetID, "isEnabled:", isEnabled);
+        const fieldset = document.getElementById(fieldsetID);
+        if (fieldset) {
+          fieldset.disabled = !isEnabled;
+        }
+        // Clear out all input fields in the fieldset if it is disabled
+        if (!isEnabled) {
+          const inputs = fieldset.querySelectorAll('input, select, textarea');
+          inputs.forEach(input => {
+            input.value = '';
+            if (input.type === 'checkbox' || input.type === 'radio') {
+              input.checked = false;
+            }
+          });
+        }
+      };
+
+      toggleFieldset("api_fieldset", apiFieldsEnabled);
+      toggleFieldset("lti_fieldset", ltiFieldsEnabled);
+    }
+
+    const typeField = document.getElementById("id_type");
+    if (typeField) {
+      typeField.addEventListener("change", toggleFormFields);
+    }
+
+    toggleFormFields();
+  });
+</script>
