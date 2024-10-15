@@ -30,13 +30,13 @@
 
     <div class="container catalog about-course-criteria" style="margin-bottom: 20rem;">
 
-        <h2>Criteria for Passing "{{ course_description.course.display_name }}"</h2>
+        <h2>{% trans "Criteria for Passing" %} "{{ course_description.course.display_name }}"</h2>
 
         <div class="row criteria-wrapper ">
 
             <div class="col-12 col-md-8 d-flex flex-column">
 
-                <h3><i class="bi bi-info-circle"></i> About this course...</h3>
+                <h3><i class="bi bi-info-circle"></i> {% trans "About this course..." %}</h3>
 
                 {% if course_description.overview %}
                     {{ course_description.overview | safe }}
@@ -47,7 +47,7 @@
                 <div class="mt-4">
                     <a class="btn btn-primary mb-4"
                        href="{% url 'catalog:about_page' course_slug=course_description.course.slug course_run=course_description.course.run %}">
-                        Read more about this course
+                        {% trans "Read more about this course" %}
                     </a>
                 </div>
 
@@ -77,17 +77,19 @@
 
         <div class="row criteria-wrapper">
             <div class="col-12 mt-3 ">
-                <h3><i class="bi bi-flag"></i> Milestones</h3>
+                <h3><i class="bi bi-flag"></i> {% trans "Milestones" %}</h3>
 
                 <div class="overview-text">
-                    The following "milestones" must be achieved in order to pass this course.
+                    {% blocktrans %}
+                        The following "milestones" must be achieved in order to pass this course.
+                    {% endblocktrans %}
                 </div>
 
                 <table class="table table-bordered mt-3">
                     <thead>
                     <tr>
-                        <th scope="col" style="width: 20rem;">Milestone</th>
-                        <th scope="col">Description</th>
+                        <th scope="col" style="width: 20rem;">{% trans "Milestone" %}</th>
+                        <th scope="col">{% trans "Description" %}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -111,16 +113,20 @@
 
         <div class="row criteria-wrapper">
             <div class="col-12 mt-3">
-                <h3><i class="bi bi-grid-fill"></i> Modules</h3>
-                <p>This is a complete list of the modules available in the course (the student is not required to
-                    interact with all of them to pass).</p>
+                <h3><i class="bi bi-grid-fill"></i> {% trans "Modules" %}</h3>
+                <p>
+                    {% blocktrans %}
+                    This is a complete list of the modules available in the course (the student is not required to
+                    interact with all of them to pass).
+                    {% endblocktrans %}
+                </p>
 
                 <table class="table table-bordered mt-3">
                     <thead>
                     <tr>
-                        <th style="width: 20rem;">Module Name</th>
-                        <th style="width: 20rem;">Number of Assessments</th>
-                        <th style="width: 20rem;">Number of Activities</th>
+                        <th style="width: 20rem;">{% trans "Module Name" %}</th>
+                        <th style="width: 20rem;">{% trans "Number of Assessments" %}</th>
+                        <th style="width: 20rem;">{% trans "Number of Activities" %}</th>
                     </tr>
                     </thead>
                     <tbody>

@@ -1,10 +1,13 @@
 {% comment %} User is not authenticated. {% endcomment %}
-{% load core_tags %}
+{% load core_tags i18n %}
 <div class="catalog-action-buttons d-flex">
-    <a href="/accounts/signup" class="btn btn-primary">Sign&nbsp;Up</a>
-    <a href="/accounts/login?next=/catalog/{{ course_slug }}/{{ course_run }}" class="btn btn-light">Sign&nbsp;In</a>
+    <a href="/accounts/signup" class="btn btn-primary">{% trans "Sign Up" %}</a>
+    <a href="/accounts/login?next=/catalog/{{ course_slug }}/{{ course_run }}" class="btn btn-light">{% trans "Sign In" %}</a>
+
     <div class="comment">
-        To enroll in this class, you first need to <a href="/accounts/signup">sign up</a> to {% site_name %} as a student
-        (or <a href="/accounts/login?next=/catalog/{{ course_slug }}/{{ course_run }}">sign in</a> if you're already a student).
+        {% blocktrans with site_name=site_name course_slug=course_slug course_run=course_run %}
+            To enroll in this class, you first need to <a href="/accounts/login?next=/catalog/{{ course_slug }}/{{ course_run }}">sign in</a> (or 
+            <a href="/accounts/signup">sign up</a> if you don't have a user account).
+        {% endblocktrans %}
     </div>
 </div>

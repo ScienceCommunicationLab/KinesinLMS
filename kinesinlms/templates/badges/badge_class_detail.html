@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block main_content %}
 
@@ -8,31 +9,31 @@
 
                 <a href="{% url 'badges:badge_class_list' %}"
                    class="btn btn-link mb-5">
-                    << All Badge Classes
+                    {% trans "Back to All Badge Classes" %}
                 </a>
 
-                <h2>Badge Class: {{ badge_class.name }}</h2>
+                <h2>{% trans "Badge Class" %}: {{ badge_class.name }}</h2>
                 <div class="alert alert-light mt-2 mb-4" style="border:1px dotted #d1d1d1; border-radius: 0.5rem;">
-                    <strong>Description:</strong> {{ badge_class.description }}
+                    <strong>{% trans "Description:" %}</strong> {{ badge_class.description }}
                 </div>
 
                 <div class="d-flex flex-row">
-                    <h3 class="w-100">Badge Assertions</h3>
+                    <h3 class="w-100">{% trans "Badge Assertions" %}</h3>
                     <div class="mb-2">
                         <a class="btn btn-success"
                            style="width:200px;"
                            href="{% url 'badges:create_badge_class_assertion' badge_class.id %}">
-                            Create New Assertion
+                            {% trans "Create New Assertion" %}
                         </a>
                     </div>
                 </div>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>Student</th>
-                        <th>Course</th>
-                        <th>Issued On</th>
-                        <th>Open Badge ID (URL)</th>
+                        <th>{% trans "Student" %}</th>
+                        <th>{% trans "Course" %}</th>
+                        <th>{% trans "Issued On" %}</th>
+                        <th>{% trans "Open Badge ID (URL)" %}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -43,7 +44,7 @@
                             <td>{{ badge_assertion.issued_on | date }}</td>
                             <td>
                                 <a href="{{ badge_assertion.open_badge_id }}" class="btn btn-link">
-                                    View
+                                    {% trans "View" %}
                                 </a>
                             </td>
                         </tr>

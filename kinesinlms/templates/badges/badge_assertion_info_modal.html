@@ -1,4 +1,5 @@
 <!-- Modal -->
+{% load i18n %}
 <style>
     .badge-table-label {
         width: 12rem;
@@ -25,7 +26,7 @@
     <div class="modal-dialog " style="max-width: 600px;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="badgeAssertionModalLabel">Course Badge</h5>
+                <h5 class="modal-title" id="badgeAssertionModalLabel">{% trans "Course Badge" %}</h5>
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="modal"
@@ -48,29 +49,29 @@
                     <a class="btn btn-primary"
                        target="_blank"
                        href="{% url 'badges:download_badge_assertion_image' badge_class_id=badge_assertion.badge_class.id badge_assertion_id=badge_assertion.id %}">
-                        <i class="bi bi-cloud-arrow-down"></i> Download Badge
+                        <i class="bi bi-cloud-arrow-down"></i> {% trans "Download Badge" %}
                     </a>
                 </div>
 
                 <table class="table table-bordered mt-5 mb-2 " style="table-layout:fixed">
                     <tr>
-                        <td class="badge-table-label">Type:</td>
+                        <td class="badge-table-label">{% trans "Type:" %}</td>
                         <td>{{ badge_assertion.badge_class.type_name }}</td>
                     </tr>
                     <tr>
-                        <td class="badge-table-label">Course:</td>
+                        <td class="badge-table-label">{% trans "Course:" %}</td>
                         <td>{{ badge_assertion.badge_class.course.display_name }}</td>
                     </tr>
                     <tr>
-                        <td class="badge-table-label">Issued On:</td>
+                        <td class="badge-table-label">{% trans "Issued On:" %}</td>
                         <td>{{ badge_assertion.issued_on }}</td>
                     </tr>
                     <tr>
-                        <td class="badge-table-label">Credential&nbsp;ID:</td>
+                        <td class="badge-table-label">{% trans "Credential ID:" %}</td>
                         <td>{{ badge_assertion.external_entity_id }}</td>
                     </tr>
                     <tr>
-                        <td class="badge-table-label">Credential&nbsp;URL:</td>
+                        <td class="badge-table-label">{% trans "Credential URL:" %}</td>
                         <td style="word-wrap:break-word;">
                             <a href="{{ badge_assertion.open_badge_id }}"
                                style="word-wrap:break-word;"
@@ -83,7 +84,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
             </div>
 
         </div>

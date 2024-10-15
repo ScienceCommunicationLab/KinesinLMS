@@ -17,7 +17,7 @@
        disabled
             {% endif %}
     >
-        View&nbsp;Course
+        {% trans "View Course" %}
     </a>
 
 
@@ -33,18 +33,18 @@
         {% if course_description.course.has_started %}
 
             {% if user_can_access_course %}
-                You are currently enrolled in this course.
+                {% trans "You are currently enrolled in this course." %}
             {% else %}
                 {% comment %} Course has started but for some reason user is not allowed to access {% endcomment %}
-                You are currently enrolled but are not allowed to access the course at this time.
+                {% trans "You are currently enrolled but are not allowed to access the course at this time." %}
             {% endif %}
 
         {% else %}
 
             <div class="d-flex flex-column">
-                <div>You are currently enrolled in this course.</div>
+                <div>{% trans "You are currently enrolled in this course." %}</div>
                 <div>
-                    Course&nbsp;starts :
+                    {% trans "Course starts:" %}
                     {% timezone 'US/Pacific' %}
                         {{ course_description.course.start_date|localtime|date:"M d, Y P e" }}
                     {% endtimezone %}
@@ -59,11 +59,11 @@
 
 
             {% if user.is_superuser %}
-                (You are a superuser, so you can view the course now.)
+                ({% trans "You are a superuser, so you can view the course now." %})
             {% elif user.is_staff %}
-                (You are staff, so you can view the course now.)
+                ({% trans "You are staff, so you can view the course now." %})
             {% elif is_beta_tester %}
-                (You are a beta-tester, so you can access course now.)
+                ({% trans "You are a beta-tester, so you can access course now." %})
             {% endif %}
 
         {% endif %}

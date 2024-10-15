@@ -113,14 +113,14 @@
 
             <div class="row">
                 <div class="{% if course_description.features %}col-xl-4{% else %}col-xl-7{% endif %} overview mb-4">
-                    <h2>Course Overview</h2>
+                    <h2>{% trans "Course Overview" %}</h2>
                     <div class="overview-text">{{ course_description.overview | safe }}</div>
                 </div>
 
                 {% if course_description.features %}
                     <div class="col-xl-4 mb-4">
                         <div class="course-features">
-                            <h2 style="border-bottom:0">Course Features</h2>
+                            <h2 style="border-bottom:0">{% trans "Course Features" %}</h2>
                             <ul class="fa-ul ms-4">
                                 {% for feature in course_description.features %}
                                     <li class="mb-1">
@@ -135,12 +135,12 @@
 
                 <div class="{% if course_description.features %}col-xl-4{% else %}col-xl-5{% endif %}">
                     <div class="course-details">
-                        <h2 style="border-bottom:0">Course Details</h2>
+                        <h2 style="border-bottom:0">{% trans "Course Details" %}</h2>
                         <table class="table table-bordered">
                             <tr>
                                 <td>Enrollment&nbsp;Starts</td>
                                 {% if course_description.enrollment_has_started %}
-                                    <td>Enrollment is open</td>
+                                    <td>{% trans "Enrollment is open" %}</td>
                                 {% else %}
                                     <td>
                                         <div>
@@ -157,8 +157,8 @@
 
                         <tr>
                             {% if course_description.course_has_started and course_description.course.self_paced %}
-                                <td>Course Starts</td>
-                                <td>Anytime, self-paced</td>
+                                <td>{% trans "Course Starts" %}</td>
+                                <td>{% trans "Anytime, self-paced" %}</td>
                             {% else %}
                                 {% if course_description.course_has_started %}
                                     <td>Course Started</td>
@@ -181,7 +181,7 @@
 
                     {% if course_description.course.end_date %}
                         <tr>
-                            <td>Course Ends</td>
+                            <td>{% trans "Course Ends" %}</td>
                             <td>
                                 <div>
                                     {% timezone 'US/Pacific' %}
@@ -197,46 +197,46 @@
 
                 {% if course_description.effort %}
                     <tr>
-                        <td>Estimated&nbsp;Effort</td>
+                        <td>{% trans "Estimated Effort" %}</td>
                         <td>{{ course_description.effort }}</td>
                     </tr>
                 {% endif %}
 
                 {% if course_description.duration %}
                     <tr>
-                        <td>Estimated&nbsp;Duration</td>
+                        <td>{% trans "Estimated Duration" %}</td>
                         <td>{{ course_description.duration }}</td>
                     </tr>
                 {% endif %}
 
                 {% if course_description.audience %}
                     <tr>
-                        <td>Audience</td>
+                        <td>{% trans "Audience" %}</td>
                         <td>{{ course_description.audience }}</td>
                     </tr>
                 {% endif %}
 
                 {% if course_description.num_modules %}
                     <tr>
-                        <td>Modules</td>
+                        <td>{% trans "Modules" %}</td>
                         <td>{{ course_description.num_modules }}</td>
                     </tr>
                 {% endif %}
 
                 {% if course_description.syllabus_url %}
                     <tr>
-                        <td>Syllabus</td>
+                        <td>{% trans "Syllabus" %}</td>
                         <td>
                             <a href="{{ course_description.syllabus_url }}" class="btn btn-dark">
                                 <i class="bi bi-cloud-arrow-down"></i>
-                                Download
+                                {% trans "Download" %}
                             </a>
                         </td>
                     </tr>
                 {% endif %}
 
                 <tr>
-                    <td>Certificate</td>
+                    <td>{% trans "Certificate" %}</td>
                     <td>
                         {% if course.enable_certificates == True %}
                             Yes
@@ -247,7 +247,7 @@
                 </tr>
 
                 <tr>
-                    <td>Badge</td>
+                    <td>{% trans "Badge" %}</td>
                     <td>
                         {% if course.enable_badges == True %}
                             Yes
@@ -271,7 +271,7 @@
 
             {% if course_description.testimonials %}
                 <div class="testimonials ml-3">
-                    <h2>Testimonials</h2>
+                    <h2>{% trans "Testimonials" %}</h2>
                     {% for testimonial in course_description.testimonials %}
                         <div class="testimonial">
                             <p class="testimonial-quote">{{ testimonial.quote }}</p>
@@ -294,17 +294,19 @@
                                  src="{% static 'images/icons/guide.svg' %}"
                                  style="height:100%" />
                         </div>
-                        Help for Educators
+                        {% trans "Help for Educators" %}
                     </div>
                     <div class="er-content">
                         <p>
+                            {% blocktrans %}
                             Are you an educator? View our resources page for easy to access to the course’s
                             outline, videos, video transcripts, infographics, term sheet, assessments, and discussion
-                            questions.
+                            questions. 
+                            {% endblocktrans %}
                         </p>
                         <div>
                             <a href="{% url 'course:course_admin:resources' course_slug=course.slug course_run=course.run %}"
-                               class="btn btn-secondary">View Resources &gt;&gt;</a>
+                               class="btn btn-secondary">{% trans "View Resources" %} &gt;&gt;</a>
                         </div>
                     </div>
                 </div>

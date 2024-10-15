@@ -20,7 +20,7 @@
             {% csrf_token %}
             <div class="card">
                 <div class="card-header">
-                    Enrollment Survey for "{{ course.display_name }}"
+                    {% trans "Enrollment Survey for" %} "{{ course.display_name }}"
                 </div>
                 <div class="card-body">
                     {{ enrollment_answer_form|crispy }}
@@ -28,7 +28,7 @@
                 <div class="card-footer">
                     <input id="btn-submit-survey"
                            type="submit"
-                           value="Complete Enrollment"
+                           value="{% trans 'Complete Enrollment' %}"
                            class="btn btn-primary">
                 </div>
             </div>
