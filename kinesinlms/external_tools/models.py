@@ -6,6 +6,7 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from slugify import slugify
+from urllib.parse import urlparse
 
 from kinesinlms.core.fields import AutoCharField
 from kinesinlms.core.models import Trackable
@@ -181,6 +182,18 @@ class ExternalToolProvider(Trackable):
 
         return str(site_id)
 
+    @property
+    def base_url(self) -> str:
+        """
+        The base URL for this external tool view. We need this to do things like
+        define a Content Security Policy for the iframe.
+        """
+        if self.launch_uri:
+            parsed_url = urlparse(self.launch_uri)
+            hostname = parsed_url.hostname
+            return hostname
+        return ""
+
     # --------------------------------------------------
     # METHODS
     # --------------------------------------------------
@@ -332,4 +345,14 @@ class ExternalToolView(Trackable):
         """
         if self.external_tool_provider:
             return self.external_tool_provider.launch_uri
+        return ""
+
+    @property
+    def base_url(self) -> str:
+        """
+        The base URL for this external tool view. We need this to do things like
+        define a Content Security Policy for the iframe.
+        """
+        if self.external_tool_provider:
+            return self.external_tool_provider.base_url
         return ""
