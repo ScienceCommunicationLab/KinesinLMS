@@ -306,42 +306,24 @@ class ExternalToolView(Trackable):
     @property
     def target_link_uri(self) -> Optional[str]:
         """
-        The target link URI for this external tool view. This is the URL that will
-        launch (once the login process is complete) a specific view of the tool for
-        this particular point in the course. So this URL might be a very specific path
-        to a particular resource in the tool.
-
-        If the ExternalToolView does not define a custom launch URI, then we will
-        use the launch URI of the ExternalToolProvider.
+        The target link URI for this external tool view. In LTIv1.3,
+        sometimes the `target_link_uri` is used by the platform to
+        tell the tool exactly what resource to show.
 
         Returns:
             Optional[str]: _description_
         """
 
-        if not self.external_tool_provider:
-            logger.error(
-                f"Cannot determine launch URL. ExternalToolView '{self}' does "
-                f"not have an ExternalToolProvider"
-            )
-            return None
-
-        default_launch_uri = self.external_tool_provider.launch_uri
-        if not default_launch_uri:
-            logger.error(
-                f"Cannot determine launch URL. ExternalToolProvider '{self.external_tool_provider}' "
-                f"does not have a launch URI defined"
-            )
-            return None
-
         if self.custom_target_link_uri:
             return self.custom_target_link_uri
-
-        return default_launch_uri
+        elif self.external_tool_provider:
+            return self.external_tool_provider.launch_uri
+        return None
 
     @property
     def launch_uri(self) -> str:
         """
-        The launch URI for this external tool view.
+        The launch URI for the ExternalToolProvider that owns this external tool view.
         """
         if self.external_tool_provider:
             return self.external_tool_provider.launch_uri

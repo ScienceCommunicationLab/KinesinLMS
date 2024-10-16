@@ -91,23 +91,47 @@ class ExternalToolLTIService:
     # METHODS
     # --------------------------------------------------
 
-    def get_tool_login_url(self, user: User) -> str:
+    def get_tool_login_url(
+        self,
+        user: User,
+        external_tool_view: ExternalToolView,
+    ) -> str:
         """
         Get a login URL to start the login process on the external tool.
         This is the first step in the LTIv1.3 "third party initiated flow"
         OIDC login process.
+
+        This method needs access to the ExternalToolView, as it has information
+        that is required even in this first "pre-flight" step (e.g. the target_link_uri)
+
+        Args:
+            user: The user that is initiating the login.
+            external_tool_view: The ExternalToolView object that represents the
+                external tool that we're connecting to in the context of a course.
+
+
+
         """
 
         login_hint = self.get_login_hint(user=user)
+        logger.debug("get_tool_login_url():")
 
         if not hasattr(self.external_tool_view, "external_tool_provider"):
             raise Exception("ExternalToolView does not have an ExternalToolProvider.")
+
+        if not external_tool_view:
+            raise ValueError("external_tool_view is required.")
+        if not external_tool_view.target_link_uri:
+            raise Exception("ExternalToolView does not have a target link URI defined.")
 
         etp: ExternalToolProvider = self.external_tool_provider
         if not etp.login_url:
             raise Exception("ExternalToolProvider does not have a login URL.")
         if not etp.launch_uri:
             raise Exception("ExternalToolProvider does not have a launch URI.")
+        
+        target_link_uri = external_tool_view.target_link_uri
+        logger.debug(f" - target_link_uri: {target_link_uri}")
 
         base_login_url = etp.login_url
         target_link_uri = self.external_tool_view.target_link_uri
