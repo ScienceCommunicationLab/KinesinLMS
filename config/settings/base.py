@@ -264,8 +264,12 @@ CSRF_COOKIE_HTTPONLY = False
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
-# TODO: Remove and only use Content-Security-Policy header instead.
-# In the meantime, setting to SAMEORIGIN rather than DENY to support LTI launches.
+
+# TODO: Remove X_FRAME_OPTIONS and only use Content-Security-Policy header instead.
+# In the meantime, setting X_FRAME_OPTIONS to SAMEORIGIN rather than DENY to support LTI launches.
+# We need to do this because of the LTI launch process. In this process, KinesinLMS will be generating
+# pages that appear *inside* the iframe. Therefore we need SAMEORIGIN to make sure it doesn't freak
+# out about KinesinLMS pages being rendered inside an iframe.
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # EMAIL
