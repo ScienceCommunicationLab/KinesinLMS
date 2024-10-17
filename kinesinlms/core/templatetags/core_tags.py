@@ -171,25 +171,29 @@ def url_replace(request, field, value):
 
 
 @register.simple_tag
-def analytics_cookie_value(request):
+def analytics_cookie_value(request) -> Optional[str]:
     """
     Returns a list of cookie groups that have not been accepted or declined.
     """
+
+    if not request:
+        return None
+
     try:
-        cookie = request.COOKIES.get(ACCEPT_ANALYTICS_COOKIE_NAME, None)
+        accept_analytics_cookie_val = request.COOKIES.get(ACCEPT_ANALYTICS_COOKIE_NAME, None)
     except Exception as e:
         logger.exception(f"Could not get COOKIES from request: {e}")
         return None
 
-    if not cookie:
+    if not accept_analytics_cookie_val:
         return None
-    if cookie not in ["ACCEPT", "REJECT"]:
+    if accept_analytics_cookie_val not in ["ACCEPT", "REJECT"]:
         logger.exception(
             f"analytics_cookie_value(): cookie value is not ACCEPT or REJECT."
-            f"value : {cookie}"
+            f"value : {accept_analytics_cookie_val}"
         )
         return "REJECT"
-    return cookie
+    return accept_analytics_cookie_val
 
 
 @register.simple_tag
