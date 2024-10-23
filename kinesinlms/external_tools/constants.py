@@ -6,6 +6,7 @@ class ExternalToolViewLaunchType(Enum):
     What UI user is shown to start engaging
     with the external tool.
     """
+
     WINDOW = "window"
     IFRAME = "iframe"
 
@@ -15,8 +16,10 @@ class ExternalToolProviderType(Enum):
     #   Just learning about juypter notebook hosting
     #   so I could be way off here. But starting
     #   with services based on JupyterHub.
-    BASIC = "Basic"
+    BASIC_LTI13 = "Basic LTIv1.3"
+    MODAL = "Modal.com"
     JUPYTER_HUB = "Jupyterhub"
+    RENKU = "Renku"
 
 
 class ConnectionMethodType(Enum):
@@ -40,7 +43,10 @@ class LTI1P3InstitutionCoreRoles(Enum):
     """
     LTI 1.3 roles
     """
-    ADMINISTRATOR = "http://purl.imsglobal.org/vocab/lis/v2/institution/person#Administrator"
+
+    ADMINISTRATOR = (
+        "http://purl.imsglobal.org/vocab/lis/v2/institution/person#Administrator"
+    )
     FACULTY = "http://purl.imsglobal.org/vocab/lis/v2/institution/person#Faculty"
     GUEST = "http://purl.imsglobal.org/vocab/lis/v2/institution/person#Guest"
     NONE = "http://purl.imsglobal.org/vocab/lis/v2/institution/person#None"

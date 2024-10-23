@@ -11,22 +11,24 @@
             <div class="card">
                 <div class="card-header">{% trans "Create an External Tool Provider" %}</div>
                 <div class="card-body">
-                    <form id="external-tool-provider-form"
-                          action="{% url 'management:external_tool_provider_create' %}"
-                          method="post">
 
-                        {% csrf_token %}
-                        {% crispy form %}
-                        
-                        <button id="id_save_btn" class="btn btn-primary btn-lg mr-2" type="submit">{% trans "Create" %}</button>
+                    {% include 'management/provider/external_tool/include/external_tool_provider_form.html' with form_action="create" %}
 
-                    </form> 
                 </div>
             </div>
         </div>
         <div class="col-12 col-lg-4 col-xl-6">
             <strong>Managing External Tool Providers</strong>
-            <p>( Help content here... )</p>
+            <p>
+                "External Tool Providers" are external websites or services that provide
+                learning tools you can include in your course. Most tools will be connected
+                via the "LTI" standard, but some may use other methods.
+            </p>
+
+            <p>
+                When you indicate which "type" the tool is, the fields required for
+                that type will be enabled in the form.
+            </p>
         </div>
     </div>
 

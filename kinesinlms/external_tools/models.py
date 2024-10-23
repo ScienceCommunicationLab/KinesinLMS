@@ -34,8 +34,14 @@ class UsernameField(Enum):
 
 class ExternalToolProvider(Trackable):
     """
-    External tool provider, connected by LTI v1.3.
-    At the moment the only type of tool we support is a JupyterHub service.
+    An "External tool provider" is a service that provides a tool that can be embedded
+    in KinesinLMS.
+
+    Usually this tool is going to be provided via LTIv1.3, the standard for embedding
+    external tools in learning management systems.
+
+    However, some services, like Modal.com or Renku, might need a custom integration. So we leave the
+    manner of integration as something dependent on the type of external tool provider.
     """
 
     name = models.CharField(
@@ -50,14 +56,6 @@ class ExternalToolProvider(Trackable):
         null=True, blank=True, help_text=_("Description of external tool.")
     )
 
-    lti_version = models.CharField(
-        max_length=100,
-        choices=[(tag.name, tag.value) for tag in LTIVersionType],
-        default=LTIVersionType.LTI_1_3.name,
-        null=False,
-        blank=False,
-    )
-
     type = models.CharField(
         max_length=50,
         choices=[(tag.name, tag.value) for tag in ExternalToolProviderType],
@@ -66,10 +64,36 @@ class ExternalToolProvider(Trackable):
         blank=False,
     )
 
-    connection_method = models.CharField(
-        max_length=50,
-        choices=[(tag.name, tag.value) for tag in ConnectionMethodType],
-        default=ConnectionMethodType.MANUAL.name,
+    # API-based connections:
+    # ~~~~~~~~~~~~~~~~~~~~~~
+
+    api_url = models.URLField(
+        null=True,
+        blank=True,
+        help_text=_("The API endpoint for the external tool."),
+    )
+
+    api_key = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        help_text=_("The API key for the external tool."),
+    )
+
+    api_secret = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        help_text=_("The API secret for the external tool."),
+    )
+
+    # LTI-based connections:
+    # ~~~~~~~~~~~~~~~~~~~~~~
+
+    lti_version = models.CharField(
+        max_length=100,
+        choices=[(tag.name, tag.value) for tag in LTIVersionType],
+        default=LTIVersionType.LTI_1_3.name,
         null=False,
         blank=False,
     )
@@ -78,8 +102,8 @@ class ExternalToolProvider(Trackable):
         max_length=50,
         choices=[(tag.name, tag.value) for tag in UsernameField],
         default=UsernameField.USERNAME.name,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         help_text=_(
             "The field in the user model that will be used to identify the user to the tool"
         ),
@@ -90,9 +114,7 @@ class ExternalToolProvider(Trackable):
         unique=True,
         null=False,
         blank=False,
-        help_text=_(
-            "Slug identifier for provider " "(used in e.g. course json imports)."
-        ),
+        help_text=_("Slug identifier for provider (used in e.g. course json imports)."),
     )
 
     login_url = models.URLField(
@@ -107,8 +129,8 @@ class ExternalToolProvider(Trackable):
     )
 
     launch_uri = models.URLField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         help_text=_(
             "The launch (target link) URI for this external tool."
             "This is the URL to launch the tool once the login process is complete."
@@ -159,6 +181,27 @@ class ExternalToolProvider(Trackable):
     # --------------------------------------------------
     # MODEL PROPERTIES
     # --------------------------------------------------
+
+    @property
+    def api_fields_active(self) -> bool:
+        """
+        Are the API fields active?
+        """
+        return self.type in [
+            ExternalToolProviderType.RENKU.name,
+            ExternalToolProviderType.MODAL.name,
+
+        ]
+
+    @property
+    def lti_fields_active(self) -> bool:
+        """
+        Are the LTI fields active?
+        """
+        return self.type in [
+            ExternalToolProviderType.BASIC_LTI13.name,
+            ExternalToolProviderType.JUPYTER_HUB.name,
+        ]
 
     @property
     def issuer(self) -> str:
