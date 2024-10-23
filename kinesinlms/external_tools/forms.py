@@ -52,7 +52,6 @@ class ExternalToolProviderForm(ModelForm):
                 "name",
                 "type",
                 "description",
-                "connection_method",
                 "username_field",
                 "slug",
             ),
