@@ -1,0 +1,35 @@
+[lint]
+extend-select = [
+  "E501", # Add the `line-too-long` rule to the enforced rule set.  # By default, Ruff omits rules that overlap with the use of a formatter
+]
+ignore = [
+  "E712", # (x == True) is allowed.
+  "D100", # Docstring allowed rules
+  "D105",
+  "D107",
+  "D203",
+  "D213",
+  "F722"
+]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or McCabe complexity (`C901`) by default.
+# Also add ISort (`I`) rules.
+select = ["E4", "E7", "E9", "F", "I"]
+
+# Allow fix for all enabled rules (when `--fix`) is provided. (only safes fixes will be applied)
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+

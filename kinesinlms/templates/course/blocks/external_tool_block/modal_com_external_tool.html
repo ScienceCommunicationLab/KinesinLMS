@@ -1,0 +1,28 @@
+<style>
+  .htmx-indicator {
+    opacity: 0;
+  }
+
+  .htmx-request .htmx-indicator {
+    opacity: 1;
+  }
+
+  .htmx-request.htmx-indicator {
+    opacity: 1;
+  }
+</style>
+<div id="external-tool-view-{{ external_tool_view.id }}">
+    <a hx-get="{% url 'external_tools:launch_external_tool_view_hx' pk=block.external_tool_view.id %}"
+       hx-target="#external-tool-view-{{ external_tool_view.id }}"
+       hx-swap="outerHTML"
+       hx-indicator="#launch-spinner-{{ external_tool_view.id }}"
+       class="btn btn-primary">Launch Tool</a>
+
+    <div id="launch-spinner-{{ external_tool_view.id }}"
+         class="htmx-indicator">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+</div>

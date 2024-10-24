@@ -24,12 +24,16 @@ other 'base' templates for certain sections of the site, such as course_base.htm
 
             {% include 'includes/head_meta.html' %}
 
+            {# temp for testing iframes from modal.com #}
+            <meta http-equiv="Content-Security-Policy" content="frame-src *;" />
+
+            {% comment %}
             {% if content_security_policies %}
                 {% for policy in content_security_policies %}
-                    <meta http-equiv="Content-Security-Policy"
-                          content="{{ policy }}" />
+                    <meta http-equiv="Content-Security-Policy" content="{{ policy }}" />
                 {% endfor %}
             {% endif %}
+            {% endcomment %}
 
         {% endblock head %}
 

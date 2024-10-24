@@ -1,21 +1,21 @@
-from enum import Enum
 import logging
+from enum import Enum
 from typing import Optional
+from urllib.parse import urlparse
 
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from slugify import slugify
-from urllib.parse import urlparse
 
 from kinesinlms.core.fields import AutoCharField
 from kinesinlms.core.models import Trackable
 from kinesinlms.core.utils import get_domain
 from kinesinlms.external_tools.constants import (
+    ConnectionMethodType,
+    ExternalToolProviderType,
     ExternalToolViewLaunchType,
     LTIVersionType,
-    ExternalToolProviderType,
-    ConnectionMethodType,
 )
 from kinesinlms.learning_library.models import Block
 
@@ -189,7 +189,7 @@ class ExternalToolProvider(Trackable):
         """
         return self.type in [
             ExternalToolProviderType.RENKU.name,
-            ExternalToolProviderType.MODAL.name,
+            ExternalToolProviderType.MODAL_COM.name,
         ]
 
     @property
@@ -260,20 +260,7 @@ class ExternalToolProvider(Trackable):
                 slug = slug[:100]
             self.slug = slug
 
-        if not self.client_id:
-            self._create_client_id()
-
         super().save(*args, **kwargs)
-
-    def _create_client_id(self):
-        if not self.client_id:
-            max_client_id = (
-                ExternalToolProvider.objects.all().aggregate(models.Max("client_id"))[
-                    "client_id__max"
-                ]
-                or 9999
-            )
-            self.client_id = max_client_id + 1
 
 
 class ExternalToolView(Trackable):

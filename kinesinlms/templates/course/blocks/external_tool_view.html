@@ -40,18 +40,20 @@ The launch process involves
 
     <h3>External Tool</h3>
     {# TODO: support iframe launch, etc. #}
-    {% if block.external_tool_view.launch_type == "IFRAME" %}
-      <iframe src="{% url 'lti:lti_launch' course_slug=course.slug course_run=course.run course_unit=course_unit.id block_id=block.id %}"
-              style="width: 100%;
-                     height: 600px;
-                     border: 1px solid #aaa;">
-        Your browser does not support iframes.
-      </iframe>
-    {% else %}
-      <a href="{% url 'lti:lti_launch' course_slug=course.slug course_run=course.run course_unit=course_unit.id block_id=block.id %}"
-         target="_blank"
-         class="btn btn-primary mt-2">Launch Tool</a>
-    {% endif %}
 
+    {% with block.external_tool_view.external_tool_provider.type as tool_type %}
+
+      {% if tool_type == "BASIC_LTI13" %}
+
+        {% include "course/blocks/external_tool_block/lti_external_tool.html" %}
+
+      {% elif tool_type == "MODAL_COM" %}
+
+        {% include "course/blocks/external_tool_block/modal_com_external_tool.html" %}
+
+      {% else %}
+        <h1>Unsupported tool type: {{ tool_type }}</h1>
+      {% endif %}
+    {% endwith %}
   {% endif %}
-  </div>
+</div>

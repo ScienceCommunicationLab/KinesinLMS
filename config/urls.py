@@ -4,23 +4,22 @@ from django.conf.urls.static import static
 # DMcQ: Force use of allauth login for admin site
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import include, path
 from django.views import defaults as default_views
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView
 from rest_framework import routers
 
 from kinesinlms.analytics.views import EngagementDataViewSet
-from kinesinlms.assessments.views import SubmittedAnswerViewSet, AssessmentViewSet
+from kinesinlms.assessments.views import AssessmentViewSet, SubmittedAnswerViewSet
 from kinesinlms.badges.views import BadgeAssertionViewSet
-from kinesinlms.course.views import BookmarkViewSet, CourseViewSet, CourseNavViewSet
+from kinesinlms.course.views import BookmarkViewSet, CourseNavViewSet, CourseViewSet
 from kinesinlms.forum.views import TopicViewSet
 from kinesinlms.learning_library.views import BlockViewSet, CourseUnitViewSet
 from kinesinlms.pathways.views import PathwayViewSet
 from kinesinlms.sits.views import (
-    SimpleInteractiveToolViewSet,
     SimpleInteractiveToolSubmissionViewSet,
     SimpleInteractiveToolTemplateViewSet,
+    SimpleInteractiveToolViewSet,
 )
 from kinesinlms.tracking.views import TrackingViewSet
 from kinesinlms.users.api.views import UserViewSet
@@ -83,7 +82,6 @@ users_router.register(
 
 # noinspection PyUnresolvedReferences
 urlpatterns = [
- 
     path(
         "tinymce/",
         include("tinymce.urls"),
@@ -105,6 +103,10 @@ urlpatterns = [
     path("courses/", include("kinesinlms.course.urls", namespace="course")),
     path("dashboard/", include("kinesinlms.dashboard.urls", namespace="dashboard")),
     path("forum/", include("kinesinlms.forum.urls", namespace="forum")),
+    path(
+        "external_tools/",
+        include("kinesinlms.external_tools.urls", namespace="external_tools"),
+    ),
     path(
         "learning_library/",
         include("kinesinlms.learning_library.urls", namespace="learning_library"),

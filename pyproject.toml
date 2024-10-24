@@ -54,10 +54,6 @@ ignore_errors = true
 django_settings_module = "config.settings.test"
 
 
-# === Ruff ====
-# ( experimenting with Ruff as a replacement for pylint )
-ignore = ["F722"]
-
 # ==== PyLint ====
 [tool.pylint.MASTER]
 load-plugins = [

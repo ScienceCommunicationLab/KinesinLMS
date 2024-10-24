@@ -17,7 +17,7 @@ class ExternalToolProviderType(Enum):
     #   so I could be way off here. But starting
     #   with services based on JupyterHub.
     BASIC_LTI13 = "Basic LTIv1.3"
-    MODAL = "Modal.com"
+    MODAL_COM = "Modal.com"
     JUPYTER_HUB = "Jupyterhub"
     RENKU = "Renku"
 
