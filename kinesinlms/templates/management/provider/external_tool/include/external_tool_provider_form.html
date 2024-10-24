@@ -6,16 +6,16 @@
       {% if form_action == "create" %} action="{% url 'management:external_tool_provider_create' %}" {% else %} action="{% url 'management:external_tool_provider_update' external_tool_provider.id %}" {% endif %}
       method="post">
 
-  {% csrf_token %}
-  {% crispy form %}
+    {% csrf_token %}
+    {% crispy form %}
 
-  <button id="id_save_btn" class="btn btn-primary btn-lg mr-2" type="submit">
-    {% if form_action == "create" %}
-      {% trans "Create" %}
-    {% else %}
-      {% trans "Update" %}
-    {% endif %}
-  </button>
+    <button id="id_save_btn" class="btn btn-primary btn-lg mr-2" type="submit">
+        {% if form_action == "create" %}
+            {% trans "Create" %}
+        {% else %}
+            {% trans "Update" %}
+        {% endif %}
+    </button>
 
 </form>
 

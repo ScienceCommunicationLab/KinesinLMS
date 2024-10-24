@@ -190,7 +190,6 @@ class ExternalToolProvider(Trackable):
         return self.type in [
             ExternalToolProviderType.RENKU.name,
             ExternalToolProviderType.MODAL.name,
-
         ]
 
     @property
