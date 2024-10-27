@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 
 import modal
 
@@ -27,6 +28,7 @@ class ModalComExternalToolService(BaseExternalToolService):
         # Launch a Jupyter notebook in modal.com and return the URL
 
         logger.info("Launching Modal.com external tool...")
+
         f = modal.Function.lookup("my_jupyter_hub", "spawn_jupyter")
         launch_url = f.remote()
         logger.info(f"Jupyter notebook launched successfully. URL: {launch_url}")

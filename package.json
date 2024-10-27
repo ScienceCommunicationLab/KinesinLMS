@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@projectstorm/react-diagrams": "^7.0.4",
-    "alpinejs": "^3.14.1",
-    "axios": "^1.6.0",
+    "alpinejs": "^3.14.3",
+    "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "fast-json-stable-stringify": "^2.1.0",
     "htmx.org": "^1.9.12",
