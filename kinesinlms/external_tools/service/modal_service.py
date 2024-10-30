@@ -25,11 +25,13 @@ class ModalComExternalToolService(BaseExternalToolService):
         Launches the Modal.com external tool in a new window.
         """
 
-        # Launch a Jupyter notebook in modal.com and return the URL
-
-        logger.info("Launching Modal.com external tool...")
-
-        f = modal.Function.lookup("my_jupyter_hub", "spawn_jupyter")
-        launch_url = f.remote()
+        logger.info("Launching jupyter notebook in Modal.com...")
+        spawn_jupyter_remote_function = modal.Function.lookup(
+            "my_jupyter_hub",
+            "spawn_jupyter",
+        )
+        launch_url = spawn_jupyter_remote_function.remote(
+            notebook_filename="hello_world.ipynb"
+        )
         logger.info(f"Jupyter notebook launched successfully. URL: {launch_url}")
         return launch_url
