@@ -132,3 +132,6 @@ django-waffle==4.1.0
 # Support markdown in composer and rendering content
 markdown==3.7
 django-markdownify==0.9.5
+
+# Serverless integration with modal.com
+modal==0.64.211
