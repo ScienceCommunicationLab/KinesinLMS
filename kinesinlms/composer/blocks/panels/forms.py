@@ -3,26 +3,26 @@ Definitions for forms to be used in panels.
 These are simply Django forms and should be relatively straightforward and
 easy to understand.
 
-Most forms target a subset of fields directly on the Block model. But sometimes a Block's
-properties are defined in other, closely related models, such as the Assessment model or the
-ExternalTooView model, which is in a one-to-one relationship with a Block and handles
-saving domain-specific information.
+Most forms target a subset of fields directly on the Block model. 
+But sometimes a Block's properties are defined in other, closely related models, 
+such as the Assessment model or the ExternalTooView model, which is in a 
+one-to-one relationship with a Block and handles saving domain-specific information.
 
-In this case, the form may target that helper model. For example, in the cases of assessments,
-that's the Assessment model, and in the case of forum topics, the ForumTopic model.
+In this case, the form may target that helper model. For example, in 
+the cases of assessments, that's the Assessment model, and in the case 
+of forum topics, the ForumTopic model.
 """
 
 import copy
 import json
 import logging
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
 from crispy_forms.helper import FormHelper
-
-from crispy_forms.layout import Layout, Row, Column, Field, HTML, Div
+from crispy_forms.layout import HTML, Column, Div, Field, Layout, Row
 from django import forms
 from django.core.validators import MaxLengthValidator
-from django.forms import Textarea, ModelForm, formset_factory, BaseFormSet, HiddenInput
+from django.forms import BaseFormSet, HiddenInput, ModelForm, Textarea, formset_factory
 from django.utils.translation import gettext as _
 from tinymce.widgets import TinyMCE
 
@@ -30,8 +30,8 @@ from kinesinlms.assessments.models import Assessment
 from kinesinlms.composer.forms.fields import LearningObjectivesField
 from kinesinlms.composer.forms.helpers import save_learning_objectives
 from kinesinlms.composer.models import ComposerSettings
-from kinesinlms.course.tasks import rescore_assessment_milestone_progress
 from kinesinlms.course.models import Course, CourseNode
+from kinesinlms.course.tasks import rescore_assessment_milestone_progress
 from kinesinlms.external_tools.models import ExternalToolView
 from kinesinlms.forum.service.base_service import BaseForumService
 from kinesinlms.forum.utils import get_forum_service
@@ -149,12 +149,14 @@ class HTMLBlockPanelForm(BasePanelModelForm):
             self.fields["html_content"].widget = TinyMCE(attrs={"cols": 80, "rows": 30})
             self.fields["html_content"].help_text = _(
                 "Enter html content here. (If you want to enter raw HTML, close this "
-                "form and disable this editor with the WYSIWYG toggle in the contents nav bar)."
+                "form and disable this editor with the WYSIWYG toggle in the "
+                "contents nav bar)."
             )
         else:
             self.fields["html_content"].help_text = _(
                 "Enter html content here. (If you want a WYSIWYG editor, close this "
-                "form and enable WYSIWYG with the toggle button in the contents nav bar)."
+                "form and enable WYSIWYG with the toggle button in the "
+                "contents nav bar)."
             )
 
         self.helper = FormHelper()
@@ -191,8 +193,8 @@ class ExternalToolViewPanelForm(BasePanelModelForm):
         ),
         help_text=(
             "This field shows the target link URI for this external tool view. "
-            "It is constructed using the custom launch URI and/or the default launch URI "
-            "from the ExternalToolProvider, depending on the settings."
+            "It is constructed using the custom launch URI and/or the default "
+            "launch URI from the ExternalToolProvider, depending on the settings."
         ),
     )
 
@@ -226,10 +228,16 @@ class ExternalToolViewPanelForm(BasePanelModelForm):
                 f"""
                     <div class="form-group mb-5">
                     <label for="id_target_link_uri">Target Link URI</label>
-                    <div class="alert alert-info mt-2">{self.instance.target_link_uri or ''}</div>
-                    <small class="form-text text-muted">This field shows the "target link URI" for this external tool view. 
-                    It defaults to the "Launch URL" defined in the External Tool Provider. But you can override it using
-                    the 'Custom Target Link URI' field above.</small>
+                    <div class="alert alert-info mt-2">
+                    {self.instance.target_link_uri or ''}
+                    </div>
+                    <small class="form-text text-muted">
+                    This field shows the "target 
+                    link URI" for this external tool view. 
+                    It defaults to the "Launch URL" defined in the External Tool 
+                    Provider. But you can override it using
+                    the 'Custom Target Link URI' field above.
+                    </small>
                     </div>
                 """
             ),
@@ -497,8 +505,12 @@ class BlockMetaForm(BasePanelModelForm):
     slug = forms.CharField(
         max_length=100,
         required=False,
-        help_text="A unique identifier for this block (A slug is usually lowercase letters, numbers, and hyphens). "
-        "Students don't usually see this identifier, but it's still good to customize it to be more descriptive, as that can make analytics data more intelligible.",
+        help_text=(
+            "A unique identifier for this block (A slug is usually lowercase "
+            "letters, numbers, and hyphens). Students don't usually see this "
+            "identifier, but it's still good to customize it to be more "
+            "descriptive, as that can make analytics data more intelligible."
+        ),
     )
 
     block_learning_objectives = LearningObjectivesField()
@@ -726,7 +738,10 @@ class BaseChoiceDefinitionForm(forms.Form):
                 Column(
                     Field("DELETE", css_class="input-small hidden"),
                     HTML(
-                        '<button type="button" class="btn btn-danger btn-sm btn-remove-choice">Delete</button>'
+                        "<button type='button' "
+                        "class='btn btn-danger btn-sm btn-remove-choice'>"
+                        "Delete"
+                        "</button>"
                     ),
                     css_class="col-1",
                 ),
@@ -947,7 +962,10 @@ class MultipleChoiceAnswerDefinitionForm(BaseChoiceDefinitionForm):
                 Column(
                     Field("DELETE", css_class="input-small hidden"),
                     HTML(
-                        '<button type="button" class="btn btn-danger btn-sm btn-remove-choice">Delete</button>'
+                        '<button type="button" '
+                        'class="btn btn-danger btn-sm btn-remove-choice">'
+                        "Delete"
+                        "</button>"
                     ),
                     css_class="col-1",
                 ),
@@ -997,7 +1015,11 @@ class MultipleChoiceAssessmentPanelForm(
             ("OR", "OR"),
         ],
         widget=forms.RadioSelect(attrs={"class": "inline-radio"}),
-        help_text="If there are multiple correct options, 'AND' means all are required, 'OR' means at least one is required.",
+        help_text=(
+            "If there are multiple correct options, "
+            "'AND' means all are required, "
+            "'OR' means at least one is required."
+        ),
         initial="AND",  # Set the initial join type
     )
 

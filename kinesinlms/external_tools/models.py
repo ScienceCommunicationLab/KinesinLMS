@@ -12,7 +12,6 @@ from kinesinlms.core.fields import AutoCharField
 from kinesinlms.core.models import Trackable
 from kinesinlms.core.utils import get_domain
 from kinesinlms.external_tools.constants import (
-    ConnectionMethodType,
     ExternalToolProviderType,
     ExternalToolViewLaunchType,
     LTIVersionType,
@@ -40,8 +39,9 @@ class ExternalToolProvider(Trackable):
     Usually this tool is going to be provided via LTIv1.3, the standard for embedding
     external tools in learning management systems.
 
-    However, some services, like Modal.com or Renku, might need a custom integration. So we leave the
-    manner of integration as something dependent on the type of external tool provider.
+    However, some services, like Modal.com or Renku, might need a
+    custom integration. So we leave the manner of integration as something
+    dependent on the type of external tool provider.
     """
 
     name = models.CharField(
@@ -105,7 +105,8 @@ class ExternalToolProvider(Trackable):
         null=True,
         blank=True,
         help_text=_(
-            "The field in the user model that will be used to identify the user to the tool"
+            "The field in the user model that will be used to "
+            "identify the user to the tool"
         ),
     )
 
@@ -123,7 +124,8 @@ class ExternalToolProvider(Trackable):
         help_text=_(
             "The login URL that starts the "
             "OpenID Connect process for this external tool. "
-            "Sometimes this URL is called the 'initiate login', the 'OIDC url' or just 'login' url. "
+            "Sometimes this URL is called the 'initiate login', the "
+            "'OIDC url' or just 'login' url. "
             "This field can be left empty if not required by external tool."
         ),
     )
@@ -267,14 +269,15 @@ class ExternalToolView(Trackable):
     """
     External tool view, connected by LTI v1.3.
 
-    Provides configuration information for a particular view (document, assessment, lesson, etc.)
-    of a resource in external tool.
+    Provides configuration information for a particular view (document,
+    assessment, lesson, etc.) of a resource in external tool.
 
     This is associated directly with a block in a CourseUnit.
 
     NOTE:
-        Wasn't sure what to call all the things that might be made available via LTI provider
-        (document, assessment, lesson, etc.) so I just called it a 'view'.
+        Wasn't sure what to call all the things that might be made
+        available via LTI provider (document, assessment, lesson, etc.)
+        so I just called it a 'view'.
 
     """
 
@@ -305,9 +308,10 @@ class ExternalToolView(Trackable):
     #
     # ...and in another spot the standard describes the rational for this id:
     #
-    #           LTI uses the resource_link_id property to help platforms and tools differentiate
-    #           amongst multiple links embedded in a single context. While all the links within a
-    #           context will share the same context_id, each LTI resource link will have a platform
+    #           LTI uses the resource_link_id property to help platforms and
+    #           tools differentiate amongst multiple links embedded in a single
+    #           context. While all the links within a context will share the
+    #           same context_id, each LTI resource link will have a platform
     #           wide unique resource link ID.
     #
     # So essentially anytime we have a button saying "Launch External Tool"
@@ -328,7 +332,9 @@ class ExternalToolView(Trackable):
         blank=True,
         max_length=1000,
         help_text=_(
-            "A custom target link helps direct to a particular resources in the external tool. If this URL is not defined, the default launch URI of the ExternalToolProvider will be used to launch the tool."
+            "A custom target link helps direct to a particular resources in the "
+            "external tool. If this URL is not defined, the default launch URI "
+            "of the ExternalToolProvider will be used to launch the tool."
         ),
     )
 
