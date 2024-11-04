@@ -7,6 +7,7 @@
        class="table table-bordered ">
     <thead>
     <tr>
+        <th>{% translate 'Name' %}</th>
         <th>{% translate 'Type' %}</th>
         <th>URL</th>
         <th>uuid</th>
@@ -17,6 +18,9 @@
     {% if block.block_resources %}
         {% for block_resource in block.block_resources.all %}
             <tr>
+                <td>
+                    {{ block_resource.resource.name }}
+                </td>
                 <td>
                     {{ block_resource.resource.type }}
                 </td>

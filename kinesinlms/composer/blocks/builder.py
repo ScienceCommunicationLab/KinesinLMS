@@ -1,20 +1,21 @@
-from typing import Optional, Dict, Type
+from typing import Dict, Optional, Type
 
 from kinesinlms.composer.blocks.panels.panels import (
-    PanelSet,
-    HTMLBlockPanelSet,
-    MultipleChoiceAssessmentPanelSet,
-    SurveyPanelSet,
-    VideoBlockPanelSet,
-    LongFormTextAssessmentPanelSet,
     DoneIndicatorAssessmentPanelSet,
-    PollAssessmentPanelSet,
-    ForumTopicPanelSet,
-    SimpleInteractiveToolPanelSet,
     ExternalToolViewPanelSet,
     FileResourceBlockPanelSet,
+    ForumTopicPanelSet,
+    HTMLBlockPanelSet,
+    JupyterNotebookPanelSet,
+    LongFormTextAssessmentPanelSet,
+    MultipleChoiceAssessmentPanelSet,
+    PanelSet,
+    PollAssessmentPanelSet,
+    SimpleInteractiveToolPanelSet,
+    SurveyPanelSet,
+    VideoBlockPanelSet,
 )
-from kinesinlms.learning_library.constants import BlockType, AssessmentType
+from kinesinlms.learning_library.constants import AssessmentType, BlockType
 from kinesinlms.learning_library.models import Block
 
 
@@ -89,6 +90,18 @@ class ExternalToolViewPanelSetBuilder(PanelSetBuilder):
     def create_panel_set(self, block: Block) -> PanelSet:
         if block.type == BlockType.EXTERNAL_TOOL_VIEW.name:
             return ExternalToolViewPanelSet()
+        else:
+            raise ValueError(f"Unsupported block type: {block.type}")
+
+
+class JupyterNotebookPanelSetBuilder(PanelSetBuilder):
+    """
+    Build a panel set for editing an jupyter notebook view block.
+    """
+
+    def create_panel_set(self, block: Block) -> PanelSet:
+        if block.type == BlockType.JUPYTER_NOTEBOOK.name:
+            return JupyterNotebookPanelSet()
         else:
             raise ValueError(f"Unsupported block type: {block.type}")
 
@@ -173,6 +186,7 @@ class PanelSetManager:
             BlockType.FORUM_TOPIC.name: ForumTopicPanelSetBuilder,
             BlockType.SIMPLE_INTERACTIVE_TOOL.name: SimpleInteractiveToolPanelSetBuilder,
             BlockType.EXTERNAL_TOOL_VIEW.name: ExternalToolViewPanelSetBuilder,
+            BlockType.JUPYTER_NOTEBOOK.name: JupyterNotebookPanelSetBuilder,
         }
 
     def set_builder_for_block(self, block: Block):

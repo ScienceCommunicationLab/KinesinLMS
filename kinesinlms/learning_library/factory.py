@@ -12,6 +12,7 @@ grow to do some initial setup as the blocks become more complex.
 # FACTORIES FOR DIFFERENT BLOCKS (using factory-boy)
 
 """
+
 import logging
 
 from factory.django import DjangoModelFactory
@@ -28,6 +29,7 @@ logger = logging.getLogger(__name__)
 
 # Factories for models associated with Blocks...
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 class AssessmentFactory(DjangoModelFactory):
     graded = True
@@ -50,6 +52,14 @@ class ExternalToolViewFactory(DjangoModelFactory):
 
 # Factories for Block instances
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+class ExternalToolViewBlockFactory(DjangoModelFactory):
+    class Meta:
+        model = Block
+
+    type = BlockType.EXTERNAL_TOOL_VIEW.name
+
 
 class SurveyBlockFactory(DjangoModelFactory):
     class Meta:
@@ -82,6 +92,13 @@ class VideoBlockFactory(DjangoModelFactory):
     type = BlockType.VIDEO.name
 
 
+class JupyterNotebookBlockFactory(DjangoModelFactory):
+    class Meta:
+        model = Block
+
+    type = BlockType.JUPYTER_NOTEBOOK.name
+
+
 class HTMLContentBlockFactory(DjangoModelFactory):
     class Meta:
         model = Block
@@ -101,10 +118,3 @@ class SimpleInteractiveToolBlockFactory(DjangoModelFactory):
         model = Block
 
     type = BlockType.SIMPLE_INTERACTIVE_TOOL.name
-
-
-class ExternalToolViewBlockFactory(DjangoModelFactory):
-    class Meta:
-        model = Block
-
-    type = BlockType.EXTERNAL_TOOL_VIEW.name

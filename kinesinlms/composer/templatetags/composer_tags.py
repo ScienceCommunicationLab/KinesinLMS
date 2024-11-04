@@ -4,9 +4,9 @@ from typing import List
 from django import template
 from django.utils.translation import gettext_lazy as _
 
-from kinesinlms.learning_library.constants import BlockType, AssessmentType
-from kinesinlms.sits.constants import SimpleInteractiveToolType
 from kinesinlms.composer.models import ComposerSettings
+from kinesinlms.learning_library.constants import AssessmentType, BlockType
+from kinesinlms.sits.constants import SimpleInteractiveToolType
 
 register = template.Library()
 logger = logging.getLogger(__name__)
@@ -123,7 +123,7 @@ def add_block_button_groups() -> List:
                     "description": _("An interactive diagram block"),
                     "block_type": BlockType.SIMPLE_INTERACTIVE_TOOL.name,
                     "block_subtype": SimpleInteractiveToolType.DIAGRAM.name,
-                    "block_type_classes": "btn-warning add-block-sit",
+                    "block_type_classes": "btn-success add-block-sit",
                 },
                 {
                     "name": _(SimpleInteractiveToolType.TABLETOOL.value),
@@ -131,7 +131,7 @@ def add_block_button_groups() -> List:
                     "description": _("A interactive table block"),
                     "block_type": BlockType.SIMPLE_INTERACTIVE_TOOL.name,
                     "block_subtype": SimpleInteractiveToolType.TABLETOOL.name,
-                    "block_type_classes": "btn-warning add-block-sit",
+                    "block_type_classes": "btn-success add-block-sit",
                 },
                 {
                     "name": _(BlockType.SURVEY.value),
@@ -139,6 +139,14 @@ def add_block_button_groups() -> List:
                     "description": _("Survey"),
                     "block_type": BlockType.SURVEY.name,
                     "block_type_classes": "btn-danger add-external-survey",
+                },
+                {
+                    "name": _("Notebook"),
+                    "bi_icon_class": None,
+                    "icon_filename": "jupyter_white.svg",
+                    "description": _("Jupyter Notebook"),
+                    "block_type": BlockType.JUPYTER_NOTEBOOK.name,
+                    "block_type_classes": "btn-danger add-external-tool-view",
                 },
                 {
                     "name": _(BlockType.EXTERNAL_TOOL_VIEW.value),

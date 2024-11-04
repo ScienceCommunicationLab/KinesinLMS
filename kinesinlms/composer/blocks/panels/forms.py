@@ -3,25 +3,28 @@ Definitions for forms to be used in panels.
 These are simply Django forms and should be relatively straightforward and
 easy to understand.
 
-Most forms target a subset of fields directly on the Block model. 
-But sometimes a Block's properties are defined in other, closely related models, 
-such as the Assessment model or the ExternalTooView model, which is in a 
+Most forms target a subset of fields directly on the Block model.
+But sometimes a Block's properties are defined in other, closely related models,
+such as the Assessment model or the ExternalTooView model, which is in a
 one-to-one relationship with a Block and handles saving domain-specific information.
 
-In this case, the form may target that helper model. For example, in 
-the cases of assessments, that's the Assessment model, and in the case 
+In this case, the form may target that helper model. For example, in
+the cases of assessments, that's the Assessment model, and in the case
 of forum topics, the ForumTopic model.
 """
 
 import copy
 import json
 import logging
+import os
 from typing import Dict, List, Optional
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Column, Div, Field, Layout, Row
 from django import forms
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator
+from django.db import transaction
 from django.forms import BaseFormSet, HiddenInput, ModelForm, Textarea, formset_factory
 from django.utils.translation import gettext as _
 from tinymce.widgets import TinyMCE
@@ -35,8 +38,8 @@ from kinesinlms.course.tasks import rescore_assessment_milestone_progress
 from kinesinlms.external_tools.models import ExternalToolView
 from kinesinlms.forum.service.base_service import BaseForumService
 from kinesinlms.forum.utils import get_forum_service
-from kinesinlms.learning_library.constants import BlockType
-from kinesinlms.learning_library.models import Block, UnitBlock
+from kinesinlms.learning_library.constants import BlockType, ResourceType
+from kinesinlms.learning_library.models import Block, BlockResource, Resource, UnitBlock
 from kinesinlms.sits.models import SimpleInteractiveTool
 from kinesinlms.survey.models import Survey, SurveyBlock
 
@@ -91,6 +94,10 @@ class BasePanelModelForm(ModelForm):
         self.settings = ComposerSettings.objects.get_or_create(user=user)[0]
         self.panel_id = block.id
         super().__init__(*args, **kwargs)
+
+    @property
+    def has_file_upload(self):
+        return False
 
 
 class HTMLBlockPanelForm(BasePanelModelForm):
@@ -182,6 +189,173 @@ class HTMLBlockPanelForm(BasePanelModelForm):
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
+
+
+class JupyterNotebookPanelForm(BasePanelModelForm):
+    """
+    Form for editing Jupyter notebook content and either selecting an existing notebook
+    resource or uploading a new one. Ensures only one notebook can be associated
+    with a block.
+    """
+
+    notebook_resource = forms.ModelChoiceField(
+        queryset=Resource.objects.filter(type=ResourceType.JUPYTER_NOTEBOOK.name),
+        required=False,  # Changed to False since we now have an alternative
+        help_text=_(
+            "Select an existing Jupyter notebook from the Resources library, "
+            "or upload a new one below.",
+        ),
+        empty_label=_("Select a notebook..."),
+    )
+
+    new_notebook = forms.FileField(
+        required=False,
+        help_text=_("Upload a new .ipynb file to create a new notebook resource."),
+        widget=forms.FileInput(attrs={"accept": ".ipynb"}),
+    )
+
+    description = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={"cols": 80, "rows": 3}),
+        help_text=_("Provide a brief description of the Jupyter notebook content."),
+    )
+
+    class Meta:
+        model = Block
+        fields = [
+            "display_name",
+            "description",
+            "notebook_resource",
+            "new_notebook",
+        ]
+
+    @property
+    def has_file_upload(self):
+        return True
+
+    def __init__(self, *args, **kwargs):
+        block = kwargs["block"]
+        kwargs["instance"] = block
+        super().__init__(*args, **kwargs)
+
+        self.fields["display_name"].label = _("Block header")
+        self.fields["notebook_resource"].label = _("Existing Jupyter notebook")
+        self.fields["new_notebook"].label = _("Upload new notebook")
+
+        # Get current notebook BlockResource if it exists
+        try:
+            attached_notebook = block.resources.get(
+                type=ResourceType.JUPYTER_NOTEBOOK.name
+            )
+        except Resource.DoesNotExist:
+            attached_notebook = None
+
+        if attached_notebook:
+            self.fields["notebook_resource"].initial = attached_notebook
+
+        # If there aren't any JUPYTER_NOTEBOOK resources at all,
+        # provide a helpful message...
+        if not Resource.objects.filter(
+            type=ResourceType.JUPYTER_NOTEBOOK.name
+        ).exists():
+            msg = _(" (No notebooks available. You can upload a new notebook below.)")
+            self.fields["notebook_resource"].help_text += msg
+
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.attrs = {"enctype": "multipart/form-data"}
+        self.helper.layout = Layout(
+            "display_name",
+            "notebook_resource",
+            "new_notebook",
+            "description",
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        notebook_resource = cleaned_data.get("notebook_resource")
+        new_notebook = cleaned_data.get("new_notebook")
+
+        # Ensure either an existing notebook is selected or a new one is uploaded
+        if not notebook_resource and not new_notebook:
+            raise ValidationError(
+                "Please either select an existing notebook or upload a new one."
+            )
+
+        # Ensure not both options are selected
+        if notebook_resource and new_notebook:
+            raise ValidationError(
+                "Please either select an existing notebook or upload a new one, not both."
+            )
+
+        # Validate file extension if a new notebook is uploaded
+        if new_notebook and not new_notebook.name.endswith(".ipynb"):
+            raise ValidationError(
+                "The uploaded file must be a Jupyter notebook (.ipynb file)."
+            )
+
+        # If selecting existing resource, validate single notebook constraint
+        if notebook_resource:
+            existing_block_resources = BlockResource.objects.filter(
+                block=self.block,
+                resource__type=ResourceType.JUPYTER_NOTEBOOK.name,
+            )
+            if existing_block_resources.exists():
+                for existing_block_resource in existing_block_resources:
+                    if existing_block_resource.resource != notebook_resource:
+                        existing_block_resource.delete()
+            block_resource, created = BlockResource.objects.get_or_create(
+                block=self.block,
+                resource=notebook_resource,
+            )
+
+        return cleaned_data
+
+    @transaction.atomic
+    def save(self, commit=True):
+        """
+        Save the block and update its resource association through BlockResource.
+        If a new notebook is uploaded, creates a new Resource first.
+        Uses transaction.atomic to ensure data consistency.
+        """
+        block = super().save(commit=False)
+        block.type = BlockType.JUPYTER_NOTEBOOK.name
+
+        if commit:
+            block.save()
+
+            new_notebook = self.cleaned_data.get("new_notebook")
+            selected_resource = self.cleaned_data.get("notebook_resource")
+
+            try:
+                # Remove any existing notebook resource associations
+                BlockResource.objects.filter(
+                    block=block, resource__type=ResourceType.JUPYTER_NOTEBOOK.name
+                ).delete()
+
+                if new_notebook:
+                    # Create new Resource for uploaded file
+                    resource = Resource.objects.create(
+                        resource_file=new_notebook,
+                        type=ResourceType.JUPYTER_NOTEBOOK.name,
+                        description=self.cleaned_data.get("description", ""),
+                    )
+                    selected_resource = resource
+
+                # Create new BlockResource association
+                if selected_resource:
+                    BlockResource.objects.create(
+                        block=block, resource=selected_resource
+                    )
+
+                block.save()
+
+            except ValidationError as e:
+                transaction.set_rollback(True)
+                raise e
+
+        return block
 
 
 class ExternalToolViewPanelForm(BasePanelModelForm):

@@ -1,55 +1,51 @@
 import json
 import logging
 from io import BytesIO
-from typing import Optional, Any
-from django.db import transaction
+from typing import Any, Optional
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.http import (
-    HttpResponseForbidden,
+    Http404,
     HttpResponse,
     HttpResponseBadRequest,
-    HttpResponseServerError,
-    Http404,
+    HttpResponseForbidden,
     HttpResponseRedirect,
+    HttpResponseServerError,
 )
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, UpdateView, ListView, DeleteView
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from kinesinlms.composer.constants import HTMLEditMode
-from kinesinlms.core.decorators import composer_author_required
-from kinesinlms.course.delete_utils import delete_course, get_exclusive_resources
 from kinesinlms.badges.models import BadgeClass
 from kinesinlms.catalog.models import CourseCatalogDescription
 from kinesinlms.composer.factory import (
-    create_unit_node,
-    create_section_node,
-    create_module_node,
     CourseBuilderDirector,
     SimpleCourseBuilder,
+    create_module_node,
+    create_section_node,
+    create_unit_node,
 )
 from kinesinlms.composer.forms.catalog import CourseCatalogDescriptionForm
 from kinesinlms.composer.forms.course import (
     CourseForm,
-    EditCourseHeaderForm,
-    AddCourseForm,
-    ImportCourseFromArchiveForm,
     DeleteCourseForm,
+    EditCourseHeaderForm,
+    ImportCourseFromArchiveForm,
 )
 from kinesinlms.composer.forms.settings import ComposerSettingsForm
 from kinesinlms.composer.import_export.constants import (
-    CourseExportFormat,
-    CommonCartridgeExportFormat,
     VALID_COURSE_EXPORT_FORMAT_IDS,
+    CommonCartridgeExportFormat,
+    CourseExportFormat,
 )
 from kinesinlms.composer.import_export.exporter import (
-    CourseExporter,
-    CommonCartridgeExporter,
     BaseExporter,
+    CommonCartridgeExporter,
+    CourseExporter,
 )
 from kinesinlms.composer.import_export.importer import (
     CourseImporter,
@@ -57,9 +53,10 @@ from kinesinlms.composer.import_export.importer import (
 )
 from kinesinlms.composer.models import ComposerSettings
 from kinesinlms.composer.view_helpers import get_course_edit_tabs
-from kinesinlms.course.constants import CourseUnitType
-from kinesinlms.course.constants import NodeType
-from kinesinlms.course.models import Course, CourseUnit, CourseNode
+from kinesinlms.core.decorators import composer_author_required
+from kinesinlms.course.constants import CourseUnitType, NodeType
+from kinesinlms.course.delete_utils import delete_course, get_exclusive_resources
+from kinesinlms.course.models import Course, CourseNode, CourseUnit
 from kinesinlms.course.views import get_course_nav
 from kinesinlms.forum.models import (
     CourseForumGroup,
@@ -67,22 +64,21 @@ from kinesinlms.forum.models import (
     ForumSubcategory,
     ForumSubcategoryType,
 )
-from kinesinlms.forum.utils import get_forum_service, get_forum_provider
+from kinesinlms.forum.utils import get_forum_provider, get_forum_service
 from kinesinlms.learning_library.builders import BlockBuilderDirector
 from kinesinlms.learning_library.constants import (
-    BlockType,
     AssessmentType,
-    BlockViewMode,
+    BlockType,
     BlockViewContext,
+    BlockViewMode,
 )
-from kinesinlms.learning_library.models import UnitBlock, Block
+from kinesinlms.learning_library.models import Block, UnitBlock
 from kinesinlms.management.utils import delete_course_nav_cache
 from kinesinlms.sits.constants import SimpleInteractiveToolType
 from kinesinlms.users.mixins import (
     StaffOrSuperuserRequiredMixin,
     SuperuserRequiredMixin,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -421,7 +417,11 @@ def course_edit(request, course_id: int, unit_node_id: int = None):
         course_unit = unit_node.unit
         section_node = unit_node.parent
         module_node = section_node.parent
-        content_index_label = f"{module_node.content_index}.{section_node.content_index}.{unit_node.content_index}"
+        content_index_label = (
+            f"{module_node.content_index}."
+            f"{section_node.content_index}."
+            f"{unit_node.content_index}"
+        )
         extra_context = {
             "block_view_context": BlockViewContext.COMPOSER.name,
             "block_view_mode": BlockViewMode.READ_ONLY.name,
@@ -523,7 +523,12 @@ def edit_course_unit_info_hx(
     )
     unit_node = CourseNode.objects.get(id=unit_node_id, type=NodeType.UNIT.name)
 
-    content_index_label = f"{module_node.content_index}.{section_node.content_index}.{unit_node.content_index}"
+    content_index_label = (
+        f"{module_node.content_index}."
+        f"{section_node.content_index}."
+        f"{unit_node.content_index}"
+    )
+
     context = {
         "course": course,
         "course_unit": course_unit,
@@ -538,12 +543,13 @@ def edit_course_unit_info_hx(
     template = "composer/course/course_unit/course_unit_header_edit.html"
 
     if request.method == "POST":
-        edit_course_form = EditCourseHeaderForm(request.POST, instance=course_unit, user=request.user)
+        edit_course_form = EditCourseHeaderForm(
+            request.POST, instance=course_unit, user=request.user
+        )
         if edit_course_form.is_valid():
             edit_course_form.save()
             delete_course_nav_cache(course.slug, course.run)
             template = "composer/course/course_unit/course_unit_header.html"
-            form = None
         else:
             # Leave form with errors
             pass
@@ -552,7 +558,9 @@ def edit_course_unit_info_hx(
             edit_course_form = None
             template = "composer/course/course_unit/course_unit_header.html"
         else:
-            edit_course_form = EditCourseHeaderForm(instance=course_unit, user=request.user)
+            edit_course_form = EditCourseHeaderForm(
+                instance=course_unit, user=request.user
+            )
             context["form"] = edit_course_form
 
     context["form"] = edit_course_form
@@ -669,7 +677,8 @@ def course_import_view(request):
                     options=options,
                 )
                 success_msg = (
-                    f"Successfully created course {course}. Be sure to update any missing course "
+                    f"Successfully created course {course}. "
+                    f"Be sure to update any missing course "
                     f"information and the course catalog description"
                 )
                 messages.add_message(request, messages.INFO, success_msg)
@@ -725,7 +734,11 @@ def edit_course_unit_hx(
         module_node = CourseNode.objects.get(id=module_node_id)
         section_node = CourseNode.objects.get(id=section_node_id)
         unit_node = CourseNode.objects.get(id=unit_node_id)
-        content_index_label = f"{module_node.content_index}.{section_node.content_index}.{unit_node.content_index}"
+        content_index_label = (
+            f"{module_node.content_index}."
+            f"{section_node.content_index}."
+            f"{unit_node.content_index}"
+        )
     except Exception:
         module_node = None
         section_node = None

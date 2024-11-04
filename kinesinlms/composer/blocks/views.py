@@ -2,17 +2,16 @@ import json
 import logging
 
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.shortcuts import get_object_or_404, render
 
 from kinesinlms.composer.blocks.builder import PanelSetManager
 from kinesinlms.composer.blocks.forms.block_resource import ResourceForm
 from kinesinlms.composer.blocks.panels.panels import PanelSet, PanelType
-from kinesinlms.course.models import Course, CourseUnit, CourseNode
-from kinesinlms.learning_library.constants import BlockViewMode, BlockViewContext
-from kinesinlms.learning_library.models import UnitBlock, Block, BlockResource
 from kinesinlms.core.decorators import composer_author_required
+from kinesinlms.course.models import Course, CourseNode, CourseUnit
+from kinesinlms.learning_library.constants import BlockViewContext, BlockViewMode
+from kinesinlms.learning_library.models import Block, BlockResource, UnitBlock
 
 logger = logging.getLogger(__name__)
 
@@ -49,11 +48,17 @@ def block_resource_upload_hx(request, course_id: int, pk: int):
     logger.debug(f"Adding block resource to course {course} block {block}")
 
     if request.method == "POST":
-
-        file_obj = request.FILES['resource_file']
+        file_obj = request.FILES["resource_file"]
         file_name_suffix = file_obj.name.split(".")[-1]
-        if file_name_suffix not in ["jpg", "png", "gif", "jpeg", ]:
-            return HttpResponseBadRequest("Wrong file format. Only jpg, jpeg, png, and gif are allowed.")
+        if file_name_suffix not in [
+            "jpg",
+            "png",
+            "gif",
+            "jpeg",
+        ]:
+            return HttpResponseBadRequest(
+                "Wrong file format. Only jpg, jpeg, png, and gif are allowed."
+            )
 
         form = ResourceForm(request.POST, request.FILES)
         if form.is_valid():
@@ -234,6 +239,7 @@ def edit_block_panel_set_hx(
         if request.POST:
             panel_form = form_class(
                 request.POST,
+                request.FILES,
                 course=course,
                 block=block,
                 unit_block=unit_block,
@@ -260,6 +266,8 @@ def edit_block_panel_set_hx(
         pass
 
     context["panel_form"] = panel_form
+    context["has_file_upload"] = panel_form and panel_form.has_file_upload
+
 
     template = "composer/course/course_unit/course_unit_block.html"
 

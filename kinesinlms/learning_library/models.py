@@ -1,38 +1,37 @@
 import logging
 import os
 import uuid
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchVectorField
 from django.core.exceptions import ValidationError
-from django.db import models, IntegrityError
+from django.db import IntegrityError, models
 from django.db.models import JSONField
 from django_react_templatetags.mixins import RepresentationMixin
 from jsonschema import validate
 from taggit.managers import TaggableManager
 
-
 from kinesinlms.core.models import Trackable
 from kinesinlms.core.utils import truncate_string
-from kinesinlms.forum.models import ForumTopic, ForumCategory, ForumSubcategory
+from kinesinlms.forum.models import ForumCategory, ForumSubcategory, ForumTopic
 from kinesinlms.learning_library.constants import (
+    BlockStatus,
     BlockType,
     ContentFormatType,
-    BlockStatus,
-    ResourceType,
     LibraryItemType,
+    ResourceType,
     VideoPlayerType,
 )
 from kinesinlms.learning_library.schema import (
-    SURVEY_BLOCK_SCHEMA,
-    HTML_CONTENT_BLOCK_SCHEMA,
-    VIDEO_BLOCK_SCHEMA,
-    CALLOUT_BLOCK_SCHEMA,
     ANSWER_LIST_BLOCK_SCHEMA,
+    CALLOUT_BLOCK_SCHEMA,
+    HTML_CONTENT_BLOCK_SCHEMA,
     SIMPLE_INTERACTIVE_TOOL_BLOCK_SCHEMA,
+    SURVEY_BLOCK_SCHEMA,
+    VIDEO_BLOCK_SCHEMA,
 )
 from kinesinlms.sits.constants import SimpleInteractiveToolType
 
@@ -47,7 +46,11 @@ class Resource(Trackable):
     """
 
     uuid = models.UUIDField(
-        primary_key=False, default=uuid.uuid4, unique=True, null=False, blank=True
+        primary_key=False,
+        default=uuid.uuid4,
+        unique=True,
+        null=False,
+        blank=True,
     )
 
     type = models.CharField(
@@ -60,12 +63,25 @@ class Resource(Trackable):
 
     resource_file = models.FileField(upload_to="block_resources")
 
+    name = models.CharField(
+        max_length=400,
+        null=True,
+        blank=True,
+        help_text="A name for this resource. This name is used in the admin "
+        "interface and in the learning library.",
+    )
+
     description = models.TextField(
         null=True,
         blank=True,
         help_text="A short description of the resource. If this is an image, the "
         "description will be used as the alt text.",
     )
+
+    def __str__(self):
+        if self.name:
+            return f"{self.name} ({self.file_name})"
+        return f"Resource [{self.id}] : {self.file_name}"
 
     @property
     def url(self) -> Optional[str]:
@@ -781,3 +797,16 @@ class BlockResource(Trackable):
             return self.resource.extension
         else:
             return None
+
+    def clean(self):
+        super().clean()
+        if self.resource.type == ResourceType.JUPYTER_NOTEBOOK.name:
+            existing = BlockResource.objects.filter(
+                block=self.block, resource__type=ResourceType.JUPYTER_NOTEBOOK.name
+            ).exclude(id=self.id)
+            if existing.exists():
+                filename = existing.first().resource.file_name
+                raise ValidationError(
+                    f"A Block can only have one Jupyter notebook resource. "
+                    f"This block already has notebook: {filename}"
+                )

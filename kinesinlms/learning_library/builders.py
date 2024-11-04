@@ -11,9 +11,9 @@ And then again, it might just be this is stupid.
 
 """
 
-from abc import abstractmethod
-from typing import Optional, List, Tuple
 import logging
+from abc import abstractmethod
+from typing import List, Optional, Tuple
 
 from kinesinlms.course.constants import CourseUnitType
 from kinesinlms.course.models import CourseUnit
@@ -22,23 +22,23 @@ from kinesinlms.learning_library.constants import AssessmentType, BlockType
 
 # FACTORIES FOR DIFFERENT BLOCKS (using factory-boy)
 from kinesinlms.learning_library.factory import (
-    AssessmentFactory,
-    ExternalToolViewFactory,
-    HTMLContentBlockFactory,
-    SimpleInteractiveToolFactory,
-    VideoBlockFactory,
     AssessmentBlockFactory,
-    ForumTopicBlockFactory,
-    SurveyBlockFactory,
-    SimpleInteractiveToolBlockFactory,
+    AssessmentFactory,
     ExternalToolViewBlockFactory,
+    ExternalToolViewFactory,
     FileResourceBlockFactory,
+    ForumTopicBlockFactory,
+    HTMLContentBlockFactory,
+    JupyterNotebookBlockFactory,
+    SimpleInteractiveToolBlockFactory,
+    SimpleInteractiveToolFactory,
+    SurveyBlockFactory,
+    VideoBlockFactory,
 )
 from kinesinlms.learning_library.models import Block, UnitBlock
 from kinesinlms.sits.constants import SimpleInteractiveToolType
 
 logger = logging.getLogger(__name__)
-
 
 # BUILDER CLASSES
 # Add custom logic to set up each block after creation.
@@ -85,12 +85,19 @@ class VideoBlockBuilder(BaseBlockBuilder):
         return block_instance
 
 
+class JupyterNotebookBlockBuilder(BaseBlockBuilder):
+    def create_block(self, block_subtype: str = None) -> Block:
+        block_instance = JupyterNotebookBlockFactory.create()
+        return block_instance
+
+
 class ExternalToolViewBlockBuilder(BaseBlockBuilder):
     def create_block(self, block_subtype: str = None) -> Block:
         block_instance = ExternalToolViewBlockFactory.create()
         external_tool_view = ExternalToolViewFactory.create(block=block_instance)
         logger.debug(
-            f"Created initial external tool view {external_tool_view} and block {block_instance}  "
+            f"Created initial external tool view {external_tool_view} "
+            f"and block {block_instance}  "
         )
         return block_instance
 
@@ -274,6 +281,8 @@ class BlockBuilderDirector:
             return SimpleInteractiveToolBlockBuilder()
         elif block_type == BlockType.EXTERNAL_TOOL_VIEW.name:
             return ExternalToolViewBlockBuilder()
+        elif block_type == BlockType.JUPYTER_NOTEBOOK.name:
+            return JupyterNotebookBlockBuilder()
         else:
             raise NotImplementedError(
                 f"Block factory cannot create blocks of type {block_type}"

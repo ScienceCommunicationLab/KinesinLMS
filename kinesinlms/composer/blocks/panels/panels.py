@@ -17,23 +17,24 @@ A panel might be a regular Django form, or it might be a UI that uses HTMx to up
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Type, Optional
+from typing import List, Optional, Type
 
-from kinesinlms.composer.blocks.forms.base import BasePanelForm
 from kinesinlms.composer.blocks.panels.forms import (
-    MultipleChoiceAssessmentPanelForm,
-    HTMLBlockPanelForm,
+    BasePanelModelForm,
     BlockMetaForm,
+    DoneIndicatorAssessmentPanelForm,
+    ExternalToolViewPanelForm,
+    ForumTopicPanelForm,
+    HTMLBlockPanelForm,
+    JupyterNotebookPanelForm,
+    LongFormTextAssessmentPanelForm,
+    MultipleChoiceAssessmentPanelForm,
+    PollAssessmentPanelForm,
+    SITDetailsPanelForm,
     SurveyPanelForm,
     VideoContentPanelForm,
-    LongFormTextAssessmentPanelForm,
-    ForumTopicPanelForm,
-    DoneIndicatorAssessmentPanelForm,
-    SITDetailsPanelForm,
-    ExternalToolViewPanelForm,
-    PollAssessmentPanelForm,
 )
-from kinesinlms.learning_library.constants import BlockType, AssessmentType
+from kinesinlms.learning_library.constants import AssessmentType, BlockType
 
 
 class PanelType(Enum):
@@ -65,8 +66,8 @@ class Panel:
     def __init__(self):
         self.slug: Optional[str] = None
         self.label: Optional[str] = None
-        self.form_class: Optional[Type[BasePanelForm]] = None
-        self.form: Optional[BasePanelForm] = None
+        self.form_class: Optional[Type[BasePanelModelForm]] = None
+        self.form: Optional[BasePanelModelForm] = None
         self.panel_type: str = PanelType.DJANGO_FORM.name
         self.template_name: str = "composer/blocks/panels/base_block_edit_panel.html"
 
@@ -207,6 +208,18 @@ class ExternalToolViewPanel(Panel):
         self.form_class = ExternalToolViewPanelForm
 
 
+class JupyterNotebookPanel(Panel):
+    """
+    Describes a 'panel' for editing an 'Jupyter Notebook' block
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.label = "Jupyter Noebook"
+        self.slug = BlockType.JUPYTER_NOTEBOOK.name
+        self.form_class = JupyterNotebookPanelForm
+
+
 class ForumTopicPanel(Panel):
     """
     Describes a panel for editing a FORUM_TOPIC block.
@@ -320,6 +333,19 @@ class SimpleInteractiveToolPanelSet(PanelSet):
         self.panels = [
             SITDetailsPanel(),
             HTMLContentPanel(),
+            BlockSettingsPanel(),
+        ]
+
+
+class JupyterNotebookPanelSet(PanelSet):
+    """
+    Panel set for editing a JUPYTER_NOTEBOOK block.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.panels = [
+            JupyterNotebookPanel(),
             BlockSettingsPanel(),
         ]
 
