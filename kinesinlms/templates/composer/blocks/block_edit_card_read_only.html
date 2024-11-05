@@ -1,4 +1,5 @@
 {% load core_tags %}
+
 {% comment %}
 
 This template is used to render a block in the course unit edit page in a 'read only' mode.
@@ -101,6 +102,7 @@ However, Composer does provide a set of actions to edit, move and delete the blo
 
                 {% include 'course/blocks/video.html' %}
 
+
             {% elif block.type == "SURVEY" %}
 
                 {% include 'course/blocks/survey.html' %}
@@ -150,16 +152,14 @@ However, Composer does provide a set of actions to edit, move and delete the blo
             {% elif block.type == "EXTERNAL_TOOL_VIEW" %}
 
                 {% include 'course/blocks/external_tool_view.html' %}
-            
-            {% elif block.type == "JUPYTER_NOTEBOOK" %}
 
-                {% include 'course/blocks/jupyter_notebook.html' %}
+            {% elif block.type == "JUPYTER_LAB" %}
+
+                {% include 'course/blocks/jupyter_lab_view.html' %}
 
             {% else %}
 
-                <div class="text-muted">
-                    ( Unrecognized block type: {{ block.type }} )
-                </div>
+                <div class="text-muted">( Unrecognized block type: {{ block.type }} )</div>
 
             {% endif %}
         </div>

@@ -13,7 +13,7 @@ class BlockType(Enum):
     FORUM_TOPIC = "Forum Topic"
     SIMPLE_INTERACTIVE_TOOL = "Simple interactive tool"
     SURVEY = "Survey"
-    JUPYTER_NOTEBOOK = "Jupyter Notebook"
+    JUPYTER_LAB = "JupyterLab"
     # Not sure what to call all the different things that might
     # be exposed by an external tool (document, exercise, interaction, notebook, etc.)
     # so going with "view"...
@@ -74,7 +74,7 @@ class ResourceType(Enum):
     GENERIC = "Generic"
     IMAGE = "Image"
     VIDEO_TRANSCRIPT = "Video transcript"
-    JUPYTER_NOTEBOOK = "Jupyter Notebook"
+    JUPYTER_LAB = "Jupyter Notebook"
 
 
 class BlockStatus(Enum):

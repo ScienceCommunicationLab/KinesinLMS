@@ -12,4 +12,9 @@ urlpatterns = [
         external_tools_views.launch_external_tool_view_hx,
         name="launch_external_tool_view_hx",
     ),
+    path(
+        "jupyter_lab_view/<int:pk>/",
+        external_tools_views.launch_jupyter_lab_view_hx,
+        name="launch_jupyter_lab_view_hx",
+    ),
 ]

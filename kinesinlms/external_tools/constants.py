@@ -15,10 +15,15 @@ class ExternalToolProviderType(Enum):
     # TODO:
     #   Just learning about juypter notebook hosting
     #   so I could be way off here. But starting
-    #   with services based on JupyterHub.
+    #   with services based on JupyterLab.
     BASIC_LTI13 = "Basic LTIv1.3"
-    MODAL_COM = "Modal.com"
-    JUPYTER_HUB = "Jupyterhub"
+    
+    # KinesinLMS implementation using Modal.com
+    JUPYTER_LAB = "JupyterLab"
+
+    # ZTJH implementation using LTIAutheticator
+    JUPYTER_HUB = "Modal.com"
+
     RENKU = "Renku"
 
 

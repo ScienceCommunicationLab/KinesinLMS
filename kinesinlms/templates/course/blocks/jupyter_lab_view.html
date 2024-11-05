@@ -1,0 +1,34 @@
+{% comment %} 
+Block that renders an external JupyterLab notebook. At the moment, that just
+means a button that launches the JupyterLab notebook in an iframe.
+
+{% endcomment %}
+
+{% load static %}
+
+<div id="block_{{ block.id }}" class="block block-jupyter-lab-view">
+  {% if block_view_context == "COMPOSER" %}
+
+    <div class="text-muted">This is a JupyterLab JupyterLab.</div>
+    <div>
+      <table class="table table-bordered table-sm mt-2" style="max-width:50rem;">
+        {% for resource in block.resources.all %}
+          {% if resource.type == "JUPYTER_LAB" %}
+            <tr>
+              <td style="width:12rem;">JupyterLab location</td>
+              <td>{{ resource.resource_file }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </table>
+    </div>
+
+  {% else %}
+
+    <h3>JupyterLab</h3>
+    {# TODO: support iframe launch, etc. #}
+
+    {% include "course/blocks/jupyter_lab/launch_jupyter_lab.html" %}
+
+  {% endif %}
+</div>

@@ -59,7 +59,7 @@ class ExternalToolProvider(Trackable):
     type = models.CharField(
         max_length=50,
         choices=[(tag.name, tag.value) for tag in ExternalToolProviderType],
-        default=ExternalToolProviderType.JUPYTER_HUB.name,
+        default=ExternalToolProviderType.JUPYTER_LAB.name,
         null=False,
         blank=False,
     )
@@ -191,7 +191,7 @@ class ExternalToolProvider(Trackable):
         """
         return self.type in [
             ExternalToolProviderType.RENKU.name,
-            ExternalToolProviderType.MODAL_COM.name,
+            ExternalToolProviderType.JUPYTER_LAB.name,
         ]
 
     @property

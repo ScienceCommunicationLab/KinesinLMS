@@ -1,24 +1,24 @@
+import logging
+from dataclasses import asdict
 from typing import Tuple
 from urllib.parse import urlencode
 
-from dataclasses import asdict
 from django.conf import settings
 from django.contrib.auth import get_user_model
-import logging
 
-from kinesinlms.core.utils import get_current_site_profile
 from kinesinlms.core.models import SiteProfile
+from kinesinlms.core.utils import get_current_site_profile
 from kinesinlms.course.models import Course
 from kinesinlms.external_tools.constants import LTI1P3InstitutionCoreRoles
-from kinesinlms.external_tools.models import ExternalToolView, ExternalToolProvider
+from kinesinlms.external_tools.models import ExternalToolProvider, ExternalToolView
 from kinesinlms.learning_library.models import Block
 from kinesinlms.lti.models import (
     ExternalToolLaunchData,
     LTI1v3ClaimsData,
+    LTIContextType,
+    LTIParamName,
     LTIToolLoginData,
     ToolAuthRequestData,
-    LTIParamName,
-    LTIContextType,
 )
 
 User = get_user_model()

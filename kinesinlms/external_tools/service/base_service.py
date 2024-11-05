@@ -10,7 +10,7 @@ class BaseExternalToolService:
         """
         pass
 
-    def get_launch_url(self, external_tool_view: "external_tools.ExternalToolView"):
+    def get_launch_url(self, *args, **kwargs):
         """
         Returns the URL to launch the external tool.
         """

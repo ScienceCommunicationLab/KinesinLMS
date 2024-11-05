@@ -800,13 +800,13 @@ class BlockResource(Trackable):
 
     def clean(self):
         super().clean()
-        if self.resource.type == ResourceType.JUPYTER_NOTEBOOK.name:
+        if self.resource.type == ResourceType.JUPYTER_LAB.name:
             existing = BlockResource.objects.filter(
-                block=self.block, resource__type=ResourceType.JUPYTER_NOTEBOOK.name
+                block=self.block, resource__type=ResourceType.JUPYTER_LAB.name
             ).exclude(id=self.id)
             if existing.exists():
                 filename = existing.first().resource.file_name
                 raise ValidationError(
-                    f"A Block can only have one Jupyter notebook resource. "
+                    f"A Block can only have one JupyterLab notebook resource. "
                     f"This block already has notebook: {filename}"
                 )

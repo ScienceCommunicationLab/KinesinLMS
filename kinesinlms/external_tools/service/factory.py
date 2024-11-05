@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ExternalToolServiceFactory:
     _services: dict[str, Type[BaseExternalToolService]] = {
-        ExternalToolProviderType.MODAL_COM.name: ModalComExternalToolService,
+        ExternalToolProviderType.JUPYTER_LAB.name: ModalComExternalToolService,
     }
 
     @classmethod

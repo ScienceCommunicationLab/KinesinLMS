@@ -1,22 +1,22 @@
-import logging
-from django.conf import settings
-from django.shortcuts import render
-from django.views import View
-from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from django.utils.translation import gettext as _
 import base64
+import logging
+
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from kinesinlms.learning_library.models import UnitBlock
-from kinesinlms.course.models import Course, Enrollment, CourseUnit
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext as _
+from django.views import View
+
+from kinesinlms.course.models import Course, CourseUnit, Enrollment
+from kinesinlms.course.utils_access import can_access_course
 from kinesinlms.external_tools.models import ExternalToolProvider, ExternalToolView
+from kinesinlms.learning_library.models import UnitBlock
 from kinesinlms.lti.models import ToolAuthRequestData
 from kinesinlms.lti.service import ExternalToolLTIService
-from kinesinlms.course.utils_access import can_access_course
 
 logger = logging.getLogger(__name__)
 
@@ -337,6 +337,9 @@ def lti_launch(
 
     # Build the login URL for the external tool with the required GET
     # parameters for the OIDC login process.
-    login_url = lti_service.get_tool_login_url(user=request.user, external_tool_view=external_tool_view)
+    login_url = lti_service.get_tool_login_url(
+        user=request.user,
+        external_tool_view=external_tool_view,
+    )
 
     return redirect(login_url)

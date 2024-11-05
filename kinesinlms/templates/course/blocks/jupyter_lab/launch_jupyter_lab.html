@@ -14,21 +14,21 @@
 </style>
 
 
-<div id="external-tool-view-{{ block.external_tool_view.id }}">
+<div id="jupyter-lab-view-{{ block.id }}">
   <div class="d-flex flex-row">
-    <a hx-get="{% url 'external_tools:launch_external_tool_view_hx' pk=block.external_tool_view.id %}"
-       hx-target="#external-tool-view-{{ block.external_tool_view.id }}"
+    <a hx-get="{% url 'external_tools:launch_jupyter_lab_view_hx' pk=block.id %}"
+       hx-target="#jupyter-lab-view-{{ block.id }}"
        hx-swap="outerHTML"
-       hx-indicator="#launch-spinner-{{ block.external_tool_view.id }}"
+       hx-indicator="#launch-jupyter-lab-spinner-{{ block.id }}"
        class="btn btn-primary">Launch Tool</a>
 
-    <div id="launch-spinner-{{ block.external_tool_view.id }}"
+    <div id="launch-jupyter-lab-spinner-{{ block.id }}"
          class="launch-htmx-indicator">
       <div class="spinner d-flex flex-row ms-3 align-items-center">
         <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading external tool...</span>
+          <span class="visually-hidden">Loading JupyterLab tool...</span>
         </div>
-        <div class="spinner-message ms-2">Loading external tool ...</div>
+        <div class="spinner-message ms-2">Loading JupyterLab tool ...</div>
       </div>
     </div>
   </div>

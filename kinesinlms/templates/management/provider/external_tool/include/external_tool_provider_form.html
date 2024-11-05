@@ -29,7 +29,7 @@
 
       // Set whether LTI and API fields should be disabled based on selected type
       const apiFieldsEnabled = ["RENKU"].includes(selectedType);
-      const ltiFieldsEnabled = ["JUPYTER_HUB", "BASIC_LTI13"].includes(selectedType);
+      const ltiFieldsEnabled = ["JUPYTER_LAB", "BASIC_LTI13"].includes(selectedType);
 
       const toggleFieldset = (fieldsetID, isEnabled) => {
         console.log("toggleFieldset(). fieldsetID:", fieldsetID, "isEnabled:", isEnabled);

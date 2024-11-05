@@ -27,7 +27,7 @@ s3_secret = modal.Secret.from_name(
 # )
 
 
-# By convention, we're storing jupyternotebooks as the
+# By convention, we're storing JupyterLabs as the
 # 'file_resource' File property of Resource model.
 # These files will be stored int the '/media/block_resources' directory
 # on S3.

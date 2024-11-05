@@ -20,7 +20,7 @@ class ModalComExternalToolService(BaseExternalToolService):
         """
         super().__init__(*args, **kwargs)
 
-    def get_launch_url(self, external_tool_view: "external_tools.ExternalToolView"):
+    def get_launch_url(self, *args, **kwargs):
         """
         Launches the Modal.com external tool in a new window.
         """

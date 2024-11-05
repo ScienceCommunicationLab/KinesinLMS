@@ -47,10 +47,6 @@ The launch process involves
 
         {% include "course/blocks/external_tool_block/lti_external_tool.html" %}
 
-      {% elif tool_type == "MODAL_COM" %}
-
-        {% include "course/blocks/external_tool_block/modal_com_external_tool.html" %}
-
       {% else %}
         <h1>Unsupported tool type: {{ tool_type }}</h1>
       {% endif %}

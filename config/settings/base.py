@@ -3,6 +3,7 @@ Base settings to build other settings files upon.
 """
 
 from pathlib import Path
+
 import environ
 
 # DMcQ: This is a hack to prevent allauth from sending an email when a user tries to reset their password
