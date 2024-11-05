@@ -150,6 +150,10 @@ However, Composer does provide a set of actions to edit, move and delete the blo
             {% elif block.type == "EXTERNAL_TOOL_VIEW" %}
 
                 {% include 'course/blocks/external_tool_view.html' %}
+            
+            {% elif block.type == "JUPYTER_NOTEBOOK" %}
+
+                {% include 'course/blocks/jupyter_notebook.html' %}
 
             {% else %}
 

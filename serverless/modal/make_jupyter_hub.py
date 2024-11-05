@@ -1,4 +1,3 @@
-
 import logging
 import os
 import shutil
@@ -18,8 +17,6 @@ s3_secret = modal.Secret.from_name(
     required_keys=["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"],
 )
 
-MOUNT_PATH: Path = Path("/modal_test")
-NOTEBOOKS_PATH: Path = MOUNT_PATH / "notebooks"
 
 # Persistent volume for storing notebooks
 volume = modal.Volume.from_name(
@@ -28,7 +25,11 @@ volume = modal.Volume.from_name(
 )
 
 
-MOUNT_PATH: Path = Path("/kinesinlms")
+# By convention, we're storing jupyternotebooks as the
+# 'file_resource' File property of Resource model.
+# These files will be stored int the '/media/block_resources' directory
+# on S3.
+MOUNT_PATH: Path = Path("/media/block_resources")
 
 # JUPYTER LAB SERVER
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,6 +48,18 @@ MOUNT_PATH: Path = Path("/kinesinlms")
     },
 )
 def run_jupyter(q, notebook_filename=None):
+    """
+    Start a Jupyter Lab server and return the URL.
+
+    Args:
+        q (modal.Queue): A queue to pass the URL back to the caller.
+        notebook_filename (str): The name of the notebook file to open
+            in Jupyter Lab. This file should be present in the
+            `MOUNT_PATH` directory.
+
+    Returns:
+        ( nothing. The URL is passed back to the caller via the `q` queue. )
+    """
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
     print(f"Starting Jupyter Lab. notebook_filename: {notebook_filename}")
@@ -64,7 +77,7 @@ def run_jupyter(q, notebook_filename=None):
     if notebook_filename:
         try:
             # Convert paths to Path objects
-            s3_path = MOUNT_PATH / "tmp_notebooks" / notebook_filename
+            s3_path = MOUNT_PATH / notebook_filename
             local_notebook_path = workspace_dir / notebook_filename
 
             print(f"Copying notebook from {s3_path} to {local_notebook_path}")
@@ -97,7 +110,7 @@ c.ServerApp.tornado_settings = {
 }
 c.ServerApp.root_dir = '/root/workspace'
     """
-    
+
     # Add notebook-specific configuration if a notebook is provided
     if notebook_filename:
         config += f"""
