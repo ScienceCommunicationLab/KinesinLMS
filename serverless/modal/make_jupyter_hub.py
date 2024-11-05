@@ -18,18 +18,21 @@ s3_secret = modal.Secret.from_name(
 )
 
 
+# Don't need a volumn yet...trying to use
+# the S3 bucket for Django as a volume.
 # Persistent volume for storing notebooks
-volume = modal.Volume.from_name(
-    "jupyter-notebooks-volume",
-    create_if_missing=True,
-)
+# volume = modal.Volume.from_name(
+#    "jupyter-notebooks-volume",
+#    create_if_missing=True,
+# )
 
 
 # By convention, we're storing jupyternotebooks as the
 # 'file_resource' File property of Resource model.
 # These files will be stored int the '/media/block_resources' directory
 # on S3.
-MOUNT_PATH: Path = Path("/media/block_resources")
+MOUNT_PATH = Path("/kinesinlms")
+BLOCK_RESOURCES_PATH = MOUNT_PATH / "media" / "block_resources"
 
 # JUPYTER LAB SERVER
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -77,7 +80,7 @@ def run_jupyter(q, notebook_filename=None):
     if notebook_filename:
         try:
             # Convert paths to Path objects
-            s3_path = MOUNT_PATH / notebook_filename
+            s3_path = BLOCK_RESOURCES_PATH / notebook_filename
             local_notebook_path = workspace_dir / notebook_filename
 
             print(f"Copying notebook from {s3_path} to {local_notebook_path}")
