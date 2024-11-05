@@ -2,7 +2,7 @@
 
 {% comment %}
 
-This template is used to render a block in the course unit edit page in a 'read only' mode.
+This template is used to render a block in Composer's course unit edit page in a 'read only' mode.
 
 That means it's not yet selected for editing, and composer is instead trying to render the block
 as close as possible to how one would see it in the course.
@@ -102,7 +102,6 @@ However, Composer does provide a set of actions to edit, move and delete the blo
 
                 {% include 'course/blocks/video.html' %}
 
-
             {% elif block.type == "SURVEY" %}
 
                 {% include 'course/blocks/survey.html' %}
@@ -155,7 +154,7 @@ However, Composer does provide a set of actions to edit, move and delete the blo
 
             {% elif block.type == "JUPYTER_LAB" %}
 
-                {% include 'course/blocks/jupyter_lab_view.html' %}
+                {% include 'course/blocks/jupyterlab_view.html' %}
 
             {% else %}
 

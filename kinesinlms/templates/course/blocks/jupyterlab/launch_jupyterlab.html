@@ -16,7 +16,7 @@
 
 <div id="jupyter-lab-view-{{ block.id }}">
   <div class="d-flex flex-row">
-    <a hx-get="{% url 'external_tools:launch_jupyter_lab_view_hx' pk=block.id %}"
+    <a hx-get="{% url 'jupyterlab:launch_jupyterlab_view_hx' pk=block.id %}"
        hx-target="#jupyter-lab-view-{{ block.id }}"
        hx-swap="outerHTML"
        hx-indicator="#launch-jupyter-lab-spinner-{{ block.id }}"

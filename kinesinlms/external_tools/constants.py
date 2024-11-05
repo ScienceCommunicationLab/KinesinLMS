@@ -12,19 +12,11 @@ class ExternalToolViewLaunchType(Enum):
 
 
 class ExternalToolProviderType(Enum):
-    # TODO:
-    #   Just learning about juypter notebook hosting
-    #   so I could be way off here. But starting
-    #   with services based on JupyterLab.
     BASIC_LTI13 = "Basic LTIv1.3"
-    
-    # KinesinLMS implementation using Modal.com
-    JUPYTER_LAB = "JupyterLab"
+    # JUPYTER_LAB is KinesinLMS-specific implementation
+    # using modal.com
+    JUPYTER_LAB = "JupyterLab" 
 
-    # ZTJH implementation using LTIAutheticator
-    JUPYTER_HUB = "Modal.com"
-
-    RENKU = "Renku"
 
 
 class ConnectionMethodType(Enum):

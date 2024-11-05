@@ -800,9 +800,9 @@ class BlockResource(Trackable):
 
     def clean(self):
         super().clean()
-        if self.resource.type == ResourceType.JUPYTER_LAB.name:
+        if self.resource.type == ResourceType.JUPYTER_NOTEBOOK.name:
             existing = BlockResource.objects.filter(
-                block=self.block, resource__type=ResourceType.JUPYTER_LAB.name
+                block=self.block, resource__type=ResourceType.JUPYTER_NOTEBOOK.name
             ).exclude(id=self.id)
             if existing.exists():
                 filename = existing.first().resource.file_name

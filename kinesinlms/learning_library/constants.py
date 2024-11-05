@@ -74,7 +74,7 @@ class ResourceType(Enum):
     GENERIC = "Generic"
     IMAGE = "Image"
     VIDEO_TRANSCRIPT = "Video transcript"
-    JUPYTER_LAB = "Jupyter Notebook"
+    JUPYTER_NOTEBOOK = "Jupyter Notebook"
 
 
 class BlockStatus(Enum):

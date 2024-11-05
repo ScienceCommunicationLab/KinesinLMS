@@ -108,6 +108,10 @@ urlpatterns = [
         include("kinesinlms.external_tools.urls", namespace="external_tools"),
     ),
     path(
+        "jupyterlab/",
+        include("kinesinlms.jupyterlab.urls", namespace="jupyterlab"),
+    ),
+    path(
         "learning_library/",
         include("kinesinlms.learning_library.urls", namespace="learning_library"),
     ),

@@ -1,0 +1,13 @@
+<div class="text-muted">This is a JupyterLab block.</div>
+<div>
+    <table class="table table-bordered table-sm mt-2" style="max-width:50rem;">
+        {% for resource in block.resources.all %}
+            {% if resource.type == "JUPYTER_NOTEBOOK" %}
+                <tr>
+                    <td>Notebook Location</td>
+                    <td>{{ resource.resource_file }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+</div>

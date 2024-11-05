@@ -1,0 +1,36 @@
+{% comment %} 
+Block that renders an external JupyterLab notebook. At the moment, that just
+means a button that launches the JupyterLab notebook in an iframe.
+
+{% endcomment %}
+
+{% load static %}
+
+<div id="block_{{ block.id }}" class="block block-jupyter-lab-view">
+
+  {% if block_view_context == "COMPOSER" %}
+
+    {# .................................................. #}
+    {#  Composer templates                                #}
+    {# .................................................. #}
+
+    {# Load the template that can display the block to an author #}
+    {# in Composer, in read-only or edit more  ... #}
+
+    {% include "composer/blocks/jupyterlab/jupyterlab_block_read_only.html" %}
+
+  {% else %}
+
+    {# .................................................. #}
+    {#  Course templates                                  #}
+    {# .................................................. #}
+
+    {# Load the template that can display the block to a user in the Course ... #}
+
+    <h3>JupyterLab</h3>
+    {# TODO: support iframe launch, etc. #}
+
+    {% include "course/blocks/jupyterlab/launch_jupyterlab.html" %}
+
+  {% endif %}
+</div>

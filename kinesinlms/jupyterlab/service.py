@@ -1,14 +1,11 @@
 import logging
-from time import sleep
 
 import modal
-
-from kinesinlms.external_tools.service.base_service import BaseExternalToolService
 
 logger = logging.getLogger(__name__)
 
 
-class ModalComExternalToolService(BaseExternalToolService):
+class JupyterLabService:
     """
     Provides service methods for operations on the Modal.com
     external tool.

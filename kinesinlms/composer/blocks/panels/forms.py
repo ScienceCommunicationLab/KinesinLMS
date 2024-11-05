@@ -199,7 +199,7 @@ class JupyterLabPanelForm(BasePanelModelForm):
     """
 
     notebook_resource = forms.ModelChoiceField(
-        queryset=Resource.objects.filter(type=ResourceType.JUPYTER_LAB.name),
+        queryset=Resource.objects.filter(type=ResourceType.JUPYTER_NOTEBOOK.name),
         required=False,  # Changed to False since we now have an alternative
         help_text=_(
             "Select an existing JupyterLab from the Resources library, "
@@ -244,7 +244,7 @@ class JupyterLabPanelForm(BasePanelModelForm):
 
         # Get current notebook BlockResource if it exists
         try:
-            attached_notebook = block.resources.get(type=ResourceType.JUPYTER_LAB.name)
+            attached_notebook = block.resources.get(type=ResourceType.JUPYTER_NOTEBOOK.name)
         except Resource.DoesNotExist:
             attached_notebook = None
 
@@ -253,7 +253,7 @@ class JupyterLabPanelForm(BasePanelModelForm):
 
         # If there aren't any JUPYTER_LAB resources at all,
         # provide a helpful message...
-        if not Resource.objects.filter(type=ResourceType.JUPYTER_LAB.name).exists():
+        if not Resource.objects.filter(type=ResourceType.JUPYTER_NOTEBOOK.name).exists():
             msg = _(
                 "(No JupyterLab notebooks available. "
                 "You can upload a new JupyterLab notebook below.)"
@@ -300,7 +300,7 @@ class JupyterLabPanelForm(BasePanelModelForm):
         if notebook_resource:
             existing_block_resources = BlockResource.objects.filter(
                 block=self.block,
-                resource__type=ResourceType.JUPYTER_LAB.name,
+                resource__type=ResourceType.JUPYTER_NOTEBOOK.name,
             )
             if existing_block_resources.exists():
                 for existing_block_resource in existing_block_resources:
@@ -332,14 +332,14 @@ class JupyterLabPanelForm(BasePanelModelForm):
             try:
                 # Remove any existing notebook resource associations
                 BlockResource.objects.filter(
-                    block=block, resource__type=ResourceType.JUPYTER_LAB.name
+                    block=block, resource__type=ResourceType.JUPYTER_NOTEBOOK.name
                 ).delete()
 
                 if new_notebook:
                     # Create new Resource for uploaded file
                     resource = Resource.objects.create(
                         resource_file=new_notebook,
-                        type=ResourceType.JUPYTER_LAB.name,
+                        type=ResourceType.JUPYTER_NOTEBOOK.name,
                         description=self.cleaned_data.get("description", ""),
                     )
                     selected_resource = resource

@@ -8,5 +8,5 @@
 {% else %}
     <a href="{% url 'lti:lti_launch' course_slug=course.slug course_run=course.run course_unit=course_unit.id block_id=block.id %}"
        target="_blank"
-       class="btn btn-primary mt-2">Launch Tool</a>
+       class="btn btn-primary mt-2">Launch External Tool</a>
 {% endif %}
