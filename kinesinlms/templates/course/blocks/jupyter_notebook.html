@@ -25,7 +25,7 @@ The launch process involves
           {% if resource.type == "JUPYTER_NOTEBOOK" %}
             <tr>
               <td style="width:12rem;">Notebook location</td>
-              <td>{{ resource.resource_file.path }}</td>
+              <td>{{ resource.resource_file }}</td>
             </tr>
           {% endif %}
         {% endfor %}
