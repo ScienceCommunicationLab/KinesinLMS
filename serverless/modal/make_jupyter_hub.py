@@ -8,7 +8,7 @@ import modal
 
 app = modal.App("my_jupyter_hub")
 app.image = modal.Image.debian_slim().pip_install(
-    "jupyter",
+    "jupyterlab",
     "matplotlib",
     "pandas",
     "numpy",
@@ -20,19 +20,11 @@ s3_secret = modal.Secret.from_name(
 )
 
 
-# Don't need a volumn yet...trying to use
-# the S3 bucket for Django as a volume.
-# Persistent volume for storing notebooks
-# volume = modal.Volume.from_name(
-#    "jupyter-notebooks-volume",
-#    create_if_missing=True,
-# )
-
-
-# By convention, we're storing JupyterLabs as the
-# 'file_resource' File property of Resource model.
-# These files will be stored int the '/media/block_resources' directory
-# on S3.
+# By convention, we're storing JupyterLab ipynb files as the
+# 'file_resource' File property of a Django 'Resource' model.
+# These files will be stored in the '/media/block_resources' directory
+# of the 'kinesinlms' bucket on S3. So we'll read them straight from 
+# there as we've stored the  S3 credentials in the 'saws-s3-bucket-secrets' variable.
 MOUNT_PATH = Path("/kinesinlms")
 BLOCK_RESOURCES_PATH = MOUNT_PATH / "media" / "block_resources"
 
