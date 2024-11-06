@@ -8,8 +8,8 @@ import modal
 
 app = modal.App("my_jupyter_hub")
 app.image = modal.Image.debian_slim().pip_install(
-    "jupyterlab",
-    "matplotlib==3.8.3",
+    "jupyter",
+    "matplotlib",
 )
 
 s3_secret = modal.Secret.from_name(
@@ -50,7 +50,7 @@ BLOCK_RESOURCES_PATH = MOUNT_PATH / "media" / "block_resources"
         ),
     },
 )
-def run_jupyter(q, notebook_filename=None):
+def run_jupyter(q, notebook_filename=None, extra_pip_packages=[]):
     """
     Start a Jupyter Lab server and return the URL.
 
@@ -65,6 +65,26 @@ def run_jupyter(q, notebook_filename=None):
     """
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
+
+    if extra_pip_packages:
+        print(f"Installing packages: {extra_pip_packages}")
+        try:
+            subprocess.check_call(
+                [
+                    "pip",
+                    "install",
+                    "--user",
+                    "--quiet",
+                    "--no-cache-dir",
+                    *extra_pip_packages,
+                ]
+            )
+            logging.info("Package installation completed successfully")
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Failed to install packages: {e}")
+            raise
+        print("  - done installing packages.")
+
     print(f"Starting Jupyter Lab. notebook_filename: {notebook_filename}")
 
     jupyter_port = 8888
@@ -151,14 +171,22 @@ c.LabApp.default_url = '/lab/tree/{notebook_filename}'
 # SPAWN JUPYTER LAB (FAKE JUPYTER HUB)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.function()
-def spawn_jupyter(notebook_filename=None):
+def spawn_jupyter(notebook_filename=None, extra_pip_packages=[]):
     # do some validation on the secret or bearer token
     is_valid = True
 
     if is_valid:
         with modal.Queue.ephemeral() as q:
-            print("spawn_jupyter(): Spawning Jupyter")
-            run_jupyter.spawn(q, notebook_filename)
+            print(
+                f"spawn_jupyter(): Spawning Jupyter with notebook {notebook_filename}."
+            )
+            if extra_pip_packages:
+                print(f"  -  Extra pip packages: {extra_pip_packages}")
+            run_jupyter.spawn(
+                q,
+                notebook_filename=notebook_filename,
+                extra_pip_packages=extra_pip_packages,
+            )
             print("spawn_jupyter(): Getting url...")
             url = q.get()
             print(f"spawn_jupyter(): Jupyter is ready at {url}")

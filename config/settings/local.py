@@ -200,3 +200,53 @@ TEST_EMAIL_AUTOMATION_PROVIDER_URL = env('TEST_EMAIL_AUTOMATION_PROVIDER_URL', d
 
 TEST_SURVEY_PROVIDER_DATA_CENTER_ID = env('TEST_SURVEY_PROVIDER_DATA_CENTER_ID', default=None)
 TEST_SURVEY_PROVIDER_CALLBACK_SECRET = env('TEST_SURVEY_PROVIDER_CALLBACK_SECRET', default=None)
+
+
+# Uncomment to enable S3 storage for local development
+# STORAGES
+# ------------------------------------------------------------------------------
+
+
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID")
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY")
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME")
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_QUERYSTRING_AUTH = False
+# DO NOT change these unless you know what you're doing.
+_AWS_EXPIRY = 60 * 60 * 24 * 7
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate",
+}
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_S3_MAX_MEMORY_SIZE = env.int(
+    "DJANGO_AWS_S3_MAX_MEMORY_SIZE",
+    default=100_000_000,  # 100MB
+)
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default="us-west-1")
+AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
+# We always want overwrite.
+AWS_S3_FILE_OVERWRITE = True
+aws_s3_domain = (
+    AWS_S3_CUSTOM_DOMAIN
+    or f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+)
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "location": "media",
+            "file_overwrite": False,
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+# AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are assigned in base.py
+
+MEDIA_URL = f"https://{aws_s3_domain}/media/"
