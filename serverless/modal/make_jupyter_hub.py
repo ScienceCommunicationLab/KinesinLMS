@@ -10,6 +10,8 @@ app = modal.App("my_jupyter_hub")
 app.image = modal.Image.debian_slim().pip_install(
     "jupyter",
     "matplotlib",
+    "pandas",
+    "numpy",
 )
 
 s3_secret = modal.Secret.from_name(
@@ -50,7 +52,11 @@ BLOCK_RESOURCES_PATH = MOUNT_PATH / "media" / "block_resources"
         ),
     },
 )
-def run_jupyter(q, notebook_filename=None, extra_pip_packages=[]):
+def run_jupyter(
+    q,
+    notebook_filename=None,
+    extra_pip_packages=[],
+):
     """
     Start a Jupyter Lab server and return the URL.
 
@@ -164,7 +170,6 @@ c.LabApp.default_url = '/lab/tree/{notebook_filename}'
                 "--LabApp.allow_remote_access=1",
             ],
             env={**os.environ, "JUPYTER_TOKEN": token, "SHELL": "/bin/bash"},
-            stderr=subprocess.DEVNULL,
         )
 
 
