@@ -75,6 +75,8 @@ class ResourceType(Enum):
     IMAGE = "Image"
     VIDEO_TRANSCRIPT = "Video transcript"
     JUPYTER_NOTEBOOK = "Jupyter Notebook"
+    SQLITE = "SQLITE file"
+    CSV = "CSV file"
 
 
 class BlockStatus(Enum):

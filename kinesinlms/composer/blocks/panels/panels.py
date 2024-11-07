@@ -346,6 +346,7 @@ class JupyterLabPanelSet(PanelSet):
         super().__init__(*args, **kwargs)
         self.panels = [
             JupyterLabPanel(),
+            BlockResourcePanel(),
             BlockSettingsPanel(),
         ]
 

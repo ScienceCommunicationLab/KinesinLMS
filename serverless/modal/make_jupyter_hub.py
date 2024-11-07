@@ -3,18 +3,16 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
+from typing import Dict, List
 
 import modal
 
+# Define a persistent volume for SQLite
+sqlite_volume = modal.Volume.persisted("sqlite-data-volume")
+
 app = modal.App("my_jupyter_hub")
 app.image = modal.Image.debian_slim().pip_install(
-    "jupyterlab",
-    "matplotlib",
-    "pandas",
-    "numpy",
-    "sqlalchemy",
-    "scipy"
-    
+    "jupyterlab", "matplotlib", "pandas", "numpy", "sqlalchemy", "scipy"
 )
 
 s3_secret = modal.Secret.from_name(
@@ -26,10 +24,11 @@ s3_secret = modal.Secret.from_name(
 # By convention, we're storing JupyterLab ipynb files as the
 # 'file_resource' File property of a Django 'Resource' model.
 # These files will be stored in the '/media/block_resources' directory
-# of the 'kinesinlms' bucket on S3. So we'll read them straight from 
+# of the 'kinesinlms' bucket on S3. So we'll read them straight from
 # there as we've stored the  S3 credentials in the 'saws-s3-bucket-secrets' variable.
 MOUNT_PATH = Path("/kinesinlms")
 BLOCK_RESOURCES_PATH = MOUNT_PATH / "media" / "block_resources"
+SQLITE_PATH = Path("/sqlite_data")
 
 # JUPYTER LAB SERVER
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,21 +44,30 @@ BLOCK_RESOURCES_PATH = MOUNT_PATH / "media" / "block_resources"
             read_only=True,
             secret=s3_secret,
         ),
+        SQLITE_PATH: sqlite_volume,
     },
 )
 def run_jupyter(
     q,
     notebook_filename=None,
+    resources: List[Dict] = [],
     extra_pip_packages=[],
 ):
     """
     Start a Jupyter Lab server and return the URL.
 
     Args:
-        q (modal.Queue): A queue to pass the URL back to the caller.
-        notebook_filename (str): The name of the notebook file to open
-            in Jupyter Lab. This file should be present in the
-            `MOUNT_PATH` directory.
+        q (modal.Queue):    A queue to pass the URL back to the caller.
+        resources:          A list of resources that accompany the notebook.
+                            Resources are stored in the same 'block_resources'
+                            directory as the notebook file.
+                            The dictionary has two keys:
+                            - 'filename': the name of the file, may include subdirs
+                            - 'type': type of the resource (e.g. 'CSV', 'SQLITE', ...)
+
+        notebook_filename (str):    The name of the notebook file to open
+                                    in Jupyter Lab. This file should be present in the
+                                    `MOUNT_PATH` directory.
 
     Returns:
         ( nothing. The URL is passed back to the caller via the `q` queue. )
@@ -96,6 +104,7 @@ def run_jupyter(
     workspace_dir = Path("/root/workspace")
     os.makedirs(workspace_dir, exist_ok=True)
 
+    # HANDLE INCOMING NOTEBOOK
     # Copy notebook file if provided so that it's available in the workspace
     # immediately upon starting Jupyter Lab.
     local_notebook_path = None
@@ -114,6 +123,37 @@ def run_jupyter(
             logger.error(f"Error copying notebook file: {e}")
             raise
 
+    # HANDLE INCOMING RESOURCES
+    if resources:
+        print("Processing resources...")
+        for resource in resources:
+            try:
+                filename = resource.get('filename')
+                resource_type = resource.get('type')
+                
+                if not filename or not resource_type:
+                    logger.warning(f"Skipping resource with missing "
+                                   f"filename or type: {resource}")
+                    continue
+                
+                s3_path = BLOCK_RESOURCES_PATH / filename
+                
+                # For SQLite files, copy to workspace in the exact path structure
+                if resource_type == 'SQLITE':
+                    dest_path = workspace_dir / filename
+                    os.makedirs(dest_path.parent, exist_ok=True)
+                    print(f"Copying SQLite file from {s3_path} to {dest_path}")
+                    shutil.copy2(s3_path, dest_path)
+                    print(f"  - successfully copied SQLite file: {filename}")
+                
+                # Handle other resource types as needed
+                # elif resource_type == 'CSV':
+                #     ... handle CSV files ...
+                
+            except Exception as e:
+                logger.error(f"Error copying resource {filename}: {e}")
+                raise
+
     # Create jupyter_server_config.py with the CSP headers
     # we need to be able to load the Jupyter Lab in an iFrame.
     print("Saving Jupyter config...")
@@ -128,7 +168,7 @@ c.ServerApp.tornado_settings = {
 c.ServerApp.root_dir = '/root/workspace'
     """
 
-    #style-src 'self' https://kinesinlms-8b588e478a49.herokuapp.com; script-src 'self' https://kinesinlms-8b588e478a49.herokuapp.com; connect-src 'self' wss://*;
+    # style-src 'self' https://kinesinlms-8b588e478a49.herokuapp.com; script-src 'self' https://kinesinlms-8b588e478a49.herokuapp.com; connect-src 'self' wss://*;
 
     # Add notebook-specific configuration if a notebook is provided
     if notebook_filename:
@@ -140,6 +180,12 @@ c.LabApp.default_url = '/lab/tree/{notebook_filename}'
     with open("/root/.jupyter/jupyter_server_config.py", "w") as f:
         f.write(config)
     print("  - done saving Jupyter config")
+
+    # Create SQLite directory if it doesn't exist
+    os.makedirs(SQLITE_PATH, exist_ok=True)
+
+    # Set environment variable for SQLite database path
+    os.environ["SQLITE_DATABASE_PATH"] = str(SQLITE_PATH / "database.db")
 
     print("Starting Jupyter Lab as tunnel...")
     with modal.forward(jupyter_port) as tunnel:
@@ -166,7 +212,7 @@ c.LabApp.default_url = '/lab/tree/{notebook_filename}'
 # SPAWN JUPYTER LAB (FAKE JUPYTER HUB)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.function()
-def spawn_jupyter(notebook_filename=None, extra_pip_packages=[]):
+def spawn_jupyter(notebook_filename=None, extra_pip_packages=[], resources=[]):
     # do some validation on the secret or bearer token
     is_valid = True
 
@@ -181,6 +227,7 @@ def spawn_jupyter(notebook_filename=None, extra_pip_packages=[]):
                 q,
                 notebook_filename=notebook_filename,
                 extra_pip_packages=extra_pip_packages,
+                resources=resources,
             )
             print("spawn_jupyter(): Getting url...")
             url = q.get()
