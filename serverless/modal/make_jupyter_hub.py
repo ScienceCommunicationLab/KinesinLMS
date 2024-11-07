@@ -161,6 +161,8 @@ def run_jupyter(
             except Exception as e:
                 logger.error(f"Error copying resource {filename}: {e}")
                 raise
+    else:
+        print("### No resources!")
 
     # Create jupyter_server_config.py with the CSP headers
     # we need to be able to load the Jupyter Lab in an iFrame.
@@ -220,14 +222,20 @@ c.LabApp.default_url = '/lab/tree/{notebook_filename}'
 # SPAWN JUPYTER LAB (FAKE JUPYTER HUB)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @app.function()
-def spawn_jupyter(notebook_filename=None, extra_pip_packages=[], resources=[]):
+def spawn_jupyter(
+    notebook_filename=None,
+    extra_pip_packages=[],
+    resources=[],
+):
     # do some validation on the secret or bearer token
     is_valid = True
 
     if is_valid:
         with modal.Queue.ephemeral() as q:
             print(
-                f"spawn_jupyter(): Spawning Jupyter with notebook {notebook_filename}."
+                f"spawn_jupyter(): Spawning Jupyter with "
+                f"notebook {notebook_filename} "
+                f"resources : {resources}."
             )
             if extra_pip_packages:
                 print(f"  -  Extra pip packages: {extra_pip_packages}")
