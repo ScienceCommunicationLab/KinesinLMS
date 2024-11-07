@@ -171,7 +171,7 @@ def run_jupyter(
 c.ServerApp.tornado_settings = {
     "headers": {
         "Content-Security-Policy": "default-src 'self' * 'unsafe-inline' 'unsafe-eval' ws: wss: blob: data:; "
-         "frame-ancestors 'self' *;",
+        "frame-ancestors 'self' *;",
         "X-Frame-Options": "ALLOW-FROM https://kinesinlms-8b588e478a49.herokuapp.com http://localhost:8001"
     }
 }
