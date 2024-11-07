@@ -8,7 +8,7 @@ from typing import Dict, List
 import modal
 
 # Define a persistent volume for SQLite
-sqlite_volume = modal.Volume.persisted("sqlite-data-volume")
+sqlite_volume = modal.Volume.from_name("sqlite-data-volume", create_if_missing=True)
 
 app = modal.App("my_jupyter_hub")
 app.image = modal.Image.debian_slim().pip_install(
@@ -127,29 +127,37 @@ def run_jupyter(
     if resources:
         print("Processing resources...")
         for resource in resources:
+            print(
+                f" - resource type: {resource.get('type')} "
+                f"filename: {resource.get('filename')}"
+            )
             try:
-                filename = resource.get('filename')
-                resource_type = resource.get('type')
-                
+                filename = resource.get("filename")
+                resource_type = resource.get("type")
+
                 if not filename or not resource_type:
-                    logger.warning(f"Skipping resource with missing "
-                                   f"filename or type: {resource}")
+                    logger.warning(
+                        f"Skipping resource with missing filename or type: {resource}"
+                    )
                     continue
-                
+
                 s3_path = BLOCK_RESOURCES_PATH / filename
-                
-                # For SQLite files, copy to workspace in the exact path structure
-                if resource_type == 'SQLITE':
-                    dest_path = workspace_dir / filename
-                    os.makedirs(dest_path.parent, exist_ok=True)
-                    print(f"Copying SQLite file from {s3_path} to {dest_path}")
+
+                # For SQLite files, copy to workspace to match notebook's working dir
+                if resource_type in ["SQLITE", "CSV"]:
+                    # Extract just the filename without path
+                    base_filename = Path(filename).name
+                    dest_path = workspace_dir / base_filename
+                    print(
+                        f"  - copying {resource_type} file from {s3_path} "
+                        f"to {dest_path}"
+                    )
                     shutil.copy2(s3_path, dest_path)
-                    print(f"  - successfully copied SQLite file: {filename}")
-                
-                # Handle other resource types as needed
-                # elif resource_type == 'CSV':
-                #     ... handle CSV files ...
-                
+                    os.chmod(dest_path, 0o666)  # Ensure file permissions allow rw
+                    print(f"  - successfully copied SQLite file: {base_filename}")
+                else:
+                    print(f"Unsupported resource type: {resource_type}")
+
             except Exception as e:
                 logger.error(f"Error copying resource {filename}: {e}")
                 raise
