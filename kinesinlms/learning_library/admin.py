@@ -4,15 +4,14 @@ from kinesinlms.assessments.models import Assessment
 from kinesinlms.forum.admin import ForumTopicInline
 from kinesinlms.learning_library.models import (
     Block,
-    LibraryItem,
-    UnitBlock,
+    BlockLearningObjective,
     BlockResource,
     LearningObjective,
-    BlockLearningObjective,
+    LibraryItem,
     Resource,
+    UnitBlock,
 )
 from kinesinlms.sits.models import SimpleInteractiveTool
-
 
 # Register your models here.
 
@@ -107,11 +106,13 @@ class ResourceAdmin(admin.ModelAdmin):
     model = Resource
     search_fields = (
         "uuid",
+        "name",
         "type",
         "description",
     )
     list_display = (
         "id",
+        "name",
         "uuid",
         "type",
         "description",
