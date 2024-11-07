@@ -590,8 +590,9 @@ class Block(RepresentationMixin, Trackable):
 
     @property
     def launch_type(self) -> str:
-        # Later we'll have more types like 'iframe'
-        return "blank"
+        # TODO: sytem for specifying launch type
+        # return 'new_window'
+        return "iframe"
 
     def __str__(self):
         return "{} :  type : {}  display_name : {} ".format(
