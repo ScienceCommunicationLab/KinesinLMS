@@ -580,6 +580,11 @@ class Block(RepresentationMixin, Trackable):
             return self.assessment.type
         else:
             return ""
+        
+    @property
+    def launch_type(self) -> str:  
+        # Later we'll have more types like 'iframe'
+        return "blank"
 
     def __str__(self):
         return "{} :  type : {}  display_name : {} ".format(

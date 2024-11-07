@@ -16,21 +16,32 @@
 
 <div id="jupyter-lab-view-{{ block.id }}">
   <div class="d-flex flex-row">
-    <a hx-get="{% url 'jupyterlab:launch_jupyterlab_view_hx' pk=block.id %}"
-       hx-target="#jupyter-lab-view-{{ block.id }}"
-       hx-swap="outerHTML"
-       hx-indicator="#launch-jupyter-lab-spinner-{{ block.id }}"
-       class="btn btn-primary">Launch Tool</a>
 
-    <div id="launch-jupyter-lab-spinner-{{ block.id }}"
-         class="launch-htmx-indicator">
-      <div class="spinner d-flex flex-row ms-3 align-items-center">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading JupyterLab tool...</span>
+    {% if block.launch_type == 'iframe' %}
+      <a hx-get="{% url 'jupyterlab:launch_jupyterlab_view_hx' pk=block.id %}"
+         hx-target="#jupyter-lab-view-{{ block.id }}"
+         hx-swap="outerHTML"
+         hx-indicator="#launch-jupyter-lab-spinner-{{ block.id }}"
+         class="btn btn-primary">Launch tool</a>
+
+      <div id="launch-jupyter-lab-spinner-{{ block.id }}"
+           class="launch-htmx-indicator">
+        <div class="spinner d-flex flex-row ms-3 align-items-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading JupyterLab tool...</span>
+          </div>
+          <div class="spinner-message ms-2">
+            Loading JupyterLab tool ...
+          </div>
         </div>
-        <div class="spinner-message ms-2">Loading JupyterLab tool ...</div>
       </div>
-    </div>
-  </div>
+    {% else %}
+      <a href="{% url 'jupyterlab:launch_jupyterlab_view' pk=block.id %}"
+         target="_blank"
+         class="btn btn-primary">
+        Launch tool in new tab
+      </a>
+    {% endif %}
 
+  </div>
 </div>

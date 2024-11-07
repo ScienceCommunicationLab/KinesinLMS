@@ -98,6 +98,11 @@ include = "H017,H035"
 indent = 2
 max_line_length = 119
 profile = "django"
+line_break_after_multiline_tag = true
+wrap_attributes = "preserve"
+
+[tool.djlint.html]
+wrap_attributes = "preserve"
 
 [tool.djlint.css]
 indent_size = 2

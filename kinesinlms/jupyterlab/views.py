@@ -2,7 +2,7 @@
 import logging
 
 from django.http import HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from kinesinlms.jupyterlab.service import JupyterLabService
 from kinesinlms.learning_library.models import Block, BlockType, ResourceType
@@ -10,11 +10,31 @@ from kinesinlms.learning_library.models import Block, BlockType, ResourceType
 logger = logging.getLogger(__name__)
 
 
+def launch_jupyterlab_view(request, pk):
+    """
+    Launches the JupyterLab tool and then redirect to it.
+    """
+
+    jupyterlab_url = _get_jupyter_lab_url(request, pk)
+
+    return redirect(jupyterlab_url)
+
+
 def launch_jupyterlab_view_hx(request, pk):
     """
     Launches the JupyterLab external tool in an iframe
     """
 
+    jupyterlab_url = _get_jupyter_lab_url(request, pk)
+
+    template = "course/blocks/jupyterlab/jupyterlab_view_hx.html"
+    context = {
+        "jupyterlab_launch_url": jupyterlab_url,
+    }
+    return render(request, template, context)
+
+
+def _get_jupyter_lab_url(request, pk):
     block = get_object_or_404(
         Block,
         type=BlockType.JUPYTER_LAB.name,
@@ -54,6 +74,8 @@ def launch_jupyterlab_view_hx(request, pk):
         jupyterlab_launch_url = service.get_launch_url(
             notebook_filename=notebook_filename
         )
+        
+        return jupyterlab_launch_url
 
     except Exception as e:
         logger.exception(
@@ -63,9 +85,3 @@ def launch_jupyterlab_view_hx(request, pk):
             },
         )
         return HttpResponseBadRequest(str(e))
-
-    template = "course/blocks/jupyterlab/jupyterlab_view_hx.html"
-    context = {
-        "jupyterlab_launch_url": jupyterlab_launch_url,
-    }
-    return render(request, template, context)

@@ -12,6 +12,9 @@ app.image = modal.Image.debian_slim().pip_install(
     "matplotlib",
     "pandas",
     "numpy",
+    "sqlalchemy",
+    "scipy"
+    
 )
 
 s3_secret = modal.Secret.from_name(
@@ -93,20 +96,17 @@ def run_jupyter(
     workspace_dir = Path("/root/workspace")
     os.makedirs(workspace_dir, exist_ok=True)
 
-    # Copy notebook file if provided
+    # Copy notebook file if provided so that it's available in the workspace
+    # immediately upon starting Jupyter Lab.
     local_notebook_path = None
     if notebook_filename:
         try:
-            # Convert paths to Path objects
             s3_path = BLOCK_RESOURCES_PATH / notebook_filename
             local_notebook_path = workspace_dir / notebook_filename
-
             print(f"Copying notebook from {s3_path} to {local_notebook_path}")
-
-            # Copy the file directly
             shutil.copy2(s3_path, local_notebook_path)
             print(
-                f"Successfully copied notebook from {s3_path} to "
+                f"  - successfully copied notebook from {s3_path} to "
                 f"{local_notebook_path}"
             )
 
@@ -114,23 +114,21 @@ def run_jupyter(
             logger.error(f"Error copying notebook file: {e}")
             raise
 
-    # Create jupyter_server_config.py with CSP headers
+    # Create jupyter_server_config.py with the CSP headers
+    # we need to be able to load the Jupyter Lab in an iFrame.
     print("Saving Jupyter config...")
     config = """
 c.ServerApp.tornado_settings = {
-    'headers': {
-        'Content-Security-Policy': "default-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data:; "
-        "frame-ancestors 'self' *; "
-        "frame-src 'self' blob: data:; "
-        "connect-src 'self' wss://* https://*; "
-        "worker-src 'self' blob:; "
-        "img-src 'self' blob: data:; "
-        "media-src 'self' blob: data:;",
-        'X-Content-Type-Options': 'nosniff'
+    "headers": {
+        "Content-Security-Policy": "default-src 'self' * 'unsafe-inline' 'unsafe-eval' ws: wss: blob: data:; "
+         "frame-ancestors 'self' *;",
+        "X-Frame-Options": "ALLOW-FROM https://kinesinlms-8b588e478a49.herokuapp.com http://localhost:8001"
     }
 }
 c.ServerApp.root_dir = '/root/workspace'
     """
+
+    #style-src 'self' https://kinesinlms-8b588e478a49.herokuapp.com; script-src 'self' https://kinesinlms-8b588e478a49.herokuapp.com; connect-src 'self' wss://*;
 
     # Add notebook-specific configuration if a notebook is provided
     if notebook_filename:
