@@ -215,7 +215,7 @@ class JupyterLabPanel(Panel):
 
     def __init__(self):
         super().__init__()
-        self.label = "Jupyter Noebook"
+        self.label = "Jupyter Notebook"
         self.slug = BlockType.JUPYTER_LAB.name
         self.form_class = JupyterLabPanelForm
 

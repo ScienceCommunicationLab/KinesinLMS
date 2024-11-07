@@ -1,13 +1,41 @@
-<div class="text-muted">This is a JupyterLab block.</div>
+{% load i18n %}
+
+<div class="text-muted">
+    {% trans 'This is a JupyterLab block.' %}
+</div>
 <div>
     <table class="table table-bordered table-sm mt-2" style="max-width:50rem;">
-        {% for resource in block.resources.all %}
-            {% if resource.type == "JUPYTER_NOTEBOOK" %}
+        <thead>
+            <tr>
+                <th>
+                    {% trans 'Type' %}
+                </th>
+                <th>
+                    {% trans 'Name' %}
+                </th>
+                <th>
+                    {% trans 'File' %}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resource in block.resources.all %}
                 <tr>
-                    <td>Notebook Location</td>
-                    <td>{{ resource.resource_file }}</td>
+                    <td>
+                        {{ resource.type }}
+                    </td>
+                    <td>
+                        {% if resource.name %}
+                            resource.name
+                        {% else %}
+                            <span class="text-black-50">( no name )</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ resource.resource_file }}
+                    </td>
                 </tr>
-            {% endif %}
-        {% endfor %}
+            {% endfor %}
+        </tbody>
     </table>
 </div>
