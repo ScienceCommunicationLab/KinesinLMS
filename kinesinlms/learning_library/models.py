@@ -84,6 +84,13 @@ class Resource(Trackable):
         return f"Resource [{self.id}] : {self.file_name}"
 
     @property
+    def info(self) -> Dict:
+        return {
+            "type": self.type,
+            "filename": self.file_name,
+        }
+
+    @property
     def url(self) -> Optional[str]:
         if self.resource_file:
             return self.resource_file.url
@@ -580,9 +587,9 @@ class Block(RepresentationMixin, Trackable):
             return self.assessment.type
         else:
             return ""
-        
+
     @property
-    def launch_type(self) -> str:  
+    def launch_type(self) -> str:
         # Later we'll have more types like 'iframe'
         return "blank"
 

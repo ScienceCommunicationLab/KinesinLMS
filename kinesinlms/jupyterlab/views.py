@@ -1,5 +1,6 @@
 # Create your views here.
 import logging
+from typing import Dict, List
 
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
@@ -70,11 +71,20 @@ def _get_jupyter_lab_url(request, pk):
                 )
             notebook_filename = notebook_resource.resource_file.name.split("/")[-1]
 
+        # Get basic resource info to sent to JupyterLab
+        # in a form it recognizes
+        resources: List[Dict] = [
+            resource.info
+            for resource in block.resources.all()
+            if resource.type != ResourceType.JUPYTER_NOTEBOOK.name
+        ]
+
         # Use the service to generate the launch URL
         jupyterlab_launch_url = service.get_launch_url(
-            notebook_filename=notebook_filename
+            notebook_filename=notebook_filename,
+            resources=resources,
         )
-        
+
         return jupyterlab_launch_url
 
     except Exception as e:
