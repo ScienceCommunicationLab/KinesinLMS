@@ -6,9 +6,12 @@ from pathlib import Path
 from secrets import token_urlsafe
 from typing import Dict, List
 
-import modal
+from resources import validate_resource
 
+import modal
 from config import config_jupyterlab
+
+logger = logging.getLogger(__name__)
 
 # Configuration
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,13 +49,24 @@ resources_volume = modal.Volume.from_name(
 
 # This is the modal app that's going to run the Jupyter Lab server.
 app = modal.App("my_jupyter_hub")
-app.image = modal.Image.debian_slim().pip_install(
-    "jupyterlab",
-    "matplotlib",
-    "pandas",
-    "numpy",
-    "sqlalchemy",
-    "scipy",
+app.image = (
+    modal.Image.debian_slim()
+    .apt_install(
+        [
+            "curl",
+            "npm",
+            "nodejs",
+            "build-essential",
+        ]
+    )
+    .pip_install(
+        "jupyterlab",
+        "matplotlib",
+        "pandas",
+        "numpy",
+        "sqlalchemy",
+        "scipy",
+    )
 )
 
 
@@ -171,6 +185,16 @@ def run_jupyter(
                     )
                     continue
 
+                try:
+                    validate_resource(
+                        filename=filename,
+                        resource_type=resource_type,
+                        aws_resource_path=AWS_BLOCK_RESOURCES_PATH,
+                    )
+                except Exception as e:
+                    logger.warning(f"Skipping invalid resource: {filename} : {e}")
+                    continue
+
                 s3_path = AWS_BLOCK_RESOURCES_PATH / filename
 
                 # For SQLite files, copy to workspace to match notebook's working dir
@@ -184,7 +208,7 @@ def run_jupyter(
                         f"to {dest_path}"
                     )
                     shutil.copy2(s3_path, dest_path)
-                    os.chmod(dest_path, 0o666)  # Ensure file permissions allow rw
+                    os.chmod(dest_path, 0o640)  # Ensure file permissions allow rw
                     print(
                         f"run_jupyter():   - successfully copied "
                         f"SQLite file: {base_filename}"
@@ -208,6 +232,23 @@ def run_jupyter(
             os.environ["SQLITE_DATABASE_PATH"] = str(RESOURCES_PATH / "database.db")
 
     config_jupyterlab(notebook_filename=notebook_filename)
+
+    # Disable announcements extension
+    try:
+        subprocess.run(
+            [
+                "jupyter",
+                "labextension",
+                "disable",
+                "@jupyterlab/apputils-extension:announcements",
+            ],
+            check=True,
+            capture_output=True,
+        )
+        print("Successfully disabled JupyterLab announcements extension")
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Failed to disable announcements extension: {e}")
+        # Continue anyway as this is not critical
 
     print("Starting Jupyter Lab as tunnel...")
     with modal.forward(JUPYTER_PORT) as tunnel:
@@ -257,13 +298,14 @@ def spawn_jupyter(
     Returns:
         The URL of the Jupyter Lab server.
     """
+
     # do some validation on the secret or bearer token
     is_valid = True
 
     if is_valid:
         with modal.Queue.ephemeral() as q:
             print(
-                f"spawn_jupyter(): Spawning Jupyter with "
+                f"spawn_jupyter(): spawning Jupyter Lab with "
                 f"notebook {notebook_filename} "
                 f"resources : {resources}."
             )
@@ -283,4 +325,5 @@ def spawn_jupyter(
             print(f"spawn_jupyter(): Jupyter is ready at {url}")
             return url
     else:
+        logger.error(f"Error copying notebook file: {e}")
         raise Exception("Not authenticated")
