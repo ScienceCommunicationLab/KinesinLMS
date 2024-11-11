@@ -227,6 +227,22 @@ def spawn_jupyter(
     extra_pip_packages=[],
     resources=[],
 ):
+    """
+    Spawn a Jupyter Lab server and return the URL.
+
+    Args:
+        notebook_filename:str           The filename of an .ipynb file stored
+                                        in the 'block_resources' directory on S3.
+        extra_pip_packages: list        A list of extra pip packages to install.
+        resources: list                 A list of KinesinLMS 'resources' that
+                                        accompany the notebook (e.g. a SQLite file).
+
+    Raises:
+        Exception
+
+    Returns:
+        The URL of the Jupyter Lab server.
+    """
     # do some validation on the secret or bearer token
     is_valid = True
 
