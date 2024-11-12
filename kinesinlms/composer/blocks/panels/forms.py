@@ -197,27 +197,13 @@ class JupyterLabPanelForm(BasePanelModelForm):
     with a block.
     """
 
-    notebook_resource = forms.ModelChoiceField(
-        queryset=Resource.objects.filter(type=ResourceType.JUPYTER_NOTEBOOK.name),
-        required=False,  # Changed to False since we now have an alternative
-        help_text=_(
-            "Select an existing JupyterLab from the Resources library. "
-            "If you don't see the notebook you want, you can upload a new "
-            "one on the 'Resources' tab.",
-        ),
-        empty_label=_("Select a JupyterLab notebook file..."),
-    )
-
-    new_notebook = forms.FileField(
-        required=False,
-        help_text=_("Upload a new .ipynb file to create a new JupyterLab resource."),
-        widget=forms.FileInput(attrs={"accept": ".ipynb"}),
-    )
-
     description = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={"cols": 80, "rows": 3}),
-        help_text=_("Provide a brief description of the JupyterLab content."),
+        help_text=_(
+            "If you want, provide the student a description of the Jupyter notebook "
+            "specific to this unit."
+        ),
     )
 
     class Meta:
@@ -225,7 +211,6 @@ class JupyterLabPanelForm(BasePanelModelForm):
         fields = [
             "display_name",
             "description",
-            "notebook_resource",
         ]
 
     @property
@@ -238,80 +223,40 @@ class JupyterLabPanelForm(BasePanelModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields["display_name"].label = _("Block header")
-        self.fields["notebook_resource"].label = _("Existing JupyterLab notebook")
-        self.fields["new_notebook"].label = _("Upload new JupyterLab notebook")
 
         # Get current notebook BlockResource if it exists
         try:
-            attached_notebook = block.resources.get(
+            attached_notebook: Resource = block.resources.get(
                 type=ResourceType.JUPYTER_NOTEBOOK.name
             )
         except Resource.DoesNotExist:
             attached_notebook = None
 
         if attached_notebook:
-            self.fields["notebook_resource"].initial = attached_notebook
-
-        # If there aren't any JUPYTER_LAB resources at all,
-        # provide a helpful message...
-        if not Resource.objects.filter(
-            type=ResourceType.JUPYTER_NOTEBOOK.name
-        ).exists():
-            msg = _(
-                "(No JupyterLab notebooks available. "
-                "You can upload a new JupyterLab notebook below.)"
-            )
-            self.fields["notebook_resource"].help_text += msg
+            notebook_html = f"""
+             <div class='alert alert-info'>
+                Assigned notebook: 
+                <strong>{attached_notebook}</strong>
+             </div>
+             """
+        else:
+            notebook_html = """
+            <div class='alert alert-warning'>
+            No notebook assigned. Add a notebook via the Resources tab.
+            </div>
+            """
 
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.attrs = {"enctype": "multipart/form-data"}
         self.helper.layout = Layout(
             "display_name",
-            "notebook_resource"
+            "description",
+            HTML(notebook_html),
         )
 
     def clean(self):
         cleaned_data = super().clean()
-
-        notebook_resource = cleaned_data.get("notebook_resource")
-        new_notebook = cleaned_data.get("new_notebook")
-
-        # Ensure either an existing notebook is selected or a new one is uploaded
-        if not notebook_resource and not new_notebook:
-            raise ValidationError(
-                "Please either select an existing JupyterLab "
-                "notebook or upload a new one."
-            )
-
-        # Ensure not both options are selected
-        if notebook_resource and new_notebook:
-            raise ValidationError(
-                "Please either select an existing JupyterLab "
-                "notebook or upload a new one, not both."
-            )
-
-        # Validate file extension if a new notebook is uploaded
-        if new_notebook and not new_notebook.name.endswith(".ipynb"):
-            raise ValidationError(
-                "The uploaded file must be a JupyterLab notebook (.ipynb file)."
-            )
-
-        # If selecting existing resource, validate single notebook constraint
-        if notebook_resource:
-            existing_block_resources = BlockResource.objects.filter(
-                block=self.block,
-                resource__type=ResourceType.JUPYTER_NOTEBOOK.name,
-            )
-            if existing_block_resources.exists():
-                for existing_block_resource in existing_block_resources:
-                    if existing_block_resource.resource != notebook_resource:
-                        existing_block_resource.delete()
-            block_resource, created = BlockResource.objects.get_or_create(
-                block=self.block,
-                resource=notebook_resource,
-            )
-
         return cleaned_data
 
     @transaction.atomic

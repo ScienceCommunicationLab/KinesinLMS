@@ -312,14 +312,7 @@ def add_block_resource_hx(request, course_id: int, pk: int):
         if form.is_valid():
             resource = form.save()
             logger.debug(f"Created Resource {resource}")
-            # Don't forget to link the new resource to the Block via join model.
-            block_resource = BlockResource.objects.create(
-                block=block, resource=resource
-            )
-            logger.debug(f"Created BlockResource {block_resource}")
-            # Send empty response, which will cause the modal to close.
             response = HttpResponse(status=204)
-            # Send an HTMX event, which will cause the appropriate block resources table to reload.
             event_name = '{{"block{}ResourceAdded": "Block resource added."}}'.format(
                 block.id
             )
