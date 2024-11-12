@@ -10,7 +10,11 @@ from kinesinlms.composer.blocks.forms.block_resource import ResourceForm
 from kinesinlms.composer.blocks.panels.panels import PanelSet, PanelType
 from kinesinlms.core.decorators import composer_author_required
 from kinesinlms.course.models import Course, CourseNode, CourseUnit
-from kinesinlms.learning_library.constants import BlockViewContext, BlockViewMode
+from kinesinlms.learning_library.constants import (
+    BlockViewContext,
+    BlockViewMode,
+    ResourceType,
+)
 from kinesinlms.learning_library.models import Block, BlockResource, UnitBlock
 
 logger = logging.getLogger(__name__)
@@ -60,8 +64,8 @@ def block_resource_upload_hx(request, course_id: int, pk: int):
                 "Wrong file format. Only jpg, jpeg, png, and gif are allowed."
             )
 
-        form = ResourceForm(request.POST, request.FILES)
-        if form.is_valid():
+        form = ResourceForm(request.POST, request.FILES, block=block)
+        if form.is_valid(block=block):
             resource = form.save()
             logger.debug(f"Created Resource {resource}")
             block_resource = BlockResource.objects.create(
@@ -268,7 +272,6 @@ def edit_block_panel_set_hx(
     context["panel_form"] = panel_form
     context["has_file_upload"] = panel_form and panel_form.has_file_upload
 
-
     template = "composer/course/course_unit/course_unit_block.html"
 
     htmx_event = {
@@ -305,7 +308,7 @@ def add_block_resource_hx(request, course_id: int, pk: int):
     block = get_object_or_404(Block, id=pk)
     course = get_object_or_404(Course, id=course_id)
     if request.method == "POST":
-        form = ResourceForm(request.POST, request.FILES)
+        form = ResourceForm(request.POST, request.FILES, block=block)
         if form.is_valid():
             resource = form.save()
             logger.debug(f"Created Resource {resource}")
@@ -323,7 +326,7 @@ def add_block_resource_hx(request, course_id: int, pk: int):
             response.headers["HX-Trigger"] = event_name
             return response
     else:
-        form = ResourceForm(initial={"block": block})
+        form = ResourceForm(block=block)
 
     context = {"course": course, "course_id": course_id, "form": form, "block": block}
 

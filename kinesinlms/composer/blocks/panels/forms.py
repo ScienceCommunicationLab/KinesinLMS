@@ -16,7 +16,6 @@ of forum topics, the ForumTopic model.
 import copy
 import json
 import logging
-import os
 from typing import Dict, List, Optional
 
 from crispy_forms.helper import FormHelper
@@ -202,8 +201,9 @@ class JupyterLabPanelForm(BasePanelModelForm):
         queryset=Resource.objects.filter(type=ResourceType.JUPYTER_NOTEBOOK.name),
         required=False,  # Changed to False since we now have an alternative
         help_text=_(
-            "Select an existing JupyterLab from the Resources library, "
-            "or upload a new one below.",
+            "Select an existing JupyterLab from the Resources library. "
+            "If you don't see the notebook you want, you can upload a new "
+            "one on the 'Resources' tab.",
         ),
         empty_label=_("Select a JupyterLab notebook file..."),
     )
@@ -226,7 +226,6 @@ class JupyterLabPanelForm(BasePanelModelForm):
             "display_name",
             "description",
             "notebook_resource",
-            "new_notebook",
         ]
 
     @property
@@ -244,7 +243,9 @@ class JupyterLabPanelForm(BasePanelModelForm):
 
         # Get current notebook BlockResource if it exists
         try:
-            attached_notebook = block.resources.get(type=ResourceType.JUPYTER_NOTEBOOK.name)
+            attached_notebook = block.resources.get(
+                type=ResourceType.JUPYTER_NOTEBOOK.name
+            )
         except Resource.DoesNotExist:
             attached_notebook = None
 
@@ -253,7 +254,9 @@ class JupyterLabPanelForm(BasePanelModelForm):
 
         # If there aren't any JUPYTER_LAB resources at all,
         # provide a helpful message...
-        if not Resource.objects.filter(type=ResourceType.JUPYTER_NOTEBOOK.name).exists():
+        if not Resource.objects.filter(
+            type=ResourceType.JUPYTER_NOTEBOOK.name
+        ).exists():
             msg = _(
                 "(No JupyterLab notebooks available. "
                 "You can upload a new JupyterLab notebook below.)"
@@ -265,9 +268,7 @@ class JupyterLabPanelForm(BasePanelModelForm):
         self.helper.attrs = {"enctype": "multipart/form-data"}
         self.helper.layout = Layout(
             "display_name",
-            "notebook_resource",
-            "new_notebook",
-            "description",
+            "notebook_resource"
         )
 
     def clean(self):
