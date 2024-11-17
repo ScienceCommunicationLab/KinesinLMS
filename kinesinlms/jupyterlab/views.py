@@ -16,6 +16,7 @@ def launch_jupyterlab_view(request, pk):
     Launches the JupyterLab tool and then redirect to it.
     """
 
+    err_msg = None
     try:
         jupyterlab_url = _get_jupyter_lab_url(request, pk)
     except TooManyNotebooksError as e:

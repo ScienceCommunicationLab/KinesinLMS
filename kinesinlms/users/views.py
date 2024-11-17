@@ -7,7 +7,7 @@ from django.contrib.sites.models import Site
 from django.http import Http404, HttpResponseForbidden
 from django.urls import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
-from rest_framework import viewsets, authentication, permissions
+from rest_framework import authentication, permissions, viewsets
 from rest_framework.response import Response
 
 from kinesinlms.users.forms import UserSettingsForm
@@ -23,13 +23,17 @@ logger = logging.getLogger(__name__)
 # API VIEWS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
 class UserProfilesViewSet(viewsets.ViewSet):
     """
     Returns user profile data, including 'profile-like'
     properties for each course, e.g. reasonForTaking.
     """
 
-    authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+    authentication_classes = [
+        authentication.TokenAuthentication,
+        authentication.SessionAuthentication,
+    ]
     permission_classes = [permissions.IsAdminUser]
 
     def list(self, request):
@@ -51,13 +55,14 @@ class UserProfilesViewSet(viewsets.ViewSet):
 
 
 class UserSettingsView(UpdateView):
-    """ Provides an editable page for user's settings.
+    """Provides an editable page for user's settings.
 
     We know that all user objects have a UserSettings object,
     so no need for a CreateView.
 
     """
-    template_name = 'users/usersettings_detail.html'
+
+    template_name = "users/usersettings_detail.html"
 
     form_class = UserSettingsForm
     model = UserSettings
@@ -74,7 +79,7 @@ class UserSettingsView(UpdateView):
         return qs
 
     def get_object(self, queryset=None):
-        user = User.objects.get(id=self.kwargs['pk'])
+        user = User.objects.get(id=self.kwargs["pk"])
         user_settings, created = UserSettings.objects.get_or_create(user=user)
         if created:
             logger.info(f"Created new UserSettings for user : {user}")
@@ -92,7 +97,7 @@ class UserSettingsView(UpdateView):
         return response
 
     def get_success_url(self) -> str:
-        return reverse('users:settings', kwargs={'pk': self.object.user.id})
+        return reverse("users:settings", kwargs={"pk": self.object.user.id})
 
     def get_context_data(self, **kwargs):
         site_name = Site.objects.get_current().name
@@ -105,6 +110,7 @@ class UserSettingsView(UpdateView):
 
 # USER DETAIL
 # ~~~~~~~~~~~~~~~~~~~~~
+
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
@@ -129,11 +135,10 @@ class UserDetailView(LoginRequiredMixin, DetailView):
                 "label": "Name",
                 "value": student.name,
             },
-
             {
                 "label": "Informal name",
                 "value": student.informal_name,
-                "note": "We use your 'informal name' when we send you email."
+                "note": "We use your 'informal name' when we send you email.",
             },
             {
                 "label": "Career stage",
@@ -154,7 +159,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
             {
                 "label": "Email",
                 "value": student.email,
-            }
+            },
         ]
         context["title"] = "My Profile"
         context["section"] = "user_account"
@@ -180,12 +185,14 @@ user_list_view = UserListView.as_view()
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
-    fields = ["name",
-              "informal_name",
-              "career_stage",
-              "gender",
-              "gender_description",
-              "year_of_birth"]
+    fields = [
+        "name",
+        "informal_name",
+        "career_stage",
+        "gender",
+        "gender_description",
+        "year_of_birth",
+    ]
 
     def get_success_url(self) -> str:
         msg = "User profile updated!"
@@ -197,11 +204,8 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UserUpdateView, self).get_context_data(**kwargs)
-        context['breadcrumbs'] = [
-            {
-                "url": f"/users/{self.request.user.id}/",
-                "label": "My Profile"
-            }
+        context["breadcrumbs"] = [
+            {"url": f"/users/{self.request.user.id}/", "label": "My Profile"}
         ]
         context["title"] = "Update My Profile"
         context["description"] = "Use this page to update your public profile."

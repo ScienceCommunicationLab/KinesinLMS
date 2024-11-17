@@ -37,11 +37,9 @@ class JupyterLabService:
         Launches the Modal.com external tool in a new window.
         """
 
-        # temp
-        extra_pip_packages = []  # ["pynbody"]
-
         logger.info("Launching jupyter notebook in Modal.com...")
-        logger.info(f"( Already launched notebooks: {self.throttle} )")
+
+        extra_pip_packages = []  # ["pynbody"]
 
         spawn_jupyter_remote_function = modal.Function.lookup(
             "my_jupyter_hub",

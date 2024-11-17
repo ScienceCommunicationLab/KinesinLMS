@@ -7,8 +7,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import JSONField, QuerySet
-from django.db.models import Q, F
+from django.db.models import F, JSONField, Q, QuerySet
 from django.db.models.fields import DateTimeField, TextField
 from django.shortcuts import resolve_url
 from django.utils.timezone import now
@@ -22,23 +21,24 @@ from kinesinlms.badges.models import BadgeAssertion, BadgeClass
 from kinesinlms.catalog.models import CourseCatalogDescription
 from kinesinlms.core.models import Trackable
 from kinesinlms.course.constants import (
-    NodeType,
+    CourseUnitType,
     MilestoneType,
     NodePurpose,
-    CourseUnitType,
+    NodeType,
 )
-from kinesinlms.learning_library.constants import ContentFormatType
-
-from kinesinlms.forum.utils import get_forum_service
-from kinesinlms.course.schema import PRINTABLE_REVIEW_SCHEMA, MY_RESPONSES_SCHEMA
+from kinesinlms.course.schema import MY_RESPONSES_SCHEMA, PRINTABLE_REVIEW_SCHEMA
 from kinesinlms.email_automation.notifiers import EmailAutomationNotifier
 from kinesinlms.forum.models import CohortForumGroup
+from kinesinlms.forum.utils import get_forum_service
 from kinesinlms.institutions.models import Institution
-from kinesinlms.learning_library.constants import ANSWER_STATUS_FINISHED
+from kinesinlms.learning_library.constants import (
+    ANSWER_STATUS_FINISHED,
+    ContentFormatType,
+)
 from kinesinlms.learning_library.models import (
     Block,
-    BlockType,
     BlockStatus,
+    BlockType,
     LearningObjective,
     LibraryItem,
     UnitBlock,
