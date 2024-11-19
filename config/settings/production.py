@@ -1,6 +1,5 @@
 import logging
 
-
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration  # noqa: 262
 from sentry_sdk.integrations.django import DjangoIntegration  # noqa: 262
@@ -242,7 +241,7 @@ if SENTRY_DSN:
 SPECTACULAR_SETTINGS["SERVERS"] = [  # noqa: F405
     {
         # Replace with your domain name...
-        #"url": "https://example.com",
+        # "url": "https://example.com",
         "description": "Production server",
     },
 ]

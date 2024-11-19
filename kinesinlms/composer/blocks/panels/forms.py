@@ -197,12 +197,11 @@ class JupyterLabPanelForm(BasePanelModelForm):
     with a block.
     """
 
-    description = forms.CharField(
+    html_content = forms.CharField(
         required=False,
-        widget=forms.Textarea(attrs={"cols": 80, "rows": 3}),
+        widget=forms.Textarea(attrs={"cols": 80, "rows": 10}),
         help_text=_(
-            "If you want, provide the student a description of the Jupyter notebook "
-            "specific to this unit."
+            "This content will appear above the link to open the notebook"
         ),
     )
 
@@ -210,7 +209,7 @@ class JupyterLabPanelForm(BasePanelModelForm):
         model = Block
         fields = [
             "display_name",
-            "description",
+            "html_content",
         ]
 
     @property
@@ -251,7 +250,7 @@ class JupyterLabPanelForm(BasePanelModelForm):
         self.helper.attrs = {"enctype": "multipart/form-data"}
         self.helper.layout = Layout(
             "display_name",
-            "description",
+            "html_content",
             HTML(notebook_html),
         )
 
