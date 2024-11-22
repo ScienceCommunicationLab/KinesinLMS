@@ -201,7 +201,7 @@ class JupyterLabPanelForm(BasePanelModelForm):
         required=False,
         widget=forms.Textarea(attrs={"cols": 80, "rows": 10}),
         help_text=_(
-            "This content will appear above the link to open the notebook"
+            "This content will appear above the link to open the notebook."
         ),
     )
 

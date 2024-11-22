@@ -11,14 +11,14 @@ from kinesinlms.learning_library.models import Block, BlockType, ResourceType
 logger = logging.getLogger(__name__)
 
 
-def launch_jupyterlab_view(request, pk):
+def launch_jupyter_view(request, pk):
     """
     Launches the JupyterLab tool and then redirect to it.
     """
 
     err_msg = None
     try:
-        jupyterlab_url = _get_jupyter_lab_url(request, pk)
+        jupyter_url = _get_jupyter_lab_url(request, pk)
     except TooManyNotebooksError as e:
         err_msg = _("Too many notebooks are currently running. Please try again later.")
     except Exception as e:
@@ -29,28 +29,28 @@ def launch_jupyterlab_view(request, pk):
         context = {"error_message": err_msg}
         return render(
             request,
-            "course/blocks/jupyterlab/jupyterlab_error_hx.html",
+            "course/blocks/jupyterlab/jupyter_error_hx.html",
             context,
         )
     else:
-        return redirect(jupyterlab_url)
+        return redirect(jupyter_url)
 
 
-def launch_jupyterlab_view_hx(request, pk):
+def launch_jupyter_view_hx(request, pk):
     """
-    Launches the JupyterLab external tool in an iframe
+    Launches a JupyterLab external tool in an iframe.
     """
 
-    jupyterlab_url = _get_jupyter_lab_url(request, pk)
+    jupyter_launch_url = _launch_jupyter(request, pk)
 
-    template = "course/blocks/jupyterlab/jupyterlab_view_hx.html"
+    template = "course/blocks/jupyterlab/jupyter_view_hx.html"
     context = {
-        "jupyterlab_launch_url": jupyterlab_url,
+        "jupyter_launch_url": jupyter_launch_url,
     }
     return render(request, template, context)
 
 
-def _get_jupyter_lab_url(request, pk):
+def _launch_jupyter(request, pk):
     block = get_object_or_404(
         Block,
         type=BlockType.JUPYTER_LAB.name,
@@ -92,9 +92,9 @@ def _get_jupyter_lab_url(request, pk):
     ]
 
     # Use the service to generate the launch URL
-    jupyterlab_launch_url = service.get_launch_url(
+    jupyter_launch_url = service.get_launch_url(
         notebook_filename=notebook_filename,
         resources=resources,
     )
 
-    return jupyterlab_launch_url
+    return jupyter_launch_url

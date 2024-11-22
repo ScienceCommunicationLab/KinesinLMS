@@ -1,20 +1,20 @@
 from django.urls import path
 
-from . import views as jupyterlab_views
+from . import views as jupyter_views
 
 app_name = "jupyter_hub"
 urlpatterns = [
     path(
-        "jupyterlab_view/<int:pk>/",
-        jupyterlab_views.launch_jupyterlab_view,
-        name="launch_jupyterlab_view",
+        "jupyter_views/<int:pk>/",
+        jupyter_views.launch_jupyter_view,
+        name="launch_jupyter_view",
     ),
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # HTMx views
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     path(
-        "jupyterlab_view/<int:pk>/",
-        jupyterlab_views.launch_jupyterlab_view_hx,
-        name="launch_jupyterlab_view_hx",
+        "jupyter_views/<int:pk>/",
+        jupyter_views.launch_jupyter_view_hx,
+        name="launch_jupyter_view_hx",
     ),
 ]
