@@ -10,7 +10,7 @@ class TooManyNotebooksError(Exception):
     pass
 
 
-class JupyterLabService:
+class JupyterService:
     """
     Provides service methods for operations on the Modal.com
     external tool.

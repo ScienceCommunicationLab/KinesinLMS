@@ -92,11 +92,11 @@ class VideoBlockFactory(DjangoModelFactory):
     type = BlockType.VIDEO.name
 
 
-class JupyterLabBlockFactory(DjangoModelFactory):
+class JupyterBlockFactory(DjangoModelFactory):
     class Meta:
         model = Block
 
-    type = BlockType.JUPYTER_LAB.name
+    type = BlockType.JUPYTER_NOTEBOOK.name
 
 
 class HTMLContentBlockFactory(DjangoModelFactory):

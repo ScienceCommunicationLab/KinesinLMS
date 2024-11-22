@@ -304,6 +304,33 @@ def block_resources_list_hx(request, course_id: int, pk: int):
 
 
 @composer_author_required
+def select_block_resource_from_library_hx(request, course_id: int, pk: int):
+    block = get_object_or_404(Block, id=pk)
+    course = get_object_or_404(Course, id=course_id)
+    if request.method == "POST":
+        form = ResourceForm(request.POST, request.FILES, block=block)
+        if form.is_valid():
+            resource = form.save()
+            logger.debug(f"Created Resource {resource}")
+            response = HttpResponse(status=204)
+            event_name = '{{"block{}ResourceAdded": "Block resource added."}}'.format(
+                block.id
+            )
+            response.headers["HX-Trigger"] = event_name
+            return response
+    else:
+        form = ResourceForm(block=block)
+
+    context = {"course": course, "course_id": course_id, "form": form, "block": block}
+
+    return render(
+        request,
+        "composer/blocks/dialogs/select_block_resource_from_library_modal_dialog.html",
+        context,
+    )
+
+
+@composer_author_required
 def add_block_resource_hx(request, course_id: int, pk: int):
     block = get_object_or_404(Block, id=pk)
     course = get_object_or_404(Course, id=course_id)

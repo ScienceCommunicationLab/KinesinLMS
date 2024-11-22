@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class JupyterLabConfig(AppConfig):
+class JupyterConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "kinesinlms.jupyterlab"
+    name = "kinesinlms.jupyter"

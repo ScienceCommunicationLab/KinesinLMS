@@ -820,6 +820,6 @@ class BlockResource(Trackable):
             if existing.exists():
                 filename = existing.first().resource.file_name
                 raise ValidationError(
-                    f"A Block can only have one JupyterLab notebook resource. "
+                    f"A Block can only have one Jupyter notebook resource. "
                     f"This block already has notebook: {filename}"
                 )

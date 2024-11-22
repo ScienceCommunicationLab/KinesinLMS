@@ -1,0 +1,45 @@
+{% load static i18n %}
+
+<div id="div_id_jupyter_notebook" class="mb-3">
+    <label for="jupyter_notebook_selector" class="form-label">
+        Jupyter Notebook
+    </label>
+    <div id="jupyter_notebook_selector"
+         class="jupyter-notebook-wrapper alert alert-light">
+        <div class="d-flex flex-row align-items-center">
+            <div class="juypter-icon me-3">
+                <img src="{% static 'images/icons/jupyter_document_icon.svg' %}"
+                     style="height:3rem"
+                     alt="Jupyter Notebook" />
+            </div>
+
+            <div class="w-100">
+                {% if attached_notebook %}
+                    {% translate "Notebook" %}: {{ attached_notebook.name }}
+                {% else %}
+                    <span class="text-muted">( {% translate "No Notebook Attached" %} )</span>
+                {% endif %}
+            </div>
+
+            <div>
+                <a hx-get="{% url 'composer:blocks:select_block_resource_from_library_hx' course_id=course.id pk=block.id %}"
+                   hx-target="#block-resources-modal-dialog"
+                   hx-swap="innerHTML"
+                   class="btn btn-success"
+                   style="min-width:8rem">
+                    <i class="bi bi-collection"></i>&nbsp;{% trans 'Library' %}
+                </a>
+            </div>
+
+            <div>
+                <a hx-get="{% url 'composer:blocks:add_block_resource_hx' course_id=course.id pk=block.id %}"
+                   hx-target="#block-resources-modal-dialog"
+                   hx-swap="innerHTML"
+                   class="btn btn-success ms-3"
+                   style="min-width:8rem">
+                    <i class="bi bi-file-earmark-arrow-up"></i>&nbsp;{% trans 'Upload' %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

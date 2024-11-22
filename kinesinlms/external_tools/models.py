@@ -190,7 +190,6 @@ class ExternalToolProvider(Trackable):
         Are the API fields active?
         """
         return self.type in [
-            ExternalToolProviderType.RENKU.name,
             ExternalToolProviderType.JUPYTER_LAB.name,
         ]
 
@@ -201,7 +200,7 @@ class ExternalToolProvider(Trackable):
         """
         return self.type in [
             ExternalToolProviderType.BASIC_LTI13.name,
-            ExternalToolProviderType.JUPYTER_HUB.name,
+            ExternalToolProviderType.JUPYTER_LAB.name,
         ]
 
     @property

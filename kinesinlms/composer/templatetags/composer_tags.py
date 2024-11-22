@@ -145,7 +145,7 @@ def add_block_button_groups() -> List:
                     "bi_icon_class": None,
                     "icon_filename": "jupyter_white.svg",
                     "description": _("Jupyter Notebook"),
-                    "block_type": BlockType.JUPYTER_LAB.name,
+                    "block_type": BlockType.JUPYTER_NOTEBOOK.name,
                     "block_type_classes": "btn-danger add-external-tool-view",
                 },
                 {

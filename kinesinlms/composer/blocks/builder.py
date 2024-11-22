@@ -6,7 +6,7 @@ from kinesinlms.composer.blocks.panels.panels import (
     FileResourceBlockPanelSet,
     ForumTopicPanelSet,
     HTMLBlockPanelSet,
-    JupyterLabPanelSet,
+    JupyterPanelSet,
     LongFormTextAssessmentPanelSet,
     MultipleChoiceAssessmentPanelSet,
     PanelSet,
@@ -94,14 +94,14 @@ class ExternalToolViewPanelSetBuilder(PanelSetBuilder):
             raise ValueError(f"Unsupported block type: {block.type}")
 
 
-class JupyterLabPanelSetBuilder(PanelSetBuilder):
+class JupyterPanelSetBuilder(PanelSetBuilder):
     """
-    Build a panel set for editing an JupyterLab view block.
+    Build a panel set for editing an Jupyter view block.
     """
 
     def create_panel_set(self, block: Block) -> PanelSet:
-        if block.type == BlockType.JUPYTER_LAB.name:
-            return JupyterLabPanelSet()
+        if block.type == BlockType.JUPYTER_NOTEBOOK.name:
+            return JupyterPanelSet()
         else:
             raise ValueError(f"Unsupported block type: {block.type}")
 
@@ -186,7 +186,7 @@ class PanelSetManager:
             BlockType.FORUM_TOPIC.name: ForumTopicPanelSetBuilder,
             BlockType.SIMPLE_INTERACTIVE_TOOL.name: SimpleInteractiveToolPanelSetBuilder,
             BlockType.EXTERNAL_TOOL_VIEW.name: ExternalToolViewPanelSetBuilder,
-            BlockType.JUPYTER_LAB.name: JupyterLabPanelSetBuilder,
+            BlockType.JUPYTER_NOTEBOOK.name: JupyterPanelSetBuilder,
         }
 
     def set_builder_for_block(self, block: Block):

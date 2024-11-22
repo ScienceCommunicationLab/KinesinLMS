@@ -69,6 +69,11 @@ urlpatterns = [
         name="add_block_resource_hx",
     ),
     path(
+        "<int:pk>/block_resource/select_from_library",
+        views.select_block_resource_from_library_hx,
+        name="select_block_resource_from_library_hx",
+    ),
+    path(
         "<int:block_id>/block_resource/<int:pk>/",
         views.delete_block_resource_hx,
         name="delete_block_resource_hx",

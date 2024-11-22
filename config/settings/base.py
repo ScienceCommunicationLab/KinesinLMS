@@ -129,7 +129,7 @@ LOCAL_APPS = [
     "kinesinlms.institutions.apps.InstitutionsConfig",
     "kinesinlms.email_automation.apps.EmailAutomationConfig",
     "kinesinlms.external_tools.apps.ExternalToolConfig",
-    "kinesinlms.jupyterlab.apps.JupyterLabConfig",
+    "kinesinlms.jupyter.apps.JupyterConfig",
     "kinesinlms.lti.apps.LTIConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

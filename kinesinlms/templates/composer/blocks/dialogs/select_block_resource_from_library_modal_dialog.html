@@ -1,0 +1,28 @@
+{% load static i18n %}
+{% load crispy_forms_filters %}
+
+<form class="modal-content"
+      hx-post="{{ request.path }}"
+      hx-target="#block-resources-modal-dialog"
+      hx-swap="innerHTML"
+      hx-encoding="multipart/form-data">
+    <div class="modal-header">
+        <h5 class="modal-title">
+            Select Block Resource from Library
+        </h5>
+    </div>
+
+    <div class="modal-body">
+        {% csrf_token %}
+        {{ form|crispy }}
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+            Cancel
+        </button>
+        <button class="btn btn-primary" type="submit">
+            Save
+        </button>
+    </div>
+</form>

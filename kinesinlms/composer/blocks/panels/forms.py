@@ -29,6 +29,7 @@ from django.utils.translation import gettext as _
 from tinymce.widgets import TinyMCE
 
 from kinesinlms.assessments.models import Assessment
+from kinesinlms.composer.blocks.panels.utils import get_jupyter_wrapper_html
 from kinesinlms.composer.forms.fields import LearningObjectivesField
 from kinesinlms.composer.forms.helpers import save_learning_objectives
 from kinesinlms.composer.models import ComposerSettings
@@ -111,7 +112,7 @@ class HTMLBlockPanelForm(BasePanelModelForm):
 
     # TODO:
     #   Add support for HTML content type, including Markdown.
-    #   This will require dynamically toggling the TinyMCE editor.
+    #   This will require dynamically toggling the wysiwyg editor.
     #   Therefore, at the moment we're only supporting HTML and handling
     #   toggle of editor at higher level before this form is shown.
 
@@ -190,19 +191,17 @@ class HTMLBlockPanelForm(BasePanelModelForm):
         return cleaned_data
 
 
-class JupyterLabPanelForm(BasePanelModelForm):
+class JupyterPanelForm(BasePanelModelForm):
     """
-    Form for editing JupyterLab content and either selecting an existing JupyterLab
-    resource or uploading a new one. Ensures only one JupyterLab can be associated
+    Form for editing Jupyter content and either selecting an existing Jupyter
+    resource or uploading a new one. Ensures only one Jupyter can be associated
     with a block.
     """
 
     html_content = forms.CharField(
         required=False,
-        widget=forms.Textarea(attrs={"cols": 80, "rows": 10}),
-        help_text=_(
-            "This content will appear above the link to open the notebook."
-        ),
+        widget=forms.Textarea(attrs={"cols": 80, "rows": 5}),
+        help_text=_("This content will appear above the link to open the notebook."),
     )
 
     class Meta:
@@ -231,27 +230,34 @@ class JupyterLabPanelForm(BasePanelModelForm):
         except Resource.DoesNotExist:
             attached_notebook = None
 
-        if attached_notebook:
-            notebook_html = f"""
-             <div class='alert alert-info'>
-                Assigned notebook: 
-                <strong>{attached_notebook}</strong>
-             </div>
-             """
+        composer_settings, created = ComposerSettings.objects.get_or_create(
+            user=self.user
+        )
+        if composer_settings.wysiwyg_active:
+            self.fields["html_content"].widget = TinyMCE(attrs={"cols": 80, "rows": 10})
+            self.fields["html_content"].help_text = _(
+                "Enter html content here. (If you want to enter raw HTML, close this "
+                "form and disable this editor with the WYSIWYG toggle in the "
+                "contents nav bar)."
+            )
         else:
-            notebook_html = """
-            <div class='alert alert-warning'>
-            No notebook assigned. Add a notebook via the Resources tab.
-            </div>
-            """
+            self.fields["html_content"].help_text = _(
+                "Enter html content here. (If you want a WYSIWYG editor, close this "
+                "form and enable WYSIWYG with the toggle button in the "
+                "contents nav bar)."
+            )
+
+        jupyter_wrapper_html = get_jupyter_wrapper_html(
+            attached_notebook=attached_notebook,
+            course=self.course,
+            block=block,
+        )
 
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.attrs = {"enctype": "multipart/form-data"}
         self.helper.layout = Layout(
-            "display_name",
-            "html_content",
-            HTML(notebook_html),
+            "display_name", "html_content", HTML(jupyter_wrapper_html)
         )
 
     def clean(self):
@@ -266,7 +272,7 @@ class JupyterLabPanelForm(BasePanelModelForm):
         Uses transaction.atomic to ensure data consistency.
         """
         block = super().save(commit=False)
-        block.type = BlockType.JUPYTER_LAB.name
+        block.type = BlockType.JUPYTER_NOTEBOOK.name
 
         if commit:
             block.save()

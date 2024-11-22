@@ -449,10 +449,15 @@ function klmsInitPanelForm(blockID: number, currentPanelSlug: string) {
 
         // Enable/disable submit button based on form changes
         if (submitButton) {
-            submitButton!.disabled = !hasChanged;
+            submitButton.disabled = !hasChanged;
+            submitButton.classList.toggle("d-none", !hasChanged);
+            if (hasChanged) {
+                submitButton.focus();
+            }
         }
         if (doneButton) {
             doneButton!.disabled = hasChanged;
+            doneButton.classList.toggle("d-none", hasChanged);
         }
         if (cancelButton) {
             cancelButton!.classList.toggle("d-none", !hasChanged);
@@ -475,7 +480,7 @@ function klmsInitPanelForm(blockID: number, currentPanelSlug: string) {
 
 }
 
-function klmsDestroyCurrentPanelForm(){
+function klmsDestroyCurrentPanelForm() {
     console.log("klmsDestroyCurrentPanelForm()");
     if (tinyMCE) {
         console.log("Destroying TinyMCE...");

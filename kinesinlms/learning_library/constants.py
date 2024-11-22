@@ -13,7 +13,7 @@ class BlockType(Enum):
     FORUM_TOPIC = "Forum Topic"
     SIMPLE_INTERACTIVE_TOOL = "Simple interactive tool"
     SURVEY = "Survey"
-    JUPYTER_LAB = "JupyterLab"
+    JUPYTER_NOTEBOOK = "Jupyter notebook"
     # Not sure what to call all the different things that might
     # be exposed by an external tool (document, exercise, interaction, notebook, etc.)
     # so going with "view"...

@@ -26,7 +26,7 @@ from kinesinlms.composer.blocks.panels.forms import (
     ExternalToolViewPanelForm,
     ForumTopicPanelForm,
     HTMLBlockPanelForm,
-    JupyterLabPanelForm,
+    JupyterPanelForm,
     LongFormTextAssessmentPanelForm,
     MultipleChoiceAssessmentPanelForm,
     PollAssessmentPanelForm,
@@ -208,16 +208,17 @@ class ExternalToolViewPanel(Panel):
         self.form_class = ExternalToolViewPanelForm
 
 
-class JupyterLabPanel(Panel):
+class JupyterPanel(Panel):
     """
-    Describes a 'panel' for editing an 'JupyterLab Notebook' block
+    Describes a 'panel' for editing an 'Jupyter Notebook' block
     """
 
     def __init__(self):
         super().__init__()
         self.label = "Jupyter Notebook"
-        self.slug = BlockType.JUPYTER_LAB.name
-        self.form_class = JupyterLabPanelForm
+        self.slug = BlockType.JUPYTER_NOTEBOOK.name
+        self.form_class = JupyterPanelForm
+        self.template_name = "composer/blocks/panels/jupyter_panel.html"
 
 
 class ForumTopicPanel(Panel):
@@ -337,15 +338,15 @@ class SimpleInteractiveToolPanelSet(PanelSet):
         ]
 
 
-class JupyterLabPanelSet(PanelSet):
+class JupyterPanelSet(PanelSet):
     """
-    Panel set for editing a JUPYTER_LAB block.
+    Panel set for editing a JUPYTER_NOTEBOOK block.
     """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.panels = [
-            JupyterLabPanel(),
+            JupyterPanel(),
             BlockResourcePanel(),
             BlockSettingsPanel(),
         ]

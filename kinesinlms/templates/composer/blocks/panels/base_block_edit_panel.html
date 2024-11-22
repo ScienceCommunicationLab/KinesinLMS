@@ -12,33 +12,44 @@ If a panel needs a more complicated UI than this, it can override or replace thi
 {% endcomment %}
 
 <div class="card">
-    <div class="card-body panel-content">
-        {% csrf_token %}
-        {{ panel_form.media }}
-        {% crispy panel_form %}
+  <div class="card-body panel-content">
+    {% csrf_token %}
+    {{ panel_form.media }}
+    {% crispy panel_form %}
 
-        {% block extra_panel_content %}
-        {% endblock extra_panel_content %}
+    {% block extra_panel_content %}
+    {% endblock extra_panel_content %}
+  </div>
+
+  <div class="card-footer action-buttons">
+
+    <div class="me-auto">
+      {% block left_side_action_buttons %}
+
+      {% endblock left_side_action_buttons %}
     </div>
 
-    <div class="card-footer action-buttons">
+    <a id="btn-cancel-panel-{{ block.id }}-{{ current_panel_slug }}"
+       href="{% url 'composer:course_edit_unit_node' course_id=course.id unit_node_id=unit_node.id %}"
+       class="btn btn-warning btn-sm action-button d-none ml-auto">
+      Cancel
+    </a>
 
-        <a id="btn-cancel-panel-{{ block.id }}-{{ current_panel_slug }}"
-           style="margin-right:auto"
-           href="{% url 'composer:course_edit_unit_node' course_id=course.id unit_node_id=unit_node.id %}"
-           class="btn btn-warning btn-sm action-button d-none">Cancel</a>
+    <button id="btn-save-panel-{{ block.id }}-{{ current_panel_slug }}"
+            type="submit"
+            disabled
+            class="btn btn-primary btn-sm action-button  ms-3 d-none">
+      Save
+    </button>
 
-        <button id="btn-save-panel-{{ block.id }}-{{ current_panel_slug }}"
-                type="submit"
-                disabled
-                class="btn btn-primary btn-sm action-button me-3">Save</button>
-
-        <button id="btn-done-panel-{{ block.id }}-{{ current_panel_slug }}"
-                hx-on::before-request="window.klmsDestroyCurrentPanelForm()"
-                hx-get="{% url 'composer:blocks:view_course_unit_block_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id pk=block.id %}"
-                type="button"
-                class="btn btn-secondary btn-sm action-button">Done</button>
-    </div>
+    <button id="btn-done-panel-{{ block.id }}-{{ current_panel_slug }}"
+            hx-on::before-request="window.klmsDestroyCurrentPanelForm()"
+            hx-get="{% url 'composer:blocks:view_course_unit_block_hx' course_id=course.id module_node_id=module_node.id section_node_id=section_node.id unit_node_id=unit_node.id course_unit_id=course_unit.id pk=block.id %}"
+            type="button"
+            class="btn btn-secondary btn-sm action-button">
+      Done
+    </button>
+  </div>
 
 </div>
 

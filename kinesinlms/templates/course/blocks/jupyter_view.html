@@ -2,8 +2,8 @@
 {% load core_tags unit_extras %}
 
 {% comment %} 
-Block that renders an external JupyterLab notebook. At the moment, that just
-means a button that launches the JupyterLab notebook in an iframe.
+Block that renders an external Jupyte notebook. At the moment, that just
+means a button that launches the Jupyter notebook in an iframe.
 {% endcomment %}
 
 {% load static %}
@@ -19,7 +19,7 @@ means a button that launches the JupyterLab notebook in an iframe.
     {# Load the template that can display the block to an author #}
     {# in Composer, in read-only or edit more  ... #}
 
-    {% include "composer/blocks/jupyterlab/jupyterlab_block_read_only.html" %}
+    {% include "composer/blocks/jupyter/jupyter_block_read_only.html" %}
 
   {% else %}
 
@@ -45,7 +45,7 @@ means a button that launches the JupyterLab notebook in an iframe.
       </div>
     {% endif %}
 
-    {% include "course/blocks/jupyterlab/launch_jupyterlab.html" %}
+    {% include "course/blocks/jupyter/launch_jupyter.html" %}
 
   {% endif %}
 </div>

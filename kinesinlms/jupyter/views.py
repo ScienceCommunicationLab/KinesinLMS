@@ -5,7 +5,7 @@ from typing import Dict, List
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext as _
 
-from kinesinlms.jupyterlab.service import JupyterLabService, TooManyNotebooksError
+from kinesinlms.jupyter.service import JupyterService, TooManyNotebooksError
 from kinesinlms.learning_library.models import Block, BlockType, ResourceType
 
 logger = logging.getLogger(__name__)
@@ -13,23 +13,24 @@ logger = logging.getLogger(__name__)
 
 def launch_jupyter_view(request, pk):
     """
-    Launches the JupyterLab tool and then redirect to it.
+    Launches the Jupyter tool and then redirect to it.
     """
 
     err_msg = None
     try:
-        jupyter_url = _get_jupyter_lab_url(request, pk)
+        jupyter_url = _launch_jupyter(request, pk)
     except TooManyNotebooksError as e:
+        logger.error(f"Too many notebooks are currently running. {e}")
         err_msg = _("Too many notebooks are currently running. Please try again later.")
     except Exception as e:
-        logger.exception(f"Error launching JupyterLab view. {e}")
-        err_msg = _("Error launching JupyterLab view. Please try again later.")
+        logger.exception(f"Error launching Jupyter view. {e}")
+        err_msg = _("Error launching Jupyter view. Please try again later.")
 
     if err_msg:
         context = {"error_message": err_msg}
         return render(
             request,
-            "course/blocks/jupyterlab/jupyter_error_hx.html",
+            "course/blocks/jupyter/jupyter_error_hx.html",
             context,
         )
     else:
@@ -38,12 +39,12 @@ def launch_jupyter_view(request, pk):
 
 def launch_jupyter_view_hx(request, pk):
     """
-    Launches a JupyterLab external tool in an iframe.
+    Launches a Jupyter external tool in an iframe.
     """
 
     jupyter_launch_url = _launch_jupyter(request, pk)
 
-    template = "course/blocks/jupyterlab/jupyter_view_hx.html"
+    template = "course/blocks/jupyter/jupyter_view_hx.html"
     context = {
         "jupyter_launch_url": jupyter_launch_url,
     }
@@ -53,12 +54,12 @@ def launch_jupyter_view_hx(request, pk):
 def _launch_jupyter(request, pk):
     block = get_object_or_404(
         Block,
-        type=BlockType.JUPYTER_LAB.name,
+        type=BlockType.JUPYTER_NOTEBOOK.name,
         pk=pk,
     )
 
     # Get the appropriate service based on the provider type
-    service = JupyterLabService()
+    service = JupyterService()
 
     # See if we have a default notebook attached
     notebook_resources = block.resources.filter(type=ResourceType.JUPYTER_NOTEBOOK.name)
@@ -83,7 +84,7 @@ def _launch_jupyter(request, pk):
             )
         notebook_filename = notebook_resource.resource_file.name.split("/")[-1]
 
-    # Get basic resource info to sent to JupyterLab
+    # Get basic resource info to sent to Jupyter
     # in a form it recognizes
     resources: List[Dict] = [
         resource.info

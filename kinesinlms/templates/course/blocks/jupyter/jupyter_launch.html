@@ -18,7 +18,7 @@
   <div class="d-flex flex-row">
 
     {% if block.launch_type == 'iframe' %}
-      <a hx-get="{% url 'jupyterlab:launch_jupyterlab_view_hx' pk=block.id %}"
+      <a hx-get="{% url 'jupyter:launch_jupyter_view_hx' pk=block.id %}"
          hx-target="#jupyter-lab-view-{{ block.id }}"
          hx-swap="outerHTML"
          hx-indicator="#launch-jupyter-lab-spinner-{{ block.id }}"
@@ -28,15 +28,15 @@
            class="launch-htmx-indicator">
         <div class="spinner d-flex flex-row ms-3 align-items-center">
           <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading JupyterLab tool...</span>
+            <span class="visually-hidden">Loading Jupyter tool...</span>
           </div>
           <div class="spinner-message ms-2">
-            Loading JupyterLab tool ...
+            Loading Jupyter tool ...
           </div>
         </div>
       </div>
     {% else %}
-      <a href="{% url 'jupyterlab:launch_jupyterlab_view' pk=block.id %}"
+      <a href="{% url 'jupyter:launch_jupyter_view' pk=block.id %}"
          target="_blank"
          class="btn btn-primary">
         Launch tool in new tab

@@ -29,7 +29,7 @@ from kinesinlms.learning_library.factory import (
     FileResourceBlockFactory,
     ForumTopicBlockFactory,
     HTMLContentBlockFactory,
-    JupyterLabBlockFactory,
+    JupyterBlockFactory,
     SimpleInteractiveToolBlockFactory,
     SimpleInteractiveToolFactory,
     SurveyBlockFactory,
@@ -85,9 +85,9 @@ class VideoBlockBuilder(BaseBlockBuilder):
         return block_instance
 
 
-class JupyterLabBlockBuilder(BaseBlockBuilder):
+class JupyterBlockBuilder(BaseBlockBuilder):
     def create_block(self, block_subtype: str = None) -> Block:
-        block_instance = JupyterLabBlockFactory.create()
+        block_instance = JupyterBlockFactory.create()
         return block_instance
 
 
@@ -281,8 +281,8 @@ class BlockBuilderDirector:
             return SimpleInteractiveToolBlockBuilder()
         elif block_type == BlockType.EXTERNAL_TOOL_VIEW.name:
             return ExternalToolViewBlockBuilder()
-        elif block_type == BlockType.JUPYTER_LAB.name:
-            return JupyterLabBlockBuilder()
+        elif block_type == BlockType.JUPYTER_NOTEBOOK.name:
+            return JupyterBlockBuilder()
         else:
             raise NotImplementedError(
                 f"Block factory cannot create blocks of type {block_type}"
