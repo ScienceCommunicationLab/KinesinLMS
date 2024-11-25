@@ -7,9 +7,6 @@
     hx-target="this"
     hx-get="{% url 'composer:blocks:jupyter_notebook_details_hx' course_id=course.id block_id=block.id %}"
     class="mb-1 mt-4">
-    <label for="jupyter_notebook_selector" class="form-label">
-        Jupyter Notebook
-    </label>
     <div id="jupyter_notebook_selector"
          class="jupyter-notebook-wrapper alert alert-light mb-0 {% if resource %}border-success-subtle{% endif %}">
         <div class="d-flex flex-row align-items-center">
@@ -67,7 +64,7 @@
 
         </div>
     </div>
-    <div class="form-text">
+    <div class="form-text mb-4">
         If this notebook requires other resources (e.g. a sqlite file), you must add them separately
         on the 'Resources' tab.
     </div>
