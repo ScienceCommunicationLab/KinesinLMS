@@ -6,16 +6,25 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render
 
 from kinesinlms.composer.blocks.builder import PanelSetManager
-from kinesinlms.composer.blocks.forms.block_resource import ResourceForm
+from kinesinlms.composer.blocks.forms.block_resource import (
+    JupyterNotebookResourceForm,
+    ResourceForm,
+    SelectResourceForBlockResourceForm,
+)
 from kinesinlms.composer.blocks.panels.panels import PanelSet, PanelType
 from kinesinlms.core.decorators import composer_author_required
 from kinesinlms.course.models import Course, CourseNode, CourseUnit
 from kinesinlms.learning_library.constants import (
     BlockViewContext,
     BlockViewMode,
-    ResourceType,
 )
-from kinesinlms.learning_library.models import Block, BlockResource, UnitBlock
+from kinesinlms.learning_library.models import (
+    Block,
+    BlockResource,
+    Resource,
+    ResourceType,
+    UnitBlock,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -304,28 +313,98 @@ def block_resources_list_hx(request, course_id: int, pk: int):
 
 
 @composer_author_required
+def block_resource_detail_hx(request, course_id: int, block_id: int, pk: int):
+    block = get_object_or_404(Block, id=block_id)
+    course = get_object_or_404(Course, id=course_id)
+    block_resource = get_object_or_404(BlockResource, block__id=block_id, id=pk)
+    context = {
+        "course": course,
+        "course_id": course_id,
+        "block": block,
+        "block_resource": block_resource,
+    }
+    if block_resource.resource.type == ResourceType.JUPYTER_NOTEBOOK.name:
+        template_path = "composer/blocks/jupyter/jupyter_selector.html"
+    else:
+        template_path = "composer/blocks/block_resource_detail.html"
+
+    return render(request, template_path, context)
+
+
+@composer_author_required
 def select_block_resource_from_library_hx(request, course_id: int, pk: int):
     block = get_object_or_404(Block, id=pk)
     course = get_object_or_404(Course, id=course_id)
+
+    type_filter = request.GET.get("type_filter", None)
+    # For now we're only allowing filter by Jupyter notebook
+    if type_filter not in [ResourceType.JUPYTER_NOTEBOOK.name]:
+        type_filter = None
+
     if request.method == "POST":
-        form = ResourceForm(request.POST, request.FILES, block=block)
+        form = SelectResourceForBlockResourceForm(
+            request.POST,
+            block=block,
+            type_filter=type_filter,
+        )
+        if form.is_valid():
+            try:
+                resource = form.save()
+                logger.debug(f"Associated Resource {resource} with Block {block}")
+                response = HttpResponse(status=204)
+                event_name = (
+                    '{{"block{}ResourceAdded": "Block resource added."}}'.format(
+                        block.id
+                    )
+                )
+                response.headers["HX-Trigger"] = event_name
+                return response
+            except Exception as e:
+                logger.error(f"Error saving BlockResource: {e}")
+                form.add_error(None, str(e))
+    else:
+        form = SelectResourceForBlockResourceForm(
+            block=block,
+            type_filter=type_filter,
+        )
+
+    context = {
+        "course": course,
+        "course_id": course_id,
+        "form": form,
+        "block": block,
+    }
+
+    return render(
+        request,
+        "composer/blocks/dialogs/select_block_resource_from_library_modal_dialog.html",
+        context,
+    )
+
+
+@composer_author_required
+def add_jupyter_notebook_block_resource_hx(request, course_id: int, pk: int):
+    block = get_object_or_404(Block, id=pk)
+    course = get_object_or_404(Course, id=course_id)
+    if request.method == "POST":
+        form = JupyterNotebookResourceForm(request.POST, request.FILES, block=block)
         if form.is_valid():
             resource = form.save()
             logger.debug(f"Created Resource {resource}")
             response = HttpResponse(status=204)
-            event_name = '{{"block{}ResourceAdded": "Block resource added."}}'.format(
+            event_name = '{{"block{}ResourceAdded": "Jupyter notebook block resource added."}}'.format(
                 block.id
             )
             response.headers["HX-Trigger"] = event_name
             return response
     else:
-        form = ResourceForm(block=block)
+        form = JupyterNotebookResourceForm(block=block)
 
     context = {"course": course, "course_id": course_id, "form": form, "block": block}
 
     return render(
         request,
-        "composer/blocks/dialogs/select_block_resource_from_library_modal_dialog.html",
+        "composer/blocks/dialogs/add_jupyter_notebook_block_resource_modal_dialog.html",
         context,
     )
 
@@ -357,7 +436,30 @@ def add_block_resource_hx(request, course_id: int, pk: int):
 
 @composer_author_required
 def delete_block_resource_hx(request, course_id: int, block_id: int, pk: int):
-    block_resource = get_object_or_404(BlockResource, id=pk, block__id=block_id)
+    """
+    Delete a block resource via an HTMx request.
+
+    This request will usually arrive by clicking a delete button in
+    the "Resources" tab of a composer panel form.
+
+    However, sometimes the originating button will be on a different form,
+    for example deleting a Jupyter notebook resource from the Jupyter notebook
+    selector.
+
+    In that case, we return a different template to update a different DOM element,
+    according to the htmx settings on the originating button.
+
+    Args:
+        request (_type_): _description_
+        course_id (int): _description_
+        block_id (int): _description_
+        pk (int): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    block_resource = get_object_or_404(BlockResource, block__id=block_id, id=pk)
     course = get_object_or_404(Course, id=course_id)
     resource = block_resource.resource
     block_resource.delete()
@@ -375,4 +477,10 @@ def delete_block_resource_hx(request, course_id: int, block_id: int, pk: int):
         "block": block,
         "block_resources": block.block_resources.all(),
     }
-    return render(request, "composer/blocks/block_resources_table.html", context)
+
+    if resource.type == ResourceType.JUPYTER_NOTEBOOK.name:
+        template_path = "composer/blocks/jupyter/jupyter_selector.html"
+    else:
+        template_path = "composer/blocks/block_resources_table.html"
+
+    return render(request, template_path, context)

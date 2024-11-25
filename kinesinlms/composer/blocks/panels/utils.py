@@ -1,28 +1,25 @@
 from django.template.loader import render_to_string
 
-from kinesinlms.learning_library.models import Resource
+from kinesinlms.learning_library.models import Resource, ResourceType
 
 
 def get_jupyter_wrapper_html(
-    attached_notebook: Resource | None,
+    resource: Resource | None,
     course,
     block,
+    block_resource,
 ) -> str:
     """
     Returns the HTML for the Jupyter Notebook wrapper shown in the panel.
     """
-    if (
-        attached_notebook
-        and not attached_notebook.type == Resource.ResourceType.JUPYTER_NOTEBOOK
-    ):
-        raise ValueError(
-            f"Expected Jupyter Notebook Resource (got {attached_notebook})"
-        )
+    if resource and not resource.type == ResourceType.JUPYTER_NOTEBOOK.name:
+        raise ValueError(f"Expected Jupyter Notebook Resource (got {resource})")
 
     context = {
-        "attached_notebook": attached_notebook,
+        "resource": resource,
         "course": course,
         "block": block,
+        "block_resource": block_resource,
     }
 
     return render_to_string("composer/blocks/jupyter/jupyter_selector.html", context)

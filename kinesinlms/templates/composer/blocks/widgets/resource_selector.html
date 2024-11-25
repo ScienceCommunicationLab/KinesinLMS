@@ -1,0 +1,51 @@
+<div class="resource-selector">
+    <div class="list-group resource-list overflow-auto"
+         style="max-height: 400px">
+        {% for resource in resources %}
+            <div class="list-group-item">
+                <div class="form-check">
+                    <input type="radio"
+                           name="{{ widget.name }}"
+                           value="{{ resource.pk }}"
+                           class="form-check-input"
+                           id="resource_{{ resource.pk }}"
+                           {% if widget.value == resource.pk %}checked{% endif %}
+                           required />
+                    <label class="form-check-label w-100 d-flex flex-row"
+                           for="resource_{{ resource.pk }}">
+                        <div class="d-flex flex-column w-100">
+                            <h6 class="mb-1">
+                                {{ resource.name|default:"( no name )" }}
+                            </h6>
+                            {% if resource.description %}
+                                <small class="text-muted d-block">{{ resource.description }}</small>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ resource.type }}
+                        </div>
+                    </label>
+                </div>
+            </div>
+        {% empty %}
+            <div class="list-group-item text-center text-muted py-4">
+                <em>No resources available</em>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+  .resource-selector .list-group-item:hover {
+    background-color: var(--bs-light);
+  }
+
+  .resource-selector .resource-list {
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+  }
+
+  .resource-selector .list-group-item:first-child {
+    border-top: none;
+  }
+</style>

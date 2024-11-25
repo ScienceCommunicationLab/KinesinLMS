@@ -1,12 +1,13 @@
 from django.urls import include, path
 
 from kinesinlms.composer.badges import views as badges_views
+from kinesinlms.composer.course_resources import views as course_resources_views
+from kinesinlms.composer.course_surveys import views as course_surveys_views
 from kinesinlms.composer.email_automations import views as email_automations_views
 from kinesinlms.composer.forum import views as forum_views
 from kinesinlms.composer.milestones import views as milestones_views
-from kinesinlms.composer.course_resources import views as course_resources_views
-from kinesinlms.composer.course_surveys import views as course_surveys_views
 from kinesinlms.sits import views as simple_interactive_tool_views
+
 from . import views
 
 app_name = "composer"
@@ -332,8 +333,6 @@ urlpatterns = [
         simple_interactive_tool_views.SimpleInteractiveToolTemplateListView.as_view(),
         name="simple_interactive_tool_templates_list",
     ),
-
-
     # HTMx URLs
     # ..........................................................
     path(
@@ -341,5 +340,4 @@ urlpatterns = [
         views.toggle_wysiwyg_hx,
         name="toggle_wysiwyg_hx",
     ),
-
 ]

@@ -224,11 +224,13 @@ class JupyterPanelForm(BasePanelModelForm):
 
         # Get current notebook BlockResource if it exists
         try:
-            attached_notebook: Resource = block.resources.get(
-                type=ResourceType.JUPYTER_NOTEBOOK.name
+            block_resource = BlockResource.objects.get(
+                block=block, resource__type=ResourceType.JUPYTER_NOTEBOOK.name
             )
-        except Resource.DoesNotExist:
-            attached_notebook = None
+            resource: Resource = block_resource.resource
+        except BlockResource.DoesNotExist:
+            block_resource = None
+            resource = None
 
         composer_settings, created = ComposerSettings.objects.get_or_create(
             user=self.user
@@ -248,16 +250,19 @@ class JupyterPanelForm(BasePanelModelForm):
             )
 
         jupyter_wrapper_html = get_jupyter_wrapper_html(
-            attached_notebook=attached_notebook,
+            resource=resource,
             course=self.course,
             block=block,
+            block_resource=block_resource,
         )
 
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.attrs = {"enctype": "multipart/form-data"}
         self.helper.layout = Layout(
-            "display_name", "html_content", HTML(jupyter_wrapper_html)
+            HTML(jupyter_wrapper_html),
+            "display_name",
+            "html_content",
         )
 
     def clean(self):

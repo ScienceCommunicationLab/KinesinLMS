@@ -14,11 +14,9 @@ from . import views
 app_name = "blocks"
 
 urlpatterns = [
-    
     # Regular urls
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # ( none yet )
-
     # HTMx urls
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     path(
@@ -64,9 +62,19 @@ urlpatterns = [
         name="block_resources_list_hx",
     ),
     path(
+        "<int:block_id>/block_resource_detail/<int:pk>/",
+        views.block_resource_detail_hx,
+        name="block_resource_detail_hx",
+    ),
+    path(
         "<int:pk>/block_resource/add",
         views.add_block_resource_hx,
         name="add_block_resource_hx",
+    ),
+    path(
+        "<int:pk>/block_resource/jupyter_notebook/add",
+        views.add_jupyter_notebook_block_resource_hx,
+        name="add_jupyter_notebook_block_resource_hx",
     ),
     path(
         "<int:pk>/block_resource/select_from_library",

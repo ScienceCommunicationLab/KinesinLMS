@@ -6,16 +6,15 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.contrib.sites.shortcuts import get_current_site
-from django.template import Template, Context
+from django.template import Context, Template
 from django.utils.safestring import mark_safe
 from markdownify.templatetags.markdownify import markdownify
 
 from config.settings.base import ACCEPT_ANALYTICS_COOKIE_NAME
-
-from kinesinlms.survey.models import SurveyProvider
-from kinesinlms.learning_library.constants import ContentFormatType
-from kinesinlms.learning_library.models import Block
 from kinesinlms.course.models import CourseUnit
+from kinesinlms.learning_library.constants import ContentFormatType
+from kinesinlms.learning_library.models import Block, Resource, ResourceType
+from kinesinlms.survey.models import SurveyProvider
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +37,19 @@ def show_none_for_none(value):
 
 # SIMPLE TAGS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+@register.simple_tag
+def get_jupyter_notebook_resource(block) -> Optional[Resource]:
+    """
+    Get the Jupyter notebook resource for a block, if it exists.
+    """
+    if block:
+        jupyter_notebook = block.resources.filter(
+            type=ResourceType.JUPYTER_NOTEBOOK.name
+        ).first()
+        return jupyter_notebook
+    return None
 
 
 @register.simple_tag(takes_context=True)
@@ -180,7 +192,9 @@ def analytics_cookie_value(request) -> Optional[str]:
         return None
 
     try:
-        accept_analytics_cookie_val = request.COOKIES.get(ACCEPT_ANALYTICS_COOKIE_NAME, None)
+        accept_analytics_cookie_val = request.COOKIES.get(
+            ACCEPT_ANALYTICS_COOKIE_NAME, None
+        )
     except Exception as e:
         logger.exception(f"Could not get COOKIES from request: {e}")
         return None
