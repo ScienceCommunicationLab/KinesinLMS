@@ -1,13 +1,11 @@
 {% load static i18n %}
 
 <div id="div_id_jupyter_notebook_selector_{{ block.id }}"
-    {# djlint:off #}
-     {% if resource %} 
-     hx-get="{% url 'composer:blocks:block_resource_detail_hx' course_id=course.id block_id=block.id pk=resource.id %}" 
-     hx-trigger="block{{ block.id }}ResourceAdded from:body" 
-     hx-target="this" 
-     {% endif %}
-    {# djlint:on #}
+    {# Add a trigger that will update this selector if the user adds a notebook via a modal dialog. #}
+    {# We want this display to automatically update when that happens #}
+    hx-trigger="block{{ block.id }}JupyterNotebookResourceAdded from:body"
+    hx-target="this"
+    hx-get="{% url 'composer:blocks:jupyter_notebook_details_hx' course_id=course.id block_id=block.id %}"
     class="mb-1 mt-4">
     <label for="jupyter_notebook_selector" class="form-label">
         Jupyter Notebook
@@ -30,8 +28,8 @@
                 {% endif %}
             </div>
 
-
             {% if resource %}
+                {# show details about the notebook and a control to remove it #}
                 <div>
                     <a hx-delete="{% url 'composer:blocks:delete_block_resource_hx' course_id=course.id block_id=block.id pk=block_resource.id %}"
                        hx-target="#div_id_jupyter_notebook_selector_{{ block.id }}"
@@ -45,7 +43,7 @@
                     </a>
                 </div>
             {% else %}
-                {# show controls to add notebook or get from resources library #}
+                {# show controls to get notebook from resources library or add it #}
                 <div>
                     <a hx-get="{% url 'composer:blocks:select_block_resource_from_library_hx' course_id=course.id pk=block.id %}?type_filter=JUPYTER_NOTEBOOK"
                        hx-target="#block-resources-modal-dialog"

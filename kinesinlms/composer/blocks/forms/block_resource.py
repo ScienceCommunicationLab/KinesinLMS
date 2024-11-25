@@ -2,7 +2,7 @@ import logging
 
 from django import forms
 from django.forms import ModelForm
-from django.forms.widgets import SelectMultiple
+from django.forms.widgets import Select
 from django.utils.translation import gettext_lazy as _
 
 from kinesinlms.learning_library.models import Block, Resource, ResourceType
@@ -95,12 +95,17 @@ class ResourceForm(ModelForm):
         return resource
 
 
-class ResourceSelectorWidget(SelectMultiple):
-    template_name = 'composer/blocks/widgets/resource_selector.html'
+class ResourceSelectorWidget(Select):  
+    template_name = "composer/blocks/widgets/resource_selector.html"
     
+    def __init__(self, type_filter=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.type_filter = type_filter
+        
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
-        context['resources'] = self.choices.queryset
+        context["resources"] = self.choices.queryset
+        context["type_filter"] = self.type_filter
         return context
 
 class SelectResourceForBlockResourceForm(forms.Form):
@@ -111,16 +116,27 @@ class SelectResourceForBlockResourceForm(forms.Form):
 
     resource = forms.ModelChoiceField(
         queryset=Resource.objects.all(),
-        label="Select a resource",
+        label=_("Select a resource"),
         help_text=_(
             "Select a resource from the list below to associate with this block."
         ),
-        widget=ResourceSelectorWidget(),
+        widget=ResourceSelectorWidget(type_filter=None),
     )
 
     def __init__(self, *args, block: Block = None, type_filter: str = None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.type_filter = type_filter
         self.block = block
+
+        if type_filter:
+            type_filter_name = ResourceType[type_filter].value
+            select_msg = _("Select a {type} resource").format(type=type_filter_name)
+        else:
+            select_msg = _("Select a resource")
+
+        self.fields["resource"].label = select_msg
+        # Update the existing widget's type_filter
+        self.fields["resource"].widget.type_filter = type_filter
 
         # Filter the queryset based on type if specified
         queryset = Resource.objects.all()

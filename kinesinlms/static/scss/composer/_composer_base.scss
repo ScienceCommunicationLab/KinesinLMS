@@ -306,8 +306,7 @@ $composer-main-background: #f9f9f9;
       }
 
       .composer-nav-dropdown {
-        a {
-        }
+        a {}
       }
 
       .list-group {
@@ -798,12 +797,11 @@ $composer-main-background: #f9f9f9;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-
-    .action-button {
-      min-width: 120px;
-    }
   }
 
+  .action-button {
+    min-width: 120px;
+  }
 
   // simple, standardized layout for delete form
   // when show on own page.

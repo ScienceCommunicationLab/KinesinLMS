@@ -352,10 +352,8 @@ def select_block_resource_from_library_hx(request, course_id: int, pk: int):
                 resource = form.save()
                 logger.debug(f"Associated Resource {resource} with Block {block}")
                 response = HttpResponse(status=204)
-                event_name = (
-                    '{{"block{}ResourceAdded": "Block resource added."}}'.format(
-                        block.id
-                    )
+                event_name = '{{"block{}JupyterNotebookResourceAdded": "Block resource added."}}'.format(
+                    block.id
                 )
                 response.headers["HX-Trigger"] = event_name
                 return response
@@ -383,6 +381,27 @@ def select_block_resource_from_library_hx(request, course_id: int, pk: int):
 
 
 @composer_author_required
+def jupyter_notebook_details_hx(request, course_id: int, block_id: int):
+    block = get_object_or_404(Block, id=block_id)
+    course = get_object_or_404(Course, id=course_id)
+    resource = block.resources.filter(type=ResourceType.JUPYTER_NOTEBOOK.name).first()
+    block_resource = BlockResource.objects.get(block=block, resource=resource)
+    context = {
+        "course": course,
+        "course_id": course_id,
+        "block": block,
+        "block_resource": block_resource,
+        "resource": resource,
+    }
+
+    return render(
+        request,
+        "composer/blocks/jupyter/jupyter_selector.html",
+        context,
+    )
+
+
+@composer_author_required
 def add_jupyter_notebook_block_resource_hx(request, course_id: int, pk: int):
     block = get_object_or_404(Block, id=pk)
     course = get_object_or_404(Course, id=course_id)
@@ -392,7 +411,7 @@ def add_jupyter_notebook_block_resource_hx(request, course_id: int, pk: int):
             resource = form.save()
             logger.debug(f"Created Resource {resource}")
             response = HttpResponse(status=204)
-            event_name = '{{"block{}ResourceAdded": "Jupyter notebook block resource added."}}'.format(
+            event_name = '{{"block{}JupyterNotebookResourceAdded": "Jupyter notebook block resource added."}}'.format(
                 block.id
             )
             response.headers["HX-Trigger"] = event_name
@@ -465,7 +484,8 @@ def delete_block_resource_hx(request, course_id: int, block_id: int, pk: int):
     block_resource.delete()
     logger.info(f"BlockResource {block_resource} deleted")
     block = get_object_or_404(Block, id=block_id)
-    if resource.block_resources.count() == 0:
+    auto_delete = request.GET.get("parent", "").upper() == "AUTO_DELETE"
+    if auto_delete and resource.block_resources.count() == 0:
         resource.delete()
         logger.info(
             f"Deleted Resource {resource} as there are "

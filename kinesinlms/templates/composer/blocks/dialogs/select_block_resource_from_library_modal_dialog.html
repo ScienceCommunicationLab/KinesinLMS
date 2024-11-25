@@ -3,7 +3,7 @@
 
 <form class="modal-content"
       style="min-height: 70vh"
-      hx-post="{{ request.path }}"
+      hx-post="{{ request.path }}{% if form.type_filter %}?type_filter={{ form.type_filter }}{% endif %}"
       hx-target="#block-resources-modal-dialog"
       hx-swap="innerHTML"
       hx-encoding="multipart/form-data">
@@ -19,10 +19,10 @@
     </div>
 
     <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+        <button class="btn btn-secondary action-button" type="button" data-bs-dismiss="modal">
             {% trans "Cancel" %}
         </button>
-        <button class="btn btn-primary" type="submit">
+        <button class="btn btn-primary action-button" type="submit">
             {% trans "Save" %}
         </button>
     </div>

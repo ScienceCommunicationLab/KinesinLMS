@@ -4,6 +4,11 @@
         {% for resource in resources %}
             <div class="list-group-item">
                 <div class="form-check">
+                    {% if not type_filter %}
+                        <div>
+                            {{ resource.type }}
+                        </div>
+                    {% endif %}
                     <input type="radio"
                            name="{{ widget.name }}"
                            value="{{ resource.pk }}"
@@ -12,17 +17,18 @@
                            {% if widget.value == resource.pk %}checked{% endif %}
                            required />
                     <label class="form-check-label w-100 d-flex flex-row"
+                           style="min-height:4rem"
                            for="resource_{{ resource.pk }}">
                         <div class="d-flex flex-column w-100">
-                            <h6 class="mb-1">
+                            <h6 class="mb-1" style="margin-top:0.15rem;">
                                 {{ resource.name|default:"( no name )" }}
                             </h6>
                             {% if resource.description %}
                                 <small class="text-muted d-block">{{ resource.description }}</small>
                             {% endif %}
                         </div>
-                        <div>
-                            {{ resource.type }}
+                        <div class="text-muted" style="font-size:0.8rem;">
+                            {{ resource.file_name }}
                         </div>
                     </label>
                 </div>

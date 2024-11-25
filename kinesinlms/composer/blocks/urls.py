@@ -72,6 +72,11 @@ urlpatterns = [
         name="add_block_resource_hx",
     ),
     path(
+        "<int:block_id>/block_resource/jupyter_notebook/",
+        views.jupyter_notebook_details_hx,
+        name="jupyter_notebook_details_hx",
+    ),
+    path(
         "<int:pk>/block_resource/jupyter_notebook/add",
         views.add_jupyter_notebook_block_resource_hx,
         name="add_jupyter_notebook_block_resource_hx",
