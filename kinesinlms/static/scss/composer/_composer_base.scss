@@ -803,6 +803,10 @@ $composer-main-background: #f9f9f9;
     min-width: 120px;
   }
 
+  .border-success-subtle {
+    border-color: rgba(var(--bs-success-rgb), 0.7) !important;
+  }
+
   // simple, standardized layout for delete form
   // when show on own page.
   .delete-confirm-wrapper {

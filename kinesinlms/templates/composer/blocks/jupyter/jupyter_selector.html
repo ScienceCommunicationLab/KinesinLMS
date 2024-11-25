@@ -11,7 +11,7 @@
         Jupyter Notebook
     </label>
     <div id="jupyter_notebook_selector"
-         class="jupyter-notebook-wrapper alert alert-light mb-0">
+         class="jupyter-notebook-wrapper alert alert-light mb-0 {% if resource %}border-success-subtle{% endif %}">
         <div class="d-flex flex-row align-items-center">
             <div class="juypter-icon me-3">
                 <img src="{% static 'images/icons/jupyter_document_icon.svg' %}"
