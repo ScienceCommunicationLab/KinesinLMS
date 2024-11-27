@@ -18,9 +18,8 @@ from kinesinlms.composer.import_export.common_cartridge.factory import (
 from kinesinlms.composer.import_export.common_cartridge.resource import CCResource
 from kinesinlms.composer.import_export.exporter import BaseExporter
 from kinesinlms.core.utils import get_current_site_profile
-from kinesinlms.course.models import Course, CourseNode
-from kinesinlms.learning_library.constants import BlockType
-from kinesinlms.learning_library.models import Block, BlockResource, UnitBlock
+from kinesinlms.course.models import Course
+from kinesinlms.learning_library.models import Block
 
 logger = logging.getLogger(__name__)
 

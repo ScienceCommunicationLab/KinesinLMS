@@ -213,7 +213,7 @@ class CCResource(ABC):
 
 class HTMLContentCCResource(CCResource):
     def __init__(self):
-        super().__init__(BlockType.HTML_CONTENT.name)
+        super().__init__(block_type=BlockType.HTML_CONTENT.name)
 
     def get_resource_type(self) -> str:
         return "webcontent"
@@ -261,7 +261,7 @@ class HTMLContentCCResource(CCResource):
 
 class VideoCCResource(CCResource):
     def __init__(self):
-        super().__init__(BlockType.VIDEO.name)
+        super().__init__(block_type=BlockType.VIDEO.name)
 
     def get_resource_type(self) -> str:
         return "imswl_xmlv1p3"
@@ -310,7 +310,7 @@ class VideoCCResource(CCResource):
 
 class AssessmentCCResource(CCResource):
     def __init__(self):
-        super().__init__(BlockType.ASSESSMENT.name)
+        super().__init__(block_type=BlockType.ASSESSMENT.name)
 
     def get_resource_type(self) -> str:
         return "imsqti_xmlv1p2"
@@ -330,4 +330,4 @@ class AssessmentCCResource(CCResource):
 
 class ForumTopicCCResource(CCResource):
     def __init__(self):
-        super().__init__(BlockType.FORUM_TOPIC.name)
+        super().__init__(block_type=BlockType.FORUM_TOPIC.name)

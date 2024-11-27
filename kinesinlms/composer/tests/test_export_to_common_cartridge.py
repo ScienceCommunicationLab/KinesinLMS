@@ -9,8 +9,13 @@ from django.test import TestCase
 from django.urls import reverse
 from lxml import etree
 
-from kinesinlms.composer.import_export.constants import NAMESPACES, SCHEMA_LOCATIONS
-from kinesinlms.composer.import_export.exporter import CommonCartridgeExporter
+from kinesinlms.composer.import_export.common_cartridge.constants import (
+    NAMESPACES,
+    SCHEMA_LOCATIONS,
+)
+from kinesinlms.composer.import_export.common_cartridge.exporter import (
+    CommonCartridgeExporter,
+)
 from kinesinlms.core.utils import get_current_site_profile
 from kinesinlms.course.models import Course
 from kinesinlms.course.tests.factories import CourseFactory
@@ -51,7 +56,8 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # TEMP: for visual inspection of export
-        # unzip bytes in response.content and write to file so that I can review export quickly
+        # unzip bytes in response.content and write to file so that I can 
+        # review export quickly
         zip_content = io.BytesIO(response.content)
         export_dir = settings.BASE_DIR / "tmp" / "course_export"
         if export_dir.exists():
