@@ -1,24 +1,24 @@
 import json
 import logging
+import os
 import zipfile
 from dataclasses import dataclass
-from typing import Dict, Optional, List
+from typing import Dict, List, Optional
 
-import os
 from django.core.files.base import ContentFile
 from django.db import transaction
 from rest_framework.exceptions import ValidationError
 
-from kinesinlms.composer.import_export.constants import (
-    CourseExportFormatID,
+from kinesinlms.composer.import_export.kinesinlms.constants import (
     VALID_COURSE_EXPORT_FORMAT_IDS,
+    KinesinLMSCourseExportFormatID,
 )
 from kinesinlms.composer.models import CourseMetaConfig
 from kinesinlms.course.constants import NodeType
 from kinesinlms.course.models import Course, CourseNode, CourseResource
 from kinesinlms.course.serializers import (
-    CourseSerializer,
     CourseNodeSerializer,
+    CourseSerializer,
     CourseUnitSerializer,
     SCLCourseSerializer,
 )
@@ -134,10 +134,10 @@ class CourseImporter:
         # including version info.
         if (
             document_type is None
-            or document_type == CourseExportFormatID.KINESIN_LMS_FORMAT.value
+            or document_type == KinesinLMSCourseExportFormatID.KINESIN_LMS_FORMAT.value
         ):
             course_serializer = CourseSerializer(data=course_json)
-        elif document_type == CourseExportFormatID.SCL_FORMAT.value:
+        elif document_type == KinesinLMSCourseExportFormatID.SCL_FORMAT.value:
             course_serializer = SCLCourseSerializer(data=course_json)
         else:
             raise Exception(f"Invalid document type: {document_type}")
@@ -341,7 +341,9 @@ class CourseImporter:
                             raise Exception(
                                 f"Invalid course thumbnail file extension: {extension}. Valid extensions: {valid_extensions}"
                             )
-                        course.catalog_description.thumbnail.save(filename, content_file)
+                        course.catalog_description.thumbnail.save(
+                            filename, content_file
+                        )
                         logger.info(f" - saved course thumbnail {filename}")
                     elif filename_parts[1] == "syllabus":
                         syllabus_content = zp.read(file_path)
@@ -383,7 +385,7 @@ class CourseImporter:
         self,
         course_node_json: Dict,
         course: Course,
-        node_index: int,    # noqa: F841
+        node_index: int,  # noqa: F841
         level: int,
         parent_node: CourseNode = None,
         content_index: Optional[int] = None,

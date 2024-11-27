@@ -20,6 +20,7 @@
     "days_early_for_beta": 100,
     "enable_certificates": true,
     "token": "TEST_SP",
+    "tags": ["tag1", "tag2", "tag3"],
     "custom_apps": [],
     "catalog_description": {
       "title": "Some Course",
@@ -35,10 +36,7 @@
       "effort": "300 hours/week",
       "duration": "5 weeks",
       "audience": "Test audience",
-      "features": [
-        "some feature",
-        "another feature"
-      ],
+      "features": ["some feature", "another feature"],
       "order": 2
     },
     "course_root_node": {

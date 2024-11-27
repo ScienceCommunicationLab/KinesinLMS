@@ -37,19 +37,25 @@ from kinesinlms.composer.forms.course import (
     ImportCourseFromArchiveForm,
 )
 from kinesinlms.composer.forms.settings import ComposerSettingsForm
-from kinesinlms.composer.import_export.constants import (
-    VALID_COURSE_EXPORT_FORMAT_IDS,
+from kinesinlms.composer.import_export.common_cartridge.constants import (
     CommonCartridgeExportFormat,
+)
+from kinesinlms.composer.import_export.common_cartridge.exporter import (
+    CommonCartridgeExporter,
+)
+from kinesinlms.composer.import_export.constants import (
     CourseExportFormat,
 )
-from kinesinlms.composer.import_export.exporter import (
-    BaseExporter,
-    CommonCartridgeExporter,
-    CourseExporter,
-)
+from kinesinlms.composer.import_export.exporter import BaseExporter
 from kinesinlms.composer.import_export.importer import (
     CourseImporter,
     CourseImportOptions,
+)
+from kinesinlms.composer.import_export.kinesinlms.constants import (
+    VALID_COURSE_EXPORT_FORMAT_IDS,
+)
+from kinesinlms.composer.import_export.kinesinlms.exporter import (
+    KinesinLMSCourseExporter,
 )
 from kinesinlms.composer.models import ComposerSettings
 from kinesinlms.composer.view_helpers import get_course_edit_tabs
@@ -630,7 +636,7 @@ def course_download_export(request, course_slug=None, course_run=None):
         course_exporter: BaseExporter = CommonCartridgeExporter()
         export_filename = "{}_{}_export.imscc".format(course_slug, course_run)
     else:
-        course_exporter: BaseExporter = CourseExporter()
+        course_exporter: BaseExporter = KinesinLMSCourseExporter()
         export_filename = "{}_{}_export.zip".format(course_slug, course_run)
 
     try:

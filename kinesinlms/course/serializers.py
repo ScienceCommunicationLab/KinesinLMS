@@ -9,6 +9,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
+from taggit.serializers import TaggitSerializer, TagListSerializerField
 
 from kinesinlms.badges.models import BadgeClass
 from kinesinlms.badges.serializers import BadgeClassSerializer
@@ -20,7 +21,9 @@ from kinesinlms.certificates.serializers import (
     SignatorySerializer,
 )
 from kinesinlms.certificates.service import CertificateTemplateFactory
-from kinesinlms.composer.import_export.constants import ImportCopyType
+from kinesinlms.composer.import_export.kinesinlms.constants import (
+    ImportCopyType,
+)
 from kinesinlms.composer.models import CourseMetaConfig
 from kinesinlms.core.serializers.serializer_fields import SanitizedHTMLField
 from kinesinlms.course.constants import CourseUnitType
@@ -637,7 +640,7 @@ class CohortSerializer(serializers.ModelSerializer):
         fields = ("institution",)
 
 
-class CourseSerializer(serializers.ModelSerializer):
+class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
     """
     A *full* serializer for Courses, with serializers for all related child elements.
     This serializer is for things like import and export.
@@ -689,6 +692,8 @@ class CourseSerializer(serializers.ModelSerializer):
     course_home_content = SanitizedHTMLField(
         required=False, allow_null=True, allow_blank=True
     )
+
+    tags = TagListSerializerField()
 
     class Meta:
         model = Course
