@@ -295,11 +295,11 @@ class CommonCartridgeExporter(BaseExporter):
         metadata_el: etree.Element = self._create_metadata_xml(course=course)
         manifest_el.append(metadata_el)
 
-        resources_el: etree.Element = self._create_resources(course=course)
-        manifest_el.append(resources_el)
-
         organizations_el: etree.Element = self._create_organizations_xml(course=course)
         manifest_el.append(organizations_el)
+
+        resources_el: etree.Element = self._create_resources(course=course)
+        manifest_el.append(resources_el)
 
         return manifest_el
 
@@ -486,7 +486,10 @@ class CommonCartridgeExporter(BaseExporter):
         return True
 
     def _create_block_resource_file(
-        self, module_node: CourseNode, unit_block: UnitBlock, zip_file: ZipFile
+        self,
+        module_node: CourseNode,
+        unit_block: UnitBlock,
+        zip_file: ZipFile,
     ) -> bool:
         """
         Create the required resource file for the given block
@@ -755,10 +758,13 @@ class CommonCartridgeExporter(BaseExporter):
 
         """
 
-        organizations_el = etree.Element("organizations")
+        organizations_el = etree.Element("organizations", attrib={"default": "org_1"})
         organization_el = etree.Element(
             "organization",
-            attrib={"identifier": "org_1", "structure": "rooted-hierarchy"},
+            attrib={
+                "identifier": "org_1",
+                "structure": "rooted-hierarchy",
+            },
         )
         organizations_el.append(organization_el)
         item_el = self._create_organization_items(course=course)
@@ -769,74 +775,90 @@ class CommonCartridgeExporter(BaseExporter):
     def _create_organization_items(self, course: Course) -> etree.Element:
         """
         Create the nested <item/> elements for the current course.
-
-        Note that KinesinLMS supports a three-tier structure:
-        Modules, Sections, and Units. However, Canvas only
-        has modules to group individual items. So we will
-        flatten the structure to have only modules and
-        within that, an <item> for each block in each unit
-        in each section of the module.
+        Implements a three-tier structure:
+        - Modules: Top level organization units
+        - Sections: Groups of related units within a module
+        - Units: Individual learning units containing blocks
 
         Returns:
             The root <item/> element for the course content.
-
         """
+        # Create root item (required by spec to have single root)
+        root_item_el = etree.Element(
+            "item",
+            attrib={
+                "identifier": "course_root",
+                "isvisible": "true",
+            },
+        )
+        root_title = etree.Element("title")
+        root_title.text = course.display_name or "Course Content"
+        root_item_el.append(root_title)
 
-        # According to the spec, an organization must have only one
-        # <item> element as a child. This is the root of the hierarchy.
-        rool_item_el: etree.Element = etree.Element("item")
-        rool_item_el.attrib["identifier"] = "LearningModules"
-
+        # Create Module level
         for m_idx, module_node in enumerate(course.course_root_node.get_children()):
-            module_id_ref = f"module_{m_idx}"
-            module_el: etree.Element = etree.Element(
-                "item", attrib={"identifier": module_id_ref}
+            module_el = etree.Element(
+                "item",
+                attrib={
+                    "identifier": f"module_{module_node.id}",
+                    "isvisible": "true",
+                },
             )
-            module_title_el: etree.Element = etree.Element("title")
-            if module_node.display_name:
-                module_title_el.text = module_node.display_name
-            else:
-                module_title_el.text = "Module {m_idx}"
-            module_el.append(module_title_el)
+            module_title = etree.Element("title")
+            module_title.text = module_node.display_name or f"Module {m_idx + 1}"
+            module_el.append(module_title)
+            root_item_el.append(module_el)
 
-            rool_item_el.append(module_el)
-
+            # Create Section level within each Module
             for s_idx, section_node in enumerate(module_node.get_children()):
-                section_id_ref = f"section_{m_idx}_{s_idx}"
-                section_el: etree.Element = etree.Element(
-                    "item", attrib={"identifier": section_id_ref}
+                section_el = etree.Element(
+                    "item",
+                    attrib={
+                        "identifier": f"section_{section_node.id}",
+                        "isvisible": "true",
+                    },
                 )
-                section_title_el: etree.Element = etree.Element("title")
-                if section_node.display_name:
-                    section_title_el.text = section_node.display_name
-                else:
-                    section_title_el.text = f"Section {m_idx}"
-                section_el.append(section_title_el)
-
+                section_title = etree.Element("title")
+                section_title.text = section_node.display_name or f"Section {s_idx + 1}"
+                section_el.append(section_title)
                 module_el.append(section_el)
 
+                # Create Unit level within each Section
                 for u_idx, unit_node in enumerate(section_node.get_children()):
-                    unit_title = unit_node.display_name or f"Unit {u_idx}"
+                    unit_el = etree.Element(
+                        "item",
+                        attrib={
+                            "identifier": f"unit_{unit_node.id}",
+                            "isvisible": "true",
+                        },
+                    )
+                    unit_title = etree.Element("title")
+                    unit_title.text = unit_node.display_name or f"Unit {u_idx + 1}"
+                    unit_el.append(unit_title)
+                    section_el.append(unit_el)
 
-                    for unit_block in unit_node.unit.unit_blocks.all():
+                    # Add blocks within each Unit
+                    for block_idx, unit_block in enumerate(
+                        unit_node.unit.unit_blocks.all()
+                    ):
                         block = unit_block.block
-
-                        block_id_ref = f"block_{block.uuid}"
                         block_el = etree.Element(
                             "item",
                             attrib={
-                                "identifier": block_id_ref,
+                                "identifier": f"block_{block.uuid}",
                                 "identifierref": str(block.uuid),
+                                "isvisible": "true",
                             },
                         )
-                        section_el.append(block_el)
+                        block_title = etree.Element("title")
+                        block_title.text = (
+                            block.display_name
+                            or f"{block.type} block uuid {block.uuid}"
+                        )
+                        block_el.append(block_title)
+                        unit_el.append(block_el)
 
-                        block_title = block.display_name or block.type
-                        title_el: etree.Element = etree.Element("title")
-                        title_el.text = f"{unit_title} : {block_title}"
-                        block_el.append(title_el)
-
-        return rool_item_el
+        return root_item_el
 
     def _create_resources(self, course) -> etree.Element:
         """

@@ -225,3 +225,97 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
             pretty_print=True,
         )
         logger.info("\nGenerated XML:\n%s", xml_str)
+
+    def test_create_organizations_xml(self):
+        """
+        Test that we can create organization items that reflect our three-tier
+        course structure (Module -> Section -> Unit -> Block).
+        """
+        exporter = CommonCartridgeExporter()
+        organizations_el = exporter._create_organizations_xml(self.course)
+
+        # Check it's an lxml Element
+        self.assertIsInstance(organizations_el, etree._Element)
+
+        # Check organizations element
+        self.assertEqual(organizations_el.tag, "organizations")
+        self.assertEqual(organizations_el.get("default"), "org_1")
+
+        # Check organization element
+        organization_el = organizations_el.find("organization")
+        self.assertIsNotNone(organization_el)
+        self.assertEqual(organization_el.get("identifier"), "org_1")
+        self.assertEqual(organization_el.get("structure"), "rooted-hierarchy")
+
+        # Get the root item element
+        items_el = organization_el.find("item")
+        self.assertIsNotNone(items_el)
+        self.assertEqual(items_el.get("identifier"), "course_root")
+        self.assertEqual(items_el.get("isvisible"), "true")
+
+        # Check course root title
+        root_title = items_el.find("title")
+        self.assertIsNotNone(root_title)
+        self.assertEqual(root_title.text, self.course.display_name or "Course Content")
+
+        # Check course root title
+        root_title = items_el.find("title")
+        self.assertIsNotNone(root_title)
+        self.assertEqual(root_title.text, self.course.display_name or "Course Content")
+
+        # Check module level exists
+        for module_node in self.course.course_root_node.get_children():
+            module_el = items_el.find(f"item[@identifier='module_{module_node.id}']")
+            self.assertIsNotNone(module_el)
+            self.assertEqual(module_el.get("isvisible"), "true")
+            self.assertEqual(
+                module_el.find("title").text,
+                module_node.display_name or f"Module {module_node.order + 1}",
+            )
+
+            # Check section level exists within module
+            for section_node in module_node.get_children():
+                section_el = module_el.find(
+                    f"item[@identifier='section_{section_node.id}']"
+                )
+                self.assertIsNotNone(section_el)
+                self.assertEqual(section_el.get("isvisible"), "true")
+                self.assertEqual(
+                    section_el.find("title").text,
+                    section_node.display_name or f"Section {section_node.order + 1}",
+                )
+
+                # Check unit level exists within section
+                for unit_node in section_node.get_children():
+                    unit_el = section_el.find(
+                        f"item[@identifier='unit_{unit_node.id}']"
+                    )
+                    self.assertIsNotNone(unit_el)
+                    self.assertEqual(unit_el.get("isvisible"), "true")
+                    self.assertEqual(
+                        unit_el.find("title").text,
+                        unit_node.display_name or f"Unit {unit_node.order + 1}",
+                    )
+
+                    # Check blocks exist within unit
+                    for unit_block in unit_node.unit.unit_blocks.all():
+                        block = unit_block.block
+                        block_el = unit_el.find(
+                            f"item[@identifier='block_{block.uuid}']"
+                        )
+                        self.assertIsNotNone(block_el)
+                        self.assertEqual(block_el.get("isvisible"), "true")
+                        self.assertEqual(block_el.get("identifierref"), str(block.uuid))
+                        self.assertEqual(
+                            block_el.find("title").text,
+                            block.display_name or block.type,
+                        )
+
+        # Print the XML for visual inspection
+        logger.info("All good! Here's what the organization items look like:")
+        xml_str = etree.tostring(
+            organizations_el,
+            encoding="unicode",
+            pretty_print=True,
+        )
+        logger.info("\nGenerated XML:\n%s", xml_str)
