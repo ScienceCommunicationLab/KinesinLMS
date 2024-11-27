@@ -1,14 +1,14 @@
+import logging
 import re
+import uuid
 from collections import OrderedDict
 from typing import Dict, List, Optional
-import uuid
 
 import pytz
 from django.utils import timezone
 from rest_framework import serializers
-from rest_framework.relations import SlugRelatedField
 from rest_framework.exceptions import ValidationError
-import logging
+from rest_framework.relations import SlugRelatedField
 
 from kinesinlms.badges.models import BadgeClass
 from kinesinlms.badges.serializers import BadgeClassSerializer
@@ -16,8 +16,8 @@ from kinesinlms.catalog.models import CourseCatalogDescription
 from kinesinlms.catalog.serializers import CourseCatalogDescriptionSerializer
 from kinesinlms.certificates.models import Signatory
 from kinesinlms.certificates.serializers import (
-    SignatorySerializer,
     CertificateTemplateSerializer,
+    SignatorySerializer,
 )
 from kinesinlms.certificates.service import CertificateTemplateFactory
 from kinesinlms.composer.import_export.constants import ImportCopyType
@@ -699,6 +699,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "short_name",
             "start_date",
             "end_date",
+            "tags",
             "advertised_start_date",
             "enrollment_start_date",
             "enrollment_end_date",

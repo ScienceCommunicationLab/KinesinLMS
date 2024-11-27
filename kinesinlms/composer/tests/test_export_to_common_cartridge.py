@@ -11,6 +11,8 @@ from lxml import etree
 
 from kinesinlms.composer.import_export.constants import NAMESPACES, SCHEMA_LOCATIONS
 from kinesinlms.composer.import_export.exporter import CommonCartridgeExporter
+from kinesinlms.core.utils import get_current_site_profile
+from kinesinlms.course.models import Course
 from kinesinlms.course.tests.factories import CourseFactory
 
 logger = logging.getLogger(__name__)
@@ -24,9 +26,13 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
     """
 
     def setUp(self):
-        course = CourseFactory()
+        course: Course = CourseFactory()
         self.course_base_url = course.course_url
         self.course = course
+
+        site_profile = get_current_site_profile()
+        site_profile.institution_name = "Test Institution"
+        site_profile.save()
 
         User = get_user_model()
         self.admin_user = User.objects.create(
@@ -108,3 +114,114 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
             pretty_print=True,
         )
         logger.info("\nGenerated XML:\n%s", xml_str)  # Using %s formatting for logger
+
+    def test_create_metadata_xml(self):
+        """
+        Test that we can create the metadata element with all required sub-elements
+        for the Common Cartridge export.
+        """
+        exporter = CommonCartridgeExporter()
+        metadata = exporter._create_metadata_xml(self.course)
+
+        # Check it's an lxml Element
+        self.assertIsInstance(metadata, etree._Element)
+
+        # Check basic structure
+        self.assertEqual(metadata.tag, "metadata")
+
+        # Check schema element
+        schema = metadata.find("schema")
+        self.assertIsNotNone(schema)
+        self.assertEqual(schema.text, "IMS Common Cartridge")
+
+        # Check schema version
+        schema_version = metadata.find("schemaversion")
+        self.assertIsNotNone(schema_version)
+        self.assertEqual(schema_version.text, "1.3.0")
+
+        # Check LOM element and its children
+        lom = metadata.find("lomimscc:lom", namespaces=NAMESPACES)
+        self.assertIsNotNone(lom)
+
+        # Check general section
+        general = lom.find("lomimscc:general", namespaces=NAMESPACES)
+        self.assertIsNotNone(general)
+
+        # Check title
+        title = general.find("lomimscc:title/lomimscc:string", namespaces=NAMESPACES)
+        self.assertIsNotNone(title)
+        self.assertEqual(title.get("language"), settings.LANGUAGE_CODE)
+        self.assertEqual(title.text, self.course.display_name or "Untitled Course")
+
+        # Check description
+        description = general.find(
+            "lomimscc:description/lomimscc:string", namespaces=NAMESPACES
+        )
+        self.assertIsNotNone(description)
+        self.assertEqual(description.get("language"), settings.LANGUAGE_CODE)
+        self.assertEqual(description.text, self.course.overview)
+
+        # Check language
+        language = general.find("lomimscc:language", namespaces=NAMESPACES)
+        self.assertIsNotNone(language)
+        self.assertEqual(language.text, settings.LANGUAGE_CODE)
+
+        # Check keywords if course has tags
+        if self.course.tags.exists():
+            keyword = general.find(
+                "lomimscc:keyword/lomimscc:string", namespaces=NAMESPACES
+            )
+            self.assertIsNotNone(keyword)
+            self.assertEqual(keyword.get("language"), settings.LANGUAGE_CODE)
+            expected_keywords = ",".join([tag.name for tag in self.course.tags.all()])
+            self.assertEqual(keyword.text, expected_keywords)
+
+        # Check lifecycle section
+        lifecycle = lom.find("lomimscc:lifeCycle", namespaces=NAMESPACES)
+        self.assertIsNotNone(lifecycle)
+
+        # Check contribute section
+        contribute = lifecycle.find("lomimscc:contribute", namespaces=NAMESPACES)
+        self.assertIsNotNone(contribute)
+
+        # Check role
+        role = contribute.find("lomimscc:role/lomimscc:value", namespaces=NAMESPACES)
+        self.assertIsNotNone(role)
+        self.assertEqual(role.text, "Author")
+
+        # Check entity
+        entity = contribute.find("lomimscc:entity", namespaces=NAMESPACES)
+        self.assertIsNotNone(entity)
+        site_profile = get_current_site_profile()
+        expected_entity = site_profile.institution_name or site_profile.uuid
+        self.assertEqual(entity.text, expected_entity)
+
+        # Check date
+        date = contribute.find("lomimscc:date/lomimscc:dateTime", namespaces=NAMESPACES)
+        self.assertIsNotNone(date)
+        self.assertEqual(date.text, self.course.created_at.strftime("%Y-%m-%d"))
+
+        # Check technical metadata
+        technical = lom.find("lomimscc:technical", namespaces=NAMESPACES)
+        self.assertIsNotNone(technical)
+        format_el = technical.find("lomimscc:format", namespaces=NAMESPACES)
+        self.assertIsNotNone(format_el)
+        self.assertEqual(format_el.text, "text/html")
+
+        # Check educational metadata
+        educational = lom.find("lomimscc:educational", namespaces=NAMESPACES)
+        self.assertIsNotNone(educational)
+        resource_type = educational.find(
+            "lomimscc:learningResourceType/lomimscc:value", namespaces=NAMESPACES
+        )
+        self.assertIsNotNone(resource_type)
+        self.assertEqual(resource_type.text, "Course")
+
+        # Print the XML for visual inspection
+        logger.info("All good! Here's what the metadata looks like:")
+        xml_str = etree.tostring(
+            metadata,
+            encoding="unicode",
+            pretty_print=True,
+        )
+        logger.info("\nGenerated XML:\n%s", xml_str)

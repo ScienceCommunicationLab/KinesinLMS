@@ -664,6 +664,8 @@ class Course(Trackable):
         ),
     )
 
+    tags = TaggableManager(blank=True)
+
     display_name = models.CharField(
         max_length=400,
         null=True,
@@ -809,6 +811,16 @@ class Course(Trackable):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Model "property" methods
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    @property
+    def overview(self) -> str:
+        """
+        Get the description for this course.
+        """
+        if self.catalog_description:
+            return self.catalog_description.overview
+        return ""
+
     @property
     def course_group_name(self):
         """

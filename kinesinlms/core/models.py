@@ -1,6 +1,7 @@
+import uuid
+
 from django.contrib.sites.models import Site
 from django.db import models
-import uuid
 
 
 class Trackable(models.Model):
@@ -13,6 +14,12 @@ class Trackable(models.Model):
 
 class SiteProfile(models.Model):
     site = models.OneToOneField(Site, related_name="profile", on_delete=models.CASCADE)
+
+    institution_name = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text="The name of the institution or organization.",
+    )
 
     uuid = models.UUIDField(
         default=uuid.uuid4,

@@ -23,6 +23,7 @@ from kinesinlms.composer.import_export.constants import (
     CommonCartridgeExportFormat,
     CourseExportFormat,
 )
+from kinesinlms.core.utils import get_current_site_profile
 from kinesinlms.course.models import Course, CourseNode, CourseUnit
 from kinesinlms.course.serializers import CourseSerializer
 from kinesinlms.learning_library.constants import BlockType
@@ -270,6 +271,187 @@ class CommonCartridgeExporter(BaseExporter):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # PRIVATE METHODS
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def _setup_namespaces_and_prefixes(self):
+        # Register all namespace prefixes with etree
+        for prefix, uri in NAMESPACES.items():
+            if prefix:
+                register_namespace(prefix, uri)
+
+    def _create_ims_manifest_xml(self, course: Course) -> etree.Element:
+        """
+        Create the imsmanifest XML (element) for the Common Cartridge export.
+
+        Args:
+            course (Course): The course to export
+
+        Returns:
+            Element: The root <manifest/> element for the course, complete with nested
+            <metadata/>, <resources/>, and <organizations/> elements.
+
+        """
+        manifest_el: etree.Element = self._create_manifest_root_element(course=course)
+
+        metadata_el: etree.Element = self._create_metadata_xml(course=course)
+        manifest_el.append(metadata_el)
+
+        resources_el: etree.Element = self._create_resources(course=course)
+        manifest_el.append(resources_el)
+
+        organizations_el: etree.Element = self._create_organizations_xml(course=course)
+        manifest_el.append(organizations_el)
+
+        return manifest_el
+
+    def _create_manifest_root_element(self, course) -> etree.Element:
+        """
+        Create the root <manifest/> element for the Common Cartridge export.
+        We need to add a bunch of namespaces to the root element.
+
+        Returns:
+            The <manifest/> element for the course, complete with namespaces.
+
+        """
+
+        # Create manifest element with basic attributes
+        manifest_el = etree.Element(
+            "manifest",
+            attrib={
+                "identifier": course.token,
+                "version": "1.3.0",
+            },
+            nsmap=NAMESPACES,
+        )
+
+        # Add schema location after namespaces
+        # Note: The weird triple-brace syntax expands to something like
+        # "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"
+        # This format is how ElementTree represents namespaced attributes internally using
+        # {namespace-uri}localname
+        schema_locations = " ".join(SCHEMA_LOCATIONS)
+        manifest_el.set(
+            etree.QName(NAMESPACES["xsi"], "schemaLocation"), schema_locations
+        )
+        return manifest_el
+
+    def _create_metadata_xml(self, course: Course) -> etree.Element:
+        """
+        Create the metadata element for the Common Cartridge export.
+        Populate with metadata about the course.
+
+        Returns:
+            The <metadata/> element for the course, complete with nested
+            <lomimscc:lom> element.
+        """
+        metadata_el = etree.Element("metadata")
+
+        schema_el = etree.Element("schema")
+        schema_el.text = "IMS Common Cartridge"
+        metadata_el.append(schema_el)
+
+        schemaversion_el = etree.Element("schemaversion")
+        schemaversion_el.text = "1.3.0"
+        metadata_el.append(schemaversion_el)
+
+        lom_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "lom"))
+
+        general_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "general"))
+
+        # Add title
+        title_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "title"))
+        title_en_el = etree.Element(
+            etree.QName(NAMESPACES["lomimscc"], "string"),
+            attrib={"language": settings.LANGUAGE_CODE},
+        )
+        title_en_el.text = course.display_name or "Untitled Course"
+        title_el.append(title_en_el)
+        general_el.append(title_el)
+
+        # Add description. We'll use the course overview.
+        description_el = etree.Element(
+            etree.QName(NAMESPACES["lomimscc"], "description")
+        )
+        description_string_el = etree.Element(
+            etree.QName(NAMESPACES["lomimscc"], "string"),
+            attrib={"language": settings.LANGUAGE_CODE},
+        )
+        description_string_el.text = course.overview
+        description_el.append(description_string_el)
+        general_el.append(description_el)
+
+        # Add language
+        language_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "language"))
+        language_el.text = settings.LANGUAGE_CODE
+        general_el.append(language_el)
+
+        # Add keywords if available
+        if course.tags.exists():
+            keyword_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "keyword"))
+            keyword_string_el = etree.Element(
+                etree.QName(NAMESPACES["lomimscc"], "string"),
+                attrib={"language": settings.LANGUAGE_CODE},
+            )
+            keyword_string_el.text = ",".join([tag.name for tag in course.tags.all()])
+            keyword_el.append(keyword_string_el)
+            general_el.append(keyword_el)
+
+        lom_el.append(general_el)
+
+        lifecycle_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "lifeCycle"))
+        contribute_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "contribute"))
+
+        # Add role
+        role_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "role"))
+        source_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "source"))
+        source_el.text = "LOMv1.0"
+        role_el.append(source_el)
+        value_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "value"))
+        value_el.text = "Author"
+        role_el.append(value_el)
+        contribute_el.append(role_el)
+
+        # Add entity (creator info)
+        site_profile = get_current_site_profile()
+        entity_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "entity"))
+        if site_profile.institution_name:
+            entity_el.text = site_profile.institution_name
+        else:
+            entity_el.text = str(site_profile.uuid)
+        contribute_el.append(entity_el)
+
+        # Technical metadata
+        technical_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "technical"))
+        format_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "format"))
+        format_el.text = "text/html"
+        technical_el.append(format_el)
+        lom_el.append(technical_el)
+
+        # Educational metadata
+        educational_el = etree.Element(
+            etree.QName(NAMESPACES["lomimscc"], "educational")
+        )
+        learning_resource_type_el = etree.Element(
+            etree.QName(NAMESPACES["lomimscc"], "learningResourceType")
+        )
+        value_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "value"))
+        value_el.text = "Course"
+        learning_resource_type_el.append(value_el)
+        educational_el.append(learning_resource_type_el)
+        lom_el.append(educational_el)
+
+        date_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "date"))
+        dateTime_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "dateTime"))
+        dateTime_el.text = course.created_at.strftime("%Y-%m-%d")
+        date_el.append(dateTime_el)
+        contribute_el.append(date_el)
+        lifecycle_el.append(contribute_el)
+        lom_el.append(lifecycle_el)
+        rights_el = self._get_rights_el(course=course)
+        lom_el.append(rights_el)
+
+        metadata_el.append(lom_el)
+
+        return metadata_el
 
     def _create_resource_files(
         self,
@@ -525,143 +707,37 @@ class CommonCartridgeExporter(BaseExporter):
 
         return html_content
 
-    def _setup_namespaces_and_prefixes(self):
-        # Register all namespace prefixes with etree
-        for prefix, uri in NAMESPACES.items():
-            if prefix:
-                register_namespace(prefix, uri)
-
-    def _create_ims_manifest_xml(self, course: Course) -> etree.Element:
-        """
-        Create the imsmanifest XML (element) for the Common Cartridge export.
-
-        Args:
-            course (Course): The course to export
-
-        Returns:
-            Element: The root <manifest/> element for the course, complete with nested
-            <metadata/>, <resources/>, and <organizations/> elements.
-
-        """
-        manifest_el: etree.Element = self._create_manifest_root_element(course=course)
-
-        metadata_el: etree.Element = self._create_metadata_xml(course=course)
-        manifest_el.append(metadata_el)
-
-        resources_el: etree.Element = self._create_resources(course=course)
-        manifest_el.append(resources_el)
-
-        organizations_el: etree.Element = self._create_organizations_xml(course=course)
-        manifest_el.append(organizations_el)
-
-        return manifest_el
-
-    def _create_manifest_root_element(self, course) -> etree.Element:
-        """
-        Create the root <manifest/> element for the Common Cartridge export.
-        We need to add a bunch of namespaces to the root element.
-
-        Returns:
-            The <manifest/> element for the course, complete with namespaces.
-
-        """
-
-        # Create manifest element with basic attributes
-        manifest_el = etree.Element(
-            "manifest",
-            attrib={
-                "identifier": course.token,
-                "version": "1.3.0",
-            },
-            nsmap=NAMESPACES,
-        )
-
-        # Add schema location after namespaces
-        # Note: The weird triple-brace syntax expands to something like
-        # "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"
-        # This format is how ElementTree represents namespaced attributes internally using
-        # {namespace-uri}localname
-        schema_locations = " ".join(SCHEMA_LOCATIONS)
-        manifest_el.set(
-            etree.QName(NAMESPACES["xsi"], "schemaLocation"), schema_locations
-        )
-        return manifest_el
-
-    def _create_metadata_xml(self, course: Course) -> etree.Element:
-        """
-        Create the metadata element for the Common Cartridge export.
-        Populate with metadata about the course.
-
-        Returns:
-            The <metadata/> element for the course, complete with nested
-            <lomimscc:lom> element.
-        """
-
-        metadata_el = etree.Element("metadata")
-
-        schema_el = etree.Element("schema")
-        schema_el.text = "IMS Common Cartridge"
-        metadata_el.append(schema_el)
-
-        schemaversion_el = etree.Element("schemaversion")
-        schemaversion_el.text = "1.3.0"
-        metadata_el.append(schemaversion_el)
-
-        lom_el = etree.Element("lomimscc:lom")
-
-        general_el = etree.Element("lomimscc:general")
-        title_el = etree.Element("lomimscc:title")
-        title_en_el = etree.Element(
-            "lomimscc:string", attrib={"language": settings.LANGUAGE_CODE}
-        )
-        title_en_el.text = course.display_name
-        title_el.append(title_en_el)
-
-        general_el.append(title_el)
-        lom_el.append(general_el)
-
-        lifecycle_el = etree.Element("lomimscc:lifeCycle")
-        contribute_el = etree.Element("lomimscc:contribute")
-        date_el = etree.Element("lomimscc:date")
-        dateTime_el = etree.Element("lomimscc:dateTime")
-        dateTime_el.text = course.created_at.strftime("%Y-%m-%d")
-        date_el.append(dateTime_el)
-        contribute_el.append(date_el)
-        lifecycle_el.append(contribute_el)
-        lom_el.append(lifecycle_el)
-        rights_el = self._get_rights_el(course=course)
-        lom_el.append(rights_el)
-
-        metadata_el.append(lom_el)
-
-        return metadata_el
-
     def _get_rights_el(self, course) -> etree.Element:
         """
         Create the <rights/> element for the Common Cartridge export.
 
         Returns:
             The <lomimscc:rights/> element for the course, complete with nested
-            <lomimscc:copyrightAndOtherRestrictions/>
-            and <lomimscc:description/> elements.
+            <lomimscc:copyrightAndOtherRestrictions/> and <lomimscc:description/> elements.
         """
+        rights_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "rights"))
 
-        rights_el = etree.Element("lomimscc:rights")
         copyrightAndOtherRestrictions_el = etree.Element(
-            "lomimscc:copyrightAndOtherRestrictions"
+            etree.QName(NAMESPACES["lomimscc"], "copyrightAndOtherRestrictions")
         )
-        value_el = etree.Element("lomimscc:value")
+        value_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "value"))
         value_el.text = "yes"
         copyrightAndOtherRestrictions_el.append(value_el)
         rights_el.append(copyrightAndOtherRestrictions_el)
 
-        if course.content_license:
-            description_el = etree.Element("lomimscc:description")
-            description_str = f"{course.content_license} - https://creativecommons.org/licenses/by-nc-nd/4.0/"
-            description_text = etree.Element("lomimscc:string")
-            description_text.text = description_str
-            description_el.append(description_text)
-            rights_el.append(description_el)
+        license_text = course.content_license
+        if not license_text:
+            license_text = "( no license defined )"
+
+        description_el = etree.Element(
+            etree.QName(NAMESPACES["lomimscc"], "description")
+        )
+        description_text_el = etree.Element(
+            etree.QName(NAMESPACES["lomimscc"], "string")
+        )
+        description_text_el.text = license_text
+        description_el.append(description_text_el)
+        rights_el.append(description_el)
 
         return rights_el
 
