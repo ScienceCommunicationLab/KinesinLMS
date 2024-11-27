@@ -56,8 +56,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # TEMP: for visual inspection of export
-        # unzip bytes in response.content and write to file so that I can 
-        # review export quickly
+        # unzip bytes in response.content and write to file so that I can review export quickly
         zip_content = io.BytesIO(response.content)
         export_dir = settings.BASE_DIR / "tmp" / "course_export"
         if export_dir.exists():
@@ -70,12 +69,12 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
     # Test individual methods of CommonCartridgeExporter
     # ..........................................................
 
-    def test_create_manifest_root_element(self):
+    def test_create_manifest_root_el(self):
         """
         Test that we can create the root element of the manifest file.
         """
         exporter = CommonCartridgeExporter()
-        manifest = exporter._create_manifest_root_element(self.course)
+        manifest = exporter._create_manifest_root_el(self.course)
 
         # Check it's an lxml Element
         self.assertIsInstance(manifest, etree._Element)
@@ -121,13 +120,13 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         )
         logger.info("\nGenerated XML:\n%s", xml_str)  # Using %s formatting for logger
 
-    def test_create_metadata_xml(self):
+    def test_create_metadata_el(self):
         """
         Test that we can create the metadata element with all required sub-elements
         for the Common Cartridge export.
         """
         exporter = CommonCartridgeExporter()
-        metadata = exporter._create_metadata_xml(self.course)
+        metadata = exporter._create_metadata_el(self.course)
 
         # Check it's an lxml Element
         self.assertIsInstance(metadata, etree._Element)
@@ -232,13 +231,13 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         )
         logger.info("\nGenerated XML:\n%s", xml_str)
 
-    def test_create_organizations_xml(self):
+    def test_create_organizations_el(self):
         """
         Test that we can create organization items that reflect our three-tier
         course structure (Module -> Section -> Unit -> Block).
         """
         exporter = CommonCartridgeExporter()
-        organizations_el = exporter._create_organizations_xml(self.course)
+        organizations_el = exporter._create_organizations_el(self.course)
 
         # Check it's an lxml Element
         self.assertIsInstance(organizations_el, etree._Element)

@@ -17,6 +17,7 @@ from slugify import slugify
 
 from kinesinlms.composer.import_export.common_cartridge.constants import (
     CommonCartridgeExportDir,
+    CommonCartridgeResourceType,
 )
 from kinesinlms.course.models import CourseNode, UnitBlock
 from kinesinlms.learning_library.models import (
@@ -50,7 +51,7 @@ class CCResource(ABC):
 
     def add_resource_file(
         self,
-        module_node: CourseNode,  # noqa: F841
+        module_node: CourseNode,
         unit_block: UnitBlock,
         zip_file: ZipFile,
     ):
@@ -226,7 +227,6 @@ class CCResource(ABC):
 
     def _block_related_resource_file_path(
         self,
-        folder_name: str,
         block_resource: BlockResource,
     ) -> str:
         uuid = str(block_resource.resource.uuid)
@@ -242,10 +242,11 @@ class HTMLContentCCResource(CCResource):
         super().__init__(block_type=BlockType.HTML_CONTENT.name)
 
     def get_resource_type(self) -> str:
-        return "webcontent"
+        return CommonCartridgeResourceType.WEB_CONTENT.value
 
     def add_resource_file(
         self,
+        module_node: CourseNode,
         unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
@@ -253,7 +254,11 @@ class HTMLContentCCResource(CCResource):
         Creates a Common Cartridge resource file for a HTML_CONTENT type block.
         Adds the file to the zip file.
         """
-        super().add_resource_file(unit_block, zip_file)
+        super().add_resource_file(
+            module_node=module_node,
+            unit_block=unit_block,
+            zip_file=zip_file,
+        )
         html_title = (
             self.block.display_name if self.block.display_name else self.block.type
         )
@@ -294,6 +299,7 @@ class VideoCCResource(CCResource):
 
     def add_resource_file(
         self,
+        module_node: CourseNode,  # noqa: F841
         unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
@@ -301,7 +307,11 @@ class VideoCCResource(CCResource):
         Creates a Common Cartridge resource file for a VIDEO type block.
         Adds the file to the zip file.
         """
-        super().add_resource_file(unit_block, zip_file)
+        super().add_resource_file(
+            module_node=module_node,
+            unit_block=unit_block,
+            zip_file=zip_file,
+        )
         html = f"""
 <html>
     <head>
@@ -339,10 +349,11 @@ class AssessmentCCResource(CCResource):
         super().__init__(block_type=BlockType.ASSESSMENT.name)
 
     def get_resource_type(self) -> str:
-        return "imsqti_xmlv1p2"
+        return CommonCartridgeResourceType.ASSIGNMENT.value
 
     def add_resource_file(
         self,
+        module_node: CourseNode,  # noqa: F841
         unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
@@ -350,10 +361,80 @@ class AssessmentCCResource(CCResource):
         Creates a Common Cartridge resource file for an ASSESSMENT type block.
         Adds the file to the zip file.
         """
-        super().add_resource_file(unit_block, zip_file)
+        super().add_resource_file(
+            module_node=module_node,
+            unit_block=unit_block,
+            zip_file=zip_file,
+        )
         logger.warning(f"Assessment block export not yet implemented: {self.block}")
 
 
 class ForumTopicCCResource(CCResource):
     def __init__(self):
         super().__init__(block_type=BlockType.FORUM_TOPIC.name)
+
+    def get_resource_type(self) -> str:
+        return CommonCartridgeResourceType.DISCUSSION_TOPIC.value
+
+    def add_resource_file(
+        self,
+        module_node: CourseNode,  # noqa: F841
+        unit_block: UnitBlock,
+        zip_file: ZipFile,
+    ) -> bool:
+        """
+        Creates a Common Cartridge resource file for an FORUM_TOPIC type block.
+        Adds the file to the zip file.
+        """
+        super().add_resource_file(
+            module_node=module_node,
+            unit_block=unit_block,
+            zip_file=zip_file,
+        )
+        logger.warning(f"Assessment block export not yet implemented: {self.block}")
+
+
+class SimpleInteractiveToolCCResource(CCResource):
+    def __init__(self):
+        super().__init__(block_type=BlockType.SIMPLE_INTERACTIVE_TOOL.name)
+
+    def get_resource_type(self) -> str:
+        return CommonCartridgeResourceType.ASSIGNMENT.value
+
+    def add_resource_file(
+        self,
+        module_node: CourseNode,  # noqa: F841
+        unit_block: UnitBlock,
+        zip_file: ZipFile,
+    ) -> bool:
+        """
+        Creates a Common Cartridge resource file for an SIMPLE_INTERACTIVE_TOOL type block.
+        Adds the file to the zip file.
+        """
+        super().add_resource_file(
+            module_node=module_node,
+            unit_block=unit_block,
+            zip_file=zip_file,
+        )
+        logger.warning(f"Assessment block export not yet implemented: {self.block}")
+
+
+class JupyterNotebookCCResource(CCResource):
+    def __init__(self):
+        super().__init__(block_type=BlockType.JUPYTER_NOTEBOOK.name)
+
+    def get_resource_type(self) -> str:
+        return CommonCartridgeResourceType.ASSIGNMENT.value
+
+        def add_resource_file(
+            self,
+            module_node: CourseNode,  # noqa: F841
+            unit_block: UnitBlock,
+            zip_file: ZipFile,
+        ) -> bool:
+            """
+            Creates a Common Cartridge resource file for an JUPYTER_NOTEBOOK type block.
+            Adds the file to the zip file.
+            """
+            super().add_resource_file(unit_block, zip_file)
+            logger.warning(f"Assessment block export not yet implemented: {self.block}")

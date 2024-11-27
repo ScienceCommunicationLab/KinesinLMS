@@ -5,6 +5,8 @@ from kinesinlms.composer.import_export.common_cartridge.resource import (
     CCResource,
     ForumTopicCCResource,
     HTMLContentCCResource,
+    JupyterNotebookCCResource,
+    SimpleInteractiveToolCCResource,
     VideoCCResource,
 )
 from kinesinlms.course.models import BlockType
@@ -20,6 +22,8 @@ class CCResourceFactory:
         BlockType.VIDEO.name: VideoCCResource,
         BlockType.ASSESSMENT.name: AssessmentCCResource,
         BlockType.FORUM_TOPIC.name: ForumTopicCCResource,
+        BlockType.SIMPLE_INTERACTIVE_TOOL.name: SimpleInteractiveToolCCResource,
+        BlockType.JUPYTER_NOTEBOOK.name: JupyterNotebookCCResource,
         # Add other block types here
     }
 
