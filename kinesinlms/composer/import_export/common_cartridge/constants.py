@@ -1,6 +1,12 @@
 from enum import Enum
 
 
+class CommonCartridgeExportDir(Enum):
+    # Constants used to reference BlockResource files in the Common Cartridge export
+    WEB_RESOURCES_DIR = "web_resources/"
+    IMS_CC_ROOT_DIR = "$IMS-CC-FILEBASE$/"
+
+
 class CommonCartridgeExportFormat(Enum):
     CC_FULL = "Full Common Cartridge Format"
     CC_SLIM = "Slim Common Cartridge Format"

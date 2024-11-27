@@ -30,10 +30,6 @@ class CommonCartridgeExporter(BaseExporter):
     At the moment that means version 1.3.
     """
 
-    # Constants used to reference BlockResource files in the Common Cartridge export
-    WEB_RESOURCES_DIR = "web_resources/"
-    IMS_CC_ROOT_DIR = "$IMS-CC-FILEBASE$/"
-
     def __init__(self):
         self._setup_namespaces_and_prefixes()
         self.resource_factory = CCResourceFactory()

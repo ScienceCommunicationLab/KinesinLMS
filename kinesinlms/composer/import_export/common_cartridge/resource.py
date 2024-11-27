@@ -1,3 +1,10 @@
+# NOTE: There's some terminology confusion here. The term "resource" is used
+# in two different ways. In the context of the Common Cartridge export, a
+# "resource" is a file that is part of the export (could be html, etc).
+#
+# In the context of the Learning Library, a "resource" is a model that
+# represents a file that is linked to a Block via BlockResource.
+
 import logging
 import re
 from abc import ABC, abstractmethod
@@ -8,6 +15,9 @@ from django.conf import settings
 from lxml import etree
 from slugify import slugify
 
+from kinesinlms.composer.import_export.common_cartridge.constants import (
+    CommonCartridgeExportDir,
+)
 from kinesinlms.course.models import CourseNode, UnitBlock
 from kinesinlms.learning_library.models import (
     Block,
@@ -84,19 +94,16 @@ class CCResource(ABC):
         if not block_resource.resource or block_resource.resource.resource_file:
             return False
 
-        folder_name = f"{self.WEB_RESOURCES_DIR}{block_resource.resource.uuid}"
-
         resource_file = block_resource.resource.resource_file
 
         if not resource_file:
             return False
 
-        filename = resource_file.name.split("/")[-1]
-        resource_export_file_path = folder_name + "/" + filename
-        logger.info(
-            f"Adding resource file to this dir in zip: {resource_export_file_path}"
+        resource_export_file_path = self._block_related_resource_file_path(
+            block_resource=block_resource,
         )
-        resource_content = block_resource.resource.resource_file.path
+        resource_content = block_resource.resource.resource_file
+
         zip_file.write(resource_content, resource_export_file_path)
 
         return True
@@ -123,7 +130,7 @@ class CCResource(ABC):
             },
         )
 
-        if self.block.type in [BlockType.HTML_CONTENT.name, BlockType.VIDEO.name]:
+        if self.block_type in [BlockType.HTML_CONTENT.name, BlockType.VIDEO.name]:
             # Create nested <file/> element
             file_href = self._block_resource_file_path(unit_block)
             file_el = etree.Element("file", attrib={"href": file_href})
@@ -140,11 +147,14 @@ class CCResource(ABC):
         to the current block via BlockResource.
         """
 
-        # Create <resource/> element
-        resource_file_path = self._block_related_resource_file_path(block_resource)
+        # Get the file path for the resource so we can add it to <resource/>
+        resource_file_path = self._block_related_resource_file_path(
+            block_resource=block_resource,
+        )
         if not resource_file_path:
             return None
 
+        # Create <resource/> element
         resource = block_resource.resource
         resource_el = etree.Element(
             "resource",
@@ -181,9 +191,13 @@ class CCResource(ABC):
                 continue
 
             # Convert the exported web resource path to an CC-relative path
-            export_file_path = self._block_related_resource_file_path(block_resource)
+            export_file_path = self._block_related_resource_file_path(
+                block_resource=block_resource
+            )
             export_file_path = re.sub(
-                self.WEB_RESOURCES_DIR, self.IMS_CC_ROOT_DIR, export_file_path
+                CommonCartridgeExportDir.WEB_RESOURCES_DIR.value,
+                self.IMS_CC_ROOT_DIR,
+                export_file_path,
             )
 
             # Replace all occurances of the resource URL with its CC-relative, exported path.
@@ -209,6 +223,18 @@ class CCResource(ABC):
             filename = f"{block.type}.html"
 
         return folder_name + "/" + filename
+
+    def _block_related_resource_file_path(
+        self,
+        folder_name: str,
+        block_resource: BlockResource,
+    ) -> str:
+        uuid = str(block_resource.resource.uuid)
+        folder_name = f"{CommonCartridgeExportDir.WEB_RESOURCES_DIR.value}{uuid}"
+        resource = block_resource.resource
+        filename = resource.resource_file.name.split("/")[-1]
+        resource_export_file_path = folder_name + "/" + filename
+        return resource_export_file_path
 
 
 class HTMLContentCCResource(CCResource):
