@@ -530,6 +530,14 @@ class Block(RepresentationMixin, Trackable):
         return obj
 
     @property
+    def export_title(self) -> str:
+        """
+        Return a name for this block that is suitable for export.
+        Used when no display_name is set.
+        """
+        return f"{self.type} block uuid {self.uuid}"
+
+    @property
     def summary_text(self) -> str:
         """
         Provide a short summary of the content in this block.

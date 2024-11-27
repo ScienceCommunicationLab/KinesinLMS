@@ -306,9 +306,10 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
                         self.assertIsNotNone(block_el)
                         self.assertEqual(block_el.get("isvisible"), "true")
                         self.assertEqual(block_el.get("identifierref"), str(block.uuid))
+                        expected_export_title = block.display_name or block.export_title
                         self.assertEqual(
                             block_el.find("title").text,
-                            block.display_name or block.type,
+                            expected_export_title,
                         )
 
         # Print the XML for visual inspection

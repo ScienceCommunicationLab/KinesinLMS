@@ -851,10 +851,7 @@ class CommonCartridgeExporter(BaseExporter):
                             },
                         )
                         block_title = etree.Element("title")
-                        block_title.text = (
-                            block.display_name
-                            or f"{block.type} block uuid {block.uuid}"
-                        )
+                        block_title.text = block.display_name or block.export_title
                         block_el.append(block_title)
                         unit_el.append(block_el)
 
