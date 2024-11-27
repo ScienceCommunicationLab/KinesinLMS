@@ -10,6 +10,7 @@ from django.contrib.postgres.search import SearchVectorField
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, models
 from django.db.models import JSONField
+from django.utils.translation import gettext_lazy as _
 from django_react_templatetags.mixins import RepresentationMixin
 from jsonschema import validate
 from taggit.managers import TaggableManager
@@ -67,15 +68,19 @@ class Resource(Trackable):
         max_length=400,
         null=True,
         blank=True,
-        help_text="A name for this resource. This name is used in the admin "
-        "interface and in the learning library.",
+        help_text=_(
+            "A name for this resource. This name is used in the admin "
+            "interface and in the learning library."
+        ),
     )
 
     description = models.TextField(
         null=True,
         blank=True,
-        help_text="A short description of the resource. If this is an image, the "
-        "description will be used as the alt text.",
+        help_text=_(
+            "A short description of the resource. If this is an image, the "
+            "description will be used as the alt text."
+        ),
     )
 
     def __str__(self):
@@ -163,15 +168,17 @@ class UnitBlock(Trackable):
         null=True,
         blank=True,
         allow_unicode=True,
-        help_text="A slug to represent this block " "in this particular unit.",
+        help_text=_("A slug to represent this block " "in this particular unit."),
     )
 
     label = models.CharField(
         max_length=200,
         null=True,
         blank=True,
-        help_text="A label that should appear next to this "
-        "block when rendered in this particular unit.",
+        help_text=_(
+            "A label that should appear next to this "
+            "block when rendered in this particular unit."
+        ),
     )
 
     # This allows us to number assessments on a unit like 1, 2, 3
@@ -182,8 +189,10 @@ class UnitBlock(Trackable):
         max_length=200,
         null=True,
         blank=True,
-        help_text="An index number that should appear next to this "
-        "block when rendered in this particular unit.",
+        help_text=_(
+            "An index number that should appear next to this "
+            "block when rendered in this particular unit."
+        ),
     )
 
     block_order = models.PositiveIntegerField(default=0)
@@ -193,7 +202,7 @@ class UnitBlock(Trackable):
         default=False,
         blank=False,
         null=False,
-        help_text="Hide this block in in this particular unit.",
+        help_text=_("Hide this block in in this particular unit."),
     )
 
     # If the referenced block is interactive, this field
@@ -202,7 +211,7 @@ class UnitBlock(Trackable):
         default=False,
         blank=False,
         null=False,
-        help_text="This block is read only in this particular unit.",
+        help_text=_("This block is read only in this particular unit."),
     )
 
     # This is a new way of grouping items into a summary view (like "My Responses" or "Printable Review")
@@ -211,8 +220,10 @@ class UnitBlock(Trackable):
         default=False,
         blank=False,
         null=False,
-        help_text="This block is included in any course summary pages (like "
-        "'My Responses' or 'Printable Review'.",
+        help_text=_(
+            "This block is included in any course summary pages (like "
+            "'My Responses' or 'Printable Review'."
+        ),
     )
 
     def __str__(self):
@@ -264,19 +275,25 @@ class Block(RepresentationMixin, Trackable):
         max_length=400,
         null=True,
         blank=True,
-        help_text="A text header to be shown at the top of the block. (Only some block types display this field.)",
+        help_text=_(
+            "A text header to be shown at the top of the block. "
+            "(Only some block types display this field.)"
+        ),
     )
 
     hide_display_name = models.BooleanField(
-        default=False, help_text="Always hide this block's display name."
+        default=False,
+        help_text=_("Always hide this block's display name."),
     )
 
     short_description = models.TextField(
         null=True,
         blank=True,
-        help_text="A short description of the unit to be used when listing blocks "
-        "outside of course or for staff composing a course. This "
-        "description is not usually shown in an actual course unit.",
+        help_text=_(
+            "A short description of the unit to be used when listing blocks "
+            "outside of course or for staff composing a course. This "
+            "description is not usually shown in an actual course unit."
+        ),
     )
 
     slug = models.SlugField(
@@ -285,28 +302,34 @@ class Block(RepresentationMixin, Trackable):
         blank=True,
         allow_unicode=True,
         unique=False,
-        help_text="A slug for this block.The main use of a slug here is "
-        "simple indication of purpose of block, both for students "
-        "(when seen in a URL for this block if its available in the learning "
-        "library) and for admins (when viewing event data in "
-        "event objects).",
+        help_text=_(
+            "A slug for this block.The main use of a slug here is "
+            "simple indication of purpose of block, both for students "
+            "(when seen in a URL for this block if its available in the learning "
+            "library) and for admins (when viewing event data in "
+            "event objects)."
+        ),
     )
 
     course_only = models.BooleanField(
         default=False,
         null=False,
         blank=False,
-        help_text="Set this flag to tru to prevent this block from "
-        "appearing anywhere outside of the courses it appears in. "
-        "(i.e. don't allow to appear as item in learning library)",
+        help_text=_(
+            "Set this flag to tru to prevent this block from "
+            "appearing anywhere outside of the courses it appears in. "
+            "(i.e. don't allow to appear as item in learning library)"
+        ),
     )
 
     enable_template_tags = models.BooleanField(
         default=True,
         null=False,
         blank=True,
-        help_text="Enables a limited number of template tags in "
-        "this model's html_content field.",
+        help_text=_(
+            "Enables a limited number of template tags in "
+            "this model's html_content field."
+        ),
     )
 
     # HTML content for this block. When defined, it's usually
@@ -314,9 +337,11 @@ class Block(RepresentationMixin, Trackable):
     html_content = models.TextField(
         null=True,
         blank=True,
-        help_text="HTML content for this block. For most blocks, when this field "
-        "is defined, the contents are just rendered into a template when "
-        "a unit page is constructed for a student.",
+        help_text=_(
+            "HTML content for this block. For most blocks, when this field "
+            "is defined, the contents are just rendered into a template when "
+            "a unit page is constructed for a student."
+        ),
     )
 
     # Format type of html_content. This is used to determine how to render
@@ -338,8 +363,10 @@ class Block(RepresentationMixin, Trackable):
     json_content = JSONField(
         null=True,
         blank=True,
-        help_text="JSON content for this block. This holds different data depending "
-        "on the block type.",
+        help_text=_(
+            "JSON content for this block. This holds different "
+            "data depending on the block type."
+        ),
     )
 
     # Status for this block. At the moment that just means 'draft' or
