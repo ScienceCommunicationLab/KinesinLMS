@@ -311,7 +311,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
                         self.assertIsNotNone(block_el)
                         self.assertEqual(block_el.get("isvisible"), "true")
                         self.assertEqual(block_el.get("identifierref"), str(block.uuid))
-                        expected_export_title = block.display_name or block.export_title
+                        expected_export_title = block.display_name 
                         self.assertEqual(
                             block_el.find("title").text,
                             expected_export_title,

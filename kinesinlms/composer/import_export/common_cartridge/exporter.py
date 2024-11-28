@@ -436,7 +436,7 @@ class CommonCartridgeExporter(BaseExporter):
                             },
                         )
                         block_title = etree.Element("title")
-                        block_title.text = block.display_name or block.export_title
+                        block_title.text = block.display_name # Okay to be None
                         block_el.append(block_title)
                         unit_el.append(block_el)
 

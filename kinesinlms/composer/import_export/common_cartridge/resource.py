@@ -191,21 +191,34 @@ class CCResource(ABC):
             if not resource_file:
                 continue
 
-            # Convert the exported web resource path to an CC-relative path
+            # Get the base filename without path
+            filename = resource_file.name.split("/")[-1]
+
+            # Convert the exported web resource path to a CC-relative path
             export_file_path = self._block_related_resource_file_path(
                 block_resource=block_resource
             )
             export_file_path = re.sub(
                 CommonCartridgeExportDir.WEB_RESOURCES_DIR.value,
-                self.IMS_CC_ROOT_DIR,
+                CommonCartridgeExportDir.IMS_CC_ROOT_DIR.value,
                 export_file_path,
             )
 
-            # Replace all occurances of the resource URL with its CC-relative, exported path.
-            resource_file_name = settings.MEDIA_URL + resource_file.name
-            resource_match = rf'["\']{resource_file_name}["\']'
-            resource_replace = f'"{export_file_path}"'
+            # Replace Django template tags using the filename
+            exp = r'{{\%\s*block_resource_url\s+[\'"]{}[\'"]\s*\%}}'
+            template_tag_pattern = exp.format(filename)
 
+            # Add debug logging
+            logger.debug(f"Looking for template tag pattern: {template_tag_pattern}")
+            logger.debug(f"In content: {html_content}")
+            logger.debug(f"Will replace with: {export_file_path}")
+
+            html_content = re.sub(template_tag_pattern, export_file_path, html_content)
+
+            # Also replace any direct media URLs
+            resource_file_name = settings.MEDIA_URL + resource_file.name
+            resource_match = rf'["\']({re.escape(resource_file_name)})["\']'
+            resource_replace = f'"{export_file_path}"'
             html_content = re.sub(resource_match, resource_replace, html_content)
 
         return html_content
