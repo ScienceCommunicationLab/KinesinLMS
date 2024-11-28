@@ -11,6 +11,9 @@
                 {% translate 'Name' %}
             </th>
             <th>
+                {% translate 'Slug' %}
+            </th>
+            <th>
                 {% translate 'Type' %}
             </th>
             <th>
@@ -30,6 +33,9 @@
                     <tr>
                         <td>
                             {{ block_resource.resource.name }}
+                        </td>
+                        <td>
+                            {{ block_resource.resource.slug }}
                         </td>
                         <td>
                             {{ block_resource.resource.type }}

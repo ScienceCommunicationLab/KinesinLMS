@@ -97,9 +97,7 @@ class CourseImporter:
 
         try:
             Course.objects.get(slug=course_slug, run=course_run)
-            raise Exception(
-                f"Course with slug {course_slug} and run {course_run} already exists"
-            )
+            raise Exception(f"Course with slug {course_slug} and run {course_run} already exists")
         except Course.DoesNotExist:
             pass  # That's good. We'll create one now...
 
@@ -113,9 +111,7 @@ class CourseImporter:
                 try:
                     setattr(course_import_config, key, value)
                 except Exception:
-                    raise ValidationError(
-                        f"Cannot set import_config property {key} to {value}"
-                    )
+                    raise ValidationError(f"Cannot set import_config property {key} to {value}")
 
         # The serializer will handle creating the Course and CourseCatalogDescription
         # NOT the CourseNode tree and the related UnitBlocks, SubBlocks, etc.
@@ -132,10 +128,7 @@ class CourseImporter:
         # and use the appropriate serializer. We only support two
         # formats at the moment, but we could add more in the future,
         # including version info.
-        if (
-            document_type is None
-            or document_type == KinesinLMSCourseExportFormatID.KINESIN_LMS_FORMAT.value
-        ):
+        if document_type is None or document_type == KinesinLMSCourseExportFormatID.KINESIN_LMS_FORMAT.value:
             course_serializer = CourseSerializer(data=course_json)
         elif document_type == KinesinLMSCourseExportFormatID.SCL_FORMAT.value:
             course_serializer = SCLCourseSerializer(data=course_json)
@@ -219,11 +212,7 @@ class CourseImporter:
             metadata = course_export_json.get("metadata", {})
             exporter_version = metadata.get("exporter_version", None)
             export_date = metadata.get("export_date", None)
-            logger.info(
-                f"Importing a course exported in format: {document_type}. "
-                f"Composer exporter version : {exporter_version}. "
-                f"Export Date: {export_date} "
-            )
+            logger.info(f"Importing a course exported in format: {document_type}. " f"Composer exporter version : {exporter_version}. " f"Export Date: {export_date} ")
         else:
             raise Exception("No document type found in course.json")
 
@@ -265,101 +254,41 @@ class CourseImporter:
             try:
                 file_path = file_info.filename
                 filename_parts = file_path.split("/")
+                first_filename_part = filename_parts[0]
 
-                if filename_parts[0] == "course_resources":
-                    # We have a course resource file to load.
-                    # The CourseResource object should already have been created...
-                    uuid = filename_parts[1]
-                    file_name = filename_parts[-1]
-                    course_resource = CourseResource.objects.get(
-                        uuid=uuid, course=course
-                    )
-                    if not course_resource.resource_file:
-                        resource_file_content = zp.read(file_path)
-                        content_file = ContentFile(resource_file_content)
-                        course_resource.resource_file.save(
-                            file_name, content_file, save=True
+                if first_filename_part == "course_resources":
+                    try:
+                        self._load_course_resources(
+                            course=course,
+                            filename_parts=filename_parts,
+                            zp=zp,
+                            file_path=file_path,
                         )
-                        logger.info(
-                            f" - saved file {file_name} to course resource {course_resource}"
+                    except Exception as e:
+                        logger.exception(f"Could not load course resource file {file_info}")
+                        raise e
+                elif first_filename_part == "block_resources":
+                    try:
+                        self._load_block_resources(
+                            filename_parts=filename_parts,
+                            zp=zp,
+                            file_path=file_path,
+                            file_info=file_info,
                         )
-
-                elif filename_parts[0] == "block_resources":
-                    # We have a resource file to load.
-                    resource_type = ResourceType[filename_parts[1].upper()]
-                    uuid = filename_parts[2]
-                    file_name = filename_parts[-1]
-                    resource, resource_created = Resource.objects.get_or_create(
-                        uuid=uuid
-                    )
-                    if resource_created:
-                        # We should never really get here, because the Resource model
-                        # should have been created during the course.json import.
-                        logger.info(f" - Created new resource: {resource}")
-                        resource.type = resource_type.name
-                        resource.save()
-                    else:
-                        logger.info(
-                            f" - SKIP adding Resource instance for uuid {resource.uuid}. Resource instance already exists."
+                    except Exception as e:
+                        logger.exception(f"Could not load block resource file {file_info}")
+                        raise e
+                elif first_filename_part == "catalog":
+                    try:
+                        self._load_catalog_resources(
+                            course=course,
+                            filename_parts=filename_parts,
+                            zp=zp,
+                            file_path=file_path,
                         )
-                        if resource.type != resource_type.name:
-                            raise Exception(
-                                f"Resource type mismatch. You are trying to import a resource "
-                                f"with uuid {resource.uuid} and type {resource_type.name}. A resource with that "
-                                f"uuid already exists, but it has a different resource type: {resource.type}"
-                            )
-
-                    # Sometimes the Resource model instance will exist, but the actual file in the
-                    # MEDIA folder does not. Check for that. If it's missing from the media folder,
-                    # we'll copy it back in. If it doesn't exist (e.g. because it's new), we'll create it.
-                    if resource.resource_file:
-                        media_file_exists = os.path.exists(resource.resource_file.path)
-                    else:
-                        media_file_exists = False
-
-                    if not media_file_exists:
-                        resource_file_content = zp.read(file_path)
-                        content_file = ContentFile(resource_file_content)
-                        resource.resource_file.save(file_name, content_file, save=True)
-                        if resource_created:
-                            logger.info(
-                                f" - saved file {file_name} to resource {resource}"
-                            )
-                        else:
-                            logger.info(
-                                f" - replaced missing file {file_info} for resource {resource}"
-                            )
-                elif filename_parts[0] == "catalog":
-                    # This will be the syllabus or the thumbnail
-                    if filename_parts[1] == "thumbnail":
-                        thumbnail_content = zp.read(file_path)
-                        content_file = ContentFile(thumbnail_content)
-                        filename = file_path.split("/")[-1]
-                        extension = filename.split(".")[-1]
-                        valid_extensions = ["png", "jpg", "jpeg"]
-                        if extension not in valid_extensions:
-                            raise Exception(
-                                f"Invalid course thumbnail file extension: {extension}. Valid extensions: {valid_extensions}"
-                            )
-                        course.catalog_description.thumbnail.save(
-                            filename, content_file
-                        )
-                        logger.info(f" - saved course thumbnail {filename}")
-                    elif filename_parts[1] == "syllabus":
-                        syllabus_content = zp.read(file_path)
-                        content_file = ContentFile(syllabus_content)
-                        filename = file_path.split("/")[-1]
-                        extension = filename.split(".")[-1]
-                        valid_extensions = ["pdf", "txt", "md", "docx", "doc"]
-                        if extension not in valid_extensions:
-                            raise Exception(
-                                f"Invalid course syllabus file extension: {extension}. Valid extensions: {valid_extensions}"
-                            )
-                        course.catalog_description.syllabus.save(filename, content_file)
-                        logger.info(f" - saved course syllabus {filename}")
-                    else:
-                        logger.warning(f"Unknown catalog resources file: {file_path}")
-
+                    except Exception as e:
+                        logger.exception(f"Could not load catalog resource file {file_info}")
+                        raise e
                 else:
                     raise Exception(f"Unknown file path: {file_path}")
 
@@ -372,14 +301,105 @@ class CourseImporter:
             for block in course_unit.contents.all():
                 for resource in block.resources.all():
                     if not resource.resource_file:
-                        logger.error(
-                            f"Resource file not found for resource: {resource}"
-                        )
+                        logger.error(f"Resource file not found for resource: {resource}")
         return course
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # PRIVATE METHODS
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def _load_course_resources(
+        self,
+        filename_parts: List[str],
+        course: Course,
+        zp: zipfile.ZipFile,
+        file_path: str,
+    ):
+        # We have a course resource file to load.
+        # The CourseResource object should already have been created...
+        uuid = filename_parts[1]
+        file_name = filename_parts[-1]
+        course_resource = CourseResource.objects.get(uuid=uuid, course=course)
+        if not course_resource.resource_file:
+            resource_file_content = zp.read(file_path)
+            content_file = ContentFile(resource_file_content)
+            course_resource.resource_file.save(file_name, content_file, save=True)
+            logger.info(f" - saved file {file_name} to course resource {course_resource}")
+
+    def _load_block_resources(
+        self,
+        filename_parts: List[str],
+        zp: zipfile.ZipFile,
+        file_path: str,
+        file_info: zipfile.ZipInfo,
+    ):
+        # We have a resource file to load.
+        resource_type = ResourceType[filename_parts[1].upper()]
+        uuid = filename_parts[2]
+        file_name = filename_parts[-1]
+        resource, resource_created = Resource.objects.get_or_create(uuid=uuid)
+        if resource_created:
+            # We should never really get here, because the Resource model
+            # should have been created during the course.json import.
+            logger.info(f" - Created new resource: {resource}")
+            resource.type = resource_type.name
+            resource.save()
+        else:
+            logger.info(f" - SKIP adding Resource instance for uuid {resource.uuid}. Resource instance already exists.")
+            if resource.type != resource_type.name:
+                raise Exception(
+                    f"Resource type mismatch. You are trying to import a resource "
+                    f"with uuid {resource.uuid} and type {resource_type.name}. A resource with that "
+                    f"uuid already exists, but it has a different resource type: {resource.type}"
+                )
+
+        # Sometimes the Resource model instance will exist, but the actual file in the
+        # MEDIA folder does not. Check for that. If it's missing from the media folder,
+        # we'll copy it back in. If it doesn't exist (e.g. because it's new), we'll create it.
+        if resource.resource_file and resource.resource_file.path:
+            media_file_exists = os.path.exists(resource.resource_file.path)
+        else:
+            media_file_exists = False
+
+        if not media_file_exists:
+            resource_file_content = zp.read(file_path)
+            content_file = ContentFile(resource_file_content)
+            resource.resource_file.save(file_name, content_file, save=True)
+            if resource_created:
+                logger.info(f" - saved file {file_name} to resource {resource}")
+            else:
+                logger.info(f" - replaced missing file {file_info} for resource {resource}")
+
+    def _load_catalog_resources(
+        self,
+        course: Course,
+        filename_parts: List[str],
+        zp: zipfile.ZipFile,
+        file_path: str,
+    ):
+        # This will be the syllabus or the thumbnail
+        if filename_parts[1] == "thumbnail":
+            thumbnail_content = zp.read(file_path)
+            content_file = ContentFile(thumbnail_content)
+            filename = file_path.split("/")[-1]
+            extension = filename.split(".")[-1]
+            valid_extensions = ["png", "jpg", "jpeg"]
+            if extension not in valid_extensions:
+                raise Exception(f"Invalid course thumbnail file extension: {extension}. Valid extensions: {valid_extensions}")
+            course.catalog_description.thumbnail.save(filename, content_file)
+            logger.info(f" - saved course thumbnail {filename}")
+        elif filename_parts[1] == "syllabus":
+            syllabus_content = zp.read(file_path)
+            content_file = ContentFile(syllabus_content)
+            filename = file_path.split("/")[-1]
+            extension = filename.split(".")[-1]
+            valid_extensions = ["pdf", "txt", "md", "docx", "doc"]
+            if extension not in valid_extensions:
+                raise Exception(f"Invalid course syllabus file extension: {extension}. Valid extensions: {valid_extensions}")
+            course.catalog_description.syllabus.save(filename, content_file)
+            logger.info(f" - saved course syllabus {filename}")
+        else:
+            logger.warning(f"Unknown catalog resources file: {file_path}")
 
     def _deserialize_course_node_tree(
         self,
@@ -430,9 +450,7 @@ class CourseImporter:
             logger.debug("Auto content indexing node.")
             existing_value = course_node_json.get("content_index", None)
             if existing_value:
-                logger.warning(
-                    f"Overwriting content_index: {existing_value} with {content_index}"
-                )
+                logger.warning(f"Overwriting content_index: {existing_value} with {content_index}")
             course_node_json["content_index"] = content_index
 
         level += 1
@@ -442,9 +460,7 @@ class CourseImporter:
             # if this is a UNIT, node, we'll need to pop off the CourseUnit definition
             # and create separately
             course_unit_json = course_node_json.pop("unit", {})
-            node_serializer = CourseNodeSerializer(
-                data=course_node_json, context={"course": course}
-            )
+            node_serializer = CourseNodeSerializer(data=course_node_json, context={"course": course})
         except Exception:
             error_msg = "Could not serialize course nodes."
             logger.exception(error_msg)
@@ -460,9 +476,7 @@ class CourseImporter:
 
         if children_json and isinstance(children_json, list) and len(children_json) > 0:
             # Decide on auto content indexing for children...
-            auto_content_start_index = course_import_config.auto_content_start_index(
-                node_type=node.type
-            )
+            auto_content_start_index = course_import_config.auto_content_start_index(node_type=node.type)
             if auto_content_start_index:
                 content_index = auto_content_start_index
             else:
@@ -476,13 +490,9 @@ class CourseImporter:
 
                 # Deserialize each child node.
                 if hasattr(child_json, "id"):
-                    raise Exception(
-                        "Incoming CourseNode json cannot have an 'id' property."
-                    )
+                    raise Exception("Incoming CourseNode json cannot have an 'id' property.")
                 if hasattr(child_json, "parent"):
-                    raise Exception(
-                        "Incoming CourseNode json cannot have a 'parent' property."
-                    )
+                    raise Exception("Incoming CourseNode json cannot have a 'parent' property.")
                 self._deserialize_course_node_tree(
                     course_node_json=child_json,
                     course=course,
@@ -498,9 +508,7 @@ class CourseImporter:
 
         if course_unit_json:
             if node.type != NodeType.UNIT.name:
-                raise ValidationError(
-                    "Only nodes of type UNIT can define a 'unit' object."
-                )
+                raise ValidationError("Only nodes of type UNIT can define a 'unit' object.")
             course_unit_serializer = CourseUnitSerializer(
                 data=course_unit_json,
                 context={
@@ -510,8 +518,10 @@ class CourseImporter:
             )
             try:
                 course_unit_serializer.is_valid(raise_exception=True)
-            except Exception:
-                error_msg = f"Could not serialize unit {course_unit_json.get('slug', '(no slug found)')}"
+            except Exception as e:
+                logger.exception(f"Could not serialize unit {course_unit_json} : {e}")
+                course_slug = course_unit_json.get("slug", "(no slug found)")
+                error_msg = f"Could not serialize unit {course_slug}"
                 logger.exception(error_msg)
                 raise ValidationError(detail=error_msg)
             course_unit = course_unit_serializer.save(course=course)

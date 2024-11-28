@@ -109,11 +109,15 @@ class ResourceAdmin(admin.ModelAdmin):
         "name",
         "type",
         "description",
+        "url",
     )
     list_display = (
         "id",
+        "slug",
         "name",
         "uuid",
         "type",
+        "file_name",
+        "url",
         "description",
     )

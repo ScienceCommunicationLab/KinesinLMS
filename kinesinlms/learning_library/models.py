@@ -13,6 +13,7 @@ from django.db.models import JSONField
 from django.utils.translation import gettext_lazy as _
 from django_react_templatetags.mixins import RepresentationMixin
 from jsonschema import validate
+from slugify import slugify
 from taggit.managers import TaggableManager
 
 from kinesinlms.core.models import Trackable
@@ -41,9 +42,9 @@ logger = logging.getLogger(__name__)
 
 class Resource(Trackable):
     """
-    A global, immutable resource that can be used by blocks.
-    This is mainly images, PDFs, text files and other types of
-    non-HTML files that can be used by blocks.
+    A global, immutable resource that can be used by one or more blocks.
+    These files are going to mainly be images, .ipynb files, PDFs, text files
+    and other types of non-HTML files that can be used by blocks.
     """
 
     uuid = models.UUIDField(
@@ -52,6 +53,26 @@ class Resource(Trackable):
         unique=True,
         null=False,
         blank=True,
+    )
+
+    # The Resource slug doesn't have to be unique. The uuid is the unique identifier.
+    # Slug *should* be unique, but if it was required to be unique, doing
+    # import and export becomes more difficult due to the way the slug
+    # is used in template tags like {% block_resource_url 'some-image' %}
+
+    slug = models.SlugField(
+        max_length=300,
+        unique=False,
+        null=True,
+        blank=True,
+        allow_unicode=True,
+        help_text=_(
+            "A slug for this resource. The main use of a slug here is "
+            "simple indication of purpose of resource, both for students "
+            "(when seen in a URL for this resource if its available in the learning "
+            "library) and for admins (when viewing event data in "
+            "event objects)."
+        ),
     )
 
     type = models.CharField(
@@ -87,6 +108,33 @@ class Resource(Trackable):
         if self.name:
             return f"{self.name} ({self.file_name})"
         return f"Resource [{self.id}] : {self.file_name}"
+
+    def clean(self):
+        """
+        Before saving, make sure slug is unique
+        """
+        super().clean()
+        if not self.slug:
+            if self.resource_file:
+                # Use resource_file instead of file_name
+                # Get filename without extension
+                filename = self.resource_file.name.split("/")[-1]
+                base_name = filename.rsplit(".", 1)[0]
+
+                # Create base slug
+                base_slug = slugify(base_name)
+
+                # Handle potential duplicates
+                slug = base_slug
+                counter = 1
+                while Resource.objects.filter(slug=slug).exists():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+
+                self.slug = slug
+            else:
+                # Use uuid for resources without files
+                self.slug = f"resource-{self.uuid}"
 
     @property
     def info(self) -> Dict:

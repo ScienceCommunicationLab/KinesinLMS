@@ -109,7 +109,7 @@
                           "short_description": "",
                           "course_only": false,
                           "enable_template_tags": true,
-                          "html_content": "<img class=\"img img-fluid mb-3\" src=\"{% block_resource_url 'dont-worry-only-demo.png' %}\"><p>We're going to introduce you to the basics of taking a course on this e-learning platform. But don't worry, there's no pressure and it won't take lots of time. We'll give you just enough info so you can start one of our real courses. The whole demo course will probably take about thirty minutes, tops.</p>\r\n<p>We built this platform from the ground up to provide you with a simple, clean and effective learning environment.</p>\r\n<p><span style=\"font-size: 1em;\">Even though this course is a demo, you should still try to finish this it, because if you do you'll get a very fancy, very printable certificate of achievement. Who doesn't like certificates of achievement? </span></p>",
+                          "html_content": "<img class=\"img img-fluid mb-3\" src=\"{% block_resource_url 'dont-worry-only-demo' %}\"><p>We're going to introduce you to the basics of taking a course on this e-learning platform. But don't worry, there's no pressure and it won't take lots of time. We'll give you just enough info so you can start one of our real courses. The whole demo course will probably take about thirty minutes, tops.</p>\r\n<p>We built this platform from the ground up to provide you with a simple, clean and effective learning environment.</p>\r\n<p><span style=\"font-size: 1em;\">Even though this course is a demo, you should still try to finish this it, because if you do you'll get a very fancy, very printable certificate of achievement. Who doesn't like certificates of achievement? </span></p>",
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -119,7 +119,8 @@
                             {
                               "type": "IMAGE",
                               "uuid": "407ba6ee-ee98-425e-8f07-dff315ab3f6b",
-                              "file_name": "dont-worry-only-demo.png"
+                              "file_name": "dont-worry-only-demo.png",
+                              "slug": "dont-worry-only-demo"
                             }
                           ]
                         }
@@ -177,7 +178,7 @@
                           "short_description": "",
                           "course_only": false,
                           "enable_template_tags": true,
-                          "html_content": "<p><img alt=\"Generic diagram of confusing website navigation.\" class=\"img img-fluid \" src=\"{% block_resource_url 'nav-illo.png' %}\"/></p>\r\n<p>\"Oh great,\" you say. \"One more website navigation system to figure out.\" But don't worry, we've tried to keep our navigation system as simple as possible.</p>\r\n<h3>Two Navigation Bars</h3>\r\n<p>There are two different navigation areas you should know about. Once you've got a handle on those, you should be able to navigate between top-level areas on this site as well access content and features specific to a course you might be viewing.</p>\r\n<p>This a diagram showing you where the two main navigation bars appear on the KinesinLMS website:</p>\r\n<p><img alt=\"Image describing location of two navigation bars.\" src=\"{% block_resource_url 'demo-course-ui-diagram.png' %}\"  class=\"img-thumbnail img-fluid \" /></p>\r\n<ol>\r\n<li><b>Top navigation bar</b>: This nav bar helps you get around all of KinesinLMS..</li>\r\n<li><b>Courses navigation bar</b>: You will only see this navigation bar once you've enrolled in and started a course. It provides access to features within that course.</li>\r\n</ol>\r\n<p></p>",
+                          "html_content": "<p><img alt=\"Generic diagram of confusing website navigation.\" class=\"img img-fluid \" src=\"{% block_resource_url 'nav-illo' %}\"/></p>\r\n<p>\"Oh great,\" you say. \"One more website navigation system to figure out.\" But don't worry, we've tried to keep our navigation system as simple as possible.</p>\r\n<h3>Two Navigation Bars</h3>\r\n<p>There are two different navigation areas you should know about. Once you've got a handle on those, you should be able to navigate between top-level areas on this site as well access content and features specific to a course you might be viewing.</p>\r\n<p>This a diagram showing you where the two main navigation bars appear on the KinesinLMS website:</p>\r\n<p><img alt=\"Image describing location of two navigation bars.\" src=\"{% block_resource_url 'demo-course-ui-diagram' %}\"  class=\"img-thumbnail img-fluid \" /></p>\r\n<ol>\r\n<li><b>Top navigation bar</b>: This nav bar helps you get around all of KinesinLMS..</li>\r\n<li><b>Courses navigation bar</b>: You will only see this navigation bar once you've enrolled in and started a course. It provides access to features within that course.</li>\r\n</ol>\r\n<p></p>",
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -187,7 +188,8 @@
                             {
                               "type": "IMAGE",
                               "uuid": "bef767bb-bc92-4d7a-a240-864ac8b92c1f",
-                              "file_name": "nav-illo.png"
+                              "file_name": "nav-illo.png",
+                              "slug": "nav-illo"
                             }
                           ]
                         }
@@ -232,7 +234,7 @@
                           "short_description": "",
                           "course_only": false,
                           "enable_template_tags": true,
-                          "html_content": "<p>When you visit this site, you'll immediately see a list of courses we're offering at the moment. They're listed in the front page just beneath the marketing image.</p>\r\n<p>Each course is listed in its own card:</p>\r\n<p><img alt='An image showing the parts of a course \"card\" in the catalog.' src=\"{% block_resource_url 'course-card-details.png' %}\" class=\"img-thumbnail img-fluid\"/></p>",
+                          "html_content": "<p>When you visit this site, you'll immediately see a list of courses we're offering at the moment. They're listed in the front page just beneath the marketing image.</p>\r\n<p>Each course is listed in its own card:</p>\r\n<p><img alt='An image showing the parts of a course \"card\" in the catalog.' src=\"{% block_resource_url 'course-card-details' %}\" class=\"img-thumbnail img-fluid\"/></p>",
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -242,7 +244,8 @@
                             {
                               "type": "IMAGE",
                               "uuid": "407ba6ee-ee98-425e-8f07-dff315ab3f63",
-                              "file_name": "course-card-details.png"
+                              "file_name": "course-card-details.png",
+                              "slug": "course-card-details"
                             }
                           ]
                         }
@@ -287,7 +290,7 @@
                           "short_description": "",
                           "course_only": false,
                           "enable_template_tags": true,
-                          "html_content": "<p>In a course, you step through \"units\" of content, where a unit is a single page of content. A unit can include text, videos, assessments and so on.</p>\n<p>Units are grouped into sections and sections grouped into modules. You click the \"Course\" tab in the course navigation bar to start viewing this content. If you've viewed this course before, you'll be placed in the last unit you viewed. Otherwise you'll start at the first unit in the course.</p>\n<p>You can now step through each unit with the forward and backward arrows on the right side of the screen.</p>\n<p><img class=\"img-thumbnail img-fluid \" src=\"{% block_resource_url 'demo-course-content-navigation.png' %}\" alt=\"Illustration of course content navigation buttons.\" /></p>\n<p>Meanwhile, you have two options if you want to see a summary of the course contents:</p>\n<ul>\n<li><strong>Course contents nav button:</strong> clicking this button shows a slide-out navigation bar on the left side of the screen with a list of all modules, sections and units in the course.</li>\n<li><strong>Course contents \"quick nav\" button</strong>: clicking this button to show the course in a navigable grid.</li>\n</ul>",
+                          "html_content": "<p>In a course, you step through \"units\" of content, where a unit is a single page of content. A unit can include text, videos, assessments and so on.</p>\n<p>Units are grouped into sections and sections grouped into modules. You click the \"Course\" tab in the course navigation bar to start viewing this content. If you've viewed this course before, you'll be placed in the last unit you viewed. Otherwise you'll start at the first unit in the course.</p>\n<p>You can now step through each unit with the forward and backward arrows on the right side of the screen.</p>\n<p><img class=\"img-thumbnail img-fluid \" src=\"{% block_resource_url 'demo-course-content-navigation' %}\" alt=\"Illustration of course content navigation buttons.\" /></p>\n<p>Meanwhile, you have two options if you want to see a summary of the course contents:</p>\n<ul>\n<li><strong>Course contents nav button:</strong> clicking this button shows a slide-out navigation bar on the left side of the screen with a list of all modules, sections and units in the course.</li>\n<li><strong>Course contents \"quick nav\" button</strong>: clicking this button to show the course in a navigable grid.</li>\n</ul>",
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -297,7 +300,8 @@
                             {
                               "type": "IMAGE",
                               "uuid": "407ba6ee-ee98-425e-8f07-dff315ab3f6c",
-                              "file_name": "demo-course-content-navigation.png"
+                              "file_name": "demo-course-content-navigation.png",
+                              "slug": "demo-course-content-navigation"
                             }
                           ]
                         }
@@ -355,7 +359,7 @@
                           "short_description": "",
                           "course_only": false,
                           "enable_template_tags": true,
-                          "html_content": "<p>KinesinLMS uses the YouTube video player for displaying videos. Here's a quick recap of the controls for a desktop browser (if you're using a mobile browser the user interface might look slightly different).</p>\n<p><img class=\"img-thumbnail img-fluid\" src=\"{% block_resource_url 'video-controls.png' %}\"/></p>\n<h3>Example Video</h3>\n<p>Here's a live example of the video player. It's a video from iBiology about the Amazonian rainforest. Feel free to experiment with video controls.</p>",
+                          "html_content": "<p>KinesinLMS uses the YouTube video player for displaying videos. Here's a quick recap of the controls for a desktop browser (if you're using a mobile browser the user interface might look slightly different).</p>\n<p><img class=\"img-thumbnail img-fluid\" src=\"{% block_resource_url 'video-controls' %}\"/></p>\n<h3>Example Video</h3>\n<p>Here's a live example of the video player. It's a video from iBiology about the Amazonian rainforest. Feel free to experiment with video controls.</p>",
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -365,7 +369,8 @@
                             {
                               "type": "IMAGE",
                               "uuid": "9397bec6-8ecb-4768-b122-896a928e3c93",
-                              "file_name": "video-controls.png"
+                              "file_name": "video-controls.png",
+                              "slug": "video-controls"
                             }
                           ]
                         }
@@ -923,7 +928,7 @@
                           "short_description": "",
                           "course_only": false,
                           "enable_template_tags": true,
-                          "html_content": "<h3>When It's Time to Discuss...</h3>\r\n\r\n<p>When it's time to discuss various topics in a course with your fellow students, you'll use the discussion forum. The discussion forum gives you a way to post questions or comments under a topic or respond to another student's post.</p>\r\n\r\n<p>KinesinLMS uses the powerful forum software created by <a href=\"https://discourse.org/\" target=\"_blank\">Discourse</a> to power our discussion forum. Discourse provides a <a href=\"https://meta.discourse.org/t/discourse-new-user-guide/96331\" target=\"_blank\">new user guide</a> for people using their forum, but our own instructions here should be enough to get you going. ( You can always check the Discourse new user guide to get more details on a forum feature. )</p>\r\n\r\n<h2>Inline Discussion Prompt</h2>\r\n\r\n<p>Individual discussion topics are embedded directly in the course content (see image below). You can review the current posts in this topic directly in the unit. If you're ready to contribute, you simply click the \"Join the discussion\" button to jump to the topic in the forum where you can add your own thoughts. A new browser window will open the discussion forum, set to the current topic. Watch the video above for a few tips on the user interface you'll use in the discussion forum</p>\r\n\r\n<p>You can also use the \"Forum Topics\" tab in the Course navigation bar to get a list of links to each discussion topic available in the course. Clicking a link will take you to that topic in the forum.</p>\r\n\r\n<img style=\"margin: 2rem 0\" class=\"img img-thumbnail\" src=\"{% block_resource_url 'discussion-prompt.png'%}\" alt=\"Graphic demonstrating how a student can click the 'join the discussion' button to open this particular topic in the forum in a new browser tab.\"/>",
+                          "html_content": "<h3>When It's Time to Discuss...</h3>\r\n\r\n<p>When it's time to discuss various topics in a course with your fellow students, you'll use the discussion forum. The discussion forum gives you a way to post questions or comments under a topic or respond to another student's post.</p>\r\n\r\n<p>KinesinLMS uses the powerful forum software created by <a href=\"https://discourse.org/\" target=\"_blank\">Discourse</a> to power our discussion forum. Discourse provides a <a href=\"https://meta.discourse.org/t/discourse-new-user-guide/96331\" target=\"_blank\">new user guide</a> for people using their forum, but our own instructions here should be enough to get you going. ( You can always check the Discourse new user guide to get more details on a forum feature. )</p>\r\n\r\n<h2>Inline Discussion Prompt</h2>\r\n\r\n<p>Individual discussion topics are embedded directly in the course content (see image below). You can review the current posts in this topic directly in the unit. If you're ready to contribute, you simply click the \"Join the discussion\" button to jump to the topic in the forum where you can add your own thoughts. A new browser window will open the discussion forum, set to the current topic. Watch the video above for a few tips on the user interface you'll use in the discussion forum</p>\r\n\r\n<p>You can also use the \"Forum Topics\" tab in the Course navigation bar to get a list of links to each discussion topic available in the course. Clicking a link will take you to that topic in the forum.</p>\r\n\r\n<img style=\"margin: 2rem 0\" class=\"img img-thumbnail\" src=\"{% block_resource_url 'discussion-prompt'%}\" alt=\"Graphic demonstrating how a student can click the 'join the discussion' button to open this particular topic in the forum in a new browser tab.\"/>",
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -933,7 +938,8 @@
                             {
                               "type": "IMAGE",
                               "uuid": "bef767bb-bc92-4d7a-a240-864ac8b92c11",
-                              "file_name": "discussion-prompt.png"
+                              "file_name": "discussion-prompt.png",
+                              "slug": "discussion-prompt"
                             }
                           ]
                         }
@@ -1244,7 +1250,8 @@
       {
         "uuid": "8e77a119-5cb3-4a68-83a6-ce45877e2a61",
         "name": "Test Course Resource",
-        "description": "Test .txt file."
+        "description": "Test .txt file.",
+        "slug": "test-course-resource"
       }
     ],
     "speakers": [],

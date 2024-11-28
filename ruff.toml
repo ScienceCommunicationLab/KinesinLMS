@@ -1,3 +1,5 @@
+line-length = 120
+
 [lint]
 extend-select = [
   "E501", # Add the `line-too-long` rule to the enforced rule set.  # By default, Ruff omits rules that overlap with the use of a formatter
@@ -32,4 +34,5 @@ indent-style = "space"
 
 # Like Black, respect magic trailing commas.
 skip-magic-trailing-comma = false
+
 

@@ -691,6 +691,8 @@ def course_import_view(request):
                 return redirect("composer:course_list")
             except Exception as e:
                 logger.error("Couldn't parse course upload: {}".format(e))
+                # temp
+                raise e
                 context["form"] = ImportCourseFromArchiveForm()
                 messages.add_message(
                     request,

@@ -69,10 +69,16 @@ class CourseUnit(Trackable):
     answers on assessments.
     """
 
-    tags = TaggableManager(blank=True)
+    tags = TaggableManager(
+        blank=True,
+        help_text=_("Tags for this course unit"),
+    )
 
     uuid = models.UUIDField(
-        primary_key=False, default=uuid.uuid4, unique=True, editable=False
+        primary_key=False,
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
     )
 
     # Why does the CourseUnit model have a slug?
@@ -81,14 +87,15 @@ class CourseUnit(Trackable):
     #
     # Course unit slugs are unique across the site.
     # If the course unit slugs were not unique across the site, then a course author
-    # couldn't use the slug when trying to add an existing course unit into a new course.
+    # couldn't reliably use the slug when trying to add an existing course unit into a
+    # new course.
     #
-    # You might think: "Wait, that's a problem because I might have multiple CourseUnits in different
-    # courses that I want to have the same slug called 'introduction'."
+    # You might think: "Wait, that's a problem because I might have multiple CourseUnits
+    # in different courses that I want to have the same slug called 'introduction'."
     #
-    # That's ok, because the slugs here are not shown to users, as course nodes are, since
-    # CourseNode is the model whose slug is used for things like URLs. So just come
-    # up with a unique slug like demo-sp-introduction
+    # That's ok, because the slugs here are not shown to users, as course nodes are,
+    # since CourseNode is the model whose slug is used for things like URLs. So just
+    # come up with a unique slug like demo-sp-introduction
     #
     # This CourseUnit model also has an uuid unique identifier, but that is
     # mainly for machines, for example when the importer links to existing course units
@@ -664,7 +671,10 @@ class Course(Trackable):
         ),
     )
 
-    tags = TaggableManager(blank=True)
+    tags = TaggableManager(
+        blank=True,
+        help_text=_("Tags for this course"),
+    )
 
     display_name = models.CharField(
         max_length=400,
@@ -1893,13 +1903,15 @@ class NoticeType(Enum):
 
 class CourseResource(Trackable):
     """
-    Resources specific to this course, and relevant for the whole course, not a particular block.
+    Resources specific to this course, and relevant for the whole course,
+    not a particular block.
 
-    These are typically shown on course home page and provide a link to something like a syllabus, etc.
+    These are typically shown on course home page and provide a link to something
+    like a syllabus, etc.
 
     These are not meant to be linked to a Block. The Resource model is used for that.
-    My guess is a "course" resource is fundamentally different from a Resource that can be linked
-    to blocks (and these concepts will diverge more).
+    My guess is a "course" resource is fundamentally different from a Resource that
+    can be linked to blocks (and these concepts will diverge more).
     """
 
     uuid = models.UUIDField(

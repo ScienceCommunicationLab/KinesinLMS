@@ -162,7 +162,11 @@ class CourseUnitSerializer(serializers.ModelSerializer):
         allow_blank=False,
     )
 
-    slug = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    slug = serializers.CharField(
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+    )
 
     display_name = serializers.CharField(
         required=False, allow_null=True, allow_blank=True
@@ -267,7 +271,10 @@ class CourseUnitSerializer(serializers.ModelSerializer):
                     unit_blocks_raw_data=unit_blocks_raw_data,
                     course_import_config=course_import_config,
                 )
-            except Exception:
+            except Exception as e:
+                logger.exception(
+                    f"Could not create new course unit from {validated_data} : {e}"
+                )
                 error_msg = f"Could not create new course unit from {validated_data}."
                 logger.exception(error_msg)
                 raise Exception(error_msg)
@@ -693,7 +700,10 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
         required=False, allow_null=True, allow_blank=True
     )
 
-    tags = TagListSerializerField()
+    tags = TagListSerializerField(
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = Course

@@ -12,10 +12,10 @@ from kinesinlms.assessments.serializers import AssessmentAllDataSerializer
 from kinesinlms.learning_library.constants import BlockType
 from kinesinlms.learning_library.models import (
     Block,
-    LearningObjective,
-    UnitBlock,
-    Resource,
     BlockResource,
+    LearningObjective,
+    Resource,
+    UnitBlock,
 )
 from kinesinlms.sits.models import SimpleInteractiveTool
 from kinesinlms.sits.serializers import SimpleInteractiveToolImportSerializer
@@ -59,13 +59,26 @@ class ResourceSerializer(serializers.ModelSerializer):
 
         return uuid_value
 
+    def validate_slug(self, slug_value):
+        """
+        If a Resource with this slug already exists in DB, we'll append a uuid to it.
+        """
+        if Resource.objects.filter(slug=slug_value).exists():
+            slug_value = f"{slug_value}_{uuid.uuid1()}"
+        return slug_value
+
     uuid = serializers.CharField(
         required=True, allow_null=False, allow_blank=False, validators=[]
     )
 
     class Meta:
         model = Resource
-        fields = ("type", "uuid", "file_name")
+        fields = (
+            "type",
+            "slug",
+            "uuid",
+            "file_name",
+        )
 
 
 class BlockSerializer(serializers.ModelSerializer):
@@ -116,7 +129,11 @@ class BlockSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
 
-    resources = ResourceSerializer(many=True, required=False, allow_null=True)
+    resources = ResourceSerializer(
+        many=True,
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = Block
@@ -222,6 +239,7 @@ class BlockSerializer(serializers.ModelSerializer):
                 )
                 if resource_created:
                     resource.type = resource_data["type"]
+                    resource.slug = resource_data["slug"]
                     resource.save()
                 else:
                     if resource.type != resource_data["type"]:

@@ -45,9 +45,7 @@ def get_jupyter_notebook_resource(block) -> Optional[Resource]:
     Get the Jupyter notebook resource for a block, if it exists.
     """
     if block:
-        jupyter_notebook = block.resources.filter(
-            type=ResourceType.JUPYTER_NOTEBOOK.name
-        ).first()
+        jupyter_notebook = block.resources.filter(type=ResourceType.JUPYTER_NOTEBOOK.name).first()
         return jupyter_notebook
     return None
 
@@ -164,9 +162,7 @@ def support_email() -> Optional[str]:
     if hasattr(settings, "CONTACT_EMAIL"):
         return settings.CONTACT_EMAIL
     else:
-        logger.warning(
-            "No support email is defined for this site, and CONTACT_EMAIL is not defined in settings."
-        )
+        logger.warning("No support email is defined for this site, and CONTACT_EMAIL is not defined in settings.")
         return None
 
 
@@ -192,9 +188,7 @@ def analytics_cookie_value(request) -> Optional[str]:
         return None
 
     try:
-        accept_analytics_cookie_val = request.COOKIES.get(
-            ACCEPT_ANALYTICS_COOKIE_NAME, None
-        )
+        accept_analytics_cookie_val = request.COOKIES.get(ACCEPT_ANALYTICS_COOKIE_NAME, None)
     except Exception as e:
         logger.exception(f"Could not get COOKIES from request: {e}")
         return None
@@ -203,48 +197,65 @@ def analytics_cookie_value(request) -> Optional[str]:
         return None
     if accept_analytics_cookie_val not in ["ACCEPT", "REJECT"]:
         logger.exception(
-            f"analytics_cookie_value(): cookie value is not ACCEPT or REJECT."
-            f"value : {accept_analytics_cookie_val}"
+            f"analytics_cookie_value(): cookie value is not ACCEPT or REJECT." f"value : {accept_analytics_cookie_val}"
         )
         return "REJECT"
     return accept_analytics_cookie_val
 
 
-@register.simple_tag
-def block_resource_url(image_name: str) -> str:
+@register.simple_tag(takes_context=True)
+def block_resource_url(context, block_resource_slug: str) -> str:
     """
     Give the full URL for a Resource object that is stored as a block resource,
     given only the image name.
     """
-    url = f"{settings.MEDIA_URL}block_resources/{image_name}"
-    return url
+
+    # Since Resource slug isn't unique, see if we can find the block
+    # and then only look for the resource within that block via block_resources
+    block = context.get("block", None)
+    resource: Optional[Resource] = None
+    if block:
+        try:
+            resource = block.resources.get(slug=block_resource_slug)
+        except Resource.DoesNotExist:
+            pass
+
+    if not resource:
+        try:
+            resource = Resource.objects.filter(slug=block_resource_slug).last()
+        except Resource.DoesNotExist:
+            logger.exception(f"Resource with slug {block_resource_slug} does not exist.")
+            return ""
+
+    if not resource:
+        logger.exception(f"Resource with slug {block_resource_slug} does not exist in block resources.")
+        return ""
+
+    # Return the fully qualified URL for the resource file
+    resource_url = resource.url
+
+    # url = f"{settings.MEDIA_URL}block_resources/{image_name}"
+    return resource_url
 
 
 @register.simple_tag
 def get_badge_provider_enabled():
     current_site = Site.objects.get_current()
-    enabled = (
-        hasattr(current_site, "badge_provider") and current_site.badge_provider.active
-    )
+    enabled = hasattr(current_site, "badge_provider") and current_site.badge_provider.active
     return enabled
 
 
 @register.simple_tag
 def get_email_automation_provider_enabled():
     current_site = Site.objects.get_current()
-    enabled = (
-        hasattr(current_site, "email_automation_provider")
-        and current_site.email_automation_provider.active
-    )
+    enabled = hasattr(current_site, "email_automation_provider") and current_site.email_automation_provider.active
     return enabled
 
 
 @register.simple_tag
 def get_forum_provider_enabled():
     current_site = Site.objects.get_current()
-    enabled = (
-        hasattr(current_site, "forum_provider") and current_site.forum_provider.active
-    )
+    enabled = hasattr(current_site, "forum_provider") and current_site.forum_provider.active
     return enabled
 
 
@@ -278,9 +289,7 @@ def render_html_content(context, item: Block | CourseUnit) -> str:
         if item.enable_template_tags:
             # Make sure we load any tag libraries that will be used
             # by Django template tags allowed in html_content.
-            html_content = (
-                "{% load core_tags unit_extras static %}\n" + item.html_content
-            )
+            html_content = "{% load core_tags unit_extras static %}\n" + item.html_content
 
             template = Template(html_content)
 

@@ -16,7 +16,7 @@ plugins = ["django_coverage_plugin"]
 
 # ==== black ====
 [tool.black]
-line-length = 119
+line-length = 200
 target-version = ['py311']
 
 
@@ -63,7 +63,7 @@ load-plugins = [
 django-settings-module = "config.settings.local"
 
 [tool.pylint.FORMAT]
-max-line-length = 119
+max-line-length = 200
 
 [tool.pylint."MESSAGES CONTROL"]
 disable = [
