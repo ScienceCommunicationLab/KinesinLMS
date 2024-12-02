@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import JSONField
+from django.utils.translation import gettext_lazy as _
 from django_react_templatetags.mixins import RepresentationMixin
 from jsonschema import validate
 
@@ -42,15 +43,33 @@ class Assessment(RepresentationMixin, Trackable):
     # TODO: Do we want to ensure that Assessments can only appear in a
     # TODO: Course not in Pathway or as a PublicResource?
 
-    label = models.CharField(max_length=255, null=True, blank=True, help_text="A label for the assessment.")
-
-    block = models.OneToOneField(Block, on_delete=models.CASCADE, related_name="assessment")
-
-    type = models.CharField(
-        max_length=50, choices=[(tag.name, tag.value) for tag in AssessmentType], default=None, null=True, blank=True
+    label = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_("A label for the assessment."),
     )
 
-    slug = models.SlugField(null=True, blank=True, unique=False, allow_unicode=True)
+    block = models.OneToOneField(
+        Block,
+        on_delete=models.CASCADE,
+        related_name="assessment",
+    )
+
+    type = models.CharField(
+        max_length=50,
+        choices=[(tag.name, tag.value) for tag in AssessmentType],
+        default=None,
+        null=True,
+        blank=True,
+    )
+
+    slug = models.SlugField(
+        null=True,
+        blank=True,
+        unique=False,
+        allow_unicode=True,
+    )
 
     # Question text to be shown above student input
     question = models.TextField(null=True, blank=True)
@@ -141,6 +160,17 @@ class Assessment(RepresentationMixin, Trackable):
     def generate_generic_slug(self):
         slug = f"assessment_id_{uuid.uuid1()}"
         return slug
+
+    @property
+    def id_for_cc(self) -> str:
+        """
+        Returns a unique identifier for this assessment that is
+        safe for use in Common Cartridge export files.
+
+        Returns:
+            str
+        """
+        return f"assessment_{self.id}"
 
     @property
     def complete_json(self) -> Dict:
