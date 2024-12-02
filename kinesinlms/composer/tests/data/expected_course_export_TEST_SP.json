@@ -121,7 +121,8 @@
                             {
                               "type": "VIDEO_TRANSCRIPT",
                               "uuid": "dc6b6f3f-4c5c-4a39-9ddd-e0ec1fbbb13d",
-                              "file_name": "test_file_8C13nO0.rst"
+                              "file_name": "test_file_8C13nO0.rst",
+                              "slug": null
                             }
                           ]
                         }
@@ -273,7 +274,8 @@
                             {
                               "type": "VIDEO_TRANSCRIPT",
                               "uuid": "1b165ac8-dc80-43aa-9349-2587683c0a9d",
-                              "file_name": "test_file_ySsS47w.rst"
+                              "file_name": "test_file_ySsS47w.rst",
+                              "slug": null
                             }
                           ]
                         }
@@ -438,7 +440,8 @@
                             {
                               "type": "VIDEO_TRANSCRIPT",
                               "uuid": "cd5f417f-41bc-4a4e-96af-2abfa3c532c1",
-                              "file_name": "test_file_ulLcfHb.rst"
+                              "file_name": "test_file_ulLcfHb.rst",
+                              "slug": null
                             }
                           ]
                         }
@@ -590,7 +593,8 @@
                             {
                               "type": "VIDEO_TRANSCRIPT",
                               "uuid": "aa619e88-ee34-428d-bb5b-12a60747b9e2",
-                              "file_name": "test_file_Dcq3hvZ.rst"
+                              "file_name": "test_file_Dcq3hvZ.rst",
+                              "slug": null
                             }
                           ]
                         }
@@ -768,7 +772,8 @@
                             {
                               "type": "VIDEO_TRANSCRIPT",
                               "uuid": "77e5b971-1656-4865-aebf-6bbd49b58f9f",
-                              "file_name": "test_file_JS5k4jI.rst"
+                              "file_name": "test_file_JS5k4jI.rst",
+                              "slug": null
                             }
                           ]
                         }
@@ -920,7 +925,8 @@
                             {
                               "type": "VIDEO_TRANSCRIPT",
                               "uuid": "831adc33-a8d7-4cbb-b46b-c21d88e05416",
-                              "file_name": "test_file_9sVVl4y.rst"
+                              "file_name": "test_file_9sVVl4y.rst",
+                              "slug": null
                             }
                           ]
                         }

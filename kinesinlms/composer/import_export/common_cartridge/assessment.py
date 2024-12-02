@@ -1,3 +1,7 @@
+"""
+These are the classes for creating QTI assessments from our internal assessment models.
+"""
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Optional
