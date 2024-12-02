@@ -412,9 +412,6 @@ class CommonCartridgeExporter(BaseExporter):
 
                     # Add UnitBlocks within each Unit
                     for unit_block in unit_node.unit.unit_blocks.all():
-                        if not unit_block.uuid:
-                            unit_block.uuid = uuid.uuid4()
-                            unit_block.save()
                         block = unit_block.block
                         unit_block_el = etree.Element(
                             "item",

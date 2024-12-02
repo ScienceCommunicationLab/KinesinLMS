@@ -347,10 +347,12 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
             self.assertFalse(validate_resource_path(path), f"Path should be invalid: {path}")
 
     def test_block_resource_file_paths_validation(self):
-        """Test that block resource file paths are properly validated."""
+        """
+        Test that block resource file paths are properly slugified.
+        """
 
         block = BlockFactory.create(
-            display_name="Test @ Block",  # invalid characters
+            display_name="Test .. Block",  # invalid characters - can't have ".."
             type=BlockType.HTML_CONTENT.name,
         )
         course_unit = CourseUnitFactory.create(
@@ -360,12 +362,14 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         unit_block = UnitBlockFactory.create(block=block, course_unit=course_unit)
 
         # Test that the path generation and validation works
-        with self.assertRaises(ValueError, msg="Should reject invalid characters in path"):
-            handler = HTMLContentCCResource()
-            handler._block_resource_file_path(unit_block)
+        handler = HTMLContentCCResource(unit_block=unit_block)
+        path = handler._block_resource_file_path()
+        self.assertEqual(path, f"{unit_block.block.uuid}/test-block.html", "Block display name should be slugified")
 
     def test_create_resources_el_with_validation(self):
-        """Test resource element creation with path validation."""
+        """
+        Test <resource/> element creation with path validation.
+        """
         exporter = CommonCartridgeExporter()
         course = self.course
 

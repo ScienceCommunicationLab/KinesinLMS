@@ -228,7 +228,7 @@ class CCHandler(ABC):
         if not unit_block:
             raise ValueError("unit_block must be provided")
 
-        resource_file_path = self._block_resource_file_path(unit_block)
+        resource_file_path = self._block_resource_file_path()
         if not resource_file_path:
             return None
         file_el = etree.Element("file", attrib={"href": resource_file_path})
@@ -284,17 +284,17 @@ class CCHandler(ABC):
 
         return html_content
 
-    def _block_resource_file_path(self, unit_block: UnitBlock) -> str:
+    def _block_resource_file_path(self) -> str:
         """
         Generate a path to use when exporting the given unit block.
         We use the block's UUID as the folder name, and the block's display name
         (if it has one) as the file name.
         """
 
-        if not unit_block:
+        if not self.unit_block:
             raise ValueError("unit_block must be provided")
 
-        block = unit_block.block
+        block = self.unit_block.block
 
         folder_name = str(block.uuid)
 
@@ -370,7 +370,7 @@ class HTMLContentCCResource(CCHandler):
     </body>
 </html>
 """
-        block_filename = self._block_resource_file_path(unit_block)
+        block_filename = self._block_resource_file_path()
         zip_file.writestr(block_filename, html)
 
         return True
@@ -415,7 +415,7 @@ class VideoCCResource(CCHandler):
 </html>
 """
 
-        block_filename = self._block_resource_file_path(unit_block)
+        block_filename = self._block_resource_file_path()
         zip_file.writestr(block_filename, html)
 
         return True
@@ -467,19 +467,22 @@ class AssessmentCCResource(CCHandler):
         qti_xml = qti_assessment.to_qti_xml()
 
         # Write the QTI XML file to the zip
-        assessment_file_path = self._block_resource_file_path(unit_block)
+        assessment_file_path = self._block_resource_file_path()
         zip_file.writestr(assessment_file_path, qti_xml)
         return True
 
-    def _block_resource_file_path(self, unit_block: UnitBlock) -> str:
+    def _block_resource_file_path(self) -> str:
         """
         Override the base class method to use .xml extension instead of .html
         """
-        folder_name = str(unit_block.block.uuid)
-        if unit_block.block.display_name:
-            filename = slugify(unit_block.block.display_name) + ".xml"
+        if not self.unit_block:
+            raise ValueError("unit_block must be provided")
+        block = self.unit_block.block
+        folder_name = str(block.uuid)
+        if block.display_name:
+            filename = slugify(block.display_name) + ".xml"
         else:
-            filename = f"{unit_block.block.type}.xml"
+            filename = f"{block.type}.xml"
         return folder_name + "/" + filename
 
 

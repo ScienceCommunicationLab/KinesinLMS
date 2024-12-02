@@ -36,4 +36,4 @@ class CCHandlerFactory:
         handler_class = cls.RESOURCE_HANDLERS.get(unit_block.block.type)
         if not handler_class:
             raise ValueError(f"Unsupported block type: {unit_block.block.type}")
-        return handler_class()
+        return handler_class(unit_block=unit_block)
