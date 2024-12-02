@@ -302,10 +302,10 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
                     # Check blocks exist within unit
                     for unit_block in unit_node.unit.unit_blocks.all():
                         block = unit_block.block
-                        block_el = unit_el.find(f"item[@identifier='block_{block.uuid}']")
+                        block_el = unit_el.find(f"item[@identifier='unit_block_{unit_block.id}']")
                         self.assertIsNotNone(block_el)
                         self.assertEqual(block_el.get("isvisible"), "true")
-                        self.assertEqual(block_el.get("identifierref"), str(block.uuid))
+                        self.assertEqual(block_el.get("identifierref"), str(unit_block.id))
                         expected_export_title = block.display_name
                         self.assertEqual(
                             block_el.find("title").text,
