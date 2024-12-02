@@ -150,8 +150,6 @@ class CCHandler(ABC):
 
     def create_cc_file_for_unit_block(
         self,
-        module_node: CourseNode,
-        unit_block: UnitBlock,
         zip_file: ZipFile,
     ):
         """
@@ -167,9 +165,7 @@ class CCHandler(ABC):
             bool:   True if the resource file was created and added successfully.
                     (otherwise an Exception should be raised)
         """
-        self.block = unit_block.block
-        if self.block.type != self.block_type:
-            raise ValueError(f"Block type must be {self.block_type}, not {self.block.type}")
+        pass
 
     def create_cc_file_for_block_related_resource(
         self,
@@ -341,21 +337,14 @@ class HTMLContentCCResource(CCHandler):
 
     def create_cc_file_for_unit_block(
         self,
-        module_node: CourseNode,
-        unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
         """
         Creates a Common Cartridge resource file for a HTML_CONTENT type block.
         Adds the file to the zip file.
         """
-        super().create_cc_file_for_unit_block(
-            module_node=module_node,
-            unit_block=unit_block,
-            zip_file=zip_file,
-        )
         html_title = self.block.display_name if self.block.display_name else self.block.type
-        html_content = self._reformat_html_content_with_relative_resource_file_paths(unit_block)
+        html_content = self._reformat_html_content_with_relative_resource_file_paths(self.unit_block)
         html = f"""
 <html>
     <head>
@@ -383,19 +372,12 @@ class VideoCCResource(CCHandler):
 
     def create_cc_file_for_unit_block(
         self,
-        module_node: CourseNode,  # noqa: F841
-        unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
         """
         Creates a Common Cartridge resource file for a VIDEO type block.
         Adds the file to the zip file.
         """
-        super().create_cc_file_for_unit_block(
-            module_node=module_node,
-            unit_block=unit_block,
-            zip_file=zip_file,
-        )
         html = f"""
 <html>
     <head>
@@ -443,8 +425,6 @@ class AssessmentCCResource(CCHandler):
 
     def create_cc_file_for_unit_block(
         self,
-        module_node: CourseNode,
-        unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
         """
@@ -452,17 +432,11 @@ class AssessmentCCResource(CCHandler):
         Uses the QTIAssessmentFactory to generate appropriate QTI content
         based on the assessment type.
         """
-        super().create_cc_file_for_unit_block(
-            module_node=module_node,
-            unit_block=unit_block,
-            zip_file=zip_file,
-        )
-
-        if not hasattr(unit_block, "assessment"):
+        if not hasattr(self.unit_block.block, "assessment"):
             raise ValueError("UnitBlock must have an assessment attribute")
 
         # Get QTI content from factory based on assessment type
-        assessment = self.block.assessment
+        assessment = self.unit_block.block.assessment
         qti_assessment = self.qti_factory.create_qti_assessment(assessment)
         qti_xml = qti_assessment.to_qti_xml()
 
@@ -492,19 +466,13 @@ class ForumTopicCCResource(CCHandler):
 
     def create_cc_file_for_unit_block(
         self,
-        module_node: CourseNode,  # noqa: F841
-        unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
         """
         Creates a Common Cartridge resource file for an FORUM_TOPIC type block.
         Adds the file to the zip file.
         """
-        super().create_cc_file_for_unit_block(
-            module_node=module_node,
-            unit_block=unit_block,
-            zip_file=zip_file,
-        )
+
         logger.warning(f"Forum topic block export not yet implemented: {self.block}")
 
 
@@ -514,19 +482,12 @@ class SimpleInteractiveToolCCResource(CCHandler):
 
     def create_cc_file_for_unit_block(
         self,
-        module_node: CourseNode,  # noqa: F841
-        unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
         """
         Creates a Common Cartridge resource file for an SIMPLE_INTERACTIVE_TOOL type block.
         Adds the file to the zip file.
         """
-        super().create_cc_file_for_unit_block(
-            module_node=module_node,
-            unit_block=unit_block,
-            zip_file=zip_file,
-        )
         logger.warning(f"Assessment block export not yet implemented: {self.block}")
 
 
@@ -536,13 +497,10 @@ class JupyterNotebookCCResource(CCHandler):
 
     def create_cc_file_for_unit_block(
         self,
-        module_node: CourseNode,  # noqa: F841
-        unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
         """
         Creates a Common Cartridge resource file for an JUPYTER_NOTEBOOK type block.
         Adds the file to the zip file.
         """
-        super().create_cc_file_for_unit_block(unit_block, zip_file)
         logger.warning(f"Assessment block export not yet implemented: {self.block}")

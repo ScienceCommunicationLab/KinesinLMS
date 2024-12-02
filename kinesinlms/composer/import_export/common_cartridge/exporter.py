@@ -504,8 +504,6 @@ class CommonCartridgeExporter(BaseExporter):
                         resource_handler: CCHandler = self.resource_factory.create_cc_handler(unit_block=unit_block)
                         try:
                             resource_handler.create_cc_file_for_unit_block(
-                                module_node=module_node,
-                                unit_block=unit_block,
                                 zip_file=zip_file,
                             )
                         except Exception as e:
