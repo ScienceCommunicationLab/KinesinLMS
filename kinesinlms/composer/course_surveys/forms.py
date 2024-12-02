@@ -1,6 +1,7 @@
 import logging
+
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, HTML
+from crispy_forms.layout import HTML, Layout
 from django import forms
 from django.forms import HiddenInput
 
@@ -24,6 +25,7 @@ class CourseSurveyForm(forms.ModelForm):
     Returns:
         _type_: _description_
     """
+
     course = forms.ModelChoiceField(
         queryset=Course.objects.all(),
         widget=HiddenInput(),
@@ -44,7 +46,7 @@ class CourseSurveyForm(forms.ModelForm):
             "days_delay",
             "include_uid",
             "survey_id",
-            "url"
+            "url",
         ]
 
     def __init__(self, *args, **kwargs):

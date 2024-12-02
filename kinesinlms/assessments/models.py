@@ -1,7 +1,7 @@
 import logging
 import textwrap
 import uuid
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -13,25 +13,28 @@ from jsonschema import validate
 from kinesinlms.composer.enum import AssessmentCompleteMode
 from kinesinlms.core.models import Trackable
 from kinesinlms.course.models import Course
-from kinesinlms.learning_library.constants import AssessmentType, AnswerStatus
+from kinesinlms.learning_library.constants import AnswerStatus, AssessmentType
 from kinesinlms.learning_library.models import Block
-from kinesinlms.learning_library.schema import DONE_INDICATOR_DEFINITION_SCHEMA, POLL_DEFINITION_SCHEMA, \
-    MULTIPLE_CHOICE_DEFINITION_SCHEMA, MULTIPLE_CHOICE_SOLUTION_SCHEMA
-
+from kinesinlms.learning_library.schema import (
+    DONE_INDICATOR_DEFINITION_SCHEMA,
+    MULTIPLE_CHOICE_DEFINITION_SCHEMA,
+    MULTIPLE_CHOICE_SOLUTION_SCHEMA,
+    POLL_DEFINITION_SCHEMA,
+)
 
 logger = logging.getLogger(__name__)
 
 
 class Assessment(RepresentationMixin, Trackable):
     """
-        An Assessment is a special kind of block that has both the question content
-        and, if applicable, the correct answer details for that question.
+    An Assessment is a special kind of block that has both the question content
+    and, if applicable, the correct answer details for that question.
 
-        We have to be careful to never send the correct answer information to the
-        client, only use it to validate incoming answers on the server. That's why
-        we take the extra precaution of splitting definition json from solution json.
+    We have to be careful to never send the correct answer information to the
+    client, only use it to validate incoming answers on the server. That's why
+    we take the extra precaution of splitting definition json from solution json.
 
-        Actual student answers to Assessments are stored in the Answer model, not here.
+    Actual student answers to Assessments are stored in the Answer model, not here.
 
 
     """
@@ -39,20 +42,13 @@ class Assessment(RepresentationMixin, Trackable):
     # TODO: Do we want to ensure that Assessments can only appear in a
     # TODO: Course not in Pathway or as a PublicResource?
 
-    label = models.CharField(max_length=255,
-                             null=True,
-                             blank=True,
-                             help_text="A label for the assessment.")
+    label = models.CharField(max_length=255, null=True, blank=True, help_text="A label for the assessment.")
 
-    block = models.OneToOneField(Block,
-                                 on_delete=models.CASCADE,
-                                 related_name='assessment')
+    block = models.OneToOneField(Block, on_delete=models.CASCADE, related_name="assessment")
 
-    type = models.CharField(max_length=50,
-                            choices=[(tag.name, tag.value) for tag in AssessmentType],
-                            default=None,
-                            null=True,
-                            blank=True)
+    type = models.CharField(
+        max_length=50, choices=[(tag.name, tag.value) for tag in AssessmentType], default=None, null=True, blank=True
+    )
 
     slug = models.SlugField(null=True, blank=True, unique=False, allow_unicode=True)
 
@@ -90,12 +86,14 @@ class Assessment(RepresentationMixin, Trackable):
     # Indicates whether to show slug before assessment name when rendered in course Unit page.
     show_slug = models.BooleanField(default=True, null=False, blank=True)
 
-    complete_mode = models.CharField(max_length=50,
-                                     choices=[(tag.name, tag.value) for tag in AssessmentCompleteMode],
-                                     default=AssessmentCompleteMode.DISABLED_ON_COMPLETE.name,
-                                     null=False,
-                                     blank=False,
-                                     help_text="Describes how an Assessment behaves when a student completes it.")
+    complete_mode = models.CharField(
+        max_length=50,
+        choices=[(tag.name, tag.value) for tag in AssessmentCompleteMode],
+        default=AssessmentCompleteMode.DISABLED_ON_COMPLETE.name,
+        null=False,
+        blank=False,
+        help_text="Describes how an Assessment behaves when a student completes it.",
+    )
 
     # How many times a student can submit an answer. Setting this
     # to `None` means there's no limit to attempts.
@@ -115,7 +113,6 @@ class Assessment(RepresentationMixin, Trackable):
     max_score = models.PositiveIntegerField(default=1, null=False, blank=False)
 
     def clean(self):
-
         if self.slug == "" or self.slug is None:
             self.slug = self.generate_generic_slug()
 
@@ -128,7 +125,7 @@ class Assessment(RepresentationMixin, Trackable):
                 elif self.type == AssessmentType.POLL.name:
                     validate(self.definition_json, POLL_DEFINITION_SCHEMA)
                 elif self.type == AssessmentType.MULTIPLE_CHOICE.name:
-                    if self.definition_json.get('choices', None):
+                    if self.definition_json.get("choices", None):
                         # If we have 'choices' in definition_json, we should use the MULTIPLE_CHOICE_DEFINITION_SCHEMA
                         validate(self.definition_json, MULTIPLE_CHOICE_DEFINITION_SCHEMA)
                         validate(self.solution_json, MULTIPLE_CHOICE_SOLUTION_SCHEMA)
@@ -158,10 +155,7 @@ class Assessment(RepresentationMixin, Trackable):
         Returns:
             dict
         """
-        return {
-            "definition": self.definition_json,
-            "solution": self.solution_json
-        }
+        return {"definition": self.definition_json, "solution": self.solution_json}
 
     @complete_json.setter
     def complete_json(self, value):
@@ -176,8 +170,8 @@ class Assessment(RepresentationMixin, Trackable):
         Args:
             value: dict
         """
-        self.definition_json = value['definition']
-        self.solution_json = value['solution']
+        self.definition_json = value["definition"]
+        self.solution_json = value["solution"]
 
     def to_react_representation(self, context=None) -> Dict:
         """
@@ -193,9 +187,9 @@ class Assessment(RepresentationMixin, Trackable):
         :return:
         """
 
-        student = context['user']
-        course = context.get('course')
-        course_unit = context.get('course_unit', None)
+        student = context["user"]
+        course = context.get("course")
+        course_unit = context.get("course_unit", None)
         if course_unit:
             course_unit_id = course_unit.id
             course_unit_slug = course_unit.slug
@@ -206,9 +200,9 @@ class Assessment(RepresentationMixin, Trackable):
         # Check for existing answer
         existing_submitted_answer = None
         try:
-            existing_submitted_answer = SubmittedAnswer.objects.get(student=student,
-                                                                    course=course,
-                                                                    assessment_id=self.id)
+            existing_submitted_answer = SubmittedAnswer.objects.get(
+                student=student, course=course, assessment_id=self.id
+            )
         except SubmittedAnswer.DoesNotExist:
             pass
         except Exception as e:
@@ -222,7 +216,7 @@ class Assessment(RepresentationMixin, Trackable):
             }
             if existing_submitted_answer.status in [AnswerStatus.COMPLETE.name, AnswerStatus.CORRECT.name]:
                 try:
-                    existing_submitted_answer_json['explanation'] = self.explanation
+                    existing_submitted_answer_json["explanation"] = self.explanation
                 except Exception:
                     logger.exception("Could not attach 'explanation' to assessment details")
         else:
@@ -238,13 +232,13 @@ class Assessment(RepresentationMixin, Trackable):
             "courseID": course.id,
             "courseUnitID": course_unit_id,
             "courseUnitSlug": course_unit_slug,
-            "existingSubmittedAnswer": existing_submitted_answer_json
+            "existingSubmittedAnswer": existing_submitted_answer_json,
         }
 
         # WARNING: Make sure not to send solution_json to client!!
-        if 'solution_json' in obj:
+        if "solution_json" in obj:
             logger.error("How did 'solution_json' get in response? Removing...")
-            obj.pop('solution_json')
+            obj.pop("solution_json")
 
         return obj
 
@@ -269,31 +263,25 @@ class SubmittedAnswer(Trackable):
     """
 
     class Meta:
-        unique_together = (('student', 'assessment', 'course'),)
+        unique_together = (("student", "assessment", "course"),)
 
-    course = models.ForeignKey(Course,
-                               null=True,
-                               related_name="answers",
-                               on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, null=True, related_name="answers", on_delete=models.CASCADE)
 
-    assessment = models.ForeignKey(Assessment,
-                                   blank=False,
-                                   null=False,
-                                   related_name='answers',
-                                   on_delete=models.CASCADE)
+    assessment = models.ForeignKey(
+        Assessment, blank=False, null=False, related_name="answers", on_delete=models.CASCADE
+    )
 
-    student = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                blank=False,
-                                null=False,
-                                related_name='answers',
-                                on_delete=models.CASCADE)
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, blank=False, null=False, related_name="answers", on_delete=models.CASCADE
+    )
 
-    status = models.CharField(max_length=50,
-                              choices=[(tag.name, tag.value) for tag in AnswerStatus],
-                              default=AnswerStatus.UNANSWERED.value,
-                              null=False,
-                              blank=True,
-                              )
+    status = models.CharField(
+        max_length=50,
+        choices=[(tag.name, tag.value) for tag in AnswerStatus],
+        default=AnswerStatus.UNANSWERED.value,
+        null=False,
+        blank=True,
+    )
 
     attempts = models.IntegerField(default=1, null=False, blank=True)
 
@@ -349,9 +337,9 @@ class SubmittedAnswer(Trackable):
         # MULTIPLE_CHOICE
         elif self.assessment.type == AssessmentType.MULTIPLE_CHOICE.name:
             logger.debug("handling multiple choice answers...")
-            correct_choice_keys = self.assessment.solution_json['correct_choice_keys']
+            correct_choice_keys = self.assessment.solution_json["correct_choice_keys"]
             # Assume AND join if not defined. (Answers with only one option are default AND.)
-            answer_join = self.assessment.solution_json.get('join', 'AND')
+            answer_join = self.assessment.solution_json.get("join", "AND")
 
             if answer_join == "AND":
                 if set(self.answer) == set(correct_choice_keys):
@@ -406,13 +394,13 @@ class SubmittedAnswer(Trackable):
         #      else:
         #          .....
 
-        if not hasattr(self, 'json_content') or self.json_content is None:
+        if not hasattr(self, "json_content") or self.json_content is None:
             if self.assessment.type == AssessmentType.DONE_INDICATOR.name:
                 return False
             else:
                 return None
 
-        answer = self.json_content.get('answer', None)
+        answer = self.json_content.get("answer", None)
         if answer == "":
             if self.assessment.type == AssessmentType.DONE_INDICATOR.name:
                 answer = False
@@ -427,20 +415,18 @@ class SubmittedAnswer(Trackable):
         Record the user's answer in the json_content field
         in a way that makes sense for the current assessment type field.
         """
-        if not hasattr(self, 'json_content'):
+        if not hasattr(self, "json_content"):
             self.json_content = {}
-        if not hasattr(self.json_content, 'answer'):
-            self.json_content = {
-                "answer": None
-            }
+        if not hasattr(self.json_content, "answer"):
+            self.json_content = {"answer": None}
         if self.assessment.type == AssessmentType.LONG_FORM_TEXT.name:
-            self.json_content['answer'] = value
+            self.json_content["answer"] = value
         elif self.assessment.type == AssessmentType.DONE_INDICATOR.name:
-            self.json_content['answer'] = value is True
+            self.json_content["answer"] = value is True
         elif self.assessment.type == AssessmentType.MULTIPLE_CHOICE.name:
             if isinstance(value, str):
                 value = [value]
-            self.json_content['answer'] = value
+            self.json_content["answer"] = value
         else:
             raise NotImplementedError()
 
@@ -452,7 +438,7 @@ class SubmittedAnswer(Trackable):
             "status": self.status,
             "attempts": self.attempts,
             "json_content": self.json_content,
-            "html_content": self.html_content
+            "html_content": self.html_content,
         }
 
     def __str__(self):

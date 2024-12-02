@@ -15,13 +15,15 @@ from django.conf import settings
 from lxml import etree
 from slugify import slugify
 
+from kinesinlms.composer.import_export.common_cartridge.assessment import QTIAssessmentFactory
 from kinesinlms.composer.import_export.common_cartridge.constants import (
     CommonCartridgeExportDir,
     CommonCartridgeResourceType,
 )
+from kinesinlms.composer.import_export.common_cartridge.utils import validate_resource_path
 from kinesinlms.course.models import CourseNode, UnitBlock
+from kinesinlms.learning_library.constants import ResourceType
 from kinesinlms.learning_library.models import (
-    Block,
     BlockResource,
     BlockType,
 )
@@ -29,7 +31,7 @@ from kinesinlms.learning_library.models import (
 logger = logging.getLogger(__name__)
 
 
-class CCResource(ABC):
+class CCHandler(ABC):
     """
     Base class for creating a common cartridge resource.
     Our factory will use a child class to create a resource
@@ -39,25 +41,122 @@ class CCResource(ABC):
         ABC (_type_): _description_
     """
 
-    block_type: str = None
-    block: Block = None
+    unit_block: UnitBlock = None
 
-    def __init__(self, block_type: str):
-        self.block_type = block_type
+    def __init__(self, unit_block: UnitBlock):
+        if not unit_block:
+            raise ValueError("unit_block must be provided")
+        self.unit_block = unit_block
+
+    @property
+    def block_type(self) -> Optional[str]:
+        if self.unit_block:
+            return self.unit_block.block.type
+        return None
 
     @abstractmethod
-    def get_resource_type(self):
+    def get_cc_resource_type(self):
         pass
 
-    def add_resource_file(
+    # METHODS FOR CREATING ELEMENTS FOR CC XML
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def create_cc_resource_element_for_unit_block(self) -> etree.Element:
+        """
+        Create the <resource> element for this UnitBlock instance.
+        This element will be added to the <resources> element in the
+        <manifest/> element in the Common Cartridge export.
+
+        Something like this:
+
+                <resources>
+                    <!-- HTML Content Resource -->
+                    <resource identifier="html_123" type="webcontent" href="html_123/content.html">
+                        <file href="html_123/content.html"/>
+                    </resource>
+
+                    <!-- Video Resource -->
+                    <resource identifier="video_456" type="imswl_xmlv1p3" href="video_456/video.html">
+                        <file href="video_456/video.html"/>
+                    </resource>
+                </resources>
+
+        Args:
+            unit_block (UnitBlock): _description_
+
+        Returns:
+            etree.Element: _description_
+        """
+        if not self.unit_block:
+            raise ValueError("unit_block must be already provided")
+
+        # Create <resource/> element
+        resource_type = self.get_cc_resource_type()
+        resource_el = etree.Element(
+            "resource",
+            attrib={
+                "identifier": self.unit_block.id_for_cc,
+                "type": resource_type,
+            },
+        )
+
+        # Create nested <file/> element, in needed
+        file_el = self._get_file_element(self.unit_block)
+        if file_el is not None:
+            resource_el.append(file_el)
+
+        return resource_el
+
+    def create_cc_resource_element_for_block_related_resource(
+        self,
+        block_resource: BlockResource,
+    ) -> Optional[etree.Element]:
+        """
+        Create the required <resource/> element for Resources instances related
+        to the current block via BlockResource.
+        """
+
+        # Get the file path for the resource so we can add it to <resource/>
+        resource_file_path = self._block_related_resource_file_path(
+            block_resource=block_resource,
+        )
+        if not resource_file_path:
+            return None
+
+        # Create <resource/> element
+        resource = block_resource.resource
+        if resource.type == ResourceType.IMAGE.name:
+            resource_type = CommonCartridgeResourceType.WEB_CONTENT.value
+        elif resource.type == ResourceType.VIDEO_TRANSCRIPT.name:
+            resource_type = CommonCartridgeResourceType.ASSIGNMENT.value
+
+        resource_el = etree.Element(
+            "resource",
+            attrib={
+                "identifier": str(resource.uuid),
+                "type": resource_type,
+                "href": resource_file_path,
+            },
+        )
+
+        # Create nested <file/> element
+        file_el = etree.Element("file", attrib={"href": resource_file_path})
+        resource_el.append(file_el)
+
+        return resource_el
+
+    # METHODS FOR CREATING FILES TO BE ADDED TO CC ZIP
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def create_cc_file_for_unit_block(
         self,
         module_node: CourseNode,
         unit_block: UnitBlock,
         zip_file: ZipFile,
     ):
         """
-        This method should create a resource file for a particular type of block.
-        The file should be added to the zip file.
+        This method should create a "resource" file within the zip for a particular
+        type of block.
 
         Args:
             module_node (CourseNode): The module node that contains the block.
@@ -70,11 +169,9 @@ class CCResource(ABC):
         """
         self.block = unit_block.block
         if self.block.type != self.block_type:
-            raise ValueError(
-                f"Block type must be {self.block_type}, not {self.block.type}"
-            )
+            raise ValueError(f"Block type must be {self.block_type}, not {self.block.type}")
 
-    def add_block_resource_file(
+    def create_cc_file_for_block_related_resource(
         self,
         block_resource: BlockResource,
         zip_file: ZipFile,
@@ -109,80 +206,46 @@ class CCResource(ABC):
 
         return True
 
-    def create_resource_manifest_element(self, unit_block: UnitBlock) -> etree.Element:
-        """
-        Create the <resource> element for the manifest file for this block.
-
-        (This isn't that complex yet so the entire logic is in this method.)
-
-        Args:
-            unit_block (UnitBlock): _description_
-
-        Returns:
-            etree.Element: _description_
-        """
-        # Create <resource/> element
-        block = unit_block.block
-        resource_el = etree.Element(
-            "resource",
-            attrib={
-                "identifier": str(block.uuid),
-                "type": "webcontent",
-            },
-        )
-
-        if self.block_type in [BlockType.HTML_CONTENT.name, BlockType.VIDEO.name]:
-            # Create nested <file/> element
-            file_href = self._block_resource_file_path(unit_block)
-            file_el = etree.Element("file", attrib={"href": file_href})
-            resource_el.append(file_el)
-
-        return resource_el
-
-    def create_block_related_resource_element(
-        self,
-        block_resource: BlockResource,
-    ) -> Optional[etree.Element]:
-        """
-        Create the required <resource/> element for Resources instances related
-        to the current block via BlockResource.
-        """
-
-        # Get the file path for the resource so we can add it to <resource/>
-        resource_file_path = self._block_related_resource_file_path(
-            block_resource=block_resource,
-        )
-        if not resource_file_path:
-            return None
-
-        # Create <resource/> element
-        resource = block_resource.resource
-        resource_el = etree.Element(
-            "resource",
-            attrib={
-                "identifier": str(resource.uuid),
-                "type": "webcontent",
-                "href": resource_file_path,
-            },
-        )
-
-        # Create nested <file/> element
-        file_el = etree.Element("file", attrib={"href": resource_file_path})
-        resource_el.append(file_el)
-
-        return resource_el
-
     # ~~~~~~~~~~~~~~~~~~~~~~
     # Private methods
     # ~~~~~~~~~~~~~~~~~~~~~~
 
-    def _html_content_with_relative_resource_file_paths(
+    def _get_file_element(self, unit_block: UnitBlock) -> Optional[etree.Element]:
+        """
+        Create a <file> element for the resource file associated with the given UnitBlock.
+
+        It will look like this:
+
+              <file href="some-uuid/HTML_CONTENT.html"/>
+
+        Args:
+            unit_block (UnitBlock): The unit block that contains the block.
+
+        Returns:
+            Optional[etree.Element]: The <file> element, or None if no file element is needed.
+
+        """
+        if not unit_block:
+            raise ValueError("unit_block must be provided")
+
+        resource_file_path = self._block_resource_file_path(unit_block)
+        if not resource_file_path:
+            return None
+        file_el = etree.Element("file", attrib={"href": resource_file_path})
+        return file_el
+
+    def _reformat_html_content_with_relative_resource_file_paths(
         self,
         unit_block: UnitBlock,
     ) -> str:
         """
         Returns the unit_block.block.html_content with any references to BlockResources
         updated to use their relative path in the Common Cartridge export.
+
+        So essentially what we're doing is replacing template tags in the HTML content
+        like "{{ block_resource_url 'filename.jpg' }}" with the relative path to the
+        exported file for that Resource as saved into the Common Cartridge export.
+
         """
         html_content = unit_block.block.html_content
 
@@ -195,9 +258,7 @@ class CCResource(ABC):
             filename = resource_file.name.split("/")[-1]
 
             # Convert the exported web resource path to a CC-relative path
-            export_file_path = self._block_related_resource_file_path(
-                block_resource=block_resource
-            )
+            export_file_path = self._block_related_resource_file_path(block_resource=block_resource)
             export_file_path = re.sub(
                 CommonCartridgeExportDir.WEB_RESOURCES_DIR.value,
                 CommonCartridgeExportDir.IMS_CC_ROOT_DIR.value,
@@ -225,8 +286,14 @@ class CCResource(ABC):
 
     def _block_resource_file_path(self, unit_block: UnitBlock) -> str:
         """
-        Return the file name to use to export the given unit block.
+        Generate a path to use when exporting the given unit block.
+        We use the block's UUID as the folder name, and the block's display name
+        (if it has one) as the file name.
         """
+
+        if not unit_block:
+            raise ValueError("unit_block must be provided")
+
         block = unit_block.block
 
         folder_name = str(block.uuid)
@@ -236,12 +303,30 @@ class CCResource(ABC):
         else:
             filename = f"{block.type}.html"
 
-        return folder_name + "/" + filename
+        path = folder_name + "/" + filename
+
+        if not validate_resource_path(path):
+            raise ValueError(f"Invalid resource path generated: {path}")
+
+        return path
 
     def _block_related_resource_file_path(
         self,
         block_resource: BlockResource,
     ) -> str:
+        """
+        Generate a path to use when exporting the given Resource instance
+        used by the provided BlockResource.
+
+        We use the resource's UUID as the folder name, and the resource's
+        file name as the file name.
+
+        Args:
+            block_resource (BlockResource): _description_
+
+        Returns:
+            str: _description_
+        """
         uuid = str(block_resource.resource.uuid)
         folder_name = f"{CommonCartridgeExportDir.WEB_RESOURCES_DIR.value}{uuid}"
         resource = block_resource.resource
@@ -250,14 +335,14 @@ class CCResource(ABC):
         return resource_export_file_path
 
 
-class HTMLContentCCResource(CCResource):
+class HTMLContentCCResource(CCHandler):
     def __init__(self):
         super().__init__(block_type=BlockType.HTML_CONTENT.name)
 
-    def get_resource_type(self) -> str:
+    def get_cc_resource_type(self) -> str:
         return CommonCartridgeResourceType.WEB_CONTENT.value
 
-    def add_resource_file(
+    def create_cc_file_for_unit_block(
         self,
         module_node: CourseNode,
         unit_block: UnitBlock,
@@ -267,15 +352,13 @@ class HTMLContentCCResource(CCResource):
         Creates a Common Cartridge resource file for a HTML_CONTENT type block.
         Adds the file to the zip file.
         """
-        super().add_resource_file(
+        super().create_cc_file_for_unit_block(
             module_node=module_node,
             unit_block=unit_block,
             zip_file=zip_file,
         )
-        html_title = (
-            self.block.display_name if self.block.display_name else self.block.type
-        )
-        html_content = self._html_content_with_relative_resource_file_paths(unit_block)
+        html_title = self.block.display_name if self.block.display_name else self.block.type
+        html_content = self._reformat_html_content_with_relative_resource_file_paths(unit_block)
         html = f"""
 <html>
     <head>
@@ -295,22 +378,16 @@ class HTMLContentCCResource(CCResource):
 
         return True
 
-    def get_manifest_entry(self, identifier: str, resource_path: str) -> str:
-        return f"""
-            <resource identifier="{identifier}" type="webcontent" href="{resource_path}">
-                <file href="{resource_path}"/>
-            </resource>
-        """
 
-
-class VideoCCResource(CCResource):
+class VideoCCResource(CCHandler):
     def __init__(self):
         super().__init__(block_type=BlockType.VIDEO.name)
 
-    def get_resource_type(self) -> str:
-        return "imswl_xmlv1p3"
+    def get_cc_resource_type(self) -> str:
+        # We store video as a simple HTML document with an embedded iframe.
+        return CommonCartridgeResourceType.WEB_CONTENT.value
 
-    def add_resource_file(
+    def create_cc_file_for_unit_block(
         self,
         module_node: CourseNode,  # noqa: F841
         unit_block: UnitBlock,
@@ -320,7 +397,7 @@ class VideoCCResource(CCResource):
         Creates a Common Cartridge resource file for a VIDEO type block.
         Adds the file to the zip file.
         """
-        super().add_resource_file(
+        super().create_cc_file_for_unit_block(
             module_node=module_node,
             unit_block=unit_block,
             zip_file=zip_file,
@@ -357,39 +434,69 @@ class VideoCCResource(CCResource):
         """
 
 
-class AssessmentCCResource(CCResource):
+class AssessmentCCResource(CCHandler):
+    """
+    Creates Common Cartridge resources for Assessment blocks.
+    Uses a factory to generate the appropriate QTI content based on assessment type.
+    """
+
     def __init__(self):
         super().__init__(block_type=BlockType.ASSESSMENT.name)
+        self.qti_factory = QTIAssessmentFactory()
 
-    def get_resource_type(self) -> str:
-        return CommonCartridgeResourceType.ASSIGNMENT.value
+    def get_cc_resource_type(self) -> str:
+        return CommonCartridgeResourceType.QTI_ASSESSMENT.value
 
-    def add_resource_file(
+    def create_cc_file_for_unit_block(
         self,
-        module_node: CourseNode,  # noqa: F841
+        module_node: CourseNode,
         unit_block: UnitBlock,
         zip_file: ZipFile,
     ) -> bool:
         """
-        Creates a Common Cartridge resource file for an ASSESSMENT type block.
-        Adds the file to the zip file.
+        Creates a Common Cartridge QTI XML file for an assessment block.
+        Uses the QTIAssessmentFactory to generate appropriate QTI content
+        based on the assessment type.
         """
-        super().add_resource_file(
+        super().create_cc_file_for_unit_block(
             module_node=module_node,
             unit_block=unit_block,
             zip_file=zip_file,
         )
-        logger.warning(f"Assessment block export not yet implemented: {self.block}")
+
+        if not hasattr(unit_block, "assessment"):
+            raise ValueError("UnitBlock must have an assessment attribute")
+
+        # Get QTI content from factory based on assessment type
+        assessment = self.block.assessment
+        qti_assessment = self.qti_factory.create_qti_assessment(assessment)
+        qti_xml = qti_assessment.to_qti_xml()
+
+        # Write the QTI XML file to the zip
+        assessment_file_path = self._block_resource_file_path(unit_block)
+        zip_file.writestr(assessment_file_path, qti_xml)
+        return True
+
+    def _block_resource_file_path(self, unit_block: UnitBlock) -> str:
+        """
+        Override the base class method to use .xml extension instead of .html
+        """
+        folder_name = str(unit_block.block.uuid)
+        if unit_block.block.display_name:
+            filename = slugify(unit_block.block.display_name) + ".xml"
+        else:
+            filename = f"{unit_block.block.type}.xml"
+        return folder_name + "/" + filename
 
 
-class ForumTopicCCResource(CCResource):
+class ForumTopicCCResource(CCHandler):
     def __init__(self):
         super().__init__(block_type=BlockType.FORUM_TOPIC.name)
 
-    def get_resource_type(self) -> str:
+    def get_cc_resource_type(self) -> str:
         return CommonCartridgeResourceType.DISCUSSION_TOPIC.value
 
-    def add_resource_file(
+    def create_cc_file_for_unit_block(
         self,
         module_node: CourseNode,  # noqa: F841
         unit_block: UnitBlock,
@@ -399,22 +506,22 @@ class ForumTopicCCResource(CCResource):
         Creates a Common Cartridge resource file for an FORUM_TOPIC type block.
         Adds the file to the zip file.
         """
-        super().add_resource_file(
+        super().create_cc_file_for_unit_block(
             module_node=module_node,
             unit_block=unit_block,
             zip_file=zip_file,
         )
-        logger.warning(f"Assessment block export not yet implemented: {self.block}")
+        logger.warning(f"Forum topic block export not yet implemented: {self.block}")
 
 
-class SimpleInteractiveToolCCResource(CCResource):
+class SimpleInteractiveToolCCResource(CCHandler):
     def __init__(self):
         super().__init__(block_type=BlockType.SIMPLE_INTERACTIVE_TOOL.name)
 
-    def get_resource_type(self) -> str:
-        return CommonCartridgeResourceType.ASSIGNMENT.value
+    def get_cc_resource_type(self) -> str:
+        return CommonCartridgeResourceType.LEARNING_RESOURCE.value
 
-    def add_resource_file(
+    def create_cc_file_for_unit_block(
         self,
         module_node: CourseNode,  # noqa: F841
         unit_block: UnitBlock,
@@ -424,7 +531,7 @@ class SimpleInteractiveToolCCResource(CCResource):
         Creates a Common Cartridge resource file for an SIMPLE_INTERACTIVE_TOOL type block.
         Adds the file to the zip file.
         """
-        super().add_resource_file(
+        super().create_cc_file_for_unit_block(
             module_node=module_node,
             unit_block=unit_block,
             zip_file=zip_file,
@@ -432,22 +539,22 @@ class SimpleInteractiveToolCCResource(CCResource):
         logger.warning(f"Assessment block export not yet implemented: {self.block}")
 
 
-class JupyterNotebookCCResource(CCResource):
+class JupyterNotebookCCResource(CCHandler):
     def __init__(self):
         super().__init__(block_type=BlockType.JUPYTER_NOTEBOOK.name)
 
-    def get_resource_type(self) -> str:
-        return CommonCartridgeResourceType.ASSIGNMENT.value
+    def get_cc_resource_type(self) -> str:
+        return CommonCartridgeResourceType.LEARNING_RESOURCE.value
 
-        def add_resource_file(
-            self,
-            module_node: CourseNode,  # noqa: F841
-            unit_block: UnitBlock,
-            zip_file: ZipFile,
-        ) -> bool:
-            """
-            Creates a Common Cartridge resource file for an JUPYTER_NOTEBOOK type block.
-            Adds the file to the zip file.
-            """
-            super().add_resource_file(unit_block, zip_file)
-            logger.warning(f"Assessment block export not yet implemented: {self.block}")
+    def create_cc_file_for_unit_block(
+        self,
+        module_node: CourseNode,  # noqa: F841
+        unit_block: UnitBlock,
+        zip_file: ZipFile,
+    ) -> bool:
+        """
+        Creates a Common Cartridge resource file for an JUPYTER_NOTEBOOK type block.
+        Adds the file to the zip file.
+        """
+        super().create_cc_file_for_unit_block(unit_block, zip_file)
+        logger.warning(f"Assessment block export not yet implemented: {self.block}")

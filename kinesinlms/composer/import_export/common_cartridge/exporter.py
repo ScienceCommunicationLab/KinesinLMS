@@ -1,6 +1,6 @@
 import logging
+import uuid
 from io import BytesIO
-from typing import Optional
 from zipfile import ZipFile
 
 from django.conf import settings
@@ -13,9 +13,9 @@ from kinesinlms.composer.import_export.common_cartridge.constants import (
     CommonCartridgeExportFormat,
 )
 from kinesinlms.composer.import_export.common_cartridge.factory import (
-    CCResourceFactory,
+    CCHandlerFactory,
 )
-from kinesinlms.composer.import_export.common_cartridge.resource import CCResource
+from kinesinlms.composer.import_export.common_cartridge.resource import CCHandler
 from kinesinlms.composer.import_export.exporter import BaseExporter
 from kinesinlms.core.utils import get_current_site_profile
 from kinesinlms.course.models import Course
@@ -32,7 +32,7 @@ class CommonCartridgeExporter(BaseExporter):
 
     def __init__(self):
         self._setup_namespaces_and_prefixes()
-        self.resource_factory = CCResourceFactory()
+        self.resource_factory = CCHandlerFactory()
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # PUBLIC METHODS
@@ -140,7 +140,7 @@ class CommonCartridgeExporter(BaseExporter):
         organizations_el: etree.Element = self._create_organizations_el(course=course)
         manifest_el.append(organizations_el)
 
-        resources_el: etree.Element = self._create_resources_el(course=course)
+        resources_el: etree.Element = self._create_cc_resources_el(course=course)
         manifest_el.append(resources_el)
 
         return manifest_el
@@ -171,9 +171,7 @@ class CommonCartridgeExporter(BaseExporter):
         # This format is how ElementTree represents namespaced attributes internally using
         # {namespace-uri}localname
         schema_locations = " ".join(SCHEMA_LOCATIONS)
-        manifest_el.set(
-            etree.QName(NAMESPACES["xsi"], "schemaLocation"), schema_locations
-        )
+        manifest_el.set(etree.QName(NAMESPACES["xsi"], "schemaLocation"), schema_locations)
         return manifest_el
 
     def _create_metadata_el(self, course: Course) -> etree.Element:
@@ -210,9 +208,7 @@ class CommonCartridgeExporter(BaseExporter):
         general_el.append(title_el)
 
         # Add description. We'll use the course overview.
-        description_el = etree.Element(
-            etree.QName(NAMESPACES["lomimscc"], "description")
-        )
+        description_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "description"))
         description_string_el = etree.Element(
             etree.QName(NAMESPACES["lomimscc"], "string"),
             attrib={"language": settings.LANGUAGE_CODE},
@@ -269,12 +265,8 @@ class CommonCartridgeExporter(BaseExporter):
         lom_el.append(technical_el)
 
         # Educational metadata
-        educational_el = etree.Element(
-            etree.QName(NAMESPACES["lomimscc"], "educational")
-        )
-        learning_resource_type_el = etree.Element(
-            etree.QName(NAMESPACES["lomimscc"], "learningResourceType")
-        )
+        educational_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "educational"))
+        learning_resource_type_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "learningResourceType"))
         value_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "value"))
         value_el.text = "Course"
         learning_resource_type_el.append(value_el)
@@ -317,12 +309,8 @@ class CommonCartridgeExporter(BaseExporter):
         if not license_text:
             license_text = "( no license defined )"
 
-        description_el = etree.Element(
-            etree.QName(NAMESPACES["lomimscc"], "description")
-        )
-        description_text_el = etree.Element(
-            etree.QName(NAMESPACES["lomimscc"], "string")
-        )
+        description_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "description"))
+        description_text_el = etree.Element(etree.QName(NAMESPACES["lomimscc"], "string"))
         description_text_el.text = license_text
         description_el.append(description_text_el)
         rights_el.append(description_el)
@@ -352,12 +340,12 @@ class CommonCartridgeExporter(BaseExporter):
             },
         )
         organizations_el.append(organization_el)
-        root_item_el = self._create_root_item(course=course)
+        root_item_el = self._create_organization_tree(course=course)
         organization_el.append(root_item_el)
 
         return organizations_el
 
-    def _create_root_item(self, course: Course) -> etree.Element:
+    def _create_organization_tree(self, course: Course) -> etree.Element:
         """
         Create the nested <item/> elements for the current course.
         Implements a three-tier structure:
@@ -422,23 +410,24 @@ class CommonCartridgeExporter(BaseExporter):
                     unit_el.append(unit_title)
                     section_el.append(unit_el)
 
-                    # Add blocks within each Unit
-                    for block_idx, unit_block in enumerate(
-                        unit_node.unit.unit_blocks.all()
-                    ):
+                    # Add UnitBlocks within each Unit
+                    for unit_block in unit_node.unit.unit_blocks.all():
+                        if not unit_block.uuid:
+                            unit_block.uuid = uuid.uuid4()
+                            unit_block.save()
                         block = unit_block.block
-                        block_el = etree.Element(
+                        unit_block_el = etree.Element(
                             "item",
                             attrib={
-                                "identifier": f"block_{block.uuid}",
-                                "identifierref": str(block.uuid),
+                                "identifier": f"unit_block_{unit_block.id_for_cc}",
+                                "identifierref": unit_block.id_for_cc,
                                 "isvisible": "true",
                             },
                         )
                         block_title = etree.Element("title")
-                        block_title.text = block.display_name # Okay to be None
-                        block_el.append(block_title)
-                        unit_el.append(block_el)
+                        block_title.text = block.display_name  # Okay to be None
+                        unit_block_el.append(block_title)
+                        unit_el.append(unit_block_el)
 
         return root_item_el
 
@@ -451,10 +440,13 @@ class CommonCartridgeExporter(BaseExporter):
     # Therefore, both Block instances as well as Resource instances are
     # considered "resources" in CC.
 
-    def _create_resources_el(self, course) -> etree.Element:
+    def _create_cc_resources_el(self, course) -> etree.Element:
         """
-        Use the CCResource factory to create the required <resources/> elements
-        for the Common Cartridge export.
+        Use the CCHandler factory to create the required <resources/> elements
+        for the Common Cartridge export. This means creating a <resource/> element
+        for each Block, as well as all the Resources associated with those Blocks.
+
+        This method makes sure not to write the same Resource to the manifest more than once.
 
         Returns:
             The <resources/> element for the course, complete with nested
@@ -462,28 +454,29 @@ class CommonCartridgeExporter(BaseExporter):
 
         """
         resources_el = etree.Element("resources")
+        # Keep track of which Resource objects we've already written to the manifest
+        expoted_resource_ids = []
         for module_node in course.course_root_node.get_children():
             for section_node in module_node.get_children():
                 for unit_node in section_node.get_children():
                     for unit_block in unit_node.unit.unit_blocks.all():
-                        # Create the <resource/> element for this Block.
-                        ccr: CCResource = self.resource_factory.create_resource_handler(
-                            unit_block.block.type
-                        )
-                        resource_el: etree.Element = (
-                            ccr.create_resource_manifest_element(unit_block)
-                        )
+                        # Create a handler from our factory
+                        ccr: CCHandler = self.resource_factory.create_cc_handler(unit_block=unit_block)
+
+                        # UNIT BLOCK: Create the <resource/> element for this UnitBlock.
+                        resource_el: etree.Element = ccr.create_cc_resource_element_for_unit_block()
                         resources_el.append(resource_el)
 
-                        # Create the <resource/> elements for BlockResource items.
+                        # BLOCK RESOURCE: Create the <resource/> elements for BlockResource items.
                         for block_resource in unit_block.block.block_resources.all():
-                            block_resource_el = (
-                                ccr.create_block_related_resource_element(
-                                    block_resource
-                                )
+                            # Only write each Resource once
+                            if block_resource.resource.id in expoted_resource_ids:
+                                continue
+                            block_resource_el = ccr.create_cc_resource_element_for_block_related_resource(
+                                block_resource=block_resource
                             )
-                            if block_resource_el:
-                                resources_el.append(block_resource_el)
+                            resources_el.append(block_resource_el)
+                            expoted_resource_ids.append(block_resource.resource.id)
 
         return resources_el
 
@@ -503,7 +496,7 @@ class CommonCartridgeExporter(BaseExporter):
         Returns:
             bool: True if successful, other Exception is raised
         """
-        saved_resource_ids = []
+        exported_resource_ids = []
         for module_node in course.course_root_node.get_children():
             for section_node in module_node.get_children():
                 for unit_node in section_node.get_children():
@@ -511,30 +504,25 @@ class CommonCartridgeExporter(BaseExporter):
                         block: Block = unit_block.block
 
                         # Write the Block resource file in the zip
-                        resource_handler: CCResource = (
-                            self.resource_factory.create_resource_handler(block.type)
-                        )
+                        resource_handler: CCHandler = self.resource_factory.create_cc_handler(unit_block=unit_block)
                         try:
-                            resource_handler.add_resource_file(
+                            resource_handler.create_cc_file_for_unit_block(
                                 module_node=module_node,
                                 unit_block=unit_block,
                                 zip_file=zip_file,
                             )
                         except Exception as e:
-                            logger.exception(
-                                f"Error creating resource file for "
-                                f"block {block.uuid}: {e}"
-                            )
+                            logger.exception(f"Error creating resource file for " f"block {block.uuid}: {e}")
                             raise e
 
                         # Resource objects are linked in a many-to-many relationship
                         # to Blocks, so we only have to write each resource file once.
                         for block_resource in block.block_resources.all():
-                            if block_resource.resource.id not in saved_resource_ids:
-                                resource_handler.add_block_resource_file(
+                            if block_resource.resource.id not in exported_resource_ids:
+                                resource_handler.create_cc_file_for_block_related_resource(
                                     block_resource=block_resource,
                                     zip_file=zip_file,
                                 )
-                                saved_resource_ids.append(block_resource.resource.id)
+                                exported_resource_ids.append(block_resource.resource.id)
 
         return True

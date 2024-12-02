@@ -90,8 +90,7 @@ class Resource(Trackable):
         null=True,
         blank=True,
         help_text=_(
-            "A name for this resource. This name is used in the admin "
-            "interface and in the learning library."
+            "A name for this resource. This name is used in the admin " "interface and in the learning library."
         ),
     )
 
@@ -99,8 +98,7 @@ class Resource(Trackable):
         null=True,
         blank=True,
         help_text=_(
-            "A short description of the resource. If this is an image, the "
-            "description will be used as the alt text."
+            "A short description of the resource. If this is an image, the " "description will be used as the alt text."
         ),
     )
 
@@ -223,10 +221,7 @@ class UnitBlock(Trackable):
         max_length=200,
         null=True,
         blank=True,
-        help_text=_(
-            "A label that should appear next to this "
-            "block when rendered in this particular unit."
-        ),
+        help_text=_("A label that should appear next to this " "block when rendered in this particular unit."),
     )
 
     # This allows us to number assessments on a unit like 1, 2, 3
@@ -237,10 +232,7 @@ class UnitBlock(Trackable):
         max_length=200,
         null=True,
         blank=True,
-        help_text=_(
-            "An index number that should appear next to this "
-            "block when rendered in this particular unit."
-        ),
+        help_text=_("An index number that should appear next to this " "block when rendered in this particular unit."),
     )
 
     block_order = models.PositiveIntegerField(default=0)
@@ -269,10 +261,17 @@ class UnitBlock(Trackable):
         blank=False,
         null=False,
         help_text=_(
-            "This block is included in any course summary pages (like "
-            "'My Responses' or 'Printable Review'."
+            "This block is included in any course summary pages (like " "'My Responses' or 'Printable Review'."
         ),
     )
+
+    @property
+    def id_for_cc(self) -> str:
+        """
+        The identifier to use when exporting to Common Cartridge.
+        TODO: Maybe switch to uuid?
+        """
+        return str(self.block.id)
 
     def __str__(self):
         s = f"UnitBlock [{self.id}]"
@@ -324,8 +323,7 @@ class Block(RepresentationMixin, Trackable):
         null=True,
         blank=True,
         help_text=_(
-            "A text header to be shown at the top of the block. "
-            "(Only some block types display this field.)"
+            "A text header to be shown at the top of the block. " "(Only some block types display this field.)"
         ),
     )
 
@@ -374,10 +372,7 @@ class Block(RepresentationMixin, Trackable):
         default=True,
         null=False,
         blank=True,
-        help_text=_(
-            "Enables a limited number of template tags in "
-            "this model's html_content field."
-        ),
+        help_text=_("Enables a limited number of template tags in " "this model's html_content field."),
     )
 
     # HTML content for this block. When defined, it's usually
@@ -411,10 +406,7 @@ class Block(RepresentationMixin, Trackable):
     json_content = JSONField(
         null=True,
         blank=True,
-        help_text=_(
-            "JSON content for this block. This holds different "
-            "data depending on the block type."
-        ),
+        help_text=_("JSON content for this block. This holds different " "data depending on the block type."),
     )
 
     # Status for this block. At the moment that just means 'draft' or
@@ -469,10 +461,7 @@ class Block(RepresentationMixin, Trackable):
                 else:
                     logger.info(f"No validator defined for block type {self.type}")
             except KeyError:
-                raise ValidationError(
-                    "No validator schema defined for this "
-                    "type but json content exists"
-                )
+                raise ValidationError("No validator schema defined for this " "type but json content exists")
             except Exception:
                 raise ValidationError("Invalid JSON")
 
@@ -483,9 +472,7 @@ class Block(RepresentationMixin, Trackable):
         try:
             super().save(*args, **kwargs)
         except IntegrityError:
-            logger.warning(
-                f"Could not save slug for Block {self.display_name} using slug {self.slug} "
-            )
+            logger.warning(f"Could not save slug for Block {self.display_name} using slug {self.slug} ")
             logger.warning(f"Saving with slug set to uuid : {self.uuid}")
             self.slug = self.uuid
             super().save(*args, **kwargs)
@@ -553,9 +540,7 @@ class Block(RepresentationMixin, Trackable):
                     cohort_forum_group=cohort.cohort_forum_group,
                     forum_category=forum_category,
                 )
-                disc_topic = ForumTopic.objects.get(
-                    forum_subcategory=forum_subcategory, block=self
-                )
+                disc_topic = ForumTopic.objects.get(forum_subcategory=forum_subcategory, block=self)
                 topic_id = disc_topic.topic_id
                 topic_slug = disc_topic.topic_slug
             except Exception:
@@ -570,10 +555,7 @@ class Block(RepresentationMixin, Trackable):
                 sit_obj = simple_interactive_tool.to_react_representation(context)
                 obj.update(sit_obj)
             else:
-                logger.error(
-                    "Cannot find simple_interactive_tool row for "
-                    "block with SIMPLE_INTERACTIVE_TOOL type."
-                )
+                logger.error("Cannot find simple_interactive_tool row for " "block with SIMPLE_INTERACTIVE_TOOL type.")
 
         return obj
 
@@ -624,9 +606,7 @@ class Block(RepresentationMixin, Trackable):
                 summary = f"Discuss: {self.slug}"
 
         elif self.type == BlockType.SIMPLE_INTERACTIVE_TOOL.name:
-            sit_name = SimpleInteractiveToolType[
-                self.simple_interactive_tool.tool_type
-            ].value
+            sit_name = SimpleInteractiveToolType[self.simple_interactive_tool.tool_type].value
 
             if self.display_name:
                 summary = f"{sit_name} Activity: {self.display_name}"
@@ -670,9 +650,7 @@ class Block(RepresentationMixin, Trackable):
         # return "iframe"
 
     def __str__(self):
-        return "{} :  type : {}  display_name : {} ".format(
-            self.id, self.type, self.display_name
-        )
+        return "{} :  type : {}  display_name : {} ".format(self.id, self.type, self.display_name)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # TYPE-SPECIFIC METHODS
@@ -714,14 +692,10 @@ class Block(RepresentationMixin, Trackable):
             data = getattr(self, "json_content", None)
             if not data:
                 return None
-            player_type = self.json_content.get(
-                "player_type", VideoPlayerType.YOUTUBE.name
-            )
+            player_type = self.json_content.get("player_type", VideoPlayerType.YOUTUBE.name)
             video_id = self.json_content.get("video_id", None)
             if not video_id:
-                logger.error(
-                    f"thumbnail_url(): 'VIDEO' type block id {self.id} does not have a video_id property. "
-                )
+                logger.error(f"thumbnail_url(): 'VIDEO' type block id {self.id} does not have a video_id property. ")
                 return None
             if player_type == VideoPlayerType.YOUTUBE.name:
                 url = f"https://img.youtube.com/vi/{video_id}/default.jpg"
@@ -782,9 +756,7 @@ class LibraryItem(Trackable):
         if not self.course_unit and not self.block:
             raise ValidationError("Either course_unit or block must be defined.")
         if self.course_unit and self.block:
-            raise ValidationError(
-                "Only one of course_unit or block can be defined, not both."
-            )
+            raise ValidationError("Only one of course_unit or block can be defined, not both.")
 
     @property
     def uuid(self):
@@ -813,15 +785,11 @@ class BlockLearningObjective(models.Model):
 
     display_in_course = models.BooleanField(default=True, null=False, blank=False)
 
-    display_in_learning_library = models.BooleanField(
-        default=True, null=False, blank=False
-    )
+    display_in_learning_library = models.BooleanField(default=True, null=False, blank=False)
 
 
 class LearningObjective(models.Model):
-    slug = models.SlugField(
-        max_length=200, unique=True, null=False, blank=False, allow_unicode=True
-    )
+    slug = models.SlugField(max_length=200, unique=True, null=False, blank=False, allow_unicode=True)
 
     type = models.CharField(
         max_length=50,
@@ -835,9 +803,7 @@ class LearningObjective(models.Model):
 
     description = models.TextField(null=True, blank=True)
 
-    blocks = models.ManyToManyField(
-        Block, through=BlockLearningObjective, related_name="learning_objectives"
-    )
+    blocks = models.ManyToManyField(Block, through=BlockLearningObjective, related_name="learning_objectives")
 
 
 class BlockResource(Trackable):
@@ -848,13 +814,9 @@ class BlockResource(Trackable):
     class Meta:
         unique_together = ("block", "resource")
 
-    block = models.ForeignKey(
-        Block, null=False, related_name="block_resources", on_delete=models.CASCADE
-    )
+    block = models.ForeignKey(Block, null=False, related_name="block_resources", on_delete=models.CASCADE)
 
-    resource = models.ForeignKey(
-        Resource, null=False, related_name="block_resources", on_delete=models.CASCADE
-    )
+    resource = models.ForeignKey(Resource, null=False, related_name="block_resources", on_delete=models.CASCADE)
 
     @property
     def description(self) -> Optional[str]:

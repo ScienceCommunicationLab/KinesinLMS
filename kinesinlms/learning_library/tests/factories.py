@@ -1,6 +1,6 @@
 import factory
 
-from kinesinlms.learning_library.models import Block, BlockStatus
+from kinesinlms.learning_library.models import Block, BlockStatus, UnitBlock
 
 
 class BlockFactory(factory.django.DjangoModelFactory):
@@ -11,3 +11,11 @@ class BlockFactory(factory.django.DjangoModelFactory):
     short_description = factory.LazyAttribute(lambda o: f"This is a short description of Unit {o.display_name}")
     status = BlockStatus.PUBLISHED.name
 
+
+class UnitBlockFactory(BlockFactory):
+    class Meta:
+        model = UnitBlock
+
+    _sequence = factory.Sequence(lambda n: n)
+    slug = factory.LazyAttribute(lambda o: f"unit-block-{o._sequence}")
+    label = factory.LazyAttribute(lambda o: f"Unit Block {o._sequence}")

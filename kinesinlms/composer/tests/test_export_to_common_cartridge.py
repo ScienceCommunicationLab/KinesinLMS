@@ -5,6 +5,7 @@ import zipfile
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 from lxml import etree
@@ -12,13 +13,23 @@ from lxml import etree
 from kinesinlms.composer.import_export.common_cartridge.constants import (
     NAMESPACES,
     SCHEMA_LOCATIONS,
+    CommonCartridgeExportDir,
 )
 from kinesinlms.composer.import_export.common_cartridge.exporter import (
     CommonCartridgeExporter,
 )
+from kinesinlms.composer.import_export.common_cartridge.resource import (
+    AssessmentCCResource,
+    CommonCartridgeResourceType,
+    HTMLContentCCResource,
+    VideoCCResource,
+)
+from kinesinlms.composer.import_export.common_cartridge.utils import validate_resource_path
 from kinesinlms.core.utils import get_current_site_profile
 from kinesinlms.course.models import Course
-from kinesinlms.course.tests.factories import CourseFactory
+from kinesinlms.course.tests.factories import CourseFactory, CourseUnitFactory
+from kinesinlms.learning_library.models import BlockResource, BlockType, Resource, ResourceType, UnitBlock
+from kinesinlms.learning_library.tests.factories import BlockFactory, UnitBlockFactory
 
 logger = logging.getLogger(__name__)
 
@@ -40,9 +51,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         site_profile.save()
 
         User = get_user_model()
-        self.admin_user = User.objects.create(
-            username="daniel", is_staff=True, is_superuser=True
-        )
+        self.admin_user = User.objects.create(username="daniel", is_staff=True, is_superuser=True)
 
     def test_course_export(self):
         self.client.force_login(self.admin_user)
@@ -94,8 +103,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
             self.assertEqual(
                 actual_uri,
                 uri,
-                f"Namespace {prefix} has incorrect value. "
-                f"Expected {uri}, got {actual_uri}",
+                f"Namespace {prefix} has incorrect value. " f"Expected {uri}, got {actual_uri}",
             )
 
         # Check schema location using lxml's QName
@@ -159,9 +167,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         self.assertEqual(title.text, self.course.display_name or "Untitled Course")
 
         # Check description
-        description = general.find(
-            "lomimscc:description/lomimscc:string", namespaces=NAMESPACES
-        )
+        description = general.find("lomimscc:description/lomimscc:string", namespaces=NAMESPACES)
         self.assertIsNotNone(description)
         self.assertEqual(description.get("language"), settings.LANGUAGE_CODE)
         self.assertEqual(description.text, self.course.overview)
@@ -173,9 +179,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
 
         # Check keywords if course has tags
         if self.course.tags.exists():
-            keyword = general.find(
-                "lomimscc:keyword/lomimscc:string", namespaces=NAMESPACES
-            )
+            keyword = general.find("lomimscc:keyword/lomimscc:string", namespaces=NAMESPACES)
             self.assertIsNotNone(keyword)
             self.assertEqual(keyword.get("language"), settings.LANGUAGE_CODE)
             expected_keywords = ",".join([tag.name for tag in self.course.tags.all()])
@@ -216,9 +220,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         # Check educational metadata
         educational = lom.find("lomimscc:educational", namespaces=NAMESPACES)
         self.assertIsNotNone(educational)
-        resource_type = educational.find(
-            "lomimscc:learningResourceType/lomimscc:value", namespaces=NAMESPACES
-        )
+        resource_type = educational.find("lomimscc:learningResourceType/lomimscc:value", namespaces=NAMESPACES)
         self.assertIsNotNone(resource_type)
         self.assertEqual(resource_type.text, "Course")
 
@@ -280,9 +282,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
 
             # Check section level exists within module
             for section_node in module_node.get_children():
-                section_el = module_el.find(
-                    f"item[@identifier='section_{section_node.id}']"
-                )
+                section_el = module_el.find(f"item[@identifier='section_{section_node.id}']")
                 self.assertIsNotNone(section_el)
                 self.assertEqual(section_el.get("isvisible"), "true")
                 self.assertEqual(
@@ -292,9 +292,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
 
                 # Check unit level exists within section
                 for unit_node in section_node.get_children():
-                    unit_el = section_el.find(
-                        f"item[@identifier='unit_{unit_node.id}']"
-                    )
+                    unit_el = section_el.find(f"item[@identifier='unit_{unit_node.id}']")
                     self.assertIsNotNone(unit_el)
                     self.assertEqual(unit_el.get("isvisible"), "true")
                     self.assertEqual(
@@ -305,13 +303,11 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
                     # Check blocks exist within unit
                     for unit_block in unit_node.unit.unit_blocks.all():
                         block = unit_block.block
-                        block_el = unit_el.find(
-                            f"item[@identifier='block_{block.uuid}']"
-                        )
+                        block_el = unit_el.find(f"item[@identifier='block_{block.uuid}']")
                         self.assertIsNotNone(block_el)
                         self.assertEqual(block_el.get("isvisible"), "true")
                         self.assertEqual(block_el.get("identifierref"), str(block.uuid))
-                        expected_export_title = block.display_name 
+                        expected_export_title = block.display_name
                         self.assertEqual(
                             block_el.find("title").text,
                             expected_export_title,
@@ -325,3 +321,110 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
             pretty_print=True,
         )
         logger.info("\nGenerated XML:\n%s", xml_str)
+
+    def test_validate_resource_path(self):
+        """Test the resource path validation functionality."""
+        valid_paths = [
+            "folder/file.html",
+            "123e4567-e89b-12d3-a456-426614174000/content.html",
+            "web_resources/image-123/test_image.jpg",
+            "some-folder/another_folder/file-name.xml",
+        ]
+
+        invalid_paths = [
+            "/absolute/path/file.html",  # starts with slash
+            "folder//double-slash.html",  # consecutive slashes
+            "folder/space file.html",  # contains space
+            "folder/COM1/file.html",  # Windows reserved name
+            "folder/../file.html",  # parent directory reference
+            "folder/special@char.html",  # special characters
+            "folder/PRN/test.html",  # Another Windows reserved name
+        ]
+
+        for path in valid_paths:
+            self.assertTrue(validate_resource_path(path), f"Path should be valid: {path}")
+
+        for path in invalid_paths:
+            self.assertFalse(validate_resource_path(path), f"Path should be invalid: {path}")
+
+    def test_block_resource_file_paths_validation(self):
+        """Test that block resource file paths are properly validated."""
+
+        block = BlockFactory(
+            display_name="Test @ Block",  # invalid characters
+            type=BlockType.HTML_CONTENT.name,
+        )
+        course_unit = CourseUnitFactory.create(course=self.course, order=1)
+        unit_block = UnitBlockFactory.create(block=block, course_unit=course_unit)
+
+        # Test that the path generation and validation works
+        with self.assertRaises(ValueError, msg="Should reject invalid characters in path"):
+            handler = HTMLContentCCResource()
+            handler._block_resource_file_path(unit_block)
+
+    def test_create_resources_el_with_validation(self):
+        """Test resource element creation with path validation."""
+        exporter = CommonCartridgeExporter()
+        course = self.course
+
+        # Create test resources with various paths
+        resources_el = exporter._create_cc_resources_el(course)
+
+        # Test that all resource href attributes are valid paths
+        for resource_el in resources_el.findall(".//resource"):
+            href = resource_el.get("href")
+            if href:  # Some resources might not have href
+                self.assertTrue(validate_resource_path(href), f"Resource href should be valid: {href}")
+
+            # Test nested file elements
+            for file_el in resource_el.findall(".//file"):
+                file_href = file_el.get("href")
+                self.assertTrue(validate_resource_path(file_href), f"File href should be valid: {file_href}")
+
+    def test_video_resource_type(self):
+        """Test that video resources use the correct resource type."""
+        block = BlockFactory(type=BlockType.VIDEO.name, video_id="test_video_id")
+        course_unit = CourseUnitFactory.create(course=self.course, order=1)
+        unit_block = UnitBlockFactory(block=block, course_unit=course_unit)
+
+        # Create handler and check resource type
+        handler = VideoCCResource(unit_block=unit_block)
+        self.assertEqual(
+            handler.get_cc_resource_type(),
+            CommonCartridgeResourceType.WEB_CONTENT.value,  # or WEB_LINK.value if changed
+            "Video resource should use correct type",
+        )
+
+        # Test the created resource element
+        resource_el = handler.create_cc_resource_element_for_unit_block()
+        self.assertEqual(
+            resource_el.get("type"),
+            CommonCartridgeResourceType.WEB_CONTENT.value,  # or WEB_LINK.value if changed
+            "Video resource element should have correct type",
+        )
+
+    def test_html_content_resource_paths(self):
+        """Test that HTML content properly handles resource paths."""
+        # Create HTML block with resources
+        block = BlockFactory(
+            type=BlockType.HTML_CONTENT.name, html_content="<img src=\"{{ block_resource_url 'test.jpg' }}\">"
+        )
+        course_unit = CourseUnitFactory.create(course=self.course, order=1)
+        unit_block = UnitBlockFactory.create(block=block, course_unit=course_unit)
+
+        # Add a resource
+        resource = Resource.objects.create(
+            type=ResourceType.IMAGE.name, resource_file=SimpleUploadedFile("test.jpg", b"file_content")
+        )
+        BlockResource.objects.create(block=unit_block.block, resource=resource)
+
+        # Create handler and process HTML
+        handler = HTMLContentCCResource(unit_block=unit_block)
+        processed_html = handler._reformat_html_content_with_relative_resource_file_paths(unit_block)
+
+        # Verify the paths are properly formatted
+        self.assertIn(
+            CommonCartridgeExportDir.IMS_CC_ROOT_DIR.value,
+            processed_html,
+            "HTML should contain IMS-CC-FILEBASE reference",
+        )
