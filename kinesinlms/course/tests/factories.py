@@ -48,9 +48,7 @@ class SignatoryFactory(factory.django.DjangoModelFactory):
 class CertificateTemplateFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CertificateTemplate
-        django_get_or_create = (
-            "course",
-        )  # Specify the field(s) to use for get_or_create
+        django_get_or_create = ("course",)  # Specify the field(s) to use for get_or_create
 
     description = "A description for some certificate template."
     custom_template_name = None
@@ -86,9 +84,7 @@ class BlockResourceFactory(factory.django.DjangoModelFactory):
 class CourseUnitFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CourseUnit
-        django_get_or_create = (
-            "slug",
-        )  # Specify the field(s) to use for get_or_create
+        django_get_or_create = ("slug",)  # Specify the field(s) to use for get_or_create
 
 
 class CourseNodeFactory(factory.django.DjangoModelFactory):
@@ -274,17 +270,11 @@ class TimedCourseFactory(factory.django.DjangoModelFactory):
                         "(Using 'How to use this website' and placeholder video).",
                     },
                 )
-                transcript_resource = ResourceFactory.create(
-                    type=ResourceType.VIDEO_TRANSCRIPT.name
-                )
+                transcript_resource = ResourceFactory.create(type=ResourceType.VIDEO_TRANSCRIPT.name)
                 video_block.resources.add(transcript_resource)
-                video_unit_block = UnitBlock.objects.create(
-                    course_unit=course_unit, block=video_block, block_order=1
-                )
+                video_unit_block = UnitBlock.objects.create(course_unit=course_unit, block=video_block, block_order=1)
                 logger.debug(f"Created video_block {video_block} for course {self}")
-                logger.debug(
-                    f"Created video_unit_block {video_unit_block} for course {self}"
-                )
+                logger.debug(f"Created video_unit_block {video_unit_block} for course {self}")
 
                 # ADD HTML CONTENT....
                 html_block = BlockFactory(
@@ -293,13 +283,9 @@ class TimedCourseFactory(factory.django.DjangoModelFactory):
                     f"<p>This is a simple HTML block for "
                     f"unit {unit_id}.</p>",
                 )
-                html_unit_block = UnitBlock.objects.create(
-                    course_unit=course_unit, block=html_block, block_order=2
-                )
+                html_unit_block = UnitBlock.objects.create(course_unit=course_unit, block=html_block, block_order=2)
                 logger.debug(f"Created html_block {html_block} for course {self}")
-                logger.debug(
-                    f"Created html_unit_block {html_unit_block} for course {self}"
-                )
+                logger.debug(f"Created html_unit_block {html_unit_block} for course {self}")
 
                 # ADD ASSESSMENT CONTENT...
                 assessment_block = BlockFactory(type=BlockType.ASSESSMENT.name)
@@ -310,21 +296,15 @@ class TimedCourseFactory(factory.django.DjangoModelFactory):
                 assessment_block.slug = f"block-{assessment.slug}"
                 assessment_block.save()
                 logger.debug(f"Created assessment {assessment} for course {self}")
-                logger.debug(
-                    f"Created assessment_unit_block {assessment_unit_block} for course {self}"
-                )
+                logger.debug(f"Created assessment_unit_block {assessment_unit_block} for course {self}")
 
                 # ADD DIAGRAM CONTENT...
-                diagram_block = BlockFactory(
-                    type=BlockType.SIMPLE_INTERACTIVE_TOOL.name
-                )
+                diagram_block = BlockFactory(type=BlockType.SIMPLE_INTERACTIVE_TOOL.name)
                 SimpleInteractiveToolFactory(
                     block=diagram_block,
                     tool_type=SimpleInteractiveToolType.DIAGRAM.name,
                 )
-                UnitBlock.objects.create(
-                    course_unit=course_unit, block=diagram_block, block_order=4
-                )
+                UnitBlock.objects.create(course_unit=course_unit, block=diagram_block, block_order=4)
 
                 # ATTACH UNIT TO NODES
                 unit_node = CourseNodeFactory(
@@ -391,9 +371,7 @@ class CourseFactory(factory.django.DjangoModelFactory):
         for _ in range(3):
             testimonial = TestimonialFactory.create()
             testimonial.course = self
-            testimonial.quote = (
-                f"Testimonial {random.randint(1, 100)} + {testimonial.quote}"
-            )
+            testimonial.quote = f"Testimonial {random.randint(1, 100)} + {testimonial.quote}"
             testimonial.save()
             self.testimonials.add(testimonial)
 
@@ -480,16 +458,10 @@ class CourseFactory(factory.django.DjangoModelFactory):
                 )
                 logger.debug(f"Created video_block {video_block} for course {self}")
 
-                transcript_resource = ResourceFactory.create(
-                    type=ResourceType.VIDEO_TRANSCRIPT.name
-                )
+                transcript_resource = ResourceFactory.create(type=ResourceType.VIDEO_TRANSCRIPT.name)
                 video_block.resources.add(transcript_resource)
-                video_unit_block = UnitBlock.objects.create(
-                    course_unit=course_unit, block=video_block, block_order=1
-                )
-                logger.debug(
-                    f"Created video_unit_block {video_unit_block} for course {self}"
-                )
+                video_unit_block = UnitBlock.objects.create(course_unit=course_unit, block=video_block, block_order=1)
+                logger.debug(f"Created video_unit_block {video_unit_block} for course {self}")
 
                 # ADD HTML CONTENT....
                 html_block = BlockFactory(
@@ -499,12 +471,8 @@ class CourseFactory(factory.django.DjangoModelFactory):
                     f"unit {unit_id}.</p>",
                 )
                 logger.debug(f"Created html_block {html_block} for course {self}")
-                html_unit_block = UnitBlock.objects.create(
-                    course_unit=course_unit, block=html_block, block_order=2
-                )
-                logger.debug(
-                    f"Created html_unit_block {html_unit_block} for course {self}"
-                )
+                html_unit_block = UnitBlock.objects.create(course_unit=course_unit, block=html_block, block_order=2)
+                logger.debug(f"Created html_unit_block {html_unit_block} for course {self}")
 
                 # ADD ASSESSMENT CONTENT...
                 assessment_block = BlockFactory(type=BlockType.ASSESSMENT.name)
@@ -513,21 +481,15 @@ class CourseFactory(factory.django.DjangoModelFactory):
                 assessment_unit_block = UnitBlock.objects.create(
                     course_unit=course_unit, block=assessment_block, block_order=3
                 )
-                logger.debug(
-                    f"Created assessment_unit_block {assessment_unit_block} for course {self}"
-                )
+                logger.debug(f"Created assessment_unit_block {assessment_unit_block} for course {self}")
 
                 # ADD DIAGRAM CONTENT...
-                diagram_block = BlockFactory(
-                    type=BlockType.SIMPLE_INTERACTIVE_TOOL.name
-                )
+                diagram_block = BlockFactory(type=BlockType.SIMPLE_INTERACTIVE_TOOL.name)
                 SimpleInteractiveToolFactory(
                     block=diagram_block,
                     tool_type=SimpleInteractiveToolType.DIAGRAM.name,
                 )
-                UnitBlock.objects.create(
-                    course_unit=course_unit, block=diagram_block, block_order=4
-                )
+                UnitBlock.objects.create(course_unit=course_unit, block=diagram_block, block_order=4)
 
                 # ATTACH UNIT TO NODES
                 unit_node = CourseNodeFactory(
@@ -616,13 +578,13 @@ class CourseWithRepeatedBlockFactory(factory.django.DjangoModelFactory):
 
         # Create a unit with an assessment
         course_unit_1 = CourseUnitFactory(
-            type=CourseUnitType.STANDARD.name, slug="course_unit_1", course=self
+            type=CourseUnitType.STANDARD.name,
+            slug="course_unit_1",
+            course=self,
         )
         assessment_block = BlockFactory(type=BlockType.ASSESSMENT.name)
         LongFormAssessmentFactory(block=assessment_block)
-        UnitBlock.objects.create(
-            course_unit=course_unit_1, block=assessment_block, block_order=1
-        )
+        UnitBlock.objects.create(course_unit=course_unit_1, block=assessment_block, block_order=1)
 
         CourseNodeFactory(
             type=NodeType.UNIT.name,
@@ -635,7 +597,9 @@ class CourseWithRepeatedBlockFactory(factory.django.DjangoModelFactory):
 
         # Create a unit that repeats same assessment in read-only form
         course_unit_2 = CourseUnitFactory(
-            type=CourseUnitType.STANDARD.name, slug="course_unit_2", course=self
+            type=CourseUnitType.STANDARD.name,
+            slug="course_unit_2",
+            course=self,
         )
         UnitBlock.objects.create(
             course_unit=course_unit_2,

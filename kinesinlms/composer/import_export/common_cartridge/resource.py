@@ -336,9 +336,6 @@ class CCHandler(ABC):
 
 
 class HTMLContentCCResource(CCHandler):
-    def __init__(self):
-        super().__init__(block_type=BlockType.HTML_CONTENT.name)
-
     def get_cc_resource_type(self) -> str:
         return CommonCartridgeResourceType.WEB_CONTENT.value
 
@@ -380,9 +377,6 @@ class HTMLContentCCResource(CCHandler):
 
 
 class VideoCCResource(CCHandler):
-    def __init__(self):
-        super().__init__(block_type=BlockType.VIDEO.name)
-
     def get_cc_resource_type(self) -> str:
         # We store video as a simple HTML document with an embedded iframe.
         return CommonCartridgeResourceType.WEB_CONTENT.value
@@ -440,8 +434,8 @@ class AssessmentCCResource(CCHandler):
     Uses a factory to generate the appropriate QTI content based on assessment type.
     """
 
-    def __init__(self):
-        super().__init__(block_type=BlockType.ASSESSMENT.name)
+    def __init__(self, unit_block: UnitBlock):
+        super().__init__(unit_block=unit_block)
         self.qti_factory = QTIAssessmentFactory()
 
     def get_cc_resource_type(self) -> str:
@@ -490,9 +484,6 @@ class AssessmentCCResource(CCHandler):
 
 
 class ForumTopicCCResource(CCHandler):
-    def __init__(self):
-        super().__init__(block_type=BlockType.FORUM_TOPIC.name)
-
     def get_cc_resource_type(self) -> str:
         return CommonCartridgeResourceType.DISCUSSION_TOPIC.value
 
@@ -515,9 +506,6 @@ class ForumTopicCCResource(CCHandler):
 
 
 class SimpleInteractiveToolCCResource(CCHandler):
-    def __init__(self):
-        super().__init__(block_type=BlockType.SIMPLE_INTERACTIVE_TOOL.name)
-
     def get_cc_resource_type(self) -> str:
         return CommonCartridgeResourceType.LEARNING_RESOURCE.value
 
@@ -540,9 +528,6 @@ class SimpleInteractiveToolCCResource(CCHandler):
 
 
 class JupyterNotebookCCResource(CCHandler):
-    def __init__(self):
-        super().__init__(block_type=BlockType.JUPYTER_NOTEBOOK.name)
-
     def get_cc_resource_type(self) -> str:
         return CommonCartridgeResourceType.LEARNING_RESOURCE.value
 

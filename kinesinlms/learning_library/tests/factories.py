@@ -12,10 +12,9 @@ class BlockFactory(factory.django.DjangoModelFactory):
     status = BlockStatus.PUBLISHED.name
 
 
-class UnitBlockFactory(BlockFactory):
+class UnitBlockFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = UnitBlock
 
-    _sequence = factory.Sequence(lambda n: n)
-    slug = factory.LazyAttribute(lambda o: f"unit-block-{o._sequence}")
-    label = factory.LazyAttribute(lambda o: f"Unit Block {o._sequence}")
+    slug = factory.LazyAttribute(lambda o: f"unit-block-{o}")
+    label = factory.LazyAttribute(lambda o: f"Unit Block {o}")

@@ -19,7 +19,6 @@ from kinesinlms.composer.import_export.common_cartridge.exporter import (
     CommonCartridgeExporter,
 )
 from kinesinlms.composer.import_export.common_cartridge.resource import (
-    AssessmentCCResource,
     CommonCartridgeResourceType,
     HTMLContentCCResource,
     VideoCCResource,
@@ -28,7 +27,7 @@ from kinesinlms.composer.import_export.common_cartridge.utils import validate_re
 from kinesinlms.core.utils import get_current_site_profile
 from kinesinlms.course.models import Course
 from kinesinlms.course.tests.factories import CourseFactory, CourseUnitFactory
-from kinesinlms.learning_library.models import BlockResource, BlockType, Resource, ResourceType, UnitBlock
+from kinesinlms.learning_library.models import BlockResource, BlockType, Resource, ResourceType
 from kinesinlms.learning_library.tests.factories import BlockFactory, UnitBlockFactory
 
 logger = logging.getLogger(__name__)
@@ -42,7 +41,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
     """
 
     def setUp(self):
-        course: Course = CourseFactory()
+        course: Course = CourseFactory.create()
         self.course_base_url = course.course_url
         self.course = course
 
@@ -350,11 +349,14 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
     def test_block_resource_file_paths_validation(self):
         """Test that block resource file paths are properly validated."""
 
-        block = BlockFactory(
+        block = BlockFactory.create(
             display_name="Test @ Block",  # invalid characters
             type=BlockType.HTML_CONTENT.name,
         )
-        course_unit = CourseUnitFactory.create(course=self.course, order=1)
+        course_unit = CourseUnitFactory.create(
+            course=self.course,
+            slug="test-course-unit",
+        )
         unit_block = UnitBlockFactory.create(block=block, course_unit=course_unit)
 
         # Test that the path generation and validation works
@@ -382,10 +384,17 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
                 self.assertTrue(validate_resource_path(file_href), f"File href should be valid: {file_href}")
 
     def test_video_resource_type(self):
-        """Test that video resources use the correct resource type."""
-        block = BlockFactory(type=BlockType.VIDEO.name, video_id="test_video_id")
-        course_unit = CourseUnitFactory.create(course=self.course, order=1)
-        unit_block = UnitBlockFactory(block=block, course_unit=course_unit)
+        """
+        Test that video blocks get the correct CC resource type.
+        when the <resource/> element is created.
+        """
+
+        block = BlockFactory.create(type=BlockType.VIDEO.name)
+        course_unit = CourseUnitFactory.create(
+            course=self.course,
+            slug="test-course-unit",
+        )
+        unit_block = UnitBlockFactory.create(block=block, course_unit=course_unit)
 
         # Create handler and check resource type
         handler = VideoCCResource(unit_block=unit_block)
@@ -404,17 +413,27 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         )
 
     def test_html_content_resource_paths(self):
-        """Test that HTML content properly handles resource paths."""
+        """
+
+        Test that we can properly replace expected template tags
+        with the correct resource paths in HTML content.
+
+        """
         # Create HTML block with resources
-        block = BlockFactory(
-            type=BlockType.HTML_CONTENT.name, html_content="<img src=\"{{ block_resource_url 'test.jpg' }}\">"
+        block = BlockFactory.create(
+            type=BlockType.HTML_CONTENT.name,
+            html_content="""<p>Some HTML here. Then an image tag <img src="{% block_resource_url 'test.jpg' %}"></p>""",
         )
-        course_unit = CourseUnitFactory.create(course=self.course, order=1)
+        course_unit = CourseUnitFactory.create(
+            course=self.course,
+            slug="test-course-unit",
+        )
         unit_block = UnitBlockFactory.create(block=block, course_unit=course_unit)
 
         # Add a resource
+        resource_file_name = "test.jpg"
         resource = Resource.objects.create(
-            type=ResourceType.IMAGE.name, resource_file=SimpleUploadedFile("test.jpg", b"file_content")
+            type=ResourceType.IMAGE.name, resource_file=SimpleUploadedFile(resource_file_name, b"file_content")
         )
         BlockResource.objects.create(block=unit_block.block, resource=resource)
 
@@ -422,9 +441,11 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         handler = HTMLContentCCResource(unit_block=unit_block)
         processed_html = handler._reformat_html_content_with_relative_resource_file_paths(unit_block)
 
+        expected_html = f"""<p>Some HTML here. Then an image tag <img src="$IMS-CC-FILEBASE$/{resource.uuid}/{resource_file_name}"></p>"""
+
         # Verify the paths are properly formatted
-        self.assertIn(
-            CommonCartridgeExportDir.IMS_CC_ROOT_DIR.value,
+        self.assertEqual(
+            expected_html,
             processed_html,
-            "HTML should contain IMS-CC-FILEBASE reference",
+            "HTML was not processed correctly",
         )

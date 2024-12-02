@@ -4,7 +4,7 @@ import re
 logger = logging.getLogger(__name__)
 
 
-def validate_resource_path(self, path: str) -> bool:
+def validate_resource_path(path: str) -> bool:
     """
     Validate that resource paths follow Common Cartridge specifications.
 
