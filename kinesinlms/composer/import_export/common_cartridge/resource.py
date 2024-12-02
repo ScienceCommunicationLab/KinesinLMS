@@ -47,6 +47,7 @@ class CCHandler(ABC):
         if not unit_block:
             raise ValueError("unit_block must be provided")
         self.unit_block = unit_block
+        self.block = unit_block.block
 
     @property
     def block_type(self) -> Optional[str]:
