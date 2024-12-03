@@ -21,6 +21,7 @@ from kinesinlms.composer.import_export.common_cartridge.constants import (
     CommonCartridgeResourceType,
 )
 from kinesinlms.composer.import_export.common_cartridge.utils import validate_resource_path
+from kinesinlms.core.templatetags.core_tags import render_html_content
 from kinesinlms.course.models import CourseNode, UnitBlock
 from kinesinlms.learning_library.constants import ResourceType
 from kinesinlms.learning_library.models import (
@@ -123,6 +124,8 @@ class CCHandler(ABC):
         )
         if not resource_file_path:
             return None
+        # we store the resource file in the web_resources directory
+        resource_file_path = f"{CommonCartridgeExportDir.WEB_RESOURCES_DIR.value}/{resource_file_path}"
 
         # Create <resource/> element
         resource = block_resource.resource
@@ -186,20 +189,19 @@ class CCHandler(ABC):
 
 
         """
-        if not block_resource.resource or block_resource.resource.resource_file:
+        if not block_resource.resource or not block_resource.resource.resource_file:
+            logger.warning(f"BlockResource {block_resource} has no resource file to export.")
             return False
 
         resource_file = block_resource.resource.resource_file
-
-        if not resource_file:
-            return False
-
         resource_export_file_path = self._block_related_resource_file_path(
             block_resource=block_resource,
         )
-        resource_content = block_resource.resource.resource_file
+        resource_export_file_path = f"{CommonCartridgeExportDir.WEB_RESOURCES_DIR.value}/{resource_export_file_path}"
 
-        zip_file.write(resource_content, resource_export_file_path)
+        # Read the file content and write it to the zip
+        with resource_file.open("rb") as f:
+            zip_file.writestr(resource_export_file_path, f.read())
 
         return True
 
@@ -240,44 +242,34 @@ class CCHandler(ABC):
         updated to use their relative path in the Common Cartridge export.
 
         So essentially what we're doing is replacing template tags in the HTML content
-        like "{{ block_resource_url 'filename.jpg' }}" with the relative path to the
+        like "{% block_resource_url 'filename.jpg' %}" with the relative path to the
         exported file for that Resource as saved into the Common Cartridge export.
 
         """
+
         html_content = unit_block.block.html_content
+        if html_content is None:
+            return ""
 
         for block_resource in unit_block.block.block_resources.all():
             resource_file = block_resource.resource.resource_file
             if not resource_file:
                 continue
 
-            # Get the base filename without path
-            filename = resource_file.name.split("/")[-1]
+            # First, render the html_content so the path is updated from the template tag
+            # to the full URL that would have been rendered.
+            context = {"request": None}
+            html_content = render_html_content(context, item=unit_block.block)
 
-            # Convert the exported web resource path to a CC-relative path
-            export_file_path = self._block_related_resource_file_path(block_resource=block_resource)
-            export_file_path = re.sub(
-                CommonCartridgeExportDir.WEB_RESOURCES_DIR.value,
-                CommonCartridgeExportDir.IMS_CC_ROOT_DIR.value,
-                export_file_path,
-            )
+            # Get the full URL that would have been rendered
+            full_url = block_resource.resource.url
 
-            # Replace Django template tags using the filename
-            exp = r'{{\%\s*block_resource_url\s+[\'"]{}[\'"]\s*\%}}'
-            template_tag_pattern = exp.format(filename)
+            # Get path that we're going to save this resource to in the CC...
+            target_cc_path = self._block_related_resource_file_path(block_resource=block_resource)
+            # Add funny prefix to make it a relative path
+            target_cc_path = f"{CommonCartridgeExportDir.IMS_CC_ROOT_DIR.value}/{target_cc_path}"
 
-            # Add debug logging
-            logger.debug(f"Looking for template tag pattern: {template_tag_pattern}")
-            logger.debug(f"In content: {html_content}")
-            logger.debug(f"Will replace with: {export_file_path}")
-
-            html_content = re.sub(template_tag_pattern, export_file_path, html_content)
-
-            # Also replace any direct media URLs
-            resource_file_name = settings.MEDIA_URL + resource_file.name
-            resource_match = rf'["\']({re.escape(resource_file_name)})["\']'
-            resource_replace = f'"{export_file_path}"'
-            html_content = re.sub(resource_match, resource_replace, html_content)
+            html_content = html_content.replace(full_url, target_cc_path)
 
         return html_content
 
@@ -325,10 +317,10 @@ class CCHandler(ABC):
             str: _description_
         """
         uuid = str(block_resource.resource.uuid)
-        folder_name = f"{CommonCartridgeExportDir.WEB_RESOURCES_DIR.value}{uuid}"
+        target_folder_name = uuid
         resource = block_resource.resource
         filename = resource.resource_file.name.split("/")[-1]
-        resource_export_file_path = folder_name + "/" + filename
+        resource_export_file_path = target_folder_name + "/" + filename
         return resource_export_file_path
 
 
