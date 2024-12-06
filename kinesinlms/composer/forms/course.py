@@ -1,13 +1,13 @@
 import logging
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset
+from crispy_forms.layout import Fieldset, Layout, Submit
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from kinesinlms.composer.forms.base import ComposerModelForm
 from kinesinlms.course.constants import CourseUnitType
-from kinesinlms.course.models import CourseUnit, Course
+from kinesinlms.course.models import Course, CourseUnit
 from kinesinlms.learning_library.constants import ContentFormatType
 
 logger = logging.getLogger(__name__)
@@ -26,9 +26,7 @@ class AddCourseForm(forms.Form):
         widget=forms.Textarea,
     )
 
-    create_forum_items = forms.BooleanField(
-        label="Create forum items", initial=False, required=False
-    )
+    create_forum_items = forms.BooleanField(label="Create forum items", initial=False, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,7 +44,7 @@ class ImportCourseFromArchiveForm(forms.Form):
     file = forms.FileField(
         label="Select course archive .zip file",
         required=True,
-        widget=forms.ClearableFileInput(attrs={"accept": ".zip", "multiple": False}),
+        widget=forms.ClearableFileInput(attrs={"accept": [".zip", ".ibioarchive"], "multiple": False}),
     )
 
     create_forum_items = forms.BooleanField(
@@ -113,32 +111,24 @@ class CourseForm(forms.ModelForm):
     enrollment_start_date = forms.DateTimeField(
         required=False,
         input_formats=["%m/%d/%Y, %H:%M"],
-        widget=forms.widgets.DateTimeInput(
-            format="%m/%d/%Y, %H:%M", attrs={"placeholder": "MM/DD/YY, HH:MM "}
-        ),
+        widget=forms.widgets.DateTimeInput(format="%m/%d/%Y, %H:%M", attrs={"placeholder": "MM/DD/YY, HH:MM "}),
     )
     enrollment_end_date = forms.DateTimeField(
         required=False,
         input_formats=["%m/%d/%Y, %H:%M"],
-        widget=forms.widgets.DateTimeInput(
-            format="%m/%d/%Y, %H:%M", attrs={"placeholder": "MM/DD/YY, HH:MM "}
-        ),
+        widget=forms.widgets.DateTimeInput(format="%m/%d/%Y, %H:%M", attrs={"placeholder": "MM/DD/YY, HH:MM "}),
     )
 
     start_date = forms.DateTimeField(
         required=False,
         input_formats=["%m/%d/%Y, %H:%M"],
-        widget=forms.widgets.DateTimeInput(
-            format="%m/%d/%Y, %H:%M", attrs={"placeholder": "MM/DD/YY, HH:MM "}
-        ),
+        widget=forms.widgets.DateTimeInput(format="%m/%d/%Y, %H:%M", attrs={"placeholder": "MM/DD/YY, HH:MM "}),
     )
 
     end_date = forms.DateTimeField(
         required=False,
         input_formats=["%m/%d/%Y, %H:%M"],
-        widget=forms.widgets.DateTimeInput(
-            format="%m/%d/%Y, %H:%M", attrs={"placeholder": "MM/DD/YY, HH:MM "}
-        ),
+        widget=forms.widgets.DateTimeInput(format="%m/%d/%Y, %H:%M", attrs={"placeholder": "MM/DD/YY, HH:MM "}),
     )
 
     class Meta:
@@ -190,7 +180,7 @@ class EditCourseHeaderForm(ComposerModelForm):
             "type",
             "enable_template_tags",
             "html_content",
-            'html_content_type',
+            "html_content_type",
         ]
 
     def __init__(self, *args, **kwargs):
@@ -209,9 +199,7 @@ class EditCourseHeaderForm(ComposerModelForm):
             "If you leave this blank, a slug will be generated from the unit title."
         )
 
-        self.fields["type"].help_text = _(
-            "The type of unit. (This is usually left as " "'Standard'.)"
-        )
+        self.fields["type"].help_text = _("The type of unit. (This is usually left as " "'Standard'.)")
 
         self.fields["html_content"].help_text = _(
             "HTML text to be shown after the unit header but before any blocks. (This "

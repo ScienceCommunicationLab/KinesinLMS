@@ -1,26 +1,29 @@
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
-from django.db import models
 from kinesinlms.core.models import Trackable
 from kinesinlms.course.models import Course
-from django.utils.translation import gettext_lazy as _
 
 
 class Testimonial(Trackable):
     visible = models.BooleanField(default=True)
     quote = models.TextField(null=False)
-    name = models.CharField(max_length=200, blank=True, null=True, help_text=_("The name of the person giving the testimonial. This can be generic like 'student' or 'industry professional'"))
+    name = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        help_text=_(
+            "The name of the person giving the testimonial. This can be generic like 'student' or 'industry professional'"
+        ),
+    )
     title = models.CharField(max_length=200, blank=True, null=True)
     company = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to="testimonials/", null=True, blank=True)
 
     # A testimonial can be associated with a course
     # ...if not it's just a general testimonial.
-    course = models.ForeignKey(Course,
-                               null=True,
-                               blank=True,
-                               related_name="testimonials",
-                               on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, null=True, blank=True, related_name="testimonials", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

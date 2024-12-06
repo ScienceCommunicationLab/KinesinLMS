@@ -2,7 +2,6 @@ import json
 import logging
 import os
 import zipfile
-from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 from django.core.files.base import ContentFile
@@ -11,9 +10,9 @@ from rest_framework.exceptions import ValidationError
 
 from kinesinlms.composer.import_export.importer import CourseImporterBase
 from kinesinlms.composer.import_export.kinesinlms.constants import (
-    VALID_COURSE_EXPORT_FORMAT_IDS,
     KinesinLMSCourseExportFormatID,
 )
+from kinesinlms.composer.import_export.model import CourseImportOptions
 from kinesinlms.composer.models import CourseMetaConfig
 from kinesinlms.course.constants import NodeType
 from kinesinlms.course.models import Course, CourseNode, CourseResource
@@ -21,18 +20,12 @@ from kinesinlms.course.serializers import (
     CourseNodeSerializer,
     CourseSerializer,
     CourseUnitSerializer,
-    SCLCourseSerializer,
 )
 from kinesinlms.forum.utils import get_forum_service
 from kinesinlms.learning_library.constants import ResourceType
 from kinesinlms.learning_library.models import Resource
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass()
-class CourseImportOptions:
-    create_forum_items: bool = True
 
 
 class KinesinLMSCourseImporter(CourseImporterBase):
@@ -71,7 +64,7 @@ class KinesinLMSCourseImporter(CourseImporterBase):
         # which includes 'metadata' and 'course' dictionaries,
         # or just the 'course' dictionary.
         document_type = course_json.get("document_type", None)
-        if document_type and document_type not in VALID_COURSE_EXPORT_FORMAT_IDS:
+        if document_type != KinesinLMSCourseExportFormatID.KINESIN_LMS_FORMAT.value:
             raise Exception(f"Invalid document type: {document_type}")
 
         metadata = {}
@@ -129,12 +122,7 @@ class KinesinLMSCourseImporter(CourseImporterBase):
         # and use the appropriate serializer. We only support two
         # formats at the moment, but we could add more in the future,
         # including version info.
-        if document_type is None or document_type == KinesinLMSCourseExportFormatID.KINESIN_LMS_FORMAT.value:
-            course_serializer = CourseSerializer(data=course_json)
-        elif document_type == KinesinLMSCourseExportFormatID.SCL_FORMAT.value:
-            course_serializer = SCLCourseSerializer(data=course_json)
-        else:
-            raise Exception(f"Invalid document type: {document_type}")
+        course_serializer = CourseSerializer(data=course_json)
         course_serializer.is_valid(raise_exception=True)
         course = course_serializer.save(course_root_node=None)
 
@@ -208,7 +196,7 @@ class KinesinLMSCourseImporter(CourseImporterBase):
         # Check for metadata. For now, we just report to command line log.
         document_type = course_export_json.get("document_type", None)
         if document_type:
-            if document_type not in VALID_COURSE_EXPORT_FORMAT_IDS:
+            if document_type != KinesinLMSCourseExportFormatID.KINESIN_LMS_FORMAT.value:
                 raise Exception(f"Invalid document type: {document_type}")
             metadata = course_export_json.get("metadata", {})
             exporter_version = metadata.get("exporter_version", None)

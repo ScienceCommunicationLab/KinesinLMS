@@ -9,7 +9,8 @@ protected_resources/
 # SCL-specific files
 scl/
 kinesinlms/scl/
-kinesinlms/core/management/commands/scl/
+kinesinlms/core/management/commands/scl_*.py
+
 
 
 # JS build output

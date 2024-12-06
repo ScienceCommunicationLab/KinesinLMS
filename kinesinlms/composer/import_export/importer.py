@@ -66,4 +66,4 @@ class CourseImporterBase:
             Course instance or None
         """
 
-    raise NotImplementedError("Subclasses must implement this method.")
+        raise NotImplementedError("Subclasses must implement this method.")

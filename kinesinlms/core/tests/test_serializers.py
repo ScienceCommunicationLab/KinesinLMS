@@ -1,9 +1,9 @@
 from django.test import TestCase
 
-from kinesinlms.course.serializers import SCLCourseSerializer
+from kinesinlms.course.serializers import IBiologyCoursesCourseSerializer
 
 
-class TestSCLCourseSerializer(TestCase):
+class TestIBiologyCoursesCourseSerializer(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -15,7 +15,7 @@ class TestSCLCourseSerializer(TestCase):
         with new KinesinLMS template tags.
         """
 
-        s = SCLCourseSerializer()
+        s = IBiologyCoursesCourseSerializer()
 
         input_html = """<p>Some html text with link ##MODULE_LINK[12]## </p>"""
         output_html = s._update_template_keywords(input_html)

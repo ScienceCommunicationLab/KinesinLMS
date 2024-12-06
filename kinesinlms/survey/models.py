@@ -10,7 +10,7 @@ from slugify import slugify
 from kinesinlms.core.models import Trackable
 from kinesinlms.course.models import Course
 from kinesinlms.learning_library.models import Block
-from kinesinlms.survey.constants import SurveyType, SurveyEmailStatus
+from kinesinlms.survey.constants import SurveyEmailStatus, SurveyType
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +30,7 @@ class SurveyProvider(Trackable):
         max_length=50,
         null=False,
         blank=False,
-        help_text=_(
-            "Name of the survey provider. (This is for your use and can be anything you want.)"
-        ),
+        help_text=_("Name of the survey provider. (This is for your use and can be anything you want.)"),
     )
 
     type = models.CharField(
@@ -105,7 +103,7 @@ class SurveyProvider(Trackable):
             bool: _description_
         """
         if hasattr(self, "surveys") and self.surveys.count() > 0:
-            return False    
+            return False
         return True
 
     def __str__(self):
@@ -193,17 +191,13 @@ class Survey(Trackable):
         null=True,
         blank=True,
         verbose_name="Survey ID",
-        help_text="The ID for the survey in the third-party service that "
-        "provides it.",
+        help_text="The ID for the survey in the third-party service that " "provides it.",
     )
 
     # TODO: What was I thinking with this field?
     index = models.IntegerField(null=True, blank=True)
 
-    url = models.URLField(
-        help_text="Public URL for the survey. This is used to render the "
-        "survey in a course unit."
-    )
+    url = models.URLField(help_text="Public URL for the survey. This is used to render the " "survey in a course unit.")
 
     include_uid = models.BooleanField(
         default=False,
@@ -222,9 +216,7 @@ class Survey(Trackable):
             str:    Full URL to survey.
         """
         if not user:
-            raise ValueError(
-                "User must be provided to generate survey URL via the url_for_user method."
-            )
+            raise ValueError("User must be provided to generate survey URL via the url_for_user method.")
         url = self.url
         if self.include_uid:
             url += f"?uid={user.anon_username}"
@@ -247,13 +239,9 @@ class SurveyBlock(Trackable):
     a course, which this model affords via its foreign key to Survey.
     """
 
-    block = models.OneToOneField(
-        Block, on_delete=models.CASCADE, related_name="survey_block"
-    )
+    block = models.OneToOneField(Block, on_delete=models.CASCADE, related_name="survey_block")
 
-    survey = models.ForeignKey(
-        Survey, on_delete=models.CASCADE, related_name="survey_blocks"
-    )
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name="survey_blocks")
 
 
 class SurveyCompletion(Trackable):

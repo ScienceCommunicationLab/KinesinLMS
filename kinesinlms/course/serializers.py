@@ -2,9 +2,12 @@ import logging
 import re
 import uuid
 from collections import OrderedDict
+from tempfile import NamedTemporaryFile
 from typing import Dict, List, Optional
 
 import pytz
+import requests
+from django.core.files import File
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -168,17 +171,11 @@ class CourseUnitSerializer(serializers.ModelSerializer):
         allow_blank=True,
     )
 
-    display_name = serializers.CharField(
-        required=False, allow_null=True, allow_blank=True
-    )
+    display_name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
-    short_description = serializers.CharField(
-        required=False, allow_null=True, allow_blank=True
-    )
+    short_description = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
-    html_content = serializers.CharField(
-        required=False, allow_null=True, allow_blank=True
-    )
+    html_content = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     json_content = serializers.JSONField(required=False, allow_null=True)
 
@@ -199,9 +196,7 @@ class CourseUnitSerializer(serializers.ModelSerializer):
         copy_type = data.get("copy_type", None)
         if copy_type:
             if not data.get("uuid", None) and not data.get("slug", None):
-                raise ValidationError(
-                    "You must provide 'uuid' or 'slug' if 'copy_type' is set."
-                )
+                raise ValidationError("You must provide 'uuid' or 'slug' if 'copy_type' is set.")
         else:
             for field in ["slug", "type"]:
                 if not data.get(field, None):
@@ -231,9 +226,7 @@ class CourseUnitSerializer(serializers.ModelSerializer):
             Instance of created object
         """
 
-        course_import_config: CourseMetaConfig = self.context.get(
-            "course_import_config", CourseMetaConfig()
-        )
+        course_import_config: CourseMetaConfig = self.context.get("course_import_config", CourseMetaConfig())
 
         course = self.context["course"]
 
@@ -247,9 +240,7 @@ class CourseUnitSerializer(serializers.ModelSerializer):
 
         # Check uuid and copy type
         if copy_type == ImportCopyType.SHALLOW.name and validated_uuid is None:
-            raise ValidationError(
-                f"Cannot have copy_type SHALLOW if uuid is not set : {validated_data}"
-            )
+            raise ValidationError(f"Cannot have copy_type SHALLOW if uuid is not set : {validated_data}")
 
         # Do copy or create new...
         if copy_type == ImportCopyType.SHALLOW.name:
@@ -272,9 +263,7 @@ class CourseUnitSerializer(serializers.ModelSerializer):
                     course_import_config=course_import_config,
                 )
             except Exception as e:
-                logger.exception(
-                    f"Could not create new course unit from {validated_data} : {e}"
-                )
+                logger.exception(f"Could not create new course unit from {validated_data} : {e}")
                 error_msg = f"Could not create new course unit from {validated_data}."
                 logger.exception(error_msg)
                 raise Exception(error_msg)
@@ -409,13 +398,9 @@ class CourseUnitSerializer(serializers.ModelSerializer):
                     )
                     unit_block_serializer.is_valid(raise_exception=True)
                 except Exception as e:
-                    logger.exception(
-                        f"Could not deserializer unit_block: {unit_block_raw_data}"
-                    )
+                    logger.exception(f"Could not deserializer unit_block: {unit_block_raw_data}")
                     raise e
-                unit_block: UnitBlock = unit_block_serializer.save(
-                    course_unit=course_unit
-                )
+                unit_block: UnitBlock = unit_block_serializer.save(course_unit=course_unit)
                 logger.info(f"Created unit_block: {unit_block.id}")
 
         return course_unit
@@ -436,9 +421,7 @@ class CourseNodeSimpleSerializer(serializers.ModelSerializer):
     release_datetime = serializers.SerializerMethodField()
     release_datetime_utc = serializers.DateTimeField(source="release_datetime")
 
-    children = serializers.SerializerMethodField(
-        read_only=True, method_name="get_children_nodes"
-    )
+    children = serializers.SerializerMethodField(read_only=True, method_name="get_children_nodes")
 
     def get_release_datetime(self, obj: CourseNode):
         if obj.release_datetime:
@@ -472,9 +455,7 @@ class CourseNodeSimpleSerializer(serializers.ModelSerializer):
 
     def get_children_nodes(self, obj):
         """self referral field"""
-        serializer = CourseNodeSimpleSerializer(
-            instance=obj.children.all().order_by("display_sequence"), many=True
-        )
+        serializer = CourseNodeSimpleSerializer(instance=obj.children.all().order_by("display_sequence"), many=True)
         return serializer.data
 
 
@@ -497,7 +478,10 @@ class CourseNodeSerializer(serializers.ModelSerializer):
     node_url = serializers.CharField(read_only=True)
 
     # We expect each node to have this value defined, as it is vital to order.
-    display_sequence = serializers.IntegerField(required=True, allow_null=False)
+    display_sequence = serializers.IntegerField(
+        required=True,
+        allow_null=False,
+    )
 
     class Meta:
         model = CourseNode
@@ -654,7 +638,10 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
     """
 
     token = serializers.CharField(read_only=True)
-    catalog_description = CourseCatalogDescriptionSerializer(many=False, required=True)
+    catalog_description = CourseCatalogDescriptionSerializer(
+        many=False,
+        required=True,
+    )
     surveys = SurveySerializer(many=True, required=False)
 
     # TODO: Use CourseNodeSerializer as part of import process
@@ -668,36 +655,50 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     badge_classes = BadgeClassSerializer(many=True, required=False)
 
-    speakers = SlugRelatedField(
-        slug_field="slug", many=True, allow_null=True, queryset=Speaker.objects.all()
-    )
+    speakers = SlugRelatedField(slug_field="slug", many=True, allow_null=True, queryset=Speaker.objects.all())
 
     learning_objectives = LearningObjectiveSerializerField(required=False, default=[])
 
     simple_interactive_tool_templates = SimpleInteractiveToolTemplateSerializer(
-        many=True, allow_null=True, required=False
+        many=True,
+        allow_null=True,
+        required=False,
     )
 
     certificate_template = CertificateTemplateSerializer(
-        many=False, allow_null=True, required=False
+        many=False,
+        allow_null=True,
+        required=False,
     )
 
     enrollment_survey = EnrollmentSurveySerializer(
-        many=False, allow_null=True, required=False
+        many=False,
+        allow_null=True,
+        required=False,
     )
 
-    course_resources = CourseResourceSerializer(many=True, required=False)
+    course_resources = CourseResourceSerializer(
+        many=True,
+        required=False,
+    )
 
-    cohorts = CohortSerializer(read_only=True, many=True)
+    cohorts = CohortSerializer(
+        read_only=True,
+        many=True,
+    )
 
     # Shortcut write-only field that allows you to provide
     # slugs of existing institutions and cohorts will be created for each.
     cohort_institutions = serializers.ListField(
-        write_only=True, required=False, child=serializers.CharField()
+        write_only=True,
+        required=False,
+        child=serializers.CharField(),
     )
 
     course_home_content = SanitizedHTMLField(
-        required=False, allow_null=True, allow_blank=True
+        required=False,
+        allow_null=True,
+        allow_blank=True,
     )
 
     tags = TagListSerializerField(
@@ -797,9 +798,7 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
 
         # Handle Course Catalog Description
         course_description_data = validated_data.pop("catalog_description")
-        cat_description = CourseCatalogDescription.objects.create(
-            **course_description_data
-        )
+        cat_description = CourseCatalogDescription.objects.create(**course_description_data)
 
         # We've already handled learning_objectives in the serializer field, so pop off here
         validated_data.pop("learning_objectives", None)
@@ -810,9 +809,7 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
 
         # Pop off the following and don't create until we create course itself...
         try:
-            enrollment_survey_validated_data: Dict = validated_data.pop(
-                "enrollment_survey"
-            )
+            enrollment_survey_validated_data: Dict = validated_data.pop("enrollment_survey")
         except KeyError:
             enrollment_survey_validated_data: Dict = {}
 
@@ -827,9 +824,7 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
             speakers_validated_data = []
 
         try:
-            sit_templates_validated_data = validated_data.pop(
-                "simple_interactive_tool_templates"
-            )
+            sit_templates_validated_data = validated_data.pop("simple_interactive_tool_templates")
         except KeyError:
             sit_templates_validated_data = []
 
@@ -859,9 +854,7 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
             certificate_template_data = None
 
         try:
-            cohort_institutions_validated_data = validated_data.pop(
-                "cohort_institutions"
-            )
+            cohort_institutions_validated_data = validated_data.pop("cohort_institutions")
         except KeyError:
             cohort_institutions_validated_data = None
 
@@ -877,9 +870,7 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
 
         # ...create-and-link custom apps
         for custom_app_validated_data in custom_apps_validated_data:
-            custom_app = CustomApp.objects.create(
-                **custom_app_validated_data, course=course
-            )
+            custom_app = CustomApp.objects.create(**custom_app_validated_data, course=course)
             logger.info(f" - created custom app : {custom_app}")
 
         # ...create SIT templates apps ... they'll be linked by SITs in units if they appear
@@ -887,15 +878,11 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
             if isinstance(sit_template_validated_data, SimpleInteractiveToolTemplate):
                 # SIT Template already exists. No need to create it here. Any blocks
                 # that refer to it via slug will be linked later on in the Block serializer.
-                logger.warning(
-                    f"Skipping SIT template slug {sit_template_validated_data.slug} ... it already exists."
-                )
+                logger.warning(f"Skipping SIT template slug {sit_template_validated_data.slug} ... it already exists.")
             else:
                 # SIT Template does not exist. So we have to create it here so that it's available later
                 # for any Blocks that link to it.
-                sit_template = SimpleInteractiveToolTemplate.objects.create(
-                    **sit_template_validated_data
-                )
+                sit_template = SimpleInteractiveToolTemplate.objects.create(**sit_template_validated_data)
                 logger.info(f" - created SIT template : {sit_template}")
 
         # ...then link speakers (they should already exist)
@@ -904,15 +891,11 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
                 course.speakers.add(speaker_validated_data)
                 logger.info(f" - linked speaker {speaker_validated_data}")
             except Exception:
-                logger.exception(
-                    f"Could not link speaker {speaker_validated_data} to course {course}"
-                )
+                logger.exception(f"Could not link speaker {speaker_validated_data} to course {course}")
 
         # ...then create milestones
         for milestone_validated_data in milestones_validated_data:
-            milestone = Milestone.objects.create(
-                **milestone_validated_data, course=course
-            )
+            milestone = Milestone.objects.create(**milestone_validated_data, course=course)
             logger.info(f" - created milestone {milestone}")
 
         # ...then create and link surveys
@@ -926,16 +909,10 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
         for course_resource_validated_data in course_resources:
             course_resource_uuid = course_resource_validated_data.get("uuid", None)
             if not course_resource_uuid:
-                raise Exception(
-                    f"CourseResource object is missing uuid: {course_resource_validated_data}"
-                )
-            course_resource, created = CourseResource.objects.get_or_create(
-                course=course, uuid=course_resource_uuid
-            )
+                raise Exception(f"CourseResource object is missing uuid: {course_resource_validated_data}")
+            course_resource, created = CourseResource.objects.get_or_create(course=course, uuid=course_resource_uuid)
             course_resource.name = course_resource_validated_data.get("name", None)
-            course_resource.description = course_resource_validated_data.get(
-                "description", None
-            )
+            course_resource.description = course_resource_validated_data.get("description", None)
             course_resource.save()
 
         # ...then link or create-and-link badge classes
@@ -943,9 +920,7 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
             # DRF will have changed the slug string to a BadgeClass instance
             slug = badge_class_validated_data.get("slug", None)
             if not slug:
-                raise Exception(
-                    f"BadgeClass object is missing slug: {badge_class_validated_data}"
-                )
+                raise Exception(f"BadgeClass object is missing slug: {badge_class_validated_data}")
             try:
                 badge_class = BadgeClass.objects.get(slug=slug)
                 logger.info(f"Linked course to existing badge class :{badge_class}")
@@ -977,33 +952,23 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
                     cohort.name = f"Cohort for {institution.name}"
                     cohort.save()
                 except Institution.DoesNotExist:
-                    logger.error(
-                        f"Could not create cohort for institution slug: {cohort_institution_slug}"
-                    )
+                    logger.error(f"Could not create cohort for institution slug: {cohort_institution_slug}")
                 except Exception as e:
-                    logger.error(
-                        f"Could not create cohort for institution slug: {cohort_institution_slug} : {e}"
-                    )
+                    logger.error(f"Could not create cohort for institution slug: {cohort_institution_slug} : {e}")
 
         # Handle enrollment survey if defined...
         if enrollment_survey_validated_data:
             enrollment_survey = EnrollmentSurvey.objects.create(course=course)
             questions_validated_data = enrollment_survey_validated_data.pop("questions")
             for question_validated_data in questions_validated_data:
-                question = EnrollmentSurveyQuestion.objects.create(
-                    **question_validated_data
-                )
+                question = EnrollmentSurveyQuestion.objects.create(**question_validated_data)
                 enrollment_survey.questions.add(question)
             logger.info(f"Created enrollment survey: {enrollment_survey}")
 
         # Handle custom certificate data if defined...
         if certificate_template_data:
             template_name = certificate_template_data.get("custom_template_name", None)
-            certificate_template, created = (
-                CertificateTemplateFactory.get_or_create_certificate_template(
-                    course=course
-                )
-            )
+            certificate_template, created = CertificateTemplateFactory.get_or_create_certificate_template(course=course)
             certificate_template.custom_template_name = template_name
             certificate_template.save()
             logger.info(f"Created certificate template: {certificate_template}")
@@ -1049,14 +1014,10 @@ class BookmarkSerializer(serializers.ModelSerializer):
         try:
             Enrollment.objects.get(course=course, student=student, active=True)
         except Enrollment.DoesNotExist:
-            raise ValidationError(
-                f"User {student.username} is not actively enrolled in this course."
-            )
+            raise ValidationError(f"User {student.username} is not actively enrolled in this course.")
         bookmark_count = Bookmark.objects.filter(student=student, course=course).count()
         if bookmark_count > 200:
-            raise ValidationError(
-                "You can only have 200 or fewer bookmarks per course."
-            )
+            raise ValidationError("You can only have 200 or fewer bookmarks per course.")
 
         return data
 
@@ -1090,22 +1051,52 @@ class BookmarkSerializer(serializers.ModelSerializer):
         return bookmark
 
 
-class SCLCourseSerializer(CourseSerializer):
+class IBiologyCoursesCourseSerializer(CourseSerializer):
     """
-    Handles deserializing a course exported in SCL_FORMAT.
+    Handles deserializing a course exported in IBIO_COURSES_FORMAT.
 
     We need to update the JSON to match what our serializer expects
     """
 
-    def to_internal_value(self, data):
+    def to_internal_value(self, data) -> Course:
         """
-        Update structure of incoming SCL course export format
+        Update structure of incoming iBiology Courses course export format
         to match the structure of the JSON expected by the CourseSerializer.
+
+        This way, we can use the base CourseSerializer to create the course.
+
         """
 
+        # Take off testimonials we don't import those.
+        if "testimonials" in data["catalog_description"]:
+            data["catalog_description"].pop("testimonials", None)
+
+        # Manually create speakers if they don't exist
+        if "speakers" in data:
+            for speaker_slug in data["speakers"]:
+                speaker, created = Speaker.objects.get_or_create(slug=speaker_slug)
+                if created:
+                    logger.info(f"Creating missing speaker: {speaker_slug}")
+
+        # Take syllabus url off if it exists and create Syllabus file object manually
+        syllabus_url = data["catalog_description"].pop("syllabus_url", None)
+
+        # Update the course_root_node to match the KinesinLMS format
+        # so we can use the same CourseNodeSerializer to create the course.
         course_root_node = data.get("course_root_node", None)
         if course_root_node:
             self._process_node(course_root_node)
+
+        course = super().to_internal_value(data)
+
+        # Add in the syllabus file to the course if we created it
+        if syllabus_url:
+            self._load_syllabus_from_url(
+                catalog_description=course.catalog_description,
+                syllabus_url=syllabus_url,
+            )
+
+        return course
 
     def _process_node(self, node: Dict):
         """
@@ -1156,8 +1147,43 @@ class SCLCourseSerializer(CourseSerializer):
         }
 
         for pattern, replacement in replacements.items():
-            html_content = re.sub(
-                pattern, lambda match: replacement.format(*match.groups()), html_content
-            )
+            html_content = re.sub(pattern, lambda match: replacement.format(*match.groups()), html_content)
 
         return html_content
+
+    def _load_syllabus_from_url(
+        self,
+        catalog_description: CourseCatalogDescription,
+        syllabus_url: str,
+    ):
+        """
+        In the older iBiology Courses format, the syllabus was stored as a URL.
+        In KinLMS, we store the syllabus as a file object.
+
+        So create that file object with the incoming URL and then attach it to the course
+        description.
+
+        Args:
+            catalog_description (CourseCatalogDescription): _description_
+            syllabus_url (str): _description_
+        """
+        response = requests.get(syllabus_url, allow_redirects=True)
+        if response.status_code == 200:
+            # Get filename from URL or use default
+            filename = syllabus_url.split("/")[-1]
+            if not filename:
+                filename = "syllabus.pdf"
+
+            # Create file object and save
+            lf = NamedTemporaryFile()
+            lf.write(response.content)
+            lf.flush()
+
+            catalog_description.syllabus.save(
+                filename,
+                File(open(lf.name, "rb")),
+                save=True,
+            )
+            logger.info(f" - downloaded and saved syllabus from URL: {syllabus_url}")
+        else:
+            logger.error(f"Could not download syllabus from URL: {syllabus_url}")

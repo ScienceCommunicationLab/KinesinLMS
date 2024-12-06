@@ -2,7 +2,6 @@ import json
 import logging
 import os
 import zipfile
-from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 from django.core.files.base import ContentFile
@@ -11,28 +10,22 @@ from rest_framework.exceptions import ValidationError
 
 from kinesinlms.composer.import_export.importer import CourseImporterBase
 from kinesinlms.composer.import_export.kinesinlms.constants import (
-    VALID_COURSE_EXPORT_FORMAT_IDS,
     KinesinLMSCourseExportFormatID,
 )
+from kinesinlms.composer.import_export.model import CourseImportOptions
 from kinesinlms.composer.models import CourseMetaConfig
 from kinesinlms.course.constants import NodeType
 from kinesinlms.course.models import Course, CourseNode, CourseResource
 from kinesinlms.course.serializers import (
     CourseNodeSerializer,
-    CourseSerializer,
     CourseUnitSerializer,
-    SCLCourseSerializer,
+    IBiologyCoursesCourseSerializer,
 )
 from kinesinlms.forum.utils import get_forum_service
 from kinesinlms.learning_library.constants import ResourceType
 from kinesinlms.learning_library.models import Resource
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass()
-class CourseImportOptions:
-    create_forum_items: bool = True
 
 
 class IBiologyCoursesCourseImporter(CourseImporterBase):
@@ -75,7 +68,7 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
         # which includes 'metadata' and 'course' dictionaries,
         # or just the 'course' dictionary.
         document_type = course_json.get("document_type", None)
-        if document_type and document_type not in VALID_COURSE_EXPORT_FORMAT_IDS:
+        if document_type != KinesinLMSCourseExportFormatID.IBIO_COURSES_FORMAT.value:
             raise Exception(f"Invalid document type: {document_type}")
 
         metadata = {}
@@ -129,21 +122,17 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
         # Pop off course_root_node before serializing Course...we'll add it further below.
         course_root_node_json = course_json.pop("course_root_node")
 
-        # Determine what type and version of json format we have,
-        # and use the appropriate serializer. We only support two
-        # formats at the moment, but we could add more in the future,
-        # including version info.
-        if document_type is None or document_type == KinesinLMSCourseExportFormatID.KINESIN_LMS_FORMAT.value:
-            course_serializer = CourseSerializer(data=course_json)
-        elif document_type == KinesinLMSCourseExportFormatID.SCL_FORMAT.value:
-            course_serializer = SCLCourseSerializer(data=course_json)
-        else:
-            raise Exception(f"Invalid document type: {document_type}")
-        course_serializer.is_valid(raise_exception=True)
+        # Now deserialize the Course and CourseCatalogDescription (without course_root_node)
+        course_serializer = IBiologyCoursesCourseSerializer(data=course_json)
+        try:
+            course_serializer.is_valid(raise_exception=True)
+        except Exception as e:
+            error_msg = f"Could not import course: {e}"
+            logger.exception(error_msg)
+            raise ValidationError(detail=error_msg)
         course = course_serializer.save(course_root_node=None)
 
         # Now that Course is saved, we can use it in the next steps.
-
         # remove keys on top-level node that shouldn't be present during an import
         for key in ["node_url", "release_datetime", "unit"]:
             try:
@@ -212,8 +201,8 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
         # Check for metadata. For now, we just report to command line log.
         document_type = course_export_json.get("document_type", None)
         if document_type:
-            if document_type not in VALID_COURSE_EXPORT_FORMAT_IDS:
-                raise Exception(f"Invalid document type: {document_type}")
+            if document_type != KinesinLMSCourseExportFormatID.IBIO_COURSES_FORMAT.value:
+                raise Exception(f"Invalid document type for an iBiology Courses course archive: {document_type}")
             metadata = course_export_json.get("metadata", {})
             exporter_version = metadata.get("exporter_version", None)
             export_date = metadata.get("export_date", None)

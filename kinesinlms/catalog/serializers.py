@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from kinesinlms.catalog.models import CourseCatalogDescription
 from kinesinlms.marketing.serializers import TestimonialSerializer
 
@@ -15,7 +16,12 @@ class CourseCatalogDescriptionSerializer(serializers.ModelSerializer):
 
     # Testimonials seem very site dependent, so we don't read in
     # testimonials. They have to be set up separately after a course import.
-    testimonials = TestimonialSerializer(many=True, read_only=True)
+    testimonials = TestimonialSerializer(
+        many=True,
+        read_only=True,
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = CourseCatalogDescription

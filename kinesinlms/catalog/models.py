@@ -1,10 +1,10 @@
 from typing import List, Optional
+
 from django.conf import settings
 from django.db import models
 from django.db.models import JSONField
 from django.shortcuts import resolve_url
 from django.utils.translation import gettext as _
-
 
 DEFAULT_COURSE_HEADER_BACKGROUND_COLOR = "F1F1F1"
 DEFAULT_THUMBNAIL = "default_course_thumbnail.jpg"
