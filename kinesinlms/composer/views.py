@@ -47,8 +47,9 @@ from kinesinlms.composer.import_export.constants import (
     CourseExportFormat,
 )
 from kinesinlms.composer.import_export.exporter import BaseExporter
+from kinesinlms.composer.import_export.ibiov2.importer import IBiologyCoursesCourseImporter
 from kinesinlms.composer.import_export.importer import (
-    CourseImporter,
+    CourseImporterBase,
     CourseImportOptions,
 )
 from kinesinlms.composer.import_export.kinesinlms.constants import (
@@ -57,6 +58,7 @@ from kinesinlms.composer.import_export.kinesinlms.constants import (
 from kinesinlms.composer.import_export.kinesinlms.exporter import (
     KinesinLMSCourseExporter,
 )
+from kinesinlms.composer.import_export.kinesinlms.importer import KinesinLMSCourseImporter
 from kinesinlms.composer.models import ComposerSettings
 from kinesinlms.composer.view_helpers import get_course_edit_tabs
 from kinesinlms.core.decorators import composer_author_required
@@ -115,14 +117,12 @@ class CourseCreateView(SuperuserRequiredMixin, CreateView):
 
     def get_success_url(self):
         success_msg = _(
-            "Course {} created. You may now edit the "
-            "catalog description and add content "
-            "to the course.".format(self.object.token)
+            "Course {} created. You may now edit the " "catalog description and add content " "to the course.".format(
+                self.object.token
+            )
         )
         messages.add_message(self.request, messages.INFO, success_msg)
-        edit_url = reverse(
-            "composer:course_edit_settings", kwargs={"pk": self.object.id}
-        )
+        edit_url = reverse("composer:course_edit_settings", kwargs={"pk": self.object.id})
         return edit_url
 
     def get_context_data(self, **kwargs):
@@ -140,12 +140,8 @@ class CourseSettingsUpdateView(SuperuserRequiredMixin, UpdateView):
     form_class = CourseForm
 
     def get_success_url(self):
-        messages.add_message(
-            self.request, messages.INFO, f"Course {self.object.token} updated."
-        )
-        edit_course_url = reverse(
-            "composer:course_edit_settings", kwargs={"pk": self.object.id}
-        )
+        messages.add_message(self.request, messages.INFO, f"Course {self.object.token} updated.")
+        edit_course_url = reverse("composer:course_edit_settings", kwargs={"pk": self.object.id})
         return edit_course_url
 
     def get_context_data(self, **kwargs):
@@ -155,9 +151,7 @@ class CourseSettingsUpdateView(SuperuserRequiredMixin, UpdateView):
         else:
             course_name = "( no name )"
 
-        section_tabs = get_course_edit_tabs(
-            current_course=self.object, active_section="course_settings"
-        )
+        section_tabs = get_course_edit_tabs(current_course=self.object, active_section="course_settings")
         extra_context = {
             "section": "edit_course",
             "title": f"Edit Course : {course_name}",
@@ -191,9 +185,7 @@ class CourseCatalogDescriptionUpdateView(SuperuserRequiredMixin, UpdateView):
         Send relevant user settings props to the form.
         """
         kwargs = super().get_form_kwargs()
-        user_settings = ComposerSettings.objects.get_or_create(user=self.request.user)[
-            0
-        ]
+        user_settings = ComposerSettings.objects.get_or_create(user=self.request.user)[0]
         kwargs["html_edit_mode"] = user_settings.html_edit_mode
         return kwargs
 
@@ -207,9 +199,7 @@ class CourseCatalogDescriptionUpdateView(SuperuserRequiredMixin, UpdateView):
         if not course_name:
             course_name = "( no name )"
 
-        section_tabs = get_course_edit_tabs(
-            current_course=self.object.course, active_section="catalog"
-        )
+        section_tabs = get_course_edit_tabs(current_course=self.object.course, active_section="catalog")
 
         extra_context = {
             "section": "edit_course",
@@ -243,9 +233,7 @@ class CourseBadgeClassListView(SuperuserRequiredMixin, ListView):
         if not course_name:
             course_name = "( no name )"
 
-        section_tabs = get_course_edit_tabs(
-            current_course=course, active_section="course_settings"
-        )
+        section_tabs = get_course_edit_tabs(current_course=course, active_section="course_settings")
         extra_context = {
             "section": "edit_course",
             "title": f"Edit Course : {course_name}",
@@ -271,9 +259,7 @@ class ComposerSettingsView(StaffOrSuperuserRequiredMixin, UpdateView):
     model = ComposerSettings
 
     def get_object(self, queryset=None):
-        composer_settings, created = ComposerSettings.objects.get_or_create(
-            user=self.request.user
-        )
+        composer_settings, created = ComposerSettings.objects.get_or_create(user=self.request.user)
         return composer_settings
 
     def post(self, request, *args, **kwargs):
@@ -329,9 +315,7 @@ class CourseDeleteView(SuperuserRequiredMixin, DeleteView):
         course = self.object
         success_url = self.get_success_url()
 
-        delete_exclusive_block_resources = (
-            self.request.POST.get("delete_block_resources") == "on"
-        )
+        delete_exclusive_block_resources = self.request.POST.get("delete_block_resources") == "on"
 
         try:
             with transaction.atomic():
@@ -407,9 +391,7 @@ def course_edit(request, course_id: int, unit_node_id: int = None):
 
     unit_node = None
     if unit_node_id:
-        unit_node = get_object_or_404(
-            CourseNode, id=unit_node_id, type=NodeType.UNIT.name
-        )
+        unit_node = get_object_or_404(CourseNode, id=unit_node_id, type=NodeType.UNIT.name)
     else:
         # Find first unit node...
         try:
@@ -424,9 +406,7 @@ def course_edit(request, course_id: int, unit_node_id: int = None):
         section_node = unit_node.parent
         module_node = section_node.parent
         content_index_label = (
-            f"{module_node.content_index}."
-            f"{section_node.content_index}."
-            f"{unit_node.content_index}"
+            f"{module_node.content_index}." f"{section_node.content_index}." f"{unit_node.content_index}"
         )
         extra_context = {
             "block_view_context": BlockViewContext.COMPOSER.name,
@@ -524,16 +504,10 @@ def edit_course_unit_info_hx(
     course = get_object_or_404(Course, id=course_id)
     course_unit = get_object_or_404(CourseUnit, id=course_unit_id, course=course)
     module_node = CourseNode.objects.get(id=module_node_id, type=NodeType.MODULE.name)
-    section_node = CourseNode.objects.get(
-        id=section_node_id, type=NodeType.SECTION.name
-    )
+    section_node = CourseNode.objects.get(id=section_node_id, type=NodeType.SECTION.name)
     unit_node = CourseNode.objects.get(id=unit_node_id, type=NodeType.UNIT.name)
 
-    content_index_label = (
-        f"{module_node.content_index}."
-        f"{section_node.content_index}."
-        f"{unit_node.content_index}"
-    )
+    content_index_label = f"{module_node.content_index}." f"{section_node.content_index}." f"{unit_node.content_index}"
 
     context = {
         "course": course,
@@ -549,9 +523,7 @@ def edit_course_unit_info_hx(
     template = "composer/course/course_unit/course_unit_header_edit.html"
 
     if request.method == "POST":
-        edit_course_form = EditCourseHeaderForm(
-            request.POST, instance=course_unit, user=request.user
-        )
+        edit_course_form = EditCourseHeaderForm(request.POST, instance=course_unit, user=request.user)
         if edit_course_form.is_valid():
             edit_course_form.save()
             delete_course_nav_cache(course.slug, course.run)
@@ -564,9 +536,7 @@ def edit_course_unit_info_hx(
             edit_course_form = None
             template = "composer/course/course_unit/course_unit_header.html"
         else:
-            edit_course_form = EditCourseHeaderForm(
-                instance=course_unit, user=request.user
-            )
+            edit_course_form = EditCourseHeaderForm(instance=course_unit, user=request.user)
             context["form"] = edit_course_form
 
     context["form"] = edit_course_form
@@ -640,12 +610,8 @@ def course_download_export(request, course_slug=None, course_run=None):
         export_filename = "{}_{}_export.zip".format(course_slug, course_run)
 
     try:
-        zip_bytes: BytesIO = course_exporter.export_course(
-            course=course, export_format=export_format
-        )
-        resp = HttpResponse(
-            zip_bytes.getvalue(), content_type="application/x-zip-compressed"
-        )
+        zip_bytes: BytesIO = course_exporter.export_course(course=course, export_format=export_format)
+        resp = HttpResponse(zip_bytes.getvalue(), content_type="application/x-zip-compressed")
     except Exception as e:
         logger.exception(f"Could not export course: {e}")
         return HttpResponseServerError("Could not export course.")
@@ -673,7 +639,14 @@ def course_import_view(request):
                 course_run = form.cleaned_data.get("course_run")
                 create_forum_items = form.cleaned_data.get("create_forum_items", False)
                 import_file = request.FILES["file"]
-                importer = CourseImporter()
+
+                # Check extension to decide which importer class to use
+                if import_file.name.endswith(".ibioarchive"):
+                    importer: CourseImporterBase = IBiologyCoursesCourseImporter()
+                else:
+                    # Assume KinesinLMS format
+                    importer: CourseImporterBase = KinesinLMSCourseImporter()
+
                 options = CourseImportOptions(create_forum_items=create_forum_items)
                 course = importer.import_course_from_archive(
                     file=import_file,
@@ -743,9 +716,7 @@ def edit_course_unit_hx(
         section_node = CourseNode.objects.get(id=section_node_id)
         unit_node = CourseNode.objects.get(id=unit_node_id)
         content_index_label = (
-            f"{module_node.content_index}."
-            f"{section_node.content_index}."
-            f"{unit_node.content_index}"
+            f"{module_node.content_index}." f"{section_node.content_index}." f"{unit_node.content_index}"
         )
     except Exception:
         module_node = None
@@ -818,9 +789,7 @@ def insert_existing_course_unit_block_hx(
     course_unit = get_object_or_404(CourseUnit, id=course_unit_id, course=course)
 
     if course_unit.type != CourseUnitType.STANDARD.name:
-        return HttpResponseServerError(
-            f"Cannot add blocks to a CourseUnit of type: {course_unit.type}"
-        )
+        return HttpResponseServerError(f"Cannot add blocks to a CourseUnit of type: {course_unit.type}")
 
     module_node = get_object_or_404(CourseNode, id=module_node_id)
     section_node = get_object_or_404(CourseNode, id=section_node_id)
@@ -838,21 +807,17 @@ def insert_existing_course_unit_block_hx(
                 block = None
             except Block.MultipleObjectsReturned:
                 return HttpResponseBadRequest(
-                    "More than one blocks correspond to that identifier. "
-                    "Try Block ID or block UUID."
+                    "More than one blocks correspond to that identifier. " "Try Block ID or block UUID."
                 )
         except Block.MultipleObjectsReturned:
             return HttpResponseBadRequest(
-                "More than one blocks correspond to that identifier. "
-                "Try Block ID or block UUID."
+                "More than one blocks correspond to that identifier. " "Try Block ID or block UUID."
             )
 
     if not block:
         raise Http404()
 
-    unit_block = BlockBuilderDirector.insert_existing_block(
-        block=block, course_unit=course_unit
-    )
+    unit_block = BlockBuilderDirector.insert_existing_block(block=block, course_unit=course_unit)
 
     context = {
         "block_view_context": BlockViewContext.COMPOSER.name,
@@ -896,9 +861,7 @@ def show_add_block_modal_dialog_hx(
     unit_node = get_object_or_404(CourseNode, id=unit_node_id)
 
     if course_unit.type != CourseUnitType.STANDARD.name:
-        return HttpResponseServerError(
-            f"Cannot add blocks to a CourseUnit of type: {course_unit.type}"
-        )
+        return HttpResponseServerError(f"Cannot add blocks to a CourseUnit of type: {course_unit.type}")
 
     before_block_id = request.GET.get("before_block_id", None)
     if before_block_id:
@@ -916,9 +879,7 @@ def show_add_block_modal_dialog_hx(
         "before_block_id": before_block_id,
     }
 
-    response = render(
-        request, "composer/course/dialogs/add_block_modal_dialog.html", context
-    )
+    response = render(request, "composer/course/dialogs/add_block_modal_dialog.html", context)
     response["HX-Trigger"] = "showAddBlockModal"
 
     return response
@@ -956,9 +917,7 @@ def add_course_unit_block_hx(
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     if course_unit.type != CourseUnitType.STANDARD.name:
-        return HttpResponseServerError(
-            f"Cannot add blocks to a CourseUnit of type: {course_unit.type}"
-        )
+        return HttpResponseServerError(f"Cannot add blocks to a CourseUnit of type: {course_unit.type}")
 
     if block_type not in [item.name for item in BlockType.valid_types_for_composer()]:
         return HttpResponseServerError(f"Cannot add block type : {block_type}")
@@ -1049,9 +1008,7 @@ def edit_course_nav_hx(request, pk: int):
         "course_nav": course_nav,
         "admin_base_url": settings.ADMIN_URL,
     }
-    return render(
-        request, "composer/course/course_nav/course_navigation_list.html", context
-    )
+    return render(request, "composer/course/course_nav/course_navigation_list.html", context)
 
 
 @composer_author_required
@@ -1066,9 +1023,7 @@ def delete_module_node_hx(request, course_id: int, pk: int):
         return HttpResponseBadRequest("This is not a MODULE node.")
 
     if module_node.children.exists():
-        return HttpResponseBadRequest(
-            "Can only delete empty MODULE " "nodes with no SECTIONs."
-        )
+        return HttpResponseBadRequest("Can only delete empty MODULE " "nodes with no SECTIONs.")
 
     # Delete node itself...
     module_node.delete()
@@ -1081,9 +1036,7 @@ def delete_module_node_hx(request, course_id: int, pk: int):
         "course_nav": course_nav,
         "admin_base_url": settings.ADMIN_URL,
     }
-    return render(
-        request, "composer/course/course_nav/course_navigation_list.html", context
-    )
+    return render(request, "composer/course/course_nav/course_navigation_list.html", context)
 
 
 @composer_author_required
@@ -1098,9 +1051,7 @@ def delete_section_node_hx(request, course_id: int, module_node_id: int, pk: int
         return HttpResponseBadRequest("This is not a SECTION node.")
 
     if section_node.children.exists():
-        return HttpResponseBadRequest(
-            "Can only delete empty SECTION " "nodes with no UNITs."
-        )
+        return HttpResponseBadRequest("Can only delete empty SECTION " "nodes with no UNITs.")
 
     # Delete node itself...
     section_node.delete()
@@ -1113,15 +1064,11 @@ def delete_section_node_hx(request, course_id: int, module_node_id: int, pk: int
         "course_nav": course_nav,
         "admin_base_url": settings.ADMIN_URL,
     }
-    return render(
-        request, "composer/course/course_nav/course_navigation_list.html", context
-    )
+    return render(request, "composer/course/course_nav/course_navigation_list.html", context)
 
 
 @composer_author_required
-def delete_unit_node_hx(
-    request, course_id: int, module_node_id: int, section_node_id: int, pk: int
-):
+def delete_unit_node_hx(request, course_id: int, module_node_id: int, section_node_id: int, pk: int):
     """
     Delete a unit node from a section node.
     """
@@ -1150,9 +1097,7 @@ def delete_unit_node_hx(
         "course_nav": course_nav,
         "admin_base_url": settings.ADMIN_URL,
     }
-    return render(
-        request, "composer/course/course_nav/course_navigation_list.html", context
-    )
+    return render(request, "composer/course/course_nav/course_navigation_list.html", context)
 
 
 @composer_author_required
@@ -1175,9 +1120,7 @@ def add_module_to_root_node_hx(request, pk: int):
         "course_nav": course_nav,
         "admin_base_url": settings.ADMIN_URL,
     }
-    return render(
-        request, "composer/course/course_nav/course_navigation_list.html", context
-    )
+    return render(request, "composer/course/course_nav/course_navigation_list.html", context)
 
 
 @composer_author_required
@@ -1201,15 +1144,11 @@ def add_section_node_to_module_hx(request, course_id: int, module_node_id: int):
         "course_nav": course_nav,
         "admin_base_url": settings.ADMIN_URL,
     }
-    return render(
-        request, "composer/course/course_nav/course_navigation_list.html", context
-    )
+    return render(request, "composer/course/course_nav/course_navigation_list.html", context)
 
 
 @composer_author_required
-def add_unit_to_section_hx(
-    request, course_id: int, module_node_id: int, section_node_id: int
-):
+def add_unit_to_section_hx(request, course_id: int, module_node_id: int, section_node_id: int):
     """
     Adds a new Unit node to a Section node and
     places at the end of the Section.
@@ -1231,9 +1170,7 @@ def add_unit_to_section_hx(
         "course_nav": course_nav,
         "admin_base_url": settings.ADMIN_URL,
     }
-    return render(
-        request, "composer/course/course_nav/course_navigation_list.html", context
-    )
+    return render(request, "composer/course/course_nav/course_navigation_list.html", context)
 
 
 @composer_author_required
@@ -1242,9 +1179,7 @@ def toggle_wysiwyg_hx(request):
     Toggle the composer wysiwyg editor on or off.
     """
 
-    composer_settings, created = ComposerSettings.objects.get_or_create(
-        user=request.user
-    )
+    composer_settings, created = ComposerSettings.objects.get_or_create(user=request.user)
     composer_settings.wysiwyg_active = not composer_settings.wysiwyg_active
 
     context = {
@@ -1312,16 +1247,13 @@ def load_course_from_form(form) -> Course:
     run = course_json.get("run")
     try:
         Course.objects.get(slug=slug, run=run)
-        raise Exception(
-            f"Course {slug}_{run} already exists. "
-            f"Please delete before loading again."
-        )
+        raise Exception(f"Course {slug}_{run} already exists. " f"Please delete before loading again.")
     except Course.DoesNotExist:
         # All good to create a new course with this slug and run!
         pass
 
     try:
-        importer = CourseImporter()
+        importer = KinesinLMSCourseImporter()
         course = importer.import_course_from_json(course_json)
     except Exception as e:
         error_message = f"Could not load course from JSON: {e}"
