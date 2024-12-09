@@ -20,7 +20,7 @@
 
         <form id="enrollment-survey-form"
               method="POST"
-              action="#"
+              action="{% url 'catalog:enrollment_survey' course_run=course.run course_slug=course.slug %}"
               class="password_set">
             {% csrf_token %}
             <div class="card">
