@@ -1080,6 +1080,6 @@
     },
     "enable_enrollment_survey": true,
     "enrollment_survey": null,
-    "course_home_content": null
+    "course_home_html_content": null
   }
 }

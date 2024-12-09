@@ -1278,6 +1278,6 @@
         },
         "enable_enrollment_survey": false,
         "enrollment_survey": null,
-        "course_home_content": "Welcome to the Sample Course\nThis is where you can place information for a custom 'home' tab for a particular course."
+        "course_home_html_content": "Welcome to the Sample Course\nThis is where you can place information for a custom 'home' tab for a particular course."
     }
 }

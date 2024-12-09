@@ -1,27 +1,30 @@
 {% extends "course/course_base_default_page.html" %}
-{% load static tz react %}
+
+{% load static tz react i18n %}
 
 {% block extra_css %}
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static 'custom_app/css/course-speakers.css' %}"/>
+    <link rel="stylesheet"
+          type="text/css"
+          href="{% static 'custom_app/css/course-speakers.css' %}" />
 {% endblock extra_css %}
 
 {% block sidebar %}
     <!-- no course nav -->
-{% endblock %}
+{% endblock sidebar %}
 
 {% block course_sub_nav %}
     <div class="course-subnav-label">
         Short biographies of speakers featured in this course (alphabetical by last name)
     </div>
-{% endblock %}
-
+{% endblock course_sub_nav %}
 
 {% block page_content %}
 
     <div class="container-fluid course-speakers">
         {% for course_speaker in course_speakers %}
-            <div class="row speaker mt-5" id="speaker-row-{{ course_speaker.speaker.slug }}">
+            <div class="row speaker mt-5"
+                 id="speaker-row-{{ course_speaker.speaker.slug }}">
                 <div class="col-md-4 col-xs-12">
                     {% if course_speaker.show_bio_video %}
                         <div class="ratio ratio-16x9">
@@ -31,23 +34,36 @@
                         </div>
                     {% elif course_speaker.headshot_url %}
                         <div class="profile-pic-container mt-1">
-                            <img src="{{ course_speaker.headshot_url }}" class="img-thumbnail"
-                                 alt="Image of {{ course_speaker.speaker.full_name }}"/>
+                            <img src="{{ course_speaker.headshot_url }}"
+                                 class="img-thumbnail"
+                                 alt="Image of {{ course_speaker.speaker.full_name }}" />
                         </div>
                     {% else %}
-                        {# no video or headshot available for this speaker #}
+                        <div class="img img-thumbnail d-flex flex-column justify-content-center align-items-center"
+                             style="min-height:15rem">
+                            <div style="color:#999;">
+                                <i class="bi bi-person-square mb-0 pb-0" style="font-size:8rem;"></i>
+                            </div>
+                            <div class="text-secondary mb-4">
+                                {% blocktrans %}No speaker photo available.{% endblocktrans %}
+                            </div>
+                        </div>
                     {% endif %}
                 </div>
                 {% with course_speaker.speaker as speaker %}
                     <div class="col-md-8 col-xs-12 mt-md-0 mt-4 mb-6 speaker-bio-info">
                         <div class="info-name">
                             {{ speaker.full_name }}
-                            {% if speaker.suffix %}, {{ speaker.suffix }}
+                            {% if speaker.suffix %}
+                                , {{ speaker.suffix }}
                             {% endif %}
                         </div>
-                        <div class="info-title">{{ speaker.title|safe|default_if_none:"" }}</div>
+                        <div class="info-title">
+                            {{ speaker.title|safe|default_if_none:"" }}
+                        </div>
                         <div class="info-university" style="margin-bottom:1rem;">
-                            {{ speaker.institution|safe|default_if_none:"" }}</div>
+                            {{ speaker.institution|safe|default_if_none:"" }}
+                        </div>
 
                         {% if speaker.pronouns %}
                             <div class="info-pronouns mb-2">
@@ -63,12 +79,13 @@
 
 
                         <div class="info-bio">
-                            <span class="text-muted">Bio:</span><br/>
+                            <span class="text-muted">Bio:</span>
+                            <br />
                             {{ speaker.bio | safe }}
                         </div>
                     </div>
-                    </div>
-                {% endwith %}
+                </div>
+            {% endwith %}
         {% endfor %}
     </div>
 
@@ -77,4 +94,3 @@
 
 {% block unit_controls_bottom %}
 {% endblock unit_controls_bottom %}
-

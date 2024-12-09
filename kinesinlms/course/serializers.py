@@ -695,7 +695,7 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
         child=serializers.CharField(),
     )
 
-    course_home_content = SanitizedHTMLField(
+    course_home_html_content = SanitizedHTMLField(
         required=False,
         allow_null=True,
         allow_blank=True,
@@ -741,7 +741,7 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
             "certificate_template",
             "enable_enrollment_survey",
             "enrollment_survey",
-            "course_home_content",
+            "course_home_html_content",
         )
 
     def to_representation(self, instance):
@@ -958,7 +958,8 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
 
         # Handle enrollment survey if defined...
         if enrollment_survey_validated_data:
-            # The only data that should be defined are the questions themselves.
+            # Currently the only data that should be defined for an enrollment survey
+            # is the questions themselves.
             enrollment_survey = EnrollmentSurvey.objects.create(course=course)
             questions_validated_data = enrollment_survey_validated_data.pop("questions")
             for question_validated_data in questions_validated_data:

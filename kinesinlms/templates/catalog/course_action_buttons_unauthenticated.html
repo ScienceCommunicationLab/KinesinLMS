@@ -1,8 +1,11 @@
 {% comment %} User is not authenticated. {% endcomment %}
+
 {% load core_tags i18n %}
+
 <div class="catalog-action-buttons d-flex">
     <a href="/accounts/signup" class="btn btn-primary">{% trans "Sign Up" %}</a>
-    <a href="/accounts/login?next=/catalog/{{ course_slug }}/{{ course_run }}" class="btn btn-light">{% trans "Sign In" %}</a>
+    <a href="/accounts/login?next=/catalog/{{ course_slug }}/{{ course_run }}"
+       class="btn btn-secondary">{% trans "Sign In" %}</a>
 
     <div class="comment">
         {% blocktrans with site_name=site_name course_slug=course_slug course_run=course_run %}

@@ -8,10 +8,10 @@ from kinesinlms.learning_library.models import Block
 
 class Speaker(models.Model):
     class Meta:
-        ordering = ['last_name']
+        ordering = ["last_name"]
 
-    courses = models.ManyToManyField(Course, related_name='speakers', blank=True, through='CourseSpeaker')
-    blocks = models.ManyToManyField(Block, related_name='speakers', blank=True)
+    courses = models.ManyToManyField(Course, related_name="speakers", blank=True, through="CourseSpeaker")
+    blocks = models.ManyToManyField(Block, related_name="speakers", blank=True)
 
     first_name = models.CharField(null=True, blank=True, max_length=200)
     last_name = models.CharField(null=True, blank=True, max_length=200)
@@ -27,10 +27,16 @@ class Speaker(models.Model):
     identities = models.CharField(null=True, blank=True, max_length=400)
     bio = models.TextField(null=True, blank=True)
 
+    headshot_image = models.ImageField(
+        upload_to="speakers",
+        null=True,
+        blank=True,
+    )
+
     @property
     def headshot_url(self) -> Optional[str]:
-        if self.slug:
-            return f"https://kinesinlms.s3.us-west-1.amazonaws.com/media/speakers/{self.slug}.jpg"
+        if self.headshot_image:
+            return self.headshot_image.url
         else:
             return None
 
@@ -39,17 +45,17 @@ class Speaker(models.Model):
 
 
 class CourseSpeaker(models.Model):
-    course = models.ForeignKey(Course,
-                               on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    speaker = models.ForeignKey(Speaker,
-                                on_delete=models.CASCADE)
+    speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
 
-    has_course_headshot = models.BooleanField(default=False,
-                                              help_text="Use a course-specific headshot (rather than the default headshot)")
+    has_course_headshot = models.BooleanField(
+        default=False, help_text="Use a course-specific headshot (rather than the default headshot)"
+    )
 
-    has_course_video = models.BooleanField(default=False,
-                                           help_text="Use a course-specific bio video (rather than the default bio video)")
+    has_course_video = models.BooleanField(
+        default=False, help_text="Use a course-specific bio video (rather than the default bio video)"
+    )
 
     @property
     def show_bio_video(self):

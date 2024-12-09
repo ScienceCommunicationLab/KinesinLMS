@@ -284,9 +284,6 @@ def course_home_page(request, course_slug=None, course_run=None):
         course_slug:
         course_run:
     """
-
-    # TODO: Refactor to use AccessService
-
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
     enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
 

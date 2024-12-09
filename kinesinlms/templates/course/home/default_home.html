@@ -1,4 +1,5 @@
 {% extends "course/home/course_home_base.html" %}
+
 {% load tz core_tags i18n %}
 
 {% block course_home_page_content %}
@@ -8,8 +9,8 @@
     otherwise just show a generic welcome message.
     {% endcomment %}
 
-    {% if course.course_home_content %}
-        {{ course.course_home_content|safe }}
+    {% if course.course_home_html_content %}
+        {{ course.course_home_html_content|safe }}
     {% else %}
 
         <h1>

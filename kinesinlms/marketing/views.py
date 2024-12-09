@@ -295,7 +295,7 @@ def get_random_speaker(current_speaker_id=None) -> Optional[Speaker]:
     speakers = Speaker.objects.filter(video_url__isnull=False).exclude(video_url="")
     if current_speaker_id:
         speakers = speakers.filter(~Q(id=current_speaker_id))
-    speaker_ids = speakers.values_list("id", flat=True)
+    speaker_ids = list(speakers.values_list("id", flat=True))
     if not speaker_ids:
         return None
     speaker_id = random.choice(list(speaker_ids))

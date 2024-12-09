@@ -152,6 +152,7 @@ class CourseForm(forms.ModelForm):
             "self_paced",
             "days_early_for_beta",
             "playlist_url",
+            "course_home_html_content",
         ]
 
     def __init__(self, *args, **kwargs):

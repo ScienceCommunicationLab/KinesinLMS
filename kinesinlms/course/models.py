@@ -744,7 +744,7 @@ class Course(Trackable):
 
     # This is the introductory course content for enrolled students, shown in the 'home' tab in the course navigation.
     # (Don't confuse with general public-focused content shown on the course's catalog home page.)
-    course_home_content = models.TextField(
+    course_home_html_content = models.TextField(
         null=True,
         blank=True,
         help_text=_("HTML content for the course home for enrolled students."),

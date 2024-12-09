@@ -4,22 +4,26 @@
       {% if course %} action="{% url 'composer:course_edit_settings' pk=course.id %}" {% else %} action="{% url 'composer:course_create' %}" {% endif %}
       method="post">
 
-    {% csrf_token %}
-    <div class="card main-card">
-        <div class="card-header">Course Details Form</div>
-        <div class="card-body">{{ form | crispy }}</div>
-        <div class="card-footer">
-            <div class="action-buttons">
-                <button type="submit" class="btn btn-primary">
-                    {% if course %}
-                        Update
-                    {% else %}
-                        Create
-                    {% endif %}
-                </button>
-            </div>
-        </div>
+  {% csrf_token %}
+  <div class="card main-card">
+    <div class="card-header">
+      Course Details Form
     </div>
+    <div class="card-body">
+      {{ form | crispy }}
+    </div>
+    <div class="card-footer">
+      <div class="action-buttons">
+        <button type="submit" class="btn btn-primary">
+          {% if course %}
+            Update
+          {% else %}
+            Create
+          {% endif %}
+        </button>
+      </div>
+    </div>
+  </div>
 </form>
 
 
