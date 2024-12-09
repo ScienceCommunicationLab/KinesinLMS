@@ -1,41 +1,37 @@
 import json
-from typing import Dict, List, Optional
 import logging
+from typing import Dict, List, Optional
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import (
-    SearchVector,
-    SearchQuery,
     SearchHeadline,
+    SearchQuery,
     SearchRank,
+    SearchVector,
 )
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
+from django.db.models import QuerySet, TextField
 from django.db.models.functions import Concat
 from django.http import Http404, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render, resolve_url
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect, render, resolve_url
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.db.models import QuerySet
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
-
-from rest_framework import viewsets, status
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from rest_framework import status, viewsets
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
-from django.db.models import TextField
 
-from kinesinlms.external_tools.constants import ExternalToolViewLaunchType
 from kinesinlms.badges.models import BadgeAssertion, BadgeClass, BadgeClassType
 from kinesinlms.catalog.service import do_enrollment
-from kinesinlms.certificates.models import CertificateTemplate, Certificate
+from kinesinlms.certificates.models import Certificate, CertificateTemplate
 from kinesinlms.certificates.service import CertificateTemplateFactory
 from kinesinlms.course.certificates.generators import (
     generate_base_certificate,
@@ -46,14 +42,15 @@ from kinesinlms.course.custom_views.views import (
     get_custom_unit_template,
 )
 from kinesinlms.course.models import (
+    Block,
+    BlockType,
+    Bookmark,
     Course,
     CourseNode,
     CoursePassed,
+    CourseResource,
     CourseUnit,
-    Block,
-    BlockType,
     CourseUnitType,
-    Bookmark,
     Enrollment,
     Milestone,
     MilestoneProgress,
@@ -61,27 +58,27 @@ from kinesinlms.course.models import (
     NoticeType,
 )
 from kinesinlms.course.nav import (
-    get_course_nav,
     CourseNavException,
+    get_course_nav,
     get_first_course_page_url,
 )
 from kinesinlms.course.progress import get_progress_status
 from kinesinlms.course.serializers import (
     BookmarkSerializer,
-    CourseNodeSimpleSerializer,
     CourseMetaSerializer,
+    CourseNodeSimpleSerializer,
     CourseSerializer,
 )
 from kinesinlms.course.utils import get_student_cohort, user_is_enrolled
 from kinesinlms.course.utils_access import (
-    can_access_course,
-    UnitNavInfo,
-    get_unit_nav_info,
-    ModuleNodeNotReleased,
-    SectionNodeNotReleased,
     ModuleNodeDoesNotExist,
+    ModuleNodeNotReleased,
     SectionNodeDoesNotExist,
+    SectionNodeNotReleased,
+    UnitNavInfo,
     UnitNodeDoesNotExist,
+    can_access_course,
+    get_unit_nav_info,
 )
 from kinesinlms.course.view_helpers import access_denied_page, process_course_hx_request
 from kinesinlms.custom_app.models import CustomApp, CustomAppTypes
@@ -90,6 +87,7 @@ from kinesinlms.custom_app.views import (
     peer_review_journal,
     simple_html_content,
 )
+from kinesinlms.external_tools.constants import ExternalToolViewLaunchType
 from kinesinlms.forum.models import (
     ForumCategory,
     ForumSubcategory,
@@ -97,14 +95,13 @@ from kinesinlms.forum.models import (
     ForumTopic,
 )
 from kinesinlms.forum.service.base_service import BaseForumService
-from kinesinlms.forum.utils import get_forum_service, get_forum_provider
+from kinesinlms.forum.utils import get_forum_provider, get_forum_service
 from kinesinlms.learning_library.constants import BlockViewContext, ResourceType
-from kinesinlms.learning_library.models import BlockResource, UnitBlock, Resource
+from kinesinlms.learning_library.models import BlockResource, Resource, UnitBlock
 from kinesinlms.learning_library.utils import get_learning_objectives
 from kinesinlms.sits.models import SimpleInteractiveTool
 from kinesinlms.tracking.event_types import TrackingEventType
 from kinesinlms.tracking.tracker import Tracker
-from kinesinlms.course.models import CourseResource
 
 logger = logging.getLogger(__name__)
 
@@ -291,20 +288,12 @@ def course_home_page(request, course_slug=None, course_run=None):
     # TODO: Refactor to use AccessService
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
 
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course_slug, course_run=course_run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course_slug, course_run=course_run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     course_home_template_path = f"course/home/{course_slug}/{course_run}/home.html"
 
@@ -316,9 +305,7 @@ def course_home_page(request, course_slug=None, course_run=None):
     course_notices_qs = Notice.objects.filter(course=course)
 
     news_items = course_notices_qs.filter(type=NoticeType.NEWS_ITEM.name).all()
-    important_dates = course_notices_qs.filter(
-        type=NoticeType.IMPORTANT_DATE.name
-    ).all()
+    important_dates = course_notices_qs.filter(type=NoticeType.IMPORTANT_DATE.name).all()
     course_resources = course.course_resources.all()
 
     first_unit_url = f"/courses/{course_slug}/{course_run}/content/"
@@ -348,9 +335,7 @@ def course_home_page(request, course_slug=None, course_run=None):
 
 
 @login_required
-def redirect_to_unit_page(
-    request, course_slug, course_run, module_slug=None, section_slug=None
-):
+def redirect_to_unit_page(request, course_slug, course_run, module_slug=None, section_slug=None):
     """
     Given course and run, and potentially module and section,
     redirect to the correct URL for the first Unit available,
@@ -372,19 +357,11 @@ def redirect_to_unit_page(
     assert course_run is not None
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course_slug, course_run=course_run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course_slug, course_run=course_run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     # If no module, section or unit, look for a last viewed unit path
     redirect_url = None
@@ -397,11 +374,7 @@ def redirect_to_unit_page(
         if last_viewed_unit_id:
             try:
                 unit: CourseNode = CourseNode.objects.get(id=int(last_viewed_unit_id))
-                is_released = (
-                    unit.is_released
-                    and unit.parent.is_released
-                    and unit.parent.parent.is_released
-                )
+                is_released = unit.is_released and unit.parent.is_released and unit.parent.parent.is_released
                 if is_released or request.user.is_superuser or request.user.is_staff:
                     redirect_url = unit.node_url
                 else:
@@ -422,11 +395,7 @@ def redirect_to_unit_page(
         # section or unit if user didn't provide a slug for it.
         try:
             if module_slug:
-                module_node = (
-                    course.course_root_node.get_children()
-                    .filter(slug=module_slug)
-                    .first()
-                )
+                module_node = course.course_root_node.get_children().filter(slug=module_slug).first()
                 if not module_node:
                     msg = _("No such module: ")
                     raise Http404(f"{msg}{module_slug}")
@@ -434,9 +403,7 @@ def redirect_to_unit_page(
                 module_node = course.course_root_node.get_children().first()
 
             if section_slug:
-                section_node = (
-                    module_node.get_children().filter(slug=section_slug).first()
-                )
+                section_node = module_node.get_children().filter(slug=section_slug).first()
                 if not section_node:
                     msg = _("No such section: ")
                     raise Http404(f"{msg}{section_slug}")
@@ -493,18 +460,11 @@ def block_page(
         is_beta_tester = False
         show_admin_controls = request.session.get("show_admin_controls", True)
     else:
-        enrollment = get_object_or_404(
-            Enrollment, student=request.user, course=course, active=True
-        )
+        enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
         if not can_access_course(request.user, course, enrollment=enrollment):
-            return access_denied_page(
-                request=request, course_slug=course_slug, course_run=course_run
-            )
-        if enrollment.enrollment_survey_required:
-            return redirect(
-                "catalog:enrollment_survey",
-                kwargs={"course_slug": course.slug, "course_run": course.run},
-            )
+            return access_denied_page(request=request, course_slug=course_slug, course_run=course_run)
+        if enrollment.enrollment_survey_required_url:
+            return redirect(enrollment.enrollment_survey_required_url)
         is_beta_tester = enrollment.beta_tester
         show_admin_controls = False
 
@@ -513,8 +473,7 @@ def block_page(
         course_nav: Dict = get_course_nav(course, is_beta_tester=is_beta_tester)
     except CourseNavException as cne:
         logger.exception(
-            f"unit_page():  Could not generate course {course} navigation with "
-            f"call to get_course_nav()"
+            f"unit_page():  Could not generate course {course} navigation with " f"call to get_course_nav()"
         )
         raise Exception("Internal error. Please contact support for help.") from cne
 
@@ -548,17 +507,13 @@ def block_page(
             raise Http404(f"{msg}{unit_nav_info.module_release_datetime}")
     if not unit_nav_info.section_released:
         if request.user.is_superuser or request.user.is_staff:
-            admin_message = _(
-                "The unit for this block is not yet available to students (Section not released)."
-            )
+            admin_message = _("The unit for this block is not yet available to students (Section not released).")
         else:
             msg = _("Section is not yet released. Release date: ")
             raise Http404(f"{msg}{unit_nav_info.module_release_datetime}")
     if not unit_nav_info.module_released:
         if request.user.is_superuser or request.user.is_staff:
-            admin_message = _(
-                "The unit for this block is not yet available to students (Module not released)."
-            )
+            admin_message = _("The unit for this block is not yet available to students (Module not released).")
         else:
             msg = _("Module is not yet released. Release date: ")
             raise Http404(f"{msg}{unit_nav_info.module_release_datetime}")
@@ -661,9 +616,7 @@ def unit_page(
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
     try:
-        enrollment = Enrollment.objects.get(
-            student=request.user, course=course, active=True
-        )
+        enrollment = Enrollment.objects.get(student=request.user, course=course, active=True)
     except Enrollment.DoesNotExist:
         if request.user.is_superuser:
             # A superuser can view a course without being enrolled.
@@ -672,27 +625,19 @@ def unit_page(
         else:
             # This user is a regular student, an educator or staff.
             # These types of users have to enroll.
-            return access_denied_page(
-                request=request, course_run=course.run, course_slug=course.slug
-            )
+            return access_denied_page(request=request, course_run=course.run, course_slug=course.slug)
 
     if not can_access_course(request.user, course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        return redirect(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
     is_beta_tester = enrollment.beta_tester
 
     try:
         course_nav: Dict = get_course_nav(course, is_beta_tester=is_beta_tester)
     except CourseNavException as cne:
         logger.exception(
-            f"unit_page():  Could not generate course {course} navigation with "
-            f"call to get_course_nav()"
+            f"unit_page():  Could not generate course {course} navigation with " f"call to get_course_nav()"
         )
         raise Exception(_("Internal error. Please contact support for help.")) from cne
 
@@ -736,31 +681,21 @@ def unit_page(
     admin_message = None
     if not unit_nav_info.unit_node_released:
         if request.user.is_superuser or request.user.is_staff:
-            admin_message = (
-                "This unit is not yet available to students (Unit not released)."
-            )
+            admin_message = "This unit is not yet available to students (Unit not released)."
         else:
             # If unit is not yet released, the template will
             # handle showing the right information
             pass
     if not unit_nav_info.section_released:
         if request.user.is_superuser or request.user.is_staff:
-            admin_message = (
-                "This unit is not yet available to students (Section not released)."
-            )
+            admin_message = "This unit is not yet available to students (Section not released)."
         else:
-            raise Http404(
-                f"Section is not yet released. Release date: {unit_nav_info.module_release_datetime}"
-            )
+            raise Http404(f"Section is not yet released. Release date: {unit_nav_info.module_release_datetime}")
     if not unit_nav_info.module_released:
         if request.user.is_superuser or request.user.is_staff:
-            admin_message = (
-                "This unit is not yet available to students (Module not released)."
-            )
+            admin_message = "This unit is not yet available to students (Module not released)."
         else:
-            raise Http404(
-                f"Module is not yet released. Release date: {unit_nav_info.module_release_datetime}"
-            )
+            raise Http404(f"Module is not yet released. Release date: {unit_nav_info.module_release_datetime}")
 
     # Set release information
     if course.self_paced:
@@ -788,9 +723,7 @@ def unit_page(
         except Exception:
             # Even though we have the ID of a 'UNIT' CourseNode ID in the cached nav...we don't have an
             # actual instance of this node with that ID in the database.
-            logger.error(
-                f"Could not find CourseNode with id {unit_nav_info.unit_node_id}"
-            )
+            logger.error(f"Could not find CourseNode with id {unit_nav_info.unit_node_id}")
             raise Http404(_("No unit found."))
 
         # Get CourseUnit
@@ -804,15 +737,11 @@ def unit_page(
         # Get Bookmark info
         bookmark_info = {"unit_node_id": current_unit_node.id, "course_id": course.id}
         try:
-            bookmark = Bookmark.objects.get(
-                unit_node=current_unit_node, student=request.user
-            )
+            bookmark = Bookmark.objects.get(unit_node=current_unit_node, student=request.user)
             bookmark_info["bookmark_id"] = bookmark.id
         except Bookmark.MultipleObjectsReturned:
             # This shouldn't happen. Delete all but one and return that.
-            bookmarks = Bookmark.objects.filter(
-                unit_node=current_unit_node, student=request.user
-            ).all()
+            bookmarks = Bookmark.objects.filter(unit_node=current_unit_node, student=request.user).all()
             for index, bookmark in enumerate(bookmarks):
                 if index == 0:
                     continue
@@ -827,9 +756,7 @@ def unit_page(
             CourseUnitType.STANDARD.name,
             CourseUnitType.ROADMAP.name,
         ]:
-            blocks = course_unit.contents.filter(unit_blocks__hide=False).order_by(
-                "unit_blocks__block_order"
-            )
+            blocks = course_unit.contents.filter(unit_blocks__hide=False).order_by("unit_blocks__block_order")
             # blocks = course_unit.contents.all().order_by('unit_blocks__block_order')
             # Standard unit so use defaults and load nodes.
         elif course_unit.type in [
@@ -839,12 +766,8 @@ def unit_page(
             pass
         else:
             # this is a custom course_unit so get appropriate template and data.
-            custom_unit_data = get_custom_unit_data(
-                request, course=course, course_unit=course_unit
-            )
-            unit_template = get_custom_unit_template(
-                course=course, course_unit=course_unit
-            )
+            custom_unit_data = get_custom_unit_data(request, course=course, course_unit=course_unit)
+            unit_template = get_custom_unit_template(course=course, course_unit=course_unit)
 
         # Get custom interactive tools...
         # Check for react component usage. Later we may build a more sophisticated approach
@@ -856,9 +779,7 @@ def unit_page(
             if sit_blocks.count() > 0:
                 for sit_block in sit_blocks:
                     tool_type = sit_block.simple_interactive_tool.tool_type
-                    js_libraries = (
-                        SimpleInteractiveTool.get_helper_javascript_libraries(tool_type)
-                    )
+                    js_libraries = SimpleInteractiveTool.get_helper_javascript_libraries(tool_type)
                     for js_library in js_libraries:
                         if js_library not in extra_course_unit_js_libraries:
                             extra_course_unit_js_libraries.append(js_library)
@@ -870,9 +791,7 @@ def unit_page(
                 external_tool_view__launch_type=ExternalToolViewLaunchType.IFRAME.name,
             ).all()
             for lti_iframe_block in lti_iframe_blocks:
-                content_security_policies.append(
-                    f"frame-src 'self' {lti_iframe_block.external_tool_view.base_url}"
-                )
+                content_security_policies.append(f"frame-src 'self' {lti_iframe_block.external_tool_view.base_url}")
             extra_context["content_security_policies"] = content_security_policies
 
     else:
@@ -882,9 +801,7 @@ def unit_page(
     try:
         # DMcQ: Weird bug where more than one bookmark was getting created for a unit_node and user,
         # DMcQ: so have to use filter rather than get.
-        bookmark = Bookmark.objects.filter(
-            unit_node=current_unit_node, student=request.user
-        ).first()
+        bookmark = Bookmark.objects.filter(unit_node=current_unit_node, student=request.user).first()
         if bookmark:
             bookmark_info["bookmark_id"] = bookmark.id
     except Exception:
@@ -903,13 +820,9 @@ def unit_page(
         # If course isn't released we won't have looked up unit
         # but this is an admin so look it up, so we can link to it.
         if not course_unit:
-            current_unit_node: CourseNode = CourseNode.objects.get(
-                id=unit_nav_info.unit_node_id
-            )
+            current_unit_node: CourseNode = CourseNode.objects.get(id=unit_nav_info.unit_node_id)
             course_unit = current_unit_node.unit
-        admin_edit_url = (
-            f"/{settings.ADMIN_URL}course/courseunit/{course_unit.id}/change/"
-        )
+        admin_edit_url = f"/{settings.ADMIN_URL}course/courseunit/{course_unit.id}/change/"
         show_admin_controls = request.session.get("show_admin_controls", True)
 
     # Cohort
@@ -919,9 +832,7 @@ def unit_page(
     learning_objectives = []
     if course_unit:
         try:
-            learning_objectives = get_learning_objectives(
-                course_unit=course_unit, current_unit_node=current_unit_node
-            )
+            learning_objectives = get_learning_objectives(course_unit=course_unit, current_unit_node=current_unit_node)
         except Exception:
             logger.exception("Could not load learning objectives")
 
@@ -1026,19 +937,11 @@ def course_search_page(request, course_slug, course_run):
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
     page_num = request.GET.get("page", 1)
 
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     search_text = request.GET.get("search_text", None)
 
@@ -1066,14 +969,10 @@ def course_search_page(request, course_slug, course_run):
     for block_id in block_ids:
         block_query = Block.objects.filter(pk=block_id)
         block_query = block_query.annotate(
-            all_content=Concat(
-                "html_content", "json_content__header", output_field=TextField()
-            )
+            all_content=Concat("html_content", "json_content__header", output_field=TextField())
         )
         block_query = block_query.annotate(
-            headline=SearchHeadline(
-                "all_content", search_query, start_sel="<mark>", stop_sel="</mark>"
-            )
+            headline=SearchHeadline("all_content", search_query, start_sel="<mark>", stop_sel="</mark>")
         )
         block: Block = block_query.get()
         headline_results.append(block)
@@ -1117,23 +1016,13 @@ def course_extra_page(request, course_slug, course_run, page_name):
     # TODO: Refactor to use AccessService
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
-    template_name = "course/custom/{}/{}/static_pages/{}.html".format(
-        course_slug, course_run, page_name
-    )
+    template_name = "course/custom/{}/{}/static_pages/{}.html".format(course_slug, course_run, page_name)
 
     Tracker.track(
         event_type=TrackingEventType.COURSE_EXTRA_PAGE_VIEW.value,
@@ -1163,28 +1052,16 @@ def certificate_download(request, course_slug, course_run):
     # TODO: Refactor to use AccessService
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
-    certificate_template, created = (
-        CertificateTemplateFactory.get_or_create_certificate_template(course=course)
-    )
+    certificate_template, created = CertificateTemplateFactory.get_or_create_certificate_template(course=course)
 
     try:
-        certificate = Certificate.objects.get(
-            student=request.user, certificate_template=certificate_template
-        )
+        certificate = Certificate.objects.get(student=request.user, certificate_template=certificate_template)
     except Certificate.DoesNotExist:
         certificate = None
 
@@ -1196,9 +1073,7 @@ def certificate_download(request, course_slug, course_run):
     # Need to reset buffer to start before sending for download to work.
     cert_buffer.seek(0)
 
-    certificate_filename = (
-        f"{certificate.student.username}_{course.token}_certificate.pdf"
-    )
+    certificate_filename = f"{certificate.student.username}_{course.token}_certificate.pdf"
 
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f"attachment; filename={certificate_filename}"
@@ -1217,19 +1092,11 @@ def certificate_page(request, course_slug, course_run):
     assert course_run is not None
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     context = {
         "course": course,
@@ -1237,9 +1104,7 @@ def certificate_page(request, course_slug, course_run):
         "current_course_tab_name": "Certificate",
     }
     try:
-        certificate_template, created = (
-            CertificateTemplateFactory.get_or_create_certificate_template(course=course)
-        )
+        certificate_template, created = CertificateTemplateFactory.get_or_create_certificate_template(course=course)
     except CertificateTemplate.DoesNotExist:
         logger.warning(f"No CertificateTemplate is defined for course {course}")
         return render(
@@ -1249,17 +1114,13 @@ def certificate_page(request, course_slug, course_run):
         )
 
     try:
-        certificate = Certificate.objects.get(
-            student=request.user, certificate_template=certificate_template
-        )
+        certificate = Certificate.objects.get(student=request.user, certificate_template=certificate_template)
     except Certificate.DoesNotExist:
         certificate = None
 
     if certificate:
         if certificate_template.custom_template_name:
-            custom_certificate_template = (
-                f"course/certificate/custom/{certificate_template.custom_template_name}"
-            )
+            custom_certificate_template = f"course/certificate/custom/{certificate_template.custom_template_name}"
         else:
             custom_certificate_template = None
         signatories = certificate_template.signatories.all()
@@ -1308,19 +1169,11 @@ def forum_topics_page(request, course_slug=None, course_run=None):
     assert course_slug is not None
     assert course_run is not None
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     forum_topics_list: List[Dict] = []
     cohort = get_student_cohort(course=course, student=request.user)
@@ -1351,18 +1204,13 @@ def forum_topics_page(request, course_slug=None, course_run=None):
                 try:
                     is_released = is_released_status[forum_topic.block.id]
                 except Exception:
-                    logger.exception(
-                        f"Could not get release status "
-                        f"for discussion_topic: {forum_topic}"
-                    )
+                    logger.exception(f"Could not get release status " f"for discussion_topic: {forum_topic}")
                     is_released = True
 
                 try:
                     block_order = order[forum_topic.block.id]
                 except Exception:
-                    logger.exception(
-                        f"Could not get order for " f"discussion_topic: {forum_topic}"
-                    )
+                    logger.exception(f"Could not get order for " f"discussion_topic: {forum_topic}")
                     block_order = 0
 
                 form_provider = get_forum_provider()
@@ -1410,19 +1258,11 @@ def bookmarks_page(request, course_slug=None, course_run=None):
     assert course_run is not None
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     bookmarks = Bookmark.objects.filter(course=course, student=request.user)
 
@@ -1468,19 +1308,11 @@ def progress_overview_page(request, course_slug=None, course_run=None):
     assert course_run is not None
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     return_to_content_url = request.META.get("HTTP_REFERER", "/")
     if not return_to_content_url:
@@ -1518,27 +1350,21 @@ def progress_overview_page(request, course_slug=None, course_run=None):
         course_passed = None
 
     try:
-        certificate = Certificate.objects.get(
-            student=request.user, certificate_template__course=course
-        )
+        certificate = Certificate.objects.get(student=request.user, certificate_template__course=course)
         certificate_url = certificate.certificate_url
     except Certificate.DoesNotExist:
         certificate_url = None
 
     # get a course passed badge class, if any
     try:
-        course_passed_badge_class = BadgeClass.objects.get(
-            course=course, type=BadgeClassType.COURSE_PASSED.name
-        )
+        course_passed_badge_class = BadgeClass.objects.get(course=course, type=BadgeClassType.COURSE_PASSED.name)
     except BadgeClass.DoesNotExist:
         course_passed_badge_class = None
 
     badge_assertion = None
     if course_passed_badge_class:
         try:
-            badge_assertion = BadgeAssertion.objects.get(
-                recipient=request.user, badge_class=course_passed_badge_class
-            )
+            badge_assertion = BadgeAssertion.objects.get(recipient=request.user, badge_class=course_passed_badge_class)
         except BadgeAssertion.DoesNotExist:
             pass
 
@@ -1579,28 +1405,18 @@ def progress_overview_page(request, course_slug=None, course_run=None):
 
 
 @login_required
-def progress_detail_page(
-    request, course_slug=None, course_run=None, module_id: int = None
-):
+def progress_detail_page(request, course_slug=None, course_run=None, module_id: int = None):
     # TODO: Refactor to use AccessService
 
     assert course_slug is not None
     assert course_run is not None
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     if module_id:
         current_module_node = get_object_or_404(CourseNode, id=module_id)
@@ -1637,19 +1453,11 @@ def custom_app_page(request, course_slug=None, course_run=None, custom_app_slug=
     assert custom_app_slug is not None
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(user=request.user, course=course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     custom_app = get_object_or_404(CustomApp, course=course, slug=custom_app_slug)
 
@@ -1695,9 +1503,7 @@ def shortcut_to_unit(request, course_slug: str, course_run: str, unit_block_slug
         if not is_enrolled:
             return Http404()
 
-    course_unit = CourseUnit.objects.filter(
-        course=course, unit__slug=unit_block_slug
-    ).first()
+    course_unit = CourseUnit.objects.filter(course=course, unit__slug=unit_block_slug).first()
     if not course_unit:
         return Http404()
     unit_node = course_unit.unit
@@ -1717,9 +1523,7 @@ def shortcut_to_unit(request, course_slug: str, course_run: str, unit_block_slug
 
 
 @login_required
-def shortcut_to_assessment(
-    request, course_slug: str, course_run: str, unit_block_slug: str
-):
+def shortcut_to_assessment(request, course_slug: str, course_run: str, unit_block_slug: str):
     """
     Find the unit an assessment first appears in and return an
     HTTP redirect response to that unit.
@@ -1825,9 +1629,7 @@ def download_course_resource(
 
 
 @login_required
-def download_resource(
-    request, course_slug: str, course_run: str, block_resource_id: int
-):
+def download_resource(request, course_slug: str, course_run: str, block_resource_id: int):
     """
     Download a block resource.
 
@@ -1971,19 +1773,11 @@ def unit_summary_hx(
         raise ValueError("unit_slug cannot be None")
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    enrollment = get_object_or_404(
-        Enrollment, student=request.user, course=course, active=True
-    )
+    enrollment = get_object_or_404(Enrollment, student=request.user, course=course, active=True)
     if not can_access_course(request.user, course, enrollment=enrollment):
-        return access_denied_page(
-            request=request, course_slug=course.slug, course_run=course.run
-        )
-    if enrollment.enrollment_survey_required:
-        enrollment_survey_url = reverse(
-            "catalog:enrollment_survey",
-            kwargs={"course_slug": course.slug, "course_run": course.run},
-        )
-        return redirect(enrollment_survey_url)
+        return access_denied_page(request=request, course_slug=course.slug, course_run=course.run)
+    if enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
 
     course_unit_url = None
     try:
@@ -2006,8 +1800,7 @@ def unit_summary_hx(
         course_nav: Dict = get_course_nav(course, is_beta_tester=is_beta_tester)
     except CourseNavException:
         logger.exception(
-            f"unit_page():  Could not generate course {course} navigation with "
-            f"call to get_course_nav()"
+            f"unit_page():  Could not generate course {course} navigation with " f"call to get_course_nav()"
         )
         raise Exception("Internal error. Please contact support for help.")
 
@@ -2026,13 +1819,9 @@ def unit_summary_hx(
     except UnitNodeDoesNotExist:
         raise Http404("Unit does not exist")
     except ModuleNodeNotReleased as mnr:
-        raise Http404(
-            f"Module is not yet released. Release date: {mnr.node['release_datetime']}"
-        )
+        raise Http404(f"Module is not yet released. Release date: {mnr.node['release_datetime']}")
     except SectionNodeNotReleased as snr:
-        raise Http404(
-            f"Section is not yet released. Release date: {snr.node['release_datetime']}"
-        )
+        raise Http404(f"Section is not yet released. Release date: {snr.node['release_datetime']}")
     except Exception:
         logger.exception("Could not build nav info")
         raise Http404("No unit found.")
@@ -2051,9 +1840,7 @@ def unit_summary_hx(
         except Exception:
             # Even though we have the ID of a 'UNIT' CourseNode ID in the cached nav...we don't have an
             # actual instance of this node with that ID in the database.
-            logger.error(
-                f"Could not find CourseNode with id {unit_nav_info.unit_node_id}"
-            )
+            logger.error(f"Could not find CourseNode with id {unit_nav_info.unit_node_id}")
             raise Http404("No unit found.")
 
         # Get CourseUnit
@@ -2103,9 +1890,7 @@ def toggle_bookmark_hx(
         )
     except PermissionDenied:
         logger.exception("User does not have permission to call this htmx endpoint")
-        return HttpResponseForbidden(
-            _("You do not have permission to perform the requested action.")
-        )
+        return HttpResponseForbidden(_("You do not have permission to perform the requested action."))
     except Exception:
         logger.exception("Could not process course htmx request")
         raise Http404(_("Error processing your request"))
@@ -2160,9 +1945,7 @@ def toggle_bookmark_hx(
 
 
 @login_required
-def forum_topic_posts_hx(
-    request, course_slug=None, course_run=None, forum_topic_id: int = None
-):
+def forum_topic_posts_hx(request, course_slug=None, course_run=None, forum_topic_id: int = None):
     """
     Returns an HTML partial with the current posts for a forum topic.
 

@@ -958,6 +958,7 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
 
         # Handle enrollment survey if defined...
         if enrollment_survey_validated_data:
+            # The only data that should be defined are the questions themselves.
             enrollment_survey = EnrollmentSurvey.objects.create(course=course)
             questions_validated_data = enrollment_survey_validated_data.pop("questions")
             for question_validated_data in questions_validated_data:

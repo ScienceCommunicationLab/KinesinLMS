@@ -1,24 +1,22 @@
-from typing import Dict, Tuple, Optional
+import logging
+from typing import Dict, Optional, Tuple
 
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
-import logging
-
 from django.shortcuts import render
 
 from kinesinlms.course.models import Course, Enrollment
-from kinesinlms.course.nav import get_course_nav, CourseNavException
+from kinesinlms.course.nav import CourseNavException, get_course_nav
 from kinesinlms.course.utils_access import (
-    can_access_course,
-    UnitNavInfo,
-    get_unit_nav_info,
-    ModuleNodeNotReleased,
-    SectionNodeNotReleased,
     ModuleNodeDoesNotExist,
+    ModuleNodeNotReleased,
     SectionNodeDoesNotExist,
+    SectionNodeNotReleased,
+    UnitNavInfo,
     UnitNodeDoesNotExist,
+    can_access_course,
+    get_unit_nav_info,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -117,12 +115,10 @@ def process_course_hx_request(
         raise ValueError("course_run cannot be None")
 
     course: Course = Course.objects.get(slug=course_slug, run=course_run)
-    enrollment: Enrollment = Enrollment.objects.get(
-        student=request.user, course=course, active=True
-    )
+    enrollment: Enrollment = Enrollment.objects.get(student=request.user, course=course, active=True)
     if not can_access_course(request.user, course, enrollment=enrollment):
         raise PermissionDenied("You do not have access to this course.")
-    if enrollment.enrollment_survey_required:
+    if enrollment.enrollment_survey_required_url:
         raise PermissionDenied("User has not completed enrollment survey yet.")
 
     is_beta_tester = enrollment.beta_tester
@@ -132,8 +128,7 @@ def process_course_hx_request(
         course_nav: Dict = get_course_nav(course, is_beta_tester=is_beta_tester)
     except CourseNavException:
         logger.exception(
-            f"unit_page():  Could not generate course {course} navigation with "
-            f"call to get_course_nav()"
+            f"unit_page():  Could not generate course {course} navigation with " f"call to get_course_nav()"
         )
         raise Exception("Internal error. Please contact support for help.")
 
@@ -158,13 +153,9 @@ def process_course_hx_request(
     except UnitNodeDoesNotExist:
         raise Exception("Unit does not exist")
     except ModuleNodeNotReleased as mnr:
-        raise Exception(
-            f"Module is not yet released. Release date: {mnr.node['release_datetime']}"
-        )
+        raise Exception(f"Module is not yet released. Release date: {mnr.node['release_datetime']}")
     except SectionNodeNotReleased as snr:
-        raise Exception(
-            f"Section is not yet released. Release date: {snr.node['release_datetime']}"
-        )
+        raise Exception(f"Section is not yet released. Release date: {snr.node['release_datetime']}")
     except Exception:
         logger.exception("Could not build nav info")
         raise Exception("No unit found.")

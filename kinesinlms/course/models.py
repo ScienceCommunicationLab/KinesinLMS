@@ -10,6 +10,7 @@ from django.db import models
 from django.db.models import F, JSONField, Q, QuerySet
 from django.db.models.fields import DateTimeField, TextField
 from django.shortcuts import resolve_url
+from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django_react_templatetags.mixins import RepresentationMixin
@@ -169,8 +170,7 @@ class CourseUnit(Trackable):
         default=True,
         null=False,
         blank=True,
-        help_text="Enables a limited number of template tags in "
-        "this model's html_content field.",
+        help_text="Enables a limited number of template tags in " "this model's html_content field.",
     )
 
     # JSON content for this unit. This holds different data depending
@@ -228,9 +228,7 @@ class CourseUnit(Trackable):
         blocks in this unit.
         """
         block_ids = [item.block.id for item in self.unit_blocks.all()]
-        learning_objectives = (
-            LearningObjective.objects.filter(blocks__id__in=block_ids).distinct().all()
-        )
+        learning_objectives = LearningObjective.objects.filter(blocks__id__in=block_ids).distinct().all()
         return learning_objectives
 
     def get_url(self, course):
@@ -298,13 +296,9 @@ class CourseUnit(Trackable):
 
         other_unit_block_instances = UnitBlock.objects.filter(block=block)
         learning_library_instances = LibraryItem.objects.filter(block=block)
-        if (
-            other_unit_block_instances.count() == 0
-            and learning_library_instances.count() == 0
-        ):
+        if other_unit_block_instances.count() == 0 and learning_library_instances.count() == 0:
             logger.warning(
-                f"Deleting actual block : {block} since it is not used in "
-                f"any course nor in the library."
+                f"Deleting actual block : {block} since it is not used in " f"any course nor in the library."
             )
             block.delete()
 
@@ -347,9 +341,7 @@ class CourseNode(MPTTModel):
         "forum_topics",
     ]
 
-    parent = TreeForeignKey(
-        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
-    )
+    parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
 
     # The CourseNode 'type' property defines its place in our generic structure of Module > Section > Unit
     # So this property is more for organizing content then telling the user what this
@@ -410,8 +402,7 @@ class CourseNode(MPTTModel):
         default=0,
         null=False,
         blank=False,
-        help_text="Ordering index for this node. Nodes will be sorted by "
-        "this value when shown in navigation.",
+        help_text="Ordering index for this node. Nodes will be sorted by " "this value when shown in navigation.",
     )
 
     # Theoretically, a CourseNode at any level could have a link in this 'unit' field
@@ -457,17 +448,13 @@ class CourseNode(MPTTModel):
             # if self.type != NodeType.UNIT.name:
             #    raise ValidationError("Leaf nodes must be 'unit' NodeType")
             if self.type == NodeType.UNIT.name and not self.unit:
-                raise ValidationError(
-                    "'unit' NodeType is missing reference to a 'unit' block"
-                )
+                raise ValidationError("'unit' NodeType is missing reference to a 'unit' block")
         else:
             # is not a leaf node, so ...
             if self.type == NodeType.UNIT.name:
                 raise ValidationError("'unit' type NodeTypes must be leaf nodes.")
         if self.parent and self.parent.unit is not None:
-            raise ValidationError(
-                "Can't have parent node that has a 'Unit' block assigned"
-            )
+            raise ValidationError("Can't have parent node that has a 'Unit' block assigned")
 
         # CourseNodes have to have a slug because we use it in the URL path
         if not self.slug:
@@ -540,9 +527,7 @@ class CourseNode(MPTTModel):
                 if self.content_index is not None:
                     token = token + str(self.content_index)
         except Exception:
-            logger.exception(
-                "CourseNode content_token: couldn't generate content_token."
-            )
+            logger.exception("CourseNode content_token: couldn't generate content_token.")
         return token
 
     @property
@@ -591,9 +576,7 @@ class CourseNode(MPTTModel):
                 section_node.save()
                 section_index += 1
                 unit_index = 1
-                for unit_node in section_node.children.order_by(
-                    "display_sequence"
-                ).all():
+                for unit_node in section_node.children.order_by("display_sequence").all():
                     unit_node.content_index = unit_index
                     unit_node.save()
                     unit_index += 1
@@ -687,36 +670,23 @@ class Course(Trackable):
         max_length=100,
         null=True,
         blank=True,
-        help_text=_(
-            "A short name for the course. (You can leave this empty if the full name isn't that long.)"
-        ),
+        help_text=_("A short name for the course. (You can leave this empty if the full name isn't that long.)"),
     )
 
-    start_date = DateTimeField(
-        null=True, blank=True, help_text=_("Start date for the course, if any")
-    )
+    start_date = DateTimeField(null=True, blank=True, help_text=_("Start date for the course, if any"))
 
-    end_date = DateTimeField(
-        null=True, blank=True, help_text=_("End date for the course, if any")
-    )
+    end_date = DateTimeField(null=True, blank=True, help_text=_("End date for the course, if any"))
 
     # if advertised_start_date is defined, make sure it stays in sync with start_date.
-    advertised_start_date = TextField(
-        null=True, blank=True, help_text=_("A more readable version of start_date.")
-    )
+    advertised_start_date = TextField(null=True, blank=True, help_text=_("A more readable version of start_date."))
 
     enrollment_start_date = DateTimeField(
         null=True,
         blank=True,
-        help_text=_(
-            "Start date for enrollment in course, if any. "
-            "If left blank, enrollment is assumed to be open."
-        ),
+        help_text=_("Start date for enrollment in course, if any. " "If left blank, enrollment is assumed to be open."),
     )
 
-    enrollment_end_date = DateTimeField(
-        null=True, blank=True, help_text=_("End date for enrollment in course, if any")
-    )
+    enrollment_end_date = DateTimeField(null=True, blank=True, help_text=_("End date for enrollment in course, if any"))
 
     # If self_paced is False, this is an 'instructor-led' course.
     self_paced = models.BooleanField(
@@ -729,47 +699,33 @@ class Course(Trackable):
     days_early_for_beta = models.IntegerField(
         null=True,
         blank=True,
-        help_text=_(
-            "The number of days early before the official start date that "
-            "beta-testers can begin."
-        ),
+        help_text=_("The number of days early before the official start date that " "beta-testers can begin."),
     )
 
     enable_certificates = models.BooleanField(
         default=True,
         null=False,
         blank=False,
-        help_text=_(
-            "Enable certificates for this course "
-            "if any 'passing' milestones are defined."
-        ),
+        help_text=_("Enable certificates for this course " "if any 'passing' milestones are defined."),
     )
 
     enable_badges = models.BooleanField(
         default=False,
-        help_text=_(
-            "Enable badges for this course if any BadgeClasses " "are defined."
-        ),
+        help_text=_("Enable badges for this course if any BadgeClasses " "are defined."),
     )
 
     enable_email_automations = models.BooleanField(
         default=False, help_text=_("Enable email automations for this course.")
     )
 
-    enable_forum = models.BooleanField(
-        default=False, help_text=_("Enable the forum service for this course.")
-    )
+    enable_forum = models.BooleanField(default=False, help_text=_("Enable the forum service for this course."))
 
-    enable_surveys = models.BooleanField(
-        default=True, help_text=_("Enable surveys if any appear in this course.")
-    )
+    enable_surveys = models.BooleanField(default=True, help_text=_("Enable surveys if any appear in this course."))
 
     playlist_url = models.URLField(
         null=True,
         blank=True,
-        help_text=_(
-            "The URL to an external playlist of " "videos, if one exists (e.g. YouTube)"
-        ),
+        help_text=_("The URL to an external playlist of " "videos, if one exists (e.g. YouTube)"),
     )
 
     admin_only_enrollment = models.BooleanField(
@@ -783,10 +739,7 @@ class Course(Trackable):
         null=False,
         blank=False,
         default=True,
-        help_text=_(
-            "Enable enrollment 'survey' composed of "
-            "enrollment questions if any are defined."
-        ),
+        help_text=_("Enable enrollment 'survey' composed of " "enrollment questions if any are defined."),
     )
 
     # This is the introductory course content for enrolled students, shown in the 'home' tab in the course navigation.
@@ -797,9 +750,7 @@ class Course(Trackable):
         help_text=_("HTML content for the course home for enrolled students."),
     )
 
-    enable_course_outline = models.BooleanField(
-        default=True, help_text=_("Enable the course outline for this course.")
-    )
+    enable_course_outline = models.BooleanField(default=True, help_text=_("Enable the course outline for this course."))
 
     content_license = models.CharField(
         max_length=200,
@@ -849,15 +800,11 @@ class Course(Trackable):
 
     @property
     def course_url(self):
-        return resolve_url(
-            "course:course_page", course_slug=self.slug, course_run=self.run
-        )
+        return resolve_url("course:course_page", course_slug=self.slug, course_run=self.run)
 
     @property
     def active_students(self) -> QuerySet:
-        students = User.objects.filter(
-            enrollments__course=self, enrollments__active=True
-        ).order_by("username")
+        students = User.objects.filter(enrollments__course=self, enrollments__active=True).order_by("username")
         return students
 
     @property
@@ -997,13 +944,9 @@ class Course(Trackable):
             cohort = self.get_default_cohort()
 
         # Add student to new cohort...
-        cohort_membership, membership_created = CohortMembership.objects.get_or_create(
-            cohort=cohort, student=user
-        )
+        cohort_membership, membership_created = CohortMembership.objects.get_or_create(cohort=cohort, student=user)
         if membership_created:
-            logger.info(
-                f"Course : add_to_cohort() adding user {user} to cohort {cohort}"
-            )
+            logger.info(f"Course : add_to_cohort() adding user {user} to cohort {cohort}")
 
         # Remove student from any old cohorts in this course, if necessary...
         # ( There should only be one CohortMembership, but we have to accomodate fact data model
@@ -1013,22 +956,16 @@ class Course(Trackable):
         ).all()
         if delete_cohort_memberships:
             for delete_cohort_membership in delete_cohort_memberships:
-                logger.debug(
-                    f"Remove user {user} from cohort membership: {delete_cohort_membership}"
-                )
+                logger.debug(f"Remove user {user} from cohort membership: {delete_cohort_membership}")
                 try:
                     # Notify external email service user is no longer in this cohort.
                     EmailAutomationNotifier.remove_tag(cohort.token, user_id=user.id)
                 except Exception as e:
-                    logger.exception(
-                        f"Could not set tag {cohort.token} via Notifier. Error: {e}"
-                    )
+                    logger.exception(f"Could not set tag {cohort.token} via Notifier. Error: {e}")
                 try:
                     delete_cohort_membership.delete()
                 except Exception:
-                    logger.exception(
-                        f"Could not delete cohort membership: {delete_cohort_membership}"
-                    )
+                    logger.exception(f"Could not delete cohort membership: {delete_cohort_membership}")
 
         return cohort_membership
 
@@ -1045,9 +982,7 @@ class Course(Trackable):
         try:
             # There should only be one for this course, but since this is an M2M join,
             # let's just delete everything we find where the cohort is in this course.
-            memberships = CohortMembership.objects.filter(
-                cohort__course=self, student=user
-            ).all()
+            memberships = CohortMembership.objects.filter(cohort__course=self, student=user).all()
             for membership in memberships:
                 membership.delete()
                 logger.debug(f"user {user} removed from cohort {membership.cohort}")
@@ -1057,14 +992,9 @@ class Course(Trackable):
                     # Notify external email service user is no longer in this cohort.
                     EmailAutomationNotifier.remove_tag(token, user_id=user.id)
                 except Exception as e:
-                    logger.exception(
-                        f"Could not set tag {token} via Notifier. Error: {e}"
-                    )
+                    logger.exception(f"Could not set tag {token} via Notifier. Error: {e}")
         except Exception:
-            logger.exception(
-                f"remove_from_cohort() Could not remove user {user} "
-                f"from cohort in course {self}."
-            )
+            logger.exception(f"remove_from_cohort() Could not remove user {user} " f"from cohort in course {self}.")
 
     def get_default_cohort(self) -> "kinesinlms.course.models.Cohort":  # noqa
         """
@@ -1075,14 +1005,10 @@ class Course(Trackable):
         # TODO: Replace with Factory
         default_cohort_created = False
         try:
-            default_cohort = Cohort.objects.get(
-                course=self, type=CohortType.DEFAULT.name
-            )
+            default_cohort = Cohort.objects.get(course=self, type=CohortType.DEFAULT.name)
         except Cohort.DoesNotExist:
             default_cohort_created = True
-            logger.info(
-                f"Course : add_to_cohort() creating a default cohort for course {self}"
-            )
+            logger.info(f"Course : add_to_cohort() creating a default cohort for course {self}")
             default_cohort = Cohort.objects.create(
                 course=self,
                 name="Default cohort",
@@ -1092,9 +1018,7 @@ class Course(Trackable):
 
         if default_cohort_created:
             try:
-                cohort_forum_group = CohortForumGroup.objects.get(
-                    course=self, is_default=True
-                )
+                cohort_forum_group = CohortForumGroup.objects.get(course=self, is_default=True)
                 default_cohort.cohort_forum_group = cohort_forum_group
                 default_cohort.save()
             except CohortForumGroup.DoesNotExist:
@@ -1113,9 +1037,7 @@ class Course(Trackable):
             return True
         if user.is_educator:
             allowed_course_staff_roles = [CourseStaffRole.EDUCATOR.name]
-            return CourseStaff.objects.filter(
-                user=user, course=self, role__in=allowed_course_staff_roles
-            ).exists()
+            return CourseStaff.objects.filter(user=user, course=self, role__in=allowed_course_staff_roles).exists()
         return False
 
     def can_view_course_admin_enrollment(self, user) -> bool:
@@ -1174,9 +1096,7 @@ class Cohort(Trackable):
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="cohorts")
 
-    students = models.ManyToManyField(
-        User, through="CohortMembership", related_name="members"
-    )
+    students = models.ManyToManyField(User, through="CohortMembership", related_name="members")
 
     # Note that we may want many cohorts to use the same
     # CohortForumGroup. Therefore, the foreign key relationship
@@ -1232,9 +1152,7 @@ class Cohort(Trackable):
     @property
     def num_students_passed(self) -> int:
         students_in_cohort = self.students.all()  # noqa
-        return CoursePassed.objects.filter(
-            course=self.course, student__in=students_in_cohort
-        ).count()
+        return CoursePassed.objects.filter(course=self.course, student__in=students_in_cohort).count()
 
     @property
     def is_default(self) -> bool:
@@ -1275,9 +1193,7 @@ class Milestone(Trackable):
     class Meta:
         unique_together = ("course", "slug")
 
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="milestones"
-    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="milestones")
     slug = models.SlugField(null=True, blank=True, allow_unicode=True)
     name = models.CharField(max_length=500, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -1297,9 +1213,7 @@ class Milestone(Trackable):
     )
 
     # Milestones may count the number of relevant blocks completed
-    count_requirement = models.IntegerField(
-        default=0, null=False, blank=True, verbose_name="Count to reach milestone"
-    )
+    count_requirement = models.IntegerField(default=0, null=False, blank=True, verbose_name="Count to reach milestone")
 
     # And/or they can count the total score of the relevant blocks completed.
     # Specifying non-zero values for both count_requirement and min_score_requirement means both must be met for this
@@ -1371,9 +1285,7 @@ class MilestoneProgress(Trackable):
     # DMcQ: It's not normalized, but it's easier to do lookups
     # to see whether a student passed if we have a foreign key to course right here,
     # rather than relying on join with Milestone table to get course info.
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="progresses"
-    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="progresses")
 
     # If the parent Milestone awards badges, record this
     # milestone achiever's BadgeAssertion here.
@@ -1401,9 +1313,7 @@ class MilestoneProgress(Trackable):
         An integer for the new count and a boolean flag, True if
         user *just* achieved milestone on this item.
         """
-        logger.debug(
-            f"Milestone Progress {self} adding block {block} (current count {self.count})"
-        )
+        logger.debug(f"Milestone Progress {self} adding block {block} (current count {self.count})")
         if self.blocks.filter(id=block.id).exists():
             return self.count, False
 
@@ -1412,9 +1322,7 @@ class MilestoneProgress(Trackable):
         just_achieved = self.mark_achieved()
         new_count = self.count
 
-        MilestoneProgressBlock.objects.create(
-            milestone_progress=self, block=block, score=score
-        )
+        MilestoneProgressBlock.objects.create(milestone_progress=self, block=block, score=score)
 
         # Update count and total_score using F statements to avoid race conditions.
         self.count = F("count") + 1
@@ -1436,8 +1344,7 @@ class MilestoneProgress(Trackable):
         delete_block = self.blocks.filter(id=block.id).first()
         if not delete_block:
             logger.warning(
-                f"Milestone Progress {self}: remove_block() was called for "
-                f"block {block} but it was not in the list"
+                f"Milestone Progress {self}: remove_block() was called for " f"block {block} but it was not in the list"
             )
             return self.count
 
@@ -1468,9 +1375,7 @@ class MilestoneProgress(Trackable):
                 just_achieved = bool(self.count >= self.milestone.count_requirement)
             # OR we've reached the milestone minimum score...
             elif self.milestone.min_score_requirement:
-                just_achieved = bool(
-                    self.total_score >= self.milestone.min_score_requirement
-                )
+                just_achieved = bool(self.total_score >= self.milestone.min_score_requirement)
 
             # ...then this milestone has been achieved.
             if just_achieved:
@@ -1502,18 +1407,14 @@ class MilestoneProgress(Trackable):
 
         progress_blocks = {
             progress_block.block_id: progress_block
-            for progress_block in MilestoneProgressBlock.objects.filter(
-                milestone_progress=self
-            )
+            for progress_block in MilestoneProgressBlock.objects.filter(milestone_progress=self)
         }
 
         # Fetch the SubmittedAnswers relevant to this MilestoneProgress object.
         # (Import here to avoid circular dependency.)
         from kinesinlms.assessments.models import SubmittedAnswer
 
-        answers = SubmittedAnswer.objects.filter(
-            course=self.course, student=self.student
-        )
+        answers = SubmittedAnswer.objects.filter(course=self.course, student=self.student)
         answers = answers.select_related("assessment", "assessment__block")
         if self.milestone.count_graded_only:
             answers = answers.filter(assessment__graded=True)
@@ -1552,9 +1453,7 @@ class MilestoneProgress(Trackable):
         if create_progress_blocks:
             MilestoneProgressBlock.objects.bulk_create(create_progress_blocks)
         if update_progress_blocks:
-            MilestoneProgressBlock.objects.bulk_update(
-                update_progress_blocks, fields=["score"]
-            )
+            MilestoneProgressBlock.objects.bulk_update(update_progress_blocks, fields=["score"])
 
         # Update our totals, and re-assess achievement.
         self.count = len(create_progress_blocks) + len(update_progress_blocks)
@@ -1591,8 +1490,7 @@ class MilestoneProgress(Trackable):
             block=block,
         )
         milestone_blocks = {
-            milestone_block.milestone_progress_id: milestone_block
-            for milestone_block in blocks_to_delete
+            milestone_block.milestone_progress_id: milestone_block for milestone_block in blocks_to_delete
         }
 
         # Update the MilestoneProgress block count and total_score, in bulk.
@@ -1603,9 +1501,7 @@ class MilestoneProgress(Trackable):
                 milestone_progress.count = F("count") - 1
                 milestone_progress.total_score = F("total_score") - progress_block.score
                 updated_progress.append(milestone_progress)
-        count = MilestoneProgress.objects.bulk_update(
-            updated_progress, ["count", "total_score"]
-        )
+        count = MilestoneProgress.objects.bulk_update(updated_progress, ["count", "total_score"])
 
         # Delete the related MilestoneProgressBlocks
         blocks_to_delete.delete()
@@ -1618,9 +1514,7 @@ class MilestoneProgressBlock(Trackable):
     Links MilestoneProgress to a learning_library Block.
     """
 
-    milestone_progress = models.ForeignKey(
-        MilestoneProgress, on_delete=models.CASCADE, null=False, blank=False
-    )
+    milestone_progress = models.ForeignKey(MilestoneProgress, on_delete=models.CASCADE, null=False, blank=False)
 
     block = models.ForeignKey(Block, on_delete=models.CASCADE, null=False, blank=False)
 
@@ -1639,9 +1533,7 @@ class CoursePassed(Trackable):
     class Meta:
         unique_together = (("course", "student"),)
 
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="course_passed_items"
-    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_passed_items")
 
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -1708,10 +1600,7 @@ class Enrollment(Trackable):
                 group, created = Group.objects.get_or_create(name=course_group_name)
                 student.groups.add(group)
             except Exception:
-                logger.exception(
-                    f"Could not add {student.username} to "
-                    f"course group {course_group_name}. "
-                )
+                logger.exception(f"Could not add {student.username} to " f"course group {course_group_name}. ")
         else:
             # Make sure student *is not* in course group
             try:
@@ -1722,15 +1611,12 @@ class Enrollment(Trackable):
                 try:
                     student.groups.remove(group)
                 except Exception:
-                    logger.exception(
-                        f"Could not remove {student.username} from "
-                        f"course group{course_group_name}."
-                    )
+                    logger.exception(f"Could not remove {student.username} from " f"course group{course_group_name}.")
 
     @property
-    def enrollment_survey_required(self) -> bool:
+    def enrollment_survey_required_url(self) -> Optional[str]:
         """
-        Boolean flag indicating this user needs to complete an enrollment
+        URL if this user needs to complete an enrollment
         survey before starting the course.
         """
         enrollment_survey = getattr(self.course, "enrollment_survey", None)
@@ -1739,7 +1625,11 @@ class Enrollment(Trackable):
                 student=self.student, enrollment_survey=enrollment_survey
             ).exists()
             if not completion:
-                return True
+                enrollment_survey_url = reverse(
+                    "catalog:enrollment_survey",
+                    kwargs={"course_slug": self.course.slug, "course_run": self.course.run},
+                )
+                return enrollment_survey_url
         return False
 
 
@@ -1771,18 +1661,12 @@ class EnrollmentSurveyQuestion(Trackable):
     def clean(self):
         if self.question_type == EnrollmentSurveyQuestionType.MULTIPLE_CHOICE.name:
             if not self.definition:
-                raise ValidationError(
-                    "definition must be provided if this is a MULTIPLE_CHOICE question"
-                )
+                raise ValidationError("definition must be provided if this is a MULTIPLE_CHOICE question")
             for item in self.definition:
                 if "key" not in item:
-                    raise ValidationError(
-                        "definition item must have a 'key' key for each question option"
-                    )
+                    raise ValidationError("definition item must have a 'key' key for each question option")
                 if "value" not in item:
-                    raise ValidationError(
-                        "definition item must have a 'value' key for each question option"
-                    )
+                    raise ValidationError("definition item must have a 'value' key for each question option")
 
 
 class EnrollmentSurveyAnswer(Trackable):
@@ -1809,13 +1693,9 @@ class EnrollmentSurveyAnswer(Trackable):
 
 
 class EnrollmentSurvey(Trackable):
-    course = models.OneToOneField(
-        Course, null=False, related_name="enrollment_survey", on_delete=models.CASCADE
-    )
+    course = models.OneToOneField(Course, null=False, related_name="enrollment_survey", on_delete=models.CASCADE)
 
-    questions = models.ManyToManyField(
-        EnrollmentSurveyQuestion, related_name="enrollment_surveys"
-    )
+    questions = models.ManyToManyField(EnrollmentSurveyQuestion, related_name="enrollment_surveys")
 
     enabled = models.BooleanField(default=True, null=False)
 
@@ -1914,9 +1794,7 @@ class CourseResource(Trackable):
     can be linked to blocks (and these concepts will diverge more).
     """
 
-    uuid = models.UUIDField(
-        default=uuid.uuid4, editable=False, unique=True, null=False, blank=False
-    )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=False, blank=False)
 
     course = models.ForeignKey(
         Course,
@@ -2046,9 +1924,7 @@ class CourseStaff(Trackable):
 
     def clean(self):
         user = getattr(self, "user", None)
-        if user and (
-            self.role == CourseStaffRole.EDUCATOR.name and user.is_educator is False
-        ):
+        if user and (self.role == CourseStaffRole.EDUCATOR.name and user.is_educator is False):
             raise ValidationError(
                 f"A user must be in the 'educator' group before being assigned as course staff "
                 f"for any particular course ({self.course})."
