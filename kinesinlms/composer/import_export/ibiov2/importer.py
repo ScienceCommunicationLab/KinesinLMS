@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import zipfile
 from typing import Dict, List, Optional
 
@@ -22,8 +23,9 @@ from kinesinlms.course.serializers import (
     IBiologyCoursesCourseSerializer,
 )
 from kinesinlms.forum.utils import get_forum_service
-from kinesinlms.learning_library.constants import ResourceType
+from kinesinlms.learning_library.constants import BlockType, ResourceType
 from kinesinlms.learning_library.models import Resource
+from kinesinlms.survey.models import Survey
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +33,13 @@ logger = logging.getLogger(__name__)
 class IBiologyCoursesCourseImporter(CourseImporterBase):
     """
     Import legacy export format from iBiology Courses into the Kinesin LMS.
+
+    We do this in a two-step process:
+    1.      We use the IBiologyCoursesCourseSerializer to create the top-level
+            Course and CourseCatalogDescription instances.
+    2.      We use methods defined in this class to create the CourseNode tree
+            and related CourseUnit and Block instances.
+
     """
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -141,6 +150,9 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
                 pass
         course_root_node_json["display_name"] = course.token
         course_root_node_json["slug"] = course.token
+
+        # Pre-process the course node tree to make SCL stuff look like KinesinlMS stuff
+        self._pre_process_node(course_root_node_json)
 
         # NOTE: Kept getting recursion errors when trying to deserialize
         # course_nodes into MPTT, so creating CourseNode tree manually
@@ -495,6 +507,7 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
                     raise Exception("Incoming CourseNode json cannot have an 'id' property.")
                 if hasattr(child_json, "parent"):
                     raise Exception("Incoming CourseNode json cannot have a 'parent' property.")
+
                 self._deserialize_course_node_tree(
                     course_node_json=child_json,
                     course=course,
@@ -526,8 +539,89 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
                 error_msg = f"Could not serialize unit {course_slug}"
                 logger.exception(error_msg)
                 raise ValidationError(detail=error_msg)
-            course_unit = course_unit_serializer.save(course=course)
+
+            try:
+                course_unit = course_unit_serializer.save(course=course)
+            except Exception as e:
+                logger.exception(f"Could not save unit {course_unit_json} : {e}")
+                error_msg = f"Could not save unit {course_slug}"
+                raise ValidationError(detail=error_msg)
             node.unit = course_unit
             node.save()
 
         return node
+
+    def _pre_process_node(self, node: Dict):
+        """
+        Recursive function to process nodes in the course nav tree.
+        """
+        if node is None:
+            return
+        children = node.get("children", [])
+        for child in children:
+            try:
+                self._pre_process_node(child)
+            except Exception as e:
+                logger.exception(f"Could not pre-process child {child} : {e}")
+                raise e
+
+        unit = node.get("unit", None)
+        if unit:
+            # This is a unit node, so make any required changes to
+            # the "unit" dictionary, which represents a CourseUnit.
+            unit_blocks = unit.get("unit_blocks", [])
+            for unit_block in unit_blocks:
+                try:
+                    self._pre_process_unit_block(unit_block)
+                except Exception as e:
+                    logger.exception(f"Could not pre-process block {unit_block} : {e}")
+                    raise e
+
+    def _pre_process_unit_block(self, unit_block: Dict):
+        """
+        Process a block in the course nav tree.
+        """
+        block = unit_block.get("block", {})
+        block_type = block.get("type")
+        if block_type == "DISCOURSE_TOPIC":
+            block["type"] = BlockType.FORUM_TOPIC.name
+        elif block_type == "SURVEY":
+            # Change survey information to match KinesinLMS format
+            # In SCL it's stored as json_content, in KinesinLMS it's stored as a SurveyBlock.
+            json_content = block.pop("json_content", {})
+            survey_id = json_content.get("survey_id", None)
+            if not survey_id:
+                raise Exception("Survey block missing survey_id")
+            survey = Survey.objects.get(survey_id=survey_id)
+            survey_block = {"survey": survey.slug}
+            block["survey_block"] = survey_block
+
+        html_content = block.get("html_content")
+        if html_content is not None:
+            block["html_content"] = self._update_template_keywords(html_content)
+
+    def _update_template_keywords(self, html_content: str) -> str:
+        """
+        Transform any SCL-style template keywords to
+        Kinesin-style template tags.
+        """
+        if not html_content:
+            return html_content
+
+        replacements = {
+            # Simple keywords
+            r"\[\[\s*ANON_USER_ID\s*\]\]": "{% anon_user_id %}",
+            r"\[\[\s*USERNAME\s*\]\]": "{% username %}",
+            # Replace LINK keywords with appropriate template tag.
+            r"##MODULE_LINK\[\s*(\d+)\s*\]##": "{{% module_link {} %}}",
+            r"##SECTION_LINK\[\s*(\d+)\s*,\s*(\d+)\s*\]##": "{{% section_link {} {} %}}",
+            r"##UNIT_LINK\[\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]##": "{{% unit_link {} {} {} %}}",
+            # Other keywords...
+            # Transform UNIT_SLUG_LINK
+            r"##UNIT_SLUG_LINK\[\s*([A-Za-z\d\-\_]+)\s*\]##": "{{% unit_slug_link {} %}}",
+        }
+
+        for pattern, replacement in replacements.items():
+            html_content = re.sub(pattern, lambda match: replacement.format(*match.groups()), html_content)
+
+        return html_content

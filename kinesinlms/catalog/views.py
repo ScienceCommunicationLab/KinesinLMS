@@ -320,8 +320,8 @@ def enroll(request, course_slug=None, course_run=None):
         msg = "Could not enroll in course. Please contact support for help."
         messages.add_message(request, messages.ERROR, msg)
 
-    if enrollment and enrollment.enrollment_survey_required:
-        return redirect("catalog:enrollment_survey", course_slug=target_course.slug, course_run=target_course.run)
+    if enrollment and enrollment.enrollment_survey_required_url:
+        return redirect(enrollment.enrollment_survey_required_url)
     else:
         return redirect("catalog:about_page", course_slug=target_course.slug, course_run=target_course.run)
 

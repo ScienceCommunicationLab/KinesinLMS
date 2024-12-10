@@ -48,7 +48,7 @@ from kinesinlms.course.models import (
 from kinesinlms.custom_app.models import CustomApp
 from kinesinlms.custom_app.serializers import CustomAppSerializer
 from kinesinlms.institutions.models import Institution
-from kinesinlms.learning_library.constants import BlockStatus, BlockType
+from kinesinlms.learning_library.constants import BlockStatus
 from kinesinlms.learning_library.models import LearningObjective, UnitBlock
 from kinesinlms.learning_library.serializers import UnitBlockSerializer
 from kinesinlms.sits.models import SimpleInteractiveToolTemplate
@@ -400,8 +400,13 @@ class CourseUnitSerializer(serializers.ModelSerializer):
                 except Exception as e:
                     logger.exception(f"Could not deserializer unit_block: {unit_block_raw_data}")
                     raise e
-                unit_block: UnitBlock = unit_block_serializer.save(course_unit=course_unit)
-                logger.info(f"Created unit_block: {unit_block.id}")
+                
+                try:
+                    unit_block: UnitBlock = unit_block_serializer.save(course_unit=course_unit)
+                    logger.info(f"Created unit_block: {unit_block.id}")
+                except Exception as e:
+                    logger.exception(f"Could not create unit_block: {unit_block_raw_data}")
+                    raise e
 
         return course_unit
 
@@ -858,6 +863,13 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
         except KeyError:
             cohort_institutions_validated_data = None
 
+        # We need to create Surveys before creating the course so they
+        # can be linked to Block via SurveyBlock during Block creation.
+        created_surveys: List[Survey] = self._create_surveys(
+            surveys_validated_data=surveys_validated_data,
+            course=None,
+        )
+
         course = CourseFactory.create(
             **validated_data,
             catalog_description=cat_description,
@@ -894,14 +906,13 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
                 logger.exception(f"Could not link speaker {speaker_validated_data} to course {course}")
 
         # ...then create milestones
-        for milestone_validated_data in milestones_validated_data:
-            milestone = Milestone.objects.create(**milestone_validated_data, course=course)
-            logger.info(f" - created milestone {milestone}")
+        self._create_milestones(milestones_validated_data=milestones_validated_data, course=course)
 
-        # ...then create and link surveys
-        for survey_validated_data in surveys_validated_data:
-            survey = Survey.objects.create(**survey_validated_data, course=course)
-            logger.info(f" - created survey {survey}")
+        # ...then link already created surveys to course
+        for survey in created_surveys:
+            survey.course = course
+            survey.save()
+            logger.info(f" - linked survey {survey} to course {course}")
 
         # ...thn create or link course resources
         # We don't load the actual file in at this point. We'll let our archive importer
@@ -998,6 +1009,52 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
 
         return course
 
+    def _create_milestones(
+        self,
+        milestones_validated_data: List,
+        course: Course,
+    ) -> List[Milestone]:
+        """
+        Create milestones for a course from a list of milestone data.
+
+        Args:
+            milestones_data: A list of dictionaries, each defining a milestone.
+            course: The course to which the milestones will be attached.
+
+        Returns:
+            A list of created Milestone instances.
+        """
+        milestones: List[Milestone] = []
+        for milestone_validated_data in milestones_validated_data:
+            milestone = Milestone.objects.create(**milestone_validated_data, course=course)
+            logger.info(f" - created milestone {milestone}")
+            milestones.append(milestone)
+        return milestones
+
+    def _create_surveys(
+        self,
+        surveys_validated_data: List,
+        course: Course,
+    ) -> List[Survey]:
+        """
+        Create surveys for a course from a list of survey data.
+
+        Args:
+            surveys_data: A list of dictionaries, each defining a survey.
+            course: The course to which the surveys will be attached.
+
+        Returns:
+            A list of created Survey instances.
+        """
+        surveys: List[Survey] = []
+        for survey_validated_data in surveys_validated_data:
+            survey = Survey.objects.create(**survey_validated_data, course=course)
+            survey.clean()
+            survey.save()
+            logger.info(f" - created survey {survey}")
+            surveys.append(survey)
+        return surveys
+
 
 class BookmarkSerializer(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -1060,6 +1117,10 @@ class IBiologyCoursesCourseSerializer(CourseSerializer):
     We need to update the JSON to match what our serializer expects
     """
 
+    def create(self, validated_data):
+        course = super().create(validated_data)
+        return course
+
     def to_internal_value(self, data) -> Course:
         """
         Update structure of incoming iBiology Courses course export format
@@ -1083,11 +1144,8 @@ class IBiologyCoursesCourseSerializer(CourseSerializer):
         # Take syllabus url off if it exists and create Syllabus file object manually
         syllabus_url = data["catalog_description"].pop("syllabus_url", None)
 
-        # Update the course_root_node to match the KinesinLMS format
-        # so we can use the same CourseNodeSerializer to create the course.
-        course_root_node = data.get("course_root_node", None)
-        if course_root_node:
-            self._process_node(course_root_node)
+        # REMEMBER: We don't process the course_root_node here.
+        # We do it in the importer after top-level deserialization is complete.
 
         course = super().to_internal_value(data)
 
@@ -1099,59 +1157,6 @@ class IBiologyCoursesCourseSerializer(CourseSerializer):
             )
 
         return course
-
-    def _process_node(self, node: Dict):
-        """
-        Recursive function to process nodes in the course nav tree.
-        """
-        if "children" in node:
-            for child in node["children"]:
-                self._process_node(child)
-        if "unit" in node:
-            # This is a unit node, so make any required changes to
-            # the "unit" dictionary, which represents a CourseUnit.
-            unit = node["unit"]
-            unit_blocks = unit.get("unit_blocks", None)
-            for key, block in unit_blocks.items():
-                self._process_block(block)
-
-    def _process_block(self, block: Dict):
-        """
-        Process a block in the course nav tree.
-        """
-        block_type = block.get("type")
-        if block_type == "DISCOURSE_TOPIC":
-            block["type"] = BlockType.FORUM_TOPIC.name
-
-        html_content = block.get("html_content")
-        if html_content is not None:
-            block["html_content"] = self._update_template_keywords(html_content)
-
-    def _update_template_keywords(self, html_content: str) -> str:
-        """
-        Transform any SCL-style template keywords to
-        Kinesin-style template tags.
-        """
-        if not html_content:
-            return html_content
-
-        replacements = {
-            # Simple keywords
-            r"\[\[\s*ANON_USER_ID\s*\]\]": "{% anon_user_id %}",
-            r"\[\[\s*USERNAME\s*\]\]": "{% username %}",
-            # Replace LINK keywords with appropriate template tag.
-            r"##MODULE_LINK\[\s*(\d+)\s*\]##": "{{% module_link {} %}}",
-            r"##SECTION_LINK\[\s*(\d+)\s*,\s*(\d+)\s*\]##": "{{% section_link {} {} %}}",
-            r"##UNIT_LINK\[\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]##": "{{% unit_link {} {} {} %}}",
-            # Other keywords...
-            # Transform UNIT_SLUG_LINK
-            r"##UNIT_SLUG_LINK\[\s*([A-Za-z\d\-\_]+)\s*\]##": "{{% unit_slug_link {} %}}",
-        }
-
-        for pattern, replacement in replacements.items():
-            html_content = re.sub(pattern, lambda match: replacement.format(*match.groups()), html_content)
-
-        return html_content
 
     def _load_syllabus_from_url(
         self,

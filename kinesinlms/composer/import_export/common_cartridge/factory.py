@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 from kinesinlms.composer.import_export.common_cartridge.resource import (
     AssessmentCCResource,
@@ -7,6 +8,7 @@ from kinesinlms.composer.import_export.common_cartridge.resource import (
     HTMLContentCCResource,
     JupyterNotebookCCResource,
     SimpleInteractiveToolCCResource,
+    SurveyCCResource,
     VideoCCResource,
 )
 from kinesinlms.course.models import BlockType, UnitBlock
@@ -28,12 +30,14 @@ class CCHandlerFactory:
         BlockType.FORUM_TOPIC.name: ForumTopicCCResource,
         BlockType.SIMPLE_INTERACTIVE_TOOL.name: SimpleInteractiveToolCCResource,
         BlockType.JUPYTER_NOTEBOOK.name: JupyterNotebookCCResource,
+        BlockType.SURVEY.name: SurveyCCResource,
         # Add other block types here
     }
 
     @classmethod
-    def create_cc_handler(cls, unit_block: UnitBlock) -> CCHandler:
+    def create_cc_handler(cls, unit_block: UnitBlock) -> Optional[CCHandler]:
         handler_class = cls.RESOURCE_HANDLERS.get(unit_block.block.type)
         if not handler_class:
-            raise ValueError(f"Unsupported block type: {unit_block.block.type}")
+            logger.warning(f"EXPORTING: Unsupported block type: {unit_block.block.type}")
+            return None
         return handler_class(unit_block=unit_block)

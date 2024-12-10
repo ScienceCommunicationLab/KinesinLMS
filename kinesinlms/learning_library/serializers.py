@@ -20,6 +20,7 @@ from kinesinlms.learning_library.models import (
 from kinesinlms.sits.models import SimpleInteractiveTool
 from kinesinlms.sits.serializers import SimpleInteractiveToolImportSerializer
 from kinesinlms.speakers.models import Speaker
+from kinesinlms.survey.models import Survey, SurveyBlock
 
 logger = logging.getLogger(__name__)
 
@@ -67,9 +68,7 @@ class ResourceSerializer(serializers.ModelSerializer):
             slug_value = f"{slug_value}_{uuid.uuid1()}"
         return slug_value
 
-    uuid = serializers.CharField(
-        required=True, allow_null=False, allow_blank=False, validators=[]
-    )
+    uuid = serializers.CharField(required=True, allow_null=False, allow_blank=False, validators=[])
 
     class Meta:
         model = Resource
@@ -81,35 +80,42 @@ class ResourceSerializer(serializers.ModelSerializer):
         )
 
 
+class SurveyBlockSerializer(serializers.ModelSerializer):
+    survey = serializers.SlugRelatedField(
+        queryset=Survey.objects.all(),
+        slug_field="slug",
+        required=True,
+        allow_null=False,
+    )
+
+    class Meta:
+        model = SurveyBlock
+        fields = ("survey",)
+
+
 class BlockSerializer(serializers.ModelSerializer):
     # Block to Assessment is one-to-one
     # Note that type is not required...when we want to use the same
     # Block as defined earlier in a course import, we use the slug
     # without the type.
+
     type = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+
     slug = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     uuid = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     enable_template_tags = serializers.BooleanField(required=False, default=True)
 
-    display_name = serializers.CharField(
-        required=False, allow_null=True, allow_blank=True
-    )
+    display_name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
-    short_description = serializers.CharField(
-        required=False, allow_null=True, allow_blank=True
-    )
+    short_description = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
-    html_content = serializers.CharField(
-        required=False, allow_null=True, allow_blank=True
-    )
+    html_content = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     json_content = serializers.JSONField(required=False, allow_null=True)
 
-    simple_interactive_tool = SimpleInteractiveToolImportSerializer(
-        required=False, allow_null=True
-    )
+    simple_interactive_tool = SimpleInteractiveToolImportSerializer(required=False, allow_null=True)
 
     assessment = AssessmentAllDataSerializer(required=False, allow_null=True)
 
@@ -135,6 +141,11 @@ class BlockSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
 
+    survey_block = SurveyBlockSerializer(
+        required=False,
+        allow_null=True,
+    )
+
     class Meta:
         model = Block
         fields = (
@@ -147,6 +158,7 @@ class BlockSerializer(serializers.ModelSerializer):
             "course_only",
             "enable_template_tags",
             "html_content",
+            "survey_block",
             # "html_content_type",
             "json_content",
             "assessment",
@@ -174,9 +186,7 @@ class BlockSerializer(serializers.ModelSerializer):
 
         speakers = data.get("speakers", None)
         if speakers and len(speakers) > 0 and block_type != BlockType.VIDEO.name:
-            raise serializers.ValidationError(
-                "Cannot attach speakers to a non-VIDEO block."
-            )
+            raise serializers.ValidationError("Cannot attach speakers to a non-VIDEO block.")
 
         return data
 
@@ -187,16 +197,15 @@ class BlockSerializer(serializers.ModelSerializer):
 
         validated_assessment_data = validated_data.pop("assessment", None)
 
+        validated_survey_block_data = validated_data.pop("survey_block", None)
+
         validated_sit_data = validated_data.pop("simple_interactive_tool", None)
 
         block_type = validated_data.get("type", None)
         if not block_type:
             raise Exception("The 'type' property must be set when creating new blocks")
 
-        if (
-            block_type == BlockType.ASSESSMENT.name
-            and validated_assessment_data is None
-        ):
+        if block_type == BlockType.ASSESSMENT.name and validated_assessment_data is None:
             ValidationError(f"Blocks of type {block_type} must define an Assessment.")
 
         speakers = validated_data.pop("speakers", None)
@@ -217,15 +226,20 @@ class BlockSerializer(serializers.ModelSerializer):
                 )
 
         if validated_assessment_data:
-            assessment = Assessment.objects.create(
-                **validated_assessment_data, block=block
-            )
+            assessment = Assessment.objects.create(**validated_assessment_data, block=block)
             logger.info(f"Created assessment {assessment} for block {block}")
 
+        if validated_survey_block_data:
+            try:
+                survey = Survey.objects.get(slug=validated_survey_block_data["survey"].slug)
+                survey_block = SurveyBlock.objects.create(block=block, survey=survey)
+                logger.info(f"Created survey_block {survey_block} for block {block}")
+            except Survey.DoesNotExist:
+                logger.error(f"Survey with slug {validated_survey_block_data['survey']} does not exist.")
+                raise
+
         if validated_sit_data:
-            sit = SimpleInteractiveTool.objects.create(
-                **validated_sit_data, block=block
-            )
+            sit = SimpleInteractiveTool.objects.create(**validated_sit_data, block=block)
             logger.info(f"Created SIT {sit} for block {block}")
 
         if resources_data:
@@ -234,9 +248,7 @@ class BlockSerializer(serializers.ModelSerializer):
             # Also, we don't load the actual file in at this point. We'll let our archive importer
             # do that once the entire course.json has been deserialized.
             for resource_data in resources_data:
-                resource, resource_created = Resource.objects.get_or_create(
-                    uuid=resource_data["uuid"]
-                )
+                resource, resource_created = Resource.objects.get_or_create(uuid=resource_data["uuid"])
                 if resource_created:
                     resource.type = resource_data["type"]
                     resource.slug = resource_data["slug"]
@@ -248,14 +260,13 @@ class BlockSerializer(serializers.ModelSerializer):
                             f"Existing: {resource.type} New: {resource['type']}"
                         )
 
-                block_resource, block_resource_created = (
-                    BlockResource.objects.get_or_create(block=block, resource=resource)
+                block_resource, block_resource_created = BlockResource.objects.get_or_create(
+                    block=block, resource=resource
                 )
 
                 if resource_created:
                     logger.info(
-                        f"Created block_resource {block_resource} "
-                        f"and resource {resource} and for block {block}"
+                        f"Created block_resource {block_resource} " f"and resource {resource} and for block {block}"
                     )
                 else:
                     logger.info(
@@ -265,6 +276,17 @@ class BlockSerializer(serializers.ModelSerializer):
                     )
 
         return block
+
+    def get_survey(self, obj):
+        """
+        Get the survey ID from the related SurveyBlock if it exists.
+        Returns None if no survey is associated.
+        """
+        try:
+            survey_block = obj.survey_block
+            return survey_block.survey_id if survey_block else None
+        except AttributeError:
+            return None
 
 
 class UnitBlockSerializer(serializers.ModelSerializer):
@@ -308,18 +330,14 @@ class UnitBlockSerializer(serializers.ModelSerializer):
         # data here and then attach validated data the save (if present).
         # (We have to pop raw data off too so that it doesn't confuse the Block serializer.)
         block_raw_data.pop("learning_objectives", None)
-        learning_objectives_validated_data = block_validated_data.pop(
-            "learning_objectives", None
-        )
+        learning_objectives_validated_data = block_validated_data.pop("learning_objectives", None)
 
         block_uuid = block_validated_data.get("uuid", None)
         block_instance = None
         if block_uuid:
             try:
                 block_instance = Block.objects.get(uuid=block_uuid)
-                logger.info(
-                    f"BLOCK UUID LINK: Linking to existing block : {block_uuid}"
-                )
+                logger.info(f"BLOCK UUID LINK: Linking to existing block : {block_uuid}")
             except Block.DoesNotExist:
                 # Block doesn't exist in library, so we'll creat it next step...
                 logger.warning(
@@ -353,9 +371,7 @@ class UnitBlockSerializer(serializers.ModelSerializer):
                 serializer.is_valid()
                 block_instance = serializer.save()
             except Exception as e:
-                logger.error(
-                    f"Could not deserialize block error: {e} Block : {block_raw_data}"
-                )
+                logger.error(f"Could not deserialize block error: {e} Block : {block_raw_data}")
                 raise e
 
             # ... and linking LOs

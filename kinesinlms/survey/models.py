@@ -133,10 +133,19 @@ class Survey(Trackable):
     class Meta:
         ordering = ["index"]
 
+    slug = models.SlugField(
+        max_length=50,
+        unique=True,
+        null=True,
+        blank=True,
+        help_text="Slug identifier for survey (used in e.g. course json imports).",
+    )
+
+    # Survey's don't have to be associated with a course.
     course = models.ForeignKey(
         Course,
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         related_name="surveys",
         on_delete=models.CASCADE,
     )
@@ -222,9 +231,15 @@ class Survey(Trackable):
             url += f"?uid={user.anon_username}"
         return url
 
+    def clean(self):
+        super().clean()
+        if not self.slug:
+            self.slug = slugify(self.survey_id)
+            self.save()
+
     def __str__(self):
         s = "Survey "
-        if hasattr(self, "course"):
+        if hasattr(self, "course") and self.course and self.course.token:
             s += f"{self.course.token} : "
         s += self.type
         if self.name:
@@ -239,9 +254,17 @@ class SurveyBlock(Trackable):
     a course, which this model affords via its foreign key to Survey.
     """
 
-    block = models.OneToOneField(Block, on_delete=models.CASCADE, related_name="survey_block")
+    block = models.OneToOneField(
+        Block,
+        on_delete=models.CASCADE,
+        related_name="survey_block",
+    )
 
-    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name="survey_blocks")
+    survey = models.ForeignKey(
+        Survey,
+        on_delete=models.CASCADE,
+        related_name="survey_blocks",
+    )
 
 
 class SurveyCompletion(Trackable):

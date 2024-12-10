@@ -324,6 +324,76 @@ class CCHandler(ABC):
         return resource_export_file_path
 
 
+class SurveyCCResource(CCHandler):
+    """
+    Export a SURVEY-type block to CC.
+    For now that just means writing some HTML with the survey URL.
+
+    Args:
+        CCHandler (_type_): _description_
+
+    Raises:
+        ValueError: _description_
+        ValueError: _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    def get_cc_resource_type(self) -> str:
+        return CommonCartridgeResourceType.WEB_CONTENT.value
+
+    def create_cc_file_for_unit_block(
+        self,
+        zip_file: ZipFile,
+    ) -> bool:
+        """
+        Creates a Common Cartridge resource file for a HTML_CONTENT type block.
+        Adds the file to the zip file.
+        """
+        html_title = self.block.display_name if self.block.display_name else self.block.type
+        html_content = self._reformat_html_content_with_relative_resource_file_paths(self.unit_block)
+
+        try:
+            survey = self.block.survey_block.survey
+        except Exception:
+            logger.exception(f"Could not get survey for block {self.block}")
+            return {}
+
+        html = f"""
+<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="identifier" content="{self.block.uuid}" />
+    <meta name="editing_roles" content="teachers" />
+    <meta name="workflow_state" content="active" />
+    <title>{html_title}</title>
+    </head>
+    <body>
+    <div>
+        <div>Course Survey</div>
+        <div>{html_content}</div>
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td>{survey.name}</td>
+            </tr>
+            <tr>
+            <td>URL:</td>
+                <td>
+                    <a href="{survey.url}">{survey.url}</a>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
+"""
+        block_filename = self._block_resource_file_path()
+        zip_file.writestr(block_filename, html)
+
+        return True
+
+
 class HTMLContentCCResource(CCHandler):
     def get_cc_resource_type(self) -> str:
         return CommonCartridgeResourceType.WEB_CONTENT.value

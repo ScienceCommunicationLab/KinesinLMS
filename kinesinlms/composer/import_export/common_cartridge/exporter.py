@@ -1,6 +1,6 @@
 import logging
-import uuid
 from io import BytesIO
+from typing import Optional
 from zipfile import ZipFile
 
 from django.conf import settings
@@ -458,8 +458,10 @@ class CommonCartridgeExporter(BaseExporter):
                 for unit_node in section_node.get_children():
                     for unit_block in unit_node.unit.unit_blocks.all():
                         # Create a handler from our factory
-                        ccr: CCHandler = self.resource_factory.create_cc_handler(unit_block=unit_block)
-
+                        ccr: Optional[CCHandler] = self.resource_factory.create_cc_handler(unit_block=unit_block)
+                        if not ccr:
+                            logger.info(f"  - SKIPPING unsupported block type: " f"{unit_block.block.type}")
+                            continue
                         # UNIT BLOCK: Create the <resource/> element for this UnitBlock.
                         resource_el: etree.Element = ccr.create_cc_resource_element_for_unit_block()
                         resources_el.append(resource_el)
@@ -501,7 +503,13 @@ class CommonCartridgeExporter(BaseExporter):
                         block: Block = unit_block.block
 
                         # Write the Block resource file in the zip
-                        resource_handler: CCHandler = self.resource_factory.create_cc_handler(unit_block=unit_block)
+                        resource_handler: Optional[CCHandler] = self.resource_factory.create_cc_handler(
+                            unit_block=unit_block
+                        )
+                        if not resource_handler:
+                            logger.info(f"  - SKIPPING unsupported block type: {block.type}")
+                            continue
+
                         try:
                             resource_handler.create_cc_file_for_unit_block(
                                 zip_file=zip_file,

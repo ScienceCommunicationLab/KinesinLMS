@@ -1,5 +1,5 @@
 import logging
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
 from django import template
 from django.contrib.auth import get_user_model
@@ -7,15 +7,15 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from kinesinlms.assessments.utils import get_answer_data
-from kinesinlms.course.models import CourseUnit, Course, CourseNode, Bookmark
+from kinesinlms.course.models import Bookmark, Course, CourseNode, CourseUnit
 from kinesinlms.forum.models import ForumCategory, ForumSubcategory, ForumTopic
 from kinesinlms.learning_library.constants import ResourceType
 from kinesinlms.learning_library.models import (
-    UnitBlock,
     Block,
     BlockType,
     LearningObjective,
     Resource,
+    UnitBlock,
 )
 from kinesinlms.learning_library.utils import get_learning_objectives
 from kinesinlms.survey.models import SurveyCompletion
@@ -64,9 +64,7 @@ def extrernal_video_badge(video_source_info: Dict):
             icon = '<i class="fab fa-vimeo-v me-2"></i>'
             external_url = f"https://vimeo.com/{video_id}"
         else:
-            raise Exception(
-                f"external_video_badge: Unsupported video format : {video_source}"
-            )
+            raise Exception(f"external_video_badge: Unsupported video format : {video_source}")
         html_result = (
             f'<a class="btn btn-sm btn-info mt-2 me-2" '
             f'   href="{external_url}" target="_blank"  >'
@@ -74,18 +72,13 @@ def extrernal_video_badge(video_source_info: Dict):
             f"</a>"
         )
     except Exception:
-        logger.exception(
-            f"Could not render external_video_badge simple "
-            f"tag for video_info: {video_source_info}"
-        )
+        logger.exception(f"Could not render external_video_badge simple " f"tag for video_info: {video_source_info}")
     return html_result
 
 
 @register.filter
 def highlight_search(content, search_text):
-    highlighted = content.replace(
-        search_text, f'<span class="highlight">{search_text}</span>'
-    )
+    highlighted = content.replace(search_text, f'<span class="highlight">{search_text}</span>')
     return mark_safe(highlighted)
 
 
@@ -138,10 +131,7 @@ def get_assessment_label(block: Block, course_unit: CourseUnit) -> str:
         else:
             label = ""
     except Exception:
-        logger.exception(
-            f"Could not render label for ASSESSMENT-type "
-            f"block {block} course_unit {course_unit} "
-        )
+        logger.exception(f"Could not render label for ASSESSMENT-type " f"block {block} course_unit {course_unit} ")
     return label
 
 
@@ -169,10 +159,7 @@ def get_html_content_label(block: Block, course_unit: CourseUnit) -> str:
         elif block.display_name:
             label = block.display_name
     except Exception:
-        logger.exception(
-            f"Could not render label for HTML_CONTENT-type "
-            f"block {block} course_unit {course_unit} "
-        )
+        logger.exception(f"Could not render label for HTML_CONTENT-type " f"block {block} course_unit {course_unit} ")
     return label
 
 
@@ -188,10 +175,7 @@ def get_survey_label(block: Block, course_unit: CourseUnit) -> str:
         elif block.display_name:
             label += block.display_name
     except Exception:
-        logger.exception(
-            f"Could not render label for SURVEY-type "
-            f"block {block} course_unit {course_unit} "
-        )
+        logger.exception(f"Could not render label for SURVEY-type " f"block {block} course_unit {course_unit} ")
     if label is None:
         label = "Survey"
 
@@ -217,10 +201,7 @@ def get_activity_label(block: Block, course_unit: CourseUnit) -> str:
         if unit_block.label:
             return unit_block.label
     except Exception:
-        logger.exception(
-            f"Could not render label for activity-type "
-            f"block {block} course_unit {course_unit} "
-        )
+        logger.exception(f"Could not render label for activity-type " f"block {block} course_unit {course_unit} ")
     return ""
 
 
@@ -305,9 +286,7 @@ def get_assessment_readonly_answer_text(unit_block: UnitBlock, user):
 
 
 @register.simple_tag
-def send_survey_reminder_email_if_required(block: Block, 
-                                           course: Course, 
-                                           user):
+def send_survey_reminder_email_if_required(block: Block, course: Course, user):
     """
     Send a survey reminder email if required.
     """
@@ -345,22 +324,20 @@ def get_survey_info(block: Block, course: Course, user: User) -> Optional[Dict]:
     if block.type != BlockType.SURVEY.name:
         logger.error("get_survey_info() passed a non-survey block")
         return None
-    
+
     try:
         survey = block.survey_block.survey
-    except Exception:
-        logger.exception(f"Could not get survey for block {block}")
+    except Exception as e:
+        logger.exception(f"Could not get survey for block {block} : {e}")
         return {}
-    
+
     survey_type = survey.type
     survey_id = survey.id
     if not survey_type and not survey_id:
         return None
 
     if not survey:
-        logger.warning(
-            f"Cannot find survey type: {survey_type} for course {course}"
-        )
+        logger.warning(f"Cannot find survey type: {survey_type} for course {course}")
         return None
 
     survey_url_for_user = survey.url_for_user(user=user)
@@ -388,13 +365,9 @@ def get_survey_info(block: Block, course: Course, user: User) -> Optional[Dict]:
 
 
 @register.simple_tag
-def learning_objectives(
-    course_unit: CourseUnit, unit_node: CourseNode
-) -> List[LearningObjective]:
+def learning_objectives(course_unit: CourseUnit, unit_node: CourseNode) -> List[LearningObjective]:
     try:
-        return get_learning_objectives(
-            course_unit=course_unit, current_unit_node=unit_node
-        )
+        return get_learning_objectives(course_unit=course_unit, current_unit_node=unit_node)
     except Exception:
         logger.exception("Error using 'learning_objectives' tag")
     return []
@@ -436,9 +409,7 @@ def can_view_course_admin_resources(user, course) -> bool:
 @register.simple_tag
 def get_bookmark(user, course, unit_node_id) -> Optional[Bookmark]:
     try:
-        bookmark = Bookmark.objects.get(
-            student=user, course=course, unit_node_id=unit_node_id
-        )
+        bookmark = Bookmark.objects.get(student=user, course=course, unit_node_id=unit_node_id)
         return bookmark
     except Bookmark.DoesNotExist:
         return None
@@ -455,18 +426,14 @@ def get_forum_topic_id(course, block, cohort) -> Optional[int]:
         cohort = course.get_default_cohort()
 
     if not course or not block or not cohort:
-        logger.warning(
-            "get_forum_topic_id() tag: Cannot get forum topic id. Missing course, block or cohort."
-        )
+        logger.warning("get_forum_topic_id() tag: Cannot get forum topic id. Missing course, block or cohort.")
         return None
     try:
         forum_category = ForumCategory.objects.get(course=course)
         forum_subcategory = ForumSubcategory.objects.get(
             cohort_forum_group=cohort.cohort_forum_group, forum_category=forum_category
         )
-        disc_topic = ForumTopic.objects.get(
-            forum_subcategory=forum_subcategory, block=block
-        )
+        disc_topic = ForumTopic.objects.get(forum_subcategory=forum_subcategory, block=block)
         topic_id = disc_topic.topic_id
     except Exception:
         logger.exception(f"Could not load ForumTopic")
@@ -500,10 +467,7 @@ def resource(context, uuid, limit_to_image=False) -> Optional[str]:
     if block is None:
         # We can't get the resource because we need to know
         # it's explicitly linked to this block.
-        logger.warning(
-            f"Could not load resource for uuid {uuid} because "
-            f"block is not in context"
-        )
+        logger.warning(f"Could not load resource for uuid {uuid} because " f"block is not in context")
         return None
 
     try:
@@ -534,10 +498,7 @@ def resource_url(context, uuid, limit_to_image=False) -> Optional[str]:
     if block is None:
         # We can't get the resource because we need to know
         # it's explicitly linked to this block.
-        logger.warning(
-            f"Could not load resource for uuid {uuid} because "
-            f"block is not in context"
-        )
+        logger.warning(f"Could not load resource for uuid {uuid} because " f"block is not in context")
         return None
 
     try:
@@ -593,9 +554,7 @@ def unit_link(
     current_course = context.get("course", None)
     if current_course is None:
         return ""
-    module: CourseNode = current_course.course_root_node.children.get(
-        content_index=module_content_index
-    )
+    module: CourseNode = current_course.course_root_node.children.get(content_index=module_content_index)
     section: CourseNode = module.children.get(content_index=section_content_index)
     unit: CourseNode = section.children.get(content_index=unit_content_index)
     unit_url = reverse(
@@ -621,9 +580,7 @@ def unit_slug_link(context, unit_slug: str) -> str:
     if current_course is None:
         return ""
     try:
-        unit_nodes = current_course.course_root_node.get_leafnodes().filter(
-            slug=unit_slug
-        )
+        unit_nodes = current_course.course_root_node.get_leafnodes().filter(slug=unit_slug)
         unit_node: CourseNode = unit_nodes.first()
     except Exception:
         logger.exception("Could not substitute UNIT_SLUG_LINK marker in template")
