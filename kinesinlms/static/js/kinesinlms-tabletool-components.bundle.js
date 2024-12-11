@@ -349,7 +349,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Tabletool: function() { return /* reexport default from dynamic */ _tabletool_TableTool__WEBPACK_IMPORTED_MODULE_0___default.a; }
 /* harmony export */ });
-/* harmony import */ var _tabletool_TableTool__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tabletool/TableTool */ "./kinesinlms_components/src/tabletool/TableTool-exposed.tsx");
+/* harmony import */ var _tabletool_TableTool__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tabletool/TableTool */ "./kinesinlms_components/src/tabletool/TableTool.tsx");
 /* harmony import */ var _tabletool_TableTool__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_tabletool_TableTool__WEBPACK_IMPORTED_MODULE_0__);
 
 
@@ -390,23 +390,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_EditableTableTool__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/EditableTableTool */ "./kinesinlms_components/src/tabletool/components/EditableTableTool-exposed.tsx");
+/* harmony import */ var _components_EditableTableTool__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/EditableTableTool */ "./kinesinlms_components/src/tabletool/components/EditableTableTool.tsx");
 /* harmony import */ var _components_EditableTableTool__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_components_EditableTableTool__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _components_SaveButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/SaveButton */ "./kinesinlms_components/src/tabletool/components/SaveButton-exposed.tsx");
+/* harmony import */ var _components_SaveButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/SaveButton */ "./kinesinlms_components/src/tabletool/components/SaveButton.tsx");
 /* harmony import */ var _components_SaveButton__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_components_SaveButton__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _components_AddRowButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/AddRowButton */ "./kinesinlms_components/src/tabletool/components/AddRowButton-exposed.tsx");
+/* harmony import */ var _components_AddRowButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/AddRowButton */ "./kinesinlms_components/src/tabletool/components/AddRowButton.tsx");
 /* harmony import */ var _components_AddRowButton__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_components_AddRowButton__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _components_SavingNotice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/SavingNotice */ "./kinesinlms_components/src/tabletool/components/SavingNotice-exposed.tsx");
+/* harmony import */ var _components_SavingNotice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/SavingNotice */ "./kinesinlms_components/src/tabletool/components/SavingNotice.tsx");
 /* harmony import */ var _components_SavingNotice__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_components_SavingNotice__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _components_SavedToast__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/SavedToast */ "./kinesinlms_components/src/tabletool/components/SavedToast-exposed.tsx");
+/* harmony import */ var _components_SavedToast__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/SavedToast */ "./kinesinlms_components/src/tabletool/components/SavedToast.tsx");
 /* harmony import */ var _components_SavedToast__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_components_SavedToast__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _hooks_useSaveTable__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./hooks/useSaveTable */ "./kinesinlms_components/src/tabletool/hooks/useSaveTable-exposed.ts");
+/* harmony import */ var _hooks_useSaveTable__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./hooks/useSaveTable */ "./kinesinlms_components/src/tabletool/hooks/useSaveTable.ts");
 /* harmony import */ var _hooks_useSaveTable__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_hooks_useSaveTable__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _hooks_useTable__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./hooks/useTable */ "./kinesinlms_components/src/tabletool/hooks/useTable-exposed.ts");
+/* harmony import */ var _hooks_useTable__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./hooks/useTable */ "./kinesinlms_components/src/tabletool/hooks/useTable.ts");
 /* harmony import */ var _hooks_useTable__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_hooks_useTable__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _TableTool_styles__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./TableTool.styles */ "./kinesinlms_components/src/tabletool/TableTool.styles-exposed.ts");
+/* harmony import */ var _TableTool_styles__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./TableTool.styles */ "./kinesinlms_components/src/tabletool/TableTool.styles.ts");
 /* harmony import */ var _TableTool_styles__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_TableTool_styles__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _SITScores__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../SITScores */ "./kinesinlms_components/src/SITScores-exposed.tsx");
+/* harmony import */ var _SITScores__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../SITScores */ "./kinesinlms_components/src/SITScores.tsx");
 /* harmony import */ var _SITScores__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_SITScores__WEBPACK_IMPORTED_MODULE_10__);
 
 // @ts-ignore
@@ -584,7 +584,7 @@ var AddRowButtonWrapper = styled_components__WEBPACK_IMPORTED_MODULE_1__["defaul
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AddRowButton_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddRowButton.styles */ "./kinesinlms_components/src/tabletool/components/AddRowButton.styles-exposed.ts");
+/* harmony import */ var _AddRowButton_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddRowButton.styles */ "./kinesinlms_components/src/tabletool/components/AddRowButton.styles.ts");
 /* harmony import */ var _AddRowButton_styles__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_AddRowButton_styles__WEBPACK_IMPORTED_MODULE_1__);
 // @ts-ignore
 
@@ -667,9 +667,9 @@ var TableRow = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].tr(_tem
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _EditableTableTool_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditableTableTool.styles */ "./kinesinlms_components/src/tabletool/components/EditableTableTool.styles-exposed.ts");
+/* harmony import */ var _EditableTableTool_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditableTableTool.styles */ "./kinesinlms_components/src/tabletool/components/EditableTableTool.styles.ts");
 /* harmony import */ var _EditableTableTool_styles__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_EditableTableTool_styles__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _hooks_useTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../hooks/useTable */ "./kinesinlms_components/src/tabletool/hooks/useTable-exposed.ts");
+/* harmony import */ var _hooks_useTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../hooks/useTable */ "./kinesinlms_components/src/tabletool/hooks/useTable.ts");
 /* harmony import */ var _hooks_useTable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_hooks_useTable__WEBPACK_IMPORTED_MODULE_2__);
 
 
@@ -813,7 +813,7 @@ var DeleteCellWrapper = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _DeleteCell_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DeleteCell.styles */ "./kinesinlms_components/src/tabletool/components/cells/DeleteCell.styles-exposed.ts");
+/* harmony import */ var _DeleteCell_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DeleteCell.styles */ "./kinesinlms_components/src/tabletool/components/cells/DeleteCell.styles.ts");
 /* harmony import */ var _DeleteCell_styles__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_DeleteCell_styles__WEBPACK_IMPORTED_MODULE_1__);
 // @ts-ignore
 
@@ -914,7 +914,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _UserEntryCell_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserEntryCell.styles */ "./kinesinlms_components/src/tabletool/components/cells/UserEntryCell.styles-exposed.ts");
+/* harmony import */ var _UserEntryCell_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserEntryCell.styles */ "./kinesinlms_components/src/tabletool/components/cells/UserEntryCell.styles.ts");
 /* harmony import */ var _UserEntryCell_styles__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_UserEntryCell_styles__WEBPACK_IMPORTED_MODULE_2__);
 
 // @ts-ignore
@@ -981,11 +981,11 @@ var UserEntryCell = function UserEntryCell(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _DeleteCell__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DeleteCell */ "./kinesinlms_components/src/tabletool/components/cells/DeleteCell-exposed.tsx");
+/* harmony import */ var _DeleteCell__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DeleteCell */ "./kinesinlms_components/src/tabletool/components/cells/DeleteCell.tsx");
 /* harmony import */ var _DeleteCell__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_DeleteCell__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _StaticCell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StaticCell */ "./kinesinlms_components/src/tabletool/components/cells/StaticCell-exposed.tsx");
+/* harmony import */ var _StaticCell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StaticCell */ "./kinesinlms_components/src/tabletool/components/cells/StaticCell.tsx");
 /* harmony import */ var _StaticCell__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_StaticCell__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _UserEntryCell__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UserEntryCell */ "./kinesinlms_components/src/tabletool/components/cells/UserEntryCell-exposed.tsx");
+/* harmony import */ var _UserEntryCell__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UserEntryCell */ "./kinesinlms_components/src/tabletool/components/cells/UserEntryCell.tsx");
 /* harmony import */ var _UserEntryCell__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_UserEntryCell__WEBPACK_IMPORTED_MODULE_3__);
 
 
@@ -1108,7 +1108,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _components_cells_getComponentForCellType__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/cells/getComponentForCellType */ "./kinesinlms_components/src/tabletool/components/cells/getComponentForCellType-exposed.tsx");
+/* harmony import */ var _components_cells_getComponentForCellType__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/cells/getComponentForCellType */ "./kinesinlms_components/src/tabletool/components/cells/getComponentForCellType.tsx");
 /* harmony import */ var _components_cells_getComponentForCellType__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_components_cells_getComponentForCellType__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var json_stable_stringify__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! json-stable-stringify */ "./node_modules/json-stable-stringify/index.js");
 /* harmony import */ var json_stable_stringify__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(json_stable_stringify__WEBPACK_IMPORTED_MODULE_6__);
@@ -2199,7 +2199,7 @@ module.exports = URIError;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/SITScores-exposed.tsx":
+/***/ "./kinesinlms_components/src/SITScores.tsx":
 /*!*********************************************************!*\
   !*** ./kinesinlms_components/src/SITScores-exposed.tsx ***!
   \*********************************************************/
@@ -2214,7 +2214,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/kinesinlms-tabletool-index-exposed.ts":
+/***/ "./kinesinlms_components/src/kinesinlms-tabletool-index.ts":
 /*!*************************************************************************!*\
   !*** ./kinesinlms_components/src/kinesinlms-tabletool-index-exposed.ts ***!
   \*************************************************************************/
@@ -2229,7 +2229,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/TableTool.styles-exposed.ts":
+/***/ "./kinesinlms_components/src/tabletool/TableTool.styles.ts":
 /*!*************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/TableTool.styles-exposed.ts ***!
   \*************************************************************************/
@@ -2244,7 +2244,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/TableTool-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/TableTool.tsx":
 /*!*******************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/TableTool-exposed.tsx ***!
   \*******************************************************************/
@@ -2259,7 +2259,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/AddRowButton.styles-exposed.ts":
+/***/ "./kinesinlms_components/src/tabletool/components/AddRowButton.styles.ts":
 /*!***************************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/AddRowButton.styles-exposed.ts ***!
   \***************************************************************************************/
@@ -2274,7 +2274,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/AddRowButton-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/components/AddRowButton.tsx":
 /*!*********************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/AddRowButton-exposed.tsx ***!
   \*********************************************************************************/
@@ -2289,7 +2289,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/EditableTableTool.styles-exposed.ts":
+/***/ "./kinesinlms_components/src/tabletool/components/EditableTableTool.styles.ts":
 /*!********************************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/EditableTableTool.styles-exposed.ts ***!
   \********************************************************************************************/
@@ -2304,7 +2304,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/EditableTableTool-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/components/EditableTableTool.tsx":
 /*!**************************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/EditableTableTool-exposed.tsx ***!
   \**************************************************************************************/
@@ -2319,7 +2319,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/SaveButton-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/components/SaveButton.tsx":
 /*!*******************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/SaveButton-exposed.tsx ***!
   \*******************************************************************************/
@@ -2334,7 +2334,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/SavedToast-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/components/SavedToast.tsx":
 /*!*******************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/SavedToast-exposed.tsx ***!
   \*******************************************************************************/
@@ -2349,7 +2349,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/SavingNotice-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/components/SavingNotice.tsx":
 /*!*********************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/SavingNotice-exposed.tsx ***!
   \*********************************************************************************/
@@ -2364,7 +2364,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/cells/DeleteCell.styles-exposed.ts":
+/***/ "./kinesinlms_components/src/tabletool/components/cells/DeleteCell.styles.ts":
 /*!*******************************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/cells/DeleteCell.styles-exposed.ts ***!
   \*******************************************************************************************/
@@ -2379,7 +2379,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/cells/DeleteCell-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/components/cells/DeleteCell.tsx":
 /*!*************************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/cells/DeleteCell-exposed.tsx ***!
   \*************************************************************************************/
@@ -2394,7 +2394,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/cells/StaticCell-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/components/cells/StaticCell.tsx":
 /*!*************************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/cells/StaticCell-exposed.tsx ***!
   \*************************************************************************************/
@@ -2409,7 +2409,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/cells/UserEntryCell.styles-exposed.ts":
+/***/ "./kinesinlms_components/src/tabletool/components/cells/UserEntryCell.styles.ts":
 /*!**********************************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/cells/UserEntryCell.styles-exposed.ts ***!
   \**********************************************************************************************/
@@ -2424,7 +2424,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/cells/UserEntryCell-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/components/cells/UserEntryCell.tsx":
 /*!****************************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/cells/UserEntryCell-exposed.tsx ***!
   \****************************************************************************************/
@@ -2439,7 +2439,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/components/cells/getComponentForCellType-exposed.tsx":
+/***/ "./kinesinlms_components/src/tabletool/components/cells/getComponentForCellType.tsx":
 /*!**************************************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/components/cells/getComponentForCellType-exposed.tsx ***!
   \**************************************************************************************************/
@@ -2454,7 +2454,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/hooks/useSaveTable-exposed.ts":
+/***/ "./kinesinlms_components/src/tabletool/hooks/useSaveTable.ts":
 /*!***************************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/hooks/useSaveTable-exposed.ts ***!
   \***************************************************************************/
@@ -2469,7 +2469,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/tabletool/hooks/useTable-exposed.ts":
+/***/ "./kinesinlms_components/src/tabletool/hooks/useTable.ts":
 /*!***********************************************************************!*\
   !*** ./kinesinlms_components/src/tabletool/hooks/useTable-exposed.ts ***!
   \***********************************************************************/
@@ -27447,7 +27447,7 @@ function __disposeResources(env) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./kinesinlms_components/src/kinesinlms-tabletool-index-exposed.ts");
+/******/ 	var __webpack_exports__ = __webpack_require__("./kinesinlms_components/src/kinesinlms-tabletool-index.ts");
 /******/ 	
 /******/ })()
 ;

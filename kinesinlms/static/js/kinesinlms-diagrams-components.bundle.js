@@ -13633,7 +13633,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _helpers_color__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helpers/color */ "./kinesinlms_components/src/colorpicker/helpers/color-exposed.js");
+/* harmony import */ var _helpers_color__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helpers/color */ "./kinesinlms_components/src/colorpicker/helpers/color.js");
 /* harmony import */ var _helpers_color__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_helpers_color__WEBPACK_IMPORTED_MODULE_9__);
 
 
@@ -13918,9 +13918,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var reactcss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! reactcss */ "./node_modules/reactcss/lib/index.js");
-/* harmony import */ var _interaction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./interaction */ "./kinesinlms_components/src/colorpicker/interaction-exposed.js");
+/* harmony import */ var _interaction__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./interaction */ "./kinesinlms_components/src/colorpicker/interaction.js");
 /* harmony import */ var _interaction__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_interaction__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _helpers_checkboard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helpers/checkboard */ "./kinesinlms_components/src/colorpicker/helpers/checkboard-exposed.js");
+/* harmony import */ var _helpers_checkboard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helpers/checkboard */ "./kinesinlms_components/src/colorpicker/helpers/checkboard.js");
 /* harmony import */ var _helpers_checkboard__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_helpers_checkboard__WEBPACK_IMPORTED_MODULE_5__);
 
 
@@ -14005,13 +14005,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_map__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_map__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash/merge */ "./node_modules/lodash/merge.js");
 /* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_merge__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _helpers_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/color */ "./kinesinlms_components/src/colorpicker/helpers/color-exposed.js");
+/* harmony import */ var _helpers_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers/color */ "./kinesinlms_components/src/colorpicker/helpers/color.js");
 /* harmony import */ var _helpers_color__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_helpers_color__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _EditableInput__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EditableInput */ "./kinesinlms_components/src/colorpicker/EditableInput-exposed.js");
+/* harmony import */ var _EditableInput__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EditableInput */ "./kinesinlms_components/src/colorpicker/EditableInput.js");
 /* harmony import */ var _EditableInput__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_EditableInput__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _ColorWrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ColorWrap */ "./kinesinlms_components/src/colorpicker/ColorWrap-exposed.js");
+/* harmony import */ var _ColorWrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ColorWrap */ "./kinesinlms_components/src/colorpicker/ColorWrap.js");
 /* harmony import */ var _ColorWrap__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_ColorWrap__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _Swatch__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Swatch */ "./kinesinlms_components/src/colorpicker/Swatch-exposed.js");
+/* harmony import */ var _Swatch__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Swatch */ "./kinesinlms_components/src/colorpicker/Swatch.js");
 /* harmony import */ var _Swatch__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_Swatch__WEBPACK_IMPORTED_MODULE_7__);
 
 
@@ -14444,7 +14444,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 /* harmony import */ var _projectstorm_react_canvas_core__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @projectstorm/react-canvas-core */ "./node_modules/@projectstorm/react-canvas-core/dist/index.js");
-/* harmony import */ var _custom_node__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../custom-node */ "./kinesinlms_components/src/diagram/custom-node/index-exposed.ts");
+/* harmony import */ var _custom_node__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../custom-node */ "./kinesinlms_components/src/diagram/custom-node/index.ts");
 /* harmony import */ var _custom_node__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_custom_node__WEBPACK_IMPORTED_MODULE_8__);
 
 
@@ -14712,9 +14712,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _projectstorm_react_canvas_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @projectstorm/react-canvas-core */ "./node_modules/@projectstorm/react-canvas-core/dist/index.js");
-/* harmony import */ var _custom_label_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./custom-label-model */ "./kinesinlms_components/src/diagram/custom-label/custom-label-model-exposed.tsx");
+/* harmony import */ var _custom_label_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./custom-label-model */ "./kinesinlms_components/src/diagram/custom-label/custom-label-model.tsx");
 /* harmony import */ var _custom_label_model__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_custom_label_model__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _custom_label_widget__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./custom-label-widget */ "./kinesinlms_components/src/diagram/custom-label/custom-label-widget-exposed.tsx");
+/* harmony import */ var _custom_label_widget__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./custom-label-widget */ "./kinesinlms_components/src/diagram/custom-label/custom-label-widget.tsx");
 /* harmony import */ var _custom_label_widget__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_custom_label_widget__WEBPACK_IMPORTED_MODULE_8__);
 
 
@@ -14905,7 +14905,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/get */ "./node_modules/@babel/runtime/helpers/esm/get.js");
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
 /* harmony import */ var _projectstorm_react_diagrams__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @projectstorm/react-diagrams */ "./node_modules/@projectstorm/react-diagrams/dist/index.js");
-/* harmony import */ var _custom_link_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./custom-link-model */ "./kinesinlms_components/src/diagram/custom-link/custom-link-model-exposed.tsx");
+/* harmony import */ var _custom_link_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./custom-link-model */ "./kinesinlms_components/src/diagram/custom-link/custom-link-model.tsx");
 /* harmony import */ var _custom_link_model__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_custom_link_model__WEBPACK_IMPORTED_MODULE_7__);
 
 
@@ -15029,9 +15029,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/esm/possibleConstructorReturn.js");
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js");
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
-/* harmony import */ var _CustomNodeWidget__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CustomNodeWidget */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeWidget-exposed.tsx");
+/* harmony import */ var _CustomNodeWidget__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CustomNodeWidget */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeWidget.tsx");
 /* harmony import */ var _CustomNodeWidget__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_CustomNodeWidget__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _CustomNodeModel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./CustomNodeModel */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeModel-exposed.ts");
+/* harmony import */ var _CustomNodeModel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./CustomNodeModel */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeModel.ts");
 /* harmony import */ var _CustomNodeModel__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_CustomNodeModel__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
@@ -15091,9 +15091,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 /* harmony import */ var _projectstorm_react_diagrams__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @projectstorm/react-diagrams */ "./node_modules/@projectstorm/react-diagrams/dist/index.js");
-/* harmony import */ var _custom_port__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../custom-port */ "./kinesinlms_components/src/diagram/custom-port/index-exposed.ts");
+/* harmony import */ var _custom_port__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../custom-port */ "./kinesinlms_components/src/diagram/custom-port/index.ts");
 /* harmony import */ var _custom_port__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_custom_port__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _CustomNodeTypes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes-exposed.ts");
+/* harmony import */ var _CustomNodeTypes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes.ts");
 /* harmony import */ var _CustomNodeTypes__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_9__);
 
 
@@ -15213,14 +15213,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _CustomNodeTypes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes-exposed.ts");
+/* harmony import */ var _CustomNodeTypes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes.ts");
 /* harmony import */ var _CustomNodeTypes__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _projectstorm_react_diagrams__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @projectstorm/react-diagrams */ "./node_modules/@projectstorm/react-diagrams/dist/index.js");
 /* harmony import */ var react_contenteditable__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-contenteditable */ "./node_modules/react-contenteditable/lib/react-contenteditable.js");
 /* harmony import */ var react_contenteditable__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_contenteditable__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./mindMapSubtypeMap */ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap-exposed.ts");
+/* harmony import */ var _mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./mindMapSubtypeMap */ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap.ts");
 /* harmony import */ var _mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _MentorSelectionButton__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./MentorSelectionButton */ "./kinesinlms_components/src/diagram/custom-node/MentorSelectionButton-exposed.tsx");
+/* harmony import */ var _MentorSelectionButton__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./MentorSelectionButton */ "./kinesinlms_components/src/diagram/custom-node/MentorSelectionButton.tsx");
 /* harmony import */ var _MentorSelectionButton__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_MentorSelectionButton__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _custom_node_widget_module_scss__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./custom-node-widget.module.scss */ "./kinesinlms_components/src/diagram/custom-node/custom-node-widget.module.scss");
 
@@ -15394,11 +15394,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mindMapSubtypeMap */ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap-exposed.ts");
+/* harmony import */ var _mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mindMapSubtypeMap */ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap.ts");
 /* harmony import */ var _mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Popover.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/OverlayTrigger.js");
-/* harmony import */ var _hooks_useBootstrapReady__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../hooks/useBootstrapReady */ "./kinesinlms_components/src/hooks/useBootstrapReady-exposed.ts");
+/* harmony import */ var _hooks_useBootstrapReady__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../hooks/useBootstrapReady */ "./kinesinlms_components/src/hooks/useBootstrapReady.ts");
 /* harmony import */ var _hooks_useBootstrapReady__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_hooks_useBootstrapReady__WEBPACK_IMPORTED_MODULE_3__);
 
 
@@ -15530,11 +15530,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   CustomNodeModel: function() { return /* reexport safe */ _CustomNodeModel__WEBPACK_IMPORTED_MODULE_1__.CustomNodeModel; },
 /* harmony export */   CustomNodeWidget: function() { return /* reexport safe */ _CustomNodeWidget__WEBPACK_IMPORTED_MODULE_2__.CustomNodeWidget; }
 /* harmony export */ });
-/* harmony import */ var _CustomNodeFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CustomNodeFactory */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeFactory-exposed.tsx");
+/* harmony import */ var _CustomNodeFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CustomNodeFactory */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeFactory.tsx");
 /* harmony import */ var _CustomNodeFactory__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_CustomNodeFactory__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _CustomNodeModel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CustomNodeModel */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeModel-exposed.ts");
+/* harmony import */ var _CustomNodeModel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CustomNodeModel */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeModel.ts");
 /* harmony import */ var _CustomNodeModel__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_CustomNodeModel__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _CustomNodeWidget__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CustomNodeWidget */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeWidget-exposed.tsx");
+/* harmony import */ var _CustomNodeWidget__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CustomNodeWidget */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeWidget.tsx");
 /* harmony import */ var _CustomNodeWidget__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_CustomNodeWidget__WEBPACK_IMPORTED_MODULE_2__);
 
 
@@ -15650,7 +15650,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/get */ "./node_modules/@babel/runtime/helpers/esm/get.js");
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/esm/inherits.js");
 /* harmony import */ var _projectstorm_react_diagrams__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @projectstorm/react-diagrams */ "./node_modules/@projectstorm/react-diagrams/dist/index.js");
-/* harmony import */ var _custom_link_custom_link_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../custom-link/custom-link-model */ "./kinesinlms_components/src/diagram/custom-link/custom-link-model-exposed.tsx");
+/* harmony import */ var _custom_link_custom_link_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../custom-link/custom-link-model */ "./kinesinlms_components/src/diagram/custom-link/custom-link-model.tsx");
 /* harmony import */ var _custom_link_custom_link_model__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_custom_link_custom_link_model__WEBPACK_IMPORTED_MODULE_7__);
 
 
@@ -15704,9 +15704,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   CustomPortFactory: function() { return /* reexport safe */ _CustomPortFactory__WEBPACK_IMPORTED_MODULE_0__.CustomPortFactory; },
 /* harmony export */   CustomPortModel: function() { return /* reexport safe */ _CustomPortModel__WEBPACK_IMPORTED_MODULE_1__.CustomPortModel; }
 /* harmony export */ });
-/* harmony import */ var _CustomPortFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CustomPortFactory */ "./kinesinlms_components/src/diagram/custom-port/CustomPortFactory-exposed.ts");
+/* harmony import */ var _CustomPortFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CustomPortFactory */ "./kinesinlms_components/src/diagram/custom-port/CustomPortFactory.ts");
 /* harmony import */ var _CustomPortFactory__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_CustomPortFactory__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _CustomPortModel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CustomPortModel */ "./kinesinlms_components/src/diagram/custom-port/CustomPortModel-exposed.ts");
+/* harmony import */ var _CustomPortModel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CustomPortModel */ "./kinesinlms_components/src/diagram/custom-port/CustomPortModel.ts");
 /* harmony import */ var _CustomPortModel__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_CustomPortModel__WEBPACK_IMPORTED_MODULE_1__);
 
 
@@ -15741,45 +15741,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! axios */ "axios");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _projectstorm_react_canvas_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @projectstorm/react-canvas-core */ "./node_modules/@projectstorm/react-canvas-core/dist/index.js");
-/* harmony import */ var _custom_node__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./custom-node */ "./kinesinlms_components/src/diagram/custom-node/index-exposed.ts");
+/* harmony import */ var _custom_node__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./custom-node */ "./kinesinlms_components/src/diagram/custom-node/index.ts");
 /* harmony import */ var _custom_node__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_custom_node__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var _custom_port__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./custom-port */ "./kinesinlms_components/src/diagram/custom-port/index-exposed.ts");
+/* harmony import */ var _custom_port__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./custom-port */ "./kinesinlms_components/src/diagram/custom-port/index.ts");
 /* harmony import */ var _custom_port__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_custom_port__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _tray_tray_item_widget__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./tray/tray-item-widget */ "./kinesinlms_components/src/diagram/tray/tray-item-widget-exposed.tsx");
+/* harmony import */ var _tray_tray_item_widget__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./tray/tray-item-widget */ "./kinesinlms_components/src/diagram/tray/tray-item-widget.tsx");
 /* harmony import */ var _tray_tray_item_widget__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_tray_tray_item_widget__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _canvas_diagram_canvas_widget__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./canvas/diagram-canvas-widget */ "./kinesinlms_components/src/diagram/canvas/diagram-canvas-widget-exposed.tsx");
+/* harmony import */ var _canvas_diagram_canvas_widget__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./canvas/diagram-canvas-widget */ "./kinesinlms_components/src/diagram/canvas/diagram-canvas-widget.tsx");
 /* harmony import */ var _canvas_diagram_canvas_widget__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_canvas_diagram_canvas_widget__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var _actions_clipboard_action__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./actions/clipboard-action */ "./kinesinlms_components/src/diagram/actions/clipboard-action-exposed.tsx");
+/* harmony import */ var _actions_clipboard_action__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./actions/clipboard-action */ "./kinesinlms_components/src/diagram/actions/clipboard-action.tsx");
 /* harmony import */ var _actions_clipboard_action__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_actions_clipboard_action__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var _colorpicker_Twitter__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../colorpicker/Twitter */ "./kinesinlms_components/src/colorpicker/Twitter-exposed.js");
+/* harmony import */ var _colorpicker_Twitter__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../colorpicker/Twitter */ "./kinesinlms_components/src/colorpicker/Twitter.js");
 /* harmony import */ var _colorpicker_Twitter__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(_colorpicker_Twitter__WEBPACK_IMPORTED_MODULE_18__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Toast.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/OverlayTrigger.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Tooltip.js");
 /* harmony import */ var _diagram_module_scss__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./diagram.module.scss */ "./kinesinlms_components/src/diagram/diagram.module.scss");
-/* harmony import */ var _custom_link_custom_link_factory__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./custom-link/custom-link-factory */ "./kinesinlms_components/src/diagram/custom-link/custom-link-factory-exposed.tsx");
+/* harmony import */ var _custom_link_custom_link_factory__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./custom-link/custom-link-factory */ "./kinesinlms_components/src/diagram/custom-link/custom-link-factory.tsx");
 /* harmony import */ var _custom_link_custom_link_factory__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(_custom_link_custom_link_factory__WEBPACK_IMPORTED_MODULE_20__);
-/* harmony import */ var _custom_label_custom_label_factory__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./custom-label/custom-label-factory */ "./kinesinlms_components/src/diagram/custom-label/custom-label-factory-exposed.tsx");
+/* harmony import */ var _custom_label_custom_label_factory__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./custom-label/custom-label-factory */ "./kinesinlms_components/src/diagram/custom-label/custom-label-factory.tsx");
 /* harmony import */ var _custom_label_custom_label_factory__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(_custom_label_custom_label_factory__WEBPACK_IMPORTED_MODULE_21__);
-/* harmony import */ var _custom_label_custom_label_model__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./custom-label/custom-label-model */ "./kinesinlms_components/src/diagram/custom-label/custom-label-model-exposed.tsx");
+/* harmony import */ var _custom_label_custom_label_model__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./custom-label/custom-label-model */ "./kinesinlms_components/src/diagram/custom-label/custom-label-model.tsx");
 /* harmony import */ var _custom_label_custom_label_model__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(_custom_label_custom_label_model__WEBPACK_IMPORTED_MODULE_22__);
-/* harmony import */ var _custom_node_CustomNodeModel__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./custom-node/CustomNodeModel */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeModel-exposed.ts");
+/* harmony import */ var _custom_node_CustomNodeModel__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./custom-node/CustomNodeModel */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeModel.ts");
 /* harmony import */ var _custom_node_CustomNodeModel__WEBPACK_IMPORTED_MODULE_23___default = /*#__PURE__*/__webpack_require__.n(_custom_node_CustomNodeModel__WEBPACK_IMPORTED_MODULE_23__);
-/* harmony import */ var _custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./custom-node/CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes-exposed.ts");
+/* harmony import */ var _custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./custom-node/CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes.ts");
 /* harmony import */ var _custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_24___default = /*#__PURE__*/__webpack_require__.n(_custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_24__);
-/* harmony import */ var _custom_node_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./custom-node/mindMapSubtypeMap */ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap-exposed.ts");
+/* harmony import */ var _custom_node_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./custom-node/mindMapSubtypeMap */ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap.ts");
 /* harmony import */ var _custom_node_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_25___default = /*#__PURE__*/__webpack_require__.n(_custom_node_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_25__);
-/* harmony import */ var _custom_link_custom_link_model__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./custom-link/custom-link-model */ "./kinesinlms_components/src/diagram/custom-link/custom-link-model-exposed.tsx");
+/* harmony import */ var _custom_link_custom_link_model__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./custom-link/custom-link-model */ "./kinesinlms_components/src/diagram/custom-link/custom-link-model.tsx");
 /* harmony import */ var _custom_link_custom_link_model__WEBPACK_IMPORTED_MODULE_26___default = /*#__PURE__*/__webpack_require__.n(_custom_link_custom_link_model__WEBPACK_IMPORTED_MODULE_26__);
-/* harmony import */ var _utils_DiagramChangeDetector__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./utils/DiagramChangeDetector */ "./kinesinlms_components/src/diagram/utils/DiagramChangeDetector-exposed.ts");
+/* harmony import */ var _utils_DiagramChangeDetector__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./utils/DiagramChangeDetector */ "./kinesinlms_components/src/diagram/utils/DiagramChangeDetector.ts");
 /* harmony import */ var _utils_DiagramChangeDetector__WEBPACK_IMPORTED_MODULE_27___default = /*#__PURE__*/__webpack_require__.n(_utils_DiagramChangeDetector__WEBPACK_IMPORTED_MODULE_27__);
-/* harmony import */ var _tray_trayNodesTypes__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./tray/trayNodesTypes */ "./kinesinlms_components/src/diagram/tray/trayNodesTypes-exposed.ts");
+/* harmony import */ var _tray_trayNodesTypes__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./tray/trayNodesTypes */ "./kinesinlms_components/src/diagram/tray/trayNodesTypes.ts");
 /* harmony import */ var _tray_trayNodesTypes__WEBPACK_IMPORTED_MODULE_28___default = /*#__PURE__*/__webpack_require__.n(_tray_trayNodesTypes__WEBPACK_IMPORTED_MODULE_28__);
-/* harmony import */ var _diagram_types__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./diagram.types */ "./kinesinlms_components/src/diagram/diagram.types-exposed.ts");
+/* harmony import */ var _diagram_types__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./diagram.types */ "./kinesinlms_components/src/diagram/diagram.types.ts");
 /* harmony import */ var _diagram_types__WEBPACK_IMPORTED_MODULE_29___default = /*#__PURE__*/__webpack_require__.n(_diagram_types__WEBPACK_IMPORTED_MODULE_29__);
-/* harmony import */ var _SITScores__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../SITScores */ "./kinesinlms_components/src/SITScores-exposed.tsx");
+/* harmony import */ var _SITScores__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ../SITScores */ "./kinesinlms_components/src/SITScores.tsx");
 /* harmony import */ var _SITScores__WEBPACK_IMPORTED_MODULE_30___default = /*#__PURE__*/__webpack_require__.n(_SITScores__WEBPACK_IMPORTED_MODULE_30__);
-/* harmony import */ var _utils_deleteKeysFromObject__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../utils/deleteKeysFromObject */ "./kinesinlms_components/src/utils/deleteKeysFromObject-exposed.ts");
+/* harmony import */ var _utils_deleteKeysFromObject__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../utils/deleteKeysFromObject */ "./kinesinlms_components/src/utils/deleteKeysFromObject.ts");
 /* harmony import */ var _utils_deleteKeysFromObject__WEBPACK_IMPORTED_MODULE_31___default = /*#__PURE__*/__webpack_require__.n(_utils_deleteKeysFromObject__WEBPACK_IMPORTED_MODULE_31__);
 /* harmony import */ var json_stable_stringify__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! json-stable-stringify */ "./node_modules/json-stable-stringify/index.js");
 /* harmony import */ var json_stable_stringify__WEBPACK_IMPORTED_MODULE_32___default = /*#__PURE__*/__webpack_require__.n(json_stable_stringify__WEBPACK_IMPORTED_MODULE_32__);
@@ -16689,9 +16689,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _tray_widget_module_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./tray-widget.module.scss */ "./kinesinlms_components/src/diagram/tray/tray-widget.module.scss");
-/* harmony import */ var _custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../custom-node/CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes-exposed.ts");
+/* harmony import */ var _custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../custom-node/CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes.ts");
 /* harmony import */ var _custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _custom_node_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../custom-node/mindMapSubtypeMap */ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap-exposed.ts");
+/* harmony import */ var _custom_node_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../custom-node/mindMapSubtypeMap */ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap.ts");
 /* harmony import */ var _custom_node_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_custom_node_mindMapSubtypeMap__WEBPACK_IMPORTED_MODULE_9__);
 
 
@@ -16784,9 +16784,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getNodesForTrayNodesType: function() { return /* binding */ getNodesForTrayNodesType; }
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
-/* harmony import */ var _custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../custom-node/CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes-exposed.ts");
+/* harmony import */ var _custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../custom-node/CustomNodeTypes */ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes.ts");
 /* harmony import */ var _custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_custom_node_CustomNodeTypes__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _diagram_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../diagram.types */ "./kinesinlms_components/src/diagram/diagram.types-exposed.ts");
+/* harmony import */ var _diagram_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../diagram.types */ "./kinesinlms_components/src/diagram/diagram.types.ts");
 /* harmony import */ var _diagram_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_diagram_types__WEBPACK_IMPORTED_MODULE_2__);
 
 
@@ -16960,7 +16960,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Diagram: function() { return /* reexport default from dynamic */ _diagram_diagram__WEBPACK_IMPORTED_MODULE_0___default.a; }
 /* harmony export */ });
-/* harmony import */ var _diagram_diagram__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./diagram/diagram */ "./kinesinlms_components/src/diagram/diagram-exposed.tsx");
+/* harmony import */ var _diagram_diagram__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./diagram/diagram */ "./kinesinlms_components/src/diagram/diagram.tsx");
 /* harmony import */ var _diagram_diagram__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_diagram_diagram__WEBPACK_IMPORTED_MODULE_0__);
 
 
@@ -21215,7 +21215,7 @@ module.exports = URIError;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/SITScores-exposed.tsx":
+/***/ "./kinesinlms_components/src/SITScores.tsx":
 /*!*********************************************************!*\
   !*** ./kinesinlms_components/src/SITScores-exposed.tsx ***!
   \*********************************************************/
@@ -21230,7 +21230,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/colorpicker/ColorWrap-exposed.js":
+/***/ "./kinesinlms_components/src/colorpicker/ColorWrap.js":
 /*!********************************************************************!*\
   !*** ./kinesinlms_components/src/colorpicker/ColorWrap-exposed.js ***!
   \********************************************************************/
@@ -21245,7 +21245,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/colorpicker/EditableInput-exposed.js":
+/***/ "./kinesinlms_components/src/colorpicker/EditableInput.js":
 /*!************************************************************************!*\
   !*** ./kinesinlms_components/src/colorpicker/EditableInput-exposed.js ***!
   \************************************************************************/
@@ -21260,7 +21260,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/colorpicker/Swatch-exposed.js":
+/***/ "./kinesinlms_components/src/colorpicker/Swatch.js":
 /*!*****************************************************************!*\
   !*** ./kinesinlms_components/src/colorpicker/Swatch-exposed.js ***!
   \*****************************************************************/
@@ -21275,7 +21275,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/colorpicker/Twitter-exposed.js":
+/***/ "./kinesinlms_components/src/colorpicker/Twitter.js":
 /*!******************************************************************!*\
   !*** ./kinesinlms_components/src/colorpicker/Twitter-exposed.js ***!
   \******************************************************************/
@@ -21290,7 +21290,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/colorpicker/helpers/checkboard-exposed.js":
+/***/ "./kinesinlms_components/src/colorpicker/helpers/checkboard.js":
 /*!*****************************************************************************!*\
   !*** ./kinesinlms_components/src/colorpicker/helpers/checkboard-exposed.js ***!
   \*****************************************************************************/
@@ -21305,7 +21305,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/colorpicker/helpers/color-exposed.js":
+/***/ "./kinesinlms_components/src/colorpicker/helpers/color.js":
 /*!************************************************************************!*\
   !*** ./kinesinlms_components/src/colorpicker/helpers/color-exposed.js ***!
   \************************************************************************/
@@ -21320,7 +21320,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/colorpicker/interaction-exposed.js":
+/***/ "./kinesinlms_components/src/colorpicker/interaction.js":
 /*!**********************************************************************!*\
   !*** ./kinesinlms_components/src/colorpicker/interaction-exposed.js ***!
   \**********************************************************************/
@@ -21335,7 +21335,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/actions/clipboard-action-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/actions/clipboard-action.tsx":
 /*!********************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/actions/clipboard-action-exposed.tsx ***!
   \********************************************************************************/
@@ -21350,7 +21350,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/canvas/diagram-canvas-widget-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/canvas/diagram-canvas-widget.tsx":
 /*!************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/canvas/diagram-canvas-widget-exposed.tsx ***!
   \************************************************************************************/
@@ -21365,7 +21365,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-label/custom-label-factory-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/custom-label/custom-label-factory.tsx":
 /*!*****************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-label/custom-label-factory-exposed.tsx ***!
   \*****************************************************************************************/
@@ -21380,7 +21380,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-label/custom-label-model-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/custom-label/custom-label-model.tsx":
 /*!***************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-label/custom-label-model-exposed.tsx ***!
   \***************************************************************************************/
@@ -21395,7 +21395,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-label/custom-label-widget-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/custom-label/custom-label-widget.tsx":
 /*!****************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-label/custom-label-widget-exposed.tsx ***!
   \****************************************************************************************/
@@ -21410,7 +21410,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-link/custom-link-factory-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/custom-link/custom-link-factory.tsx":
 /*!***************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-link/custom-link-factory-exposed.tsx ***!
   \***************************************************************************************/
@@ -21425,7 +21425,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-link/custom-link-model-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/custom-link/custom-link-model.tsx":
 /*!*************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-link/custom-link-model-exposed.tsx ***!
   \*************************************************************************************/
@@ -21440,7 +21440,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-node/CustomNodeFactory-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/custom-node/CustomNodeFactory.tsx":
 /*!*************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-node/CustomNodeFactory-exposed.tsx ***!
   \*************************************************************************************/
@@ -21455,7 +21455,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-node/CustomNodeModel-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/custom-node/CustomNodeModel.ts":
 /*!**********************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-node/CustomNodeModel-exposed.ts ***!
   \**********************************************************************************/
@@ -21470,7 +21470,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes.ts":
 /*!**********************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-node/CustomNodeTypes-exposed.ts ***!
   \**********************************************************************************/
@@ -21485,7 +21485,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-node/CustomNodeWidget-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/custom-node/CustomNodeWidget.tsx":
 /*!************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-node/CustomNodeWidget-exposed.tsx ***!
   \************************************************************************************/
@@ -21500,7 +21500,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-node/MentorSelectionButton-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/custom-node/MentorSelectionButton.tsx":
 /*!*****************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-node/MentorSelectionButton-exposed.tsx ***!
   \*****************************************************************************************/
@@ -21515,7 +21515,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-node/index-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/custom-node/index.ts":
 /*!************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-node/index-exposed.ts ***!
   \************************************************************************/
@@ -21530,7 +21530,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap.ts":
 /*!************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-node/mindMapSubtypeMap-exposed.ts ***!
   \************************************************************************************/
@@ -21545,7 +21545,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-port/CustomPortFactory-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/custom-port/CustomPortFactory.ts":
 /*!************************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-port/CustomPortFactory-exposed.ts ***!
   \************************************************************************************/
@@ -21560,7 +21560,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-port/CustomPortModel-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/custom-port/CustomPortModel.ts":
 /*!**********************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-port/CustomPortModel-exposed.ts ***!
   \**********************************************************************************/
@@ -21575,7 +21575,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/custom-port/index-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/custom-port/index.ts":
 /*!************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/custom-port/index-exposed.ts ***!
   \************************************************************************/
@@ -21590,7 +21590,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/diagram-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/diagram.tsx":
 /*!***************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/diagram-exposed.tsx ***!
   \***************************************************************/
@@ -21605,7 +21605,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/diagram.types-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/diagram.types.ts":
 /*!********************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/diagram.types-exposed.ts ***!
   \********************************************************************/
@@ -21620,7 +21620,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/tray/tray-item-widget-exposed.tsx":
+/***/ "./kinesinlms_components/src/diagram/tray/tray-item-widget.tsx":
 /*!*****************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/tray/tray-item-widget-exposed.tsx ***!
   \*****************************************************************************/
@@ -21635,7 +21635,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/tray/trayNodesTypes-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/tray/trayNodesTypes.ts":
 /*!**************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/tray/trayNodesTypes-exposed.ts ***!
   \**************************************************************************/
@@ -21650,7 +21650,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/diagram/utils/DiagramChangeDetector-exposed.ts":
+/***/ "./kinesinlms_components/src/diagram/utils/DiagramChangeDetector.ts":
 /*!**********************************************************************************!*\
   !*** ./kinesinlms_components/src/diagram/utils/DiagramChangeDetector-exposed.ts ***!
   \**********************************************************************************/
@@ -21665,7 +21665,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/hooks/useBootstrapReady-exposed.ts":
+/***/ "./kinesinlms_components/src/hooks/useBootstrapReady.ts":
 /*!**********************************************************************!*\
   !*** ./kinesinlms_components/src/hooks/useBootstrapReady-exposed.ts ***!
   \**********************************************************************/
@@ -21680,7 +21680,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/kinesinlms-diagrams-index-exposed.ts":
+/***/ "./kinesinlms_components/src/kinesinlms-diagrams-index.ts":
 /*!************************************************************************!*\
   !*** ./kinesinlms_components/src/kinesinlms-diagrams-index-exposed.ts ***!
   \************************************************************************/
@@ -21695,7 +21695,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/utils/deleteKeysFromObject-exposed.ts":
+/***/ "./kinesinlms_components/src/utils/deleteKeysFromObject.ts":
 /*!*************************************************************************!*\
   !*** ./kinesinlms_components/src/utils/deleteKeysFromObject-exposed.ts ***!
   \*************************************************************************/
@@ -67730,7 +67730,7 @@ function validateWCAG2Parms(parms) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./kinesinlms_components/src/kinesinlms-diagrams-index-exposed.ts");
+/******/ 	var __webpack_exports__ = __webpack_require__("./kinesinlms_components/src/kinesinlms-diagrams-index.ts");
 /******/ 	
 /******/ })()
 ;

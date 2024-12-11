@@ -12,7 +12,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   VideoPlayer: function() { return /* reexport default from dynamic */ _videoplayer_VideoPlayer__WEBPACK_IMPORTED_MODULE_0___default.a; }
 /* harmony export */ });
-/* harmony import */ var _videoplayer_VideoPlayer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./videoplayer/VideoPlayer */ "./kinesinlms_components/src/videoplayer/VideoPlayer-exposed.tsx");
+/* harmony import */ var _videoplayer_VideoPlayer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./videoplayer/VideoPlayer */ "./kinesinlms_components/src/videoplayer/VideoPlayer.tsx");
 /* harmony import */ var _videoplayer_VideoPlayer__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_videoplayer_VideoPlayer__WEBPACK_IMPORTED_MODULE_0__);
 
 
@@ -140,7 +140,7 @@ var VideoPlayer = function VideoPlayer(_ref) {
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/kinesinlms-standard-components-index-exposed.ts":
+/***/ "./kinesinlms_components/src/kinesinlms-standard-components-index.ts":
 /*!***********************************************************************************!*\
   !*** ./kinesinlms_components/src/kinesinlms-standard-components-index-exposed.ts ***!
   \***********************************************************************************/
@@ -155,7 +155,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 
 /***/ }),
 
-/***/ "./kinesinlms_components/src/videoplayer/VideoPlayer-exposed.tsx":
+/***/ "./kinesinlms_components/src/videoplayer/VideoPlayer.tsx":
 /*!***********************************************************************!*\
   !*** ./kinesinlms_components/src/videoplayer/VideoPlayer-exposed.tsx ***!
   \***********************************************************************/
@@ -3135,7 +3135,7 @@ function _unsupportedIterableToArray(r, a) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./kinesinlms_components/src/kinesinlms-standard-components-index-exposed.ts");
+/******/ 	var __webpack_exports__ = __webpack_require__("./kinesinlms_components/src/kinesinlms-standard-components-index.ts");
 /******/ 	
 /******/ })()
 ;
