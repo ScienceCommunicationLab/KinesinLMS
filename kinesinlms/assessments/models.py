@@ -170,7 +170,9 @@ class Assessment(RepresentationMixin, Trackable):
         Returns:
             str
         """
-        return f"assessment_{self.id}"
+        # Give this the same uuid as the block,
+        # as that's what we'll need to link correctly in the CC output.
+        return str(self.block.uuid)
 
     @property
     def complete_json(self) -> Dict:

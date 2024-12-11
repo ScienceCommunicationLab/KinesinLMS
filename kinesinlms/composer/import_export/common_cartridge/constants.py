@@ -19,8 +19,9 @@ class CommonCartridgeResourceType(Enum):
     WEB_LINK = "imswl_xmlv1p3"
 
     # Assessment Types - needs update
-    QTI_ASSESSMENT = "imsqti_xmlv1p2/imscc_xmlv1p3/assessment"
-    QTI_QUESTION_BANK = "imsqti_xmlv1p2/imscc_xmlv1p3/question-bank"
+    # We use QTI 1.2 to match CC 1.3
+    QTI_ASSESSMENT = "imsqti_xmlv1p2/imscc_xmlv1p1/assessment"
+    QTI_QUESTION_BANK = "imsqti_xmlv1p2/question-bank"
 
     # Learning Tools & Resources
     BASIC_LTI_LINK = "imsbasiclti_xmlv1p3"
@@ -34,7 +35,14 @@ class CommonCartridgeResourceType(Enum):
 
     @classmethod
     def is_qti(cls, resource_type: str) -> bool:
-        return "imsqti_xmlv1p2/imscc_xmlv1p3" in resource_type
+        """
+        Determines if a resource type represents a QTI 1.2 assessment.
+
+        The method checks specifically for QTI 1.2 resources, which can be either:
+        - Standard assessments (imsqti_xmlv1p2)
+        - Question banks (imsqti_xmlv1p2/question-bank)
+        """
+        return resource_type == cls.QTI_ASSESSMENT.value or resource_type == cls.QTI_QUESTION_BANK.value
 
 
 NAMESPACES = {
@@ -44,11 +52,10 @@ NAMESPACES = {
     "lomimscc": "http://ltsc.ieee.org/xsd/imsccv1p3/LOM/manifest",
     "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     "csmd": "http://www.imsglobal.org/xsd/imsccv1p3/csmd_v1p0",
-    "qti": "http://www.imsglobal.org/xsd/imsqti_v2p1",
-    "qtimetadata": "http://www.imsglobal.org/xsd/imsmd_v1p2",
+    # "qti": "http://www.imsglobal.org/xsd/imsqti_v2p1",
+    "qtimetadata": "http://www.imsglobal.org/xsd/ims_qtiasiv1p2",
 }
 
-# Define schema locations - one per line for readability
 SCHEMA_LOCATIONS = [
     "http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1",
     "http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imscp_v1p2_v1p0.xsd",
@@ -58,4 +65,6 @@ SCHEMA_LOCATIONS = [
     "http://www.imsglobal.org/profile/cc/ccv1p3/LOM/ccv1p3_lommanifest_v1p0.xsd",
     "http://www.imsglobal.org/xsd/imsccv1p3/csmd_v1p0",
     "http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_csmd_v1p0.xsd",
+    "http://www.imsglobal.org/xsd/ims_qtiasiv1p2",
+    "http://www.imsglobal.org/xsd/ims_qtiasiv1p2.xsd",
 ]

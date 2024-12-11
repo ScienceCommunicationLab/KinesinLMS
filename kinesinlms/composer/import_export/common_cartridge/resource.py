@@ -6,12 +6,10 @@
 # represents a file that is linked to a Block via BlockResource.
 
 import logging
-import re
 from abc import ABC, abstractmethod
 from typing import Optional
 from zipfile import ZipFile
 
-from django.conf import settings
 from lxml import etree
 from slugify import slugify
 
@@ -22,11 +20,10 @@ from kinesinlms.composer.import_export.common_cartridge.constants import (
 )
 from kinesinlms.composer.import_export.common_cartridge.utils import validate_resource_path
 from kinesinlms.core.templatetags.core_tags import render_html_content
-from kinesinlms.course.models import CourseNode, UnitBlock
+from kinesinlms.course.models import UnitBlock
 from kinesinlms.learning_library.constants import ResourceType
 from kinesinlms.learning_library.models import (
     BlockResource,
-    BlockType,
 )
 
 logger = logging.getLogger(__name__)
@@ -477,6 +474,12 @@ class AssessmentCCResource(CCHandler):
     """
     Creates Common Cartridge resources for Assessment blocks.
     Uses a factory to generate the appropriate QTI content based on assessment type.
+
+    The XML generation is handled by the QTI assessment classes themselves, which include:
+    - Standard XML namespaces via get_xml_namespaces()
+    - Required metadata via get_base_metadata()
+    - Proper response processing with feedback
+
     """
 
     def __init__(self, unit_block: UnitBlock):
@@ -494,6 +497,15 @@ class AssessmentCCResource(CCHandler):
         Creates a Common Cartridge QTI XML file for an assessment block.
         Uses the QTIAssessmentFactory to generate appropriate QTI content
         based on the assessment type.
+
+        Args:
+            zip_file: The zip file where the Common Cartridge is being built
+
+        Returns:
+            bool: True if the assessment was successfully created and added
+
+        Raises:
+            ValueError: If the block doesn't have an assessment attribute
         """
         if not hasattr(self.unit_block.block, "assessment"):
             raise ValueError("UnitBlock must have an assessment attribute")
@@ -501,6 +513,7 @@ class AssessmentCCResource(CCHandler):
         # Get QTI content from factory based on assessment type
         assessment = self.unit_block.block.assessment
         qti_assessment = self.qti_factory.create_qti_assessment(assessment)
+
         qti_xml = qti_assessment.to_qti_xml()
 
         # Write the QTI XML file to the zip

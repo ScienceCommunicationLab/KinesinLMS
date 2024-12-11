@@ -3,7 +3,7 @@ These are the classes for creating QTI assessments from our internal assessment 
 """
 
 import logging
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -37,14 +37,85 @@ class QTIAssessment:
         """Convert the assessment to QTI XML string"""
         pass
 
+    def get_xml_namespaces(self) -> str:
+        """Returns the XML namespace declarations"""
+        return (
+            'xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" '
+            'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+            'xsi:schemaLocation="http://www.imsglobal.org/xsd/ims_qtiasiv1p2 '
+            'http://www.imsglobal.org/xsd/ims_qtiasiv1p2.xsd"'
+        )
+
+    def get_base_metadata(self) -> str:
+        """Returns the base metadata XML"""
+        return """
+<qtimetadatafield>
+    <fieldlabel>qmd_assessmenttype</fieldlabel>
+    <fieldentry>Assessment</fieldentry>
+</qtimetadatafield>
+<qtimetadatafield>
+    <fieldlabel>cc_maxattempts</fieldlabel>
+    <fieldentry>1</fieldentry>
+</qtimetadatafield>
+"""
+
+
+class TextEntryQTIAssessment(QTIAssessment):
+    def to_qti_xml(self) -> str:
+        return f"""<?xml version="1.0" encoding="UTF-8"?>
+<questestinterop {self.get_xml_namespaces()}>
+    <assessment ident="{self.identifier}" title="{self.title}">
+        <qtimetadata>{self.get_base_metadata()}</qtimetadata>
+        <section ident="root_section">
+            <item ident="{self.identifier}_item1" title="{self.title}">
+                <itemmetadata>
+                    <qtimetadata>
+                        <qtimetadatafield>
+                            <fieldlabel>question_type</fieldlabel>
+                            <fieldentry>text_entry_question</fieldentry>
+                        </qtimetadatafield>
+                        <qtimetadatafield>
+                            <fieldlabel>points_possible</fieldlabel>
+                            <fieldentry>{self.max_score}</fieldentry>
+                        </qtimetadatafield>
+                    </qtimetadata>
+                </itemmetadata>
+                <presentation>
+                    <material>
+                        <mattext texttype="text/html">{self.question_text}</mattext>
+                    </material>
+                    <response_str ident="response1" rcardinality="Single">
+                        <render_fib>
+                            <response_label ident="answer1" rshuffle="No" size="80" />
+                        </render_fib>
+                    </response_str>
+                </presentation>
+                <resprocessing>
+                    <outcomes>
+                        <decvar maxvalue="{self.max_score}" minvalue="0" varname="SCORE" vartype="Decimal"/>
+                    </outcomes>
+                    <respcondition continue="Yes">
+                        <conditionvar>
+                            <other/>
+                        </conditionvar>
+                        <setvar varname="SCORE" action="Set">{self.max_score}</setvar>
+                        <displayfeedback linkrefid="general_fb" feedbacktype="Response"/>
+                    </respcondition>
+                </resprocessing>
+                <itemfeedback ident="general_fb">
+                    <flow_mat>
+                        <material>
+                            <mattext texttype="text/plain">Thank you for your response.</mattext>
+                        </material>
+                    </flow_mat>
+                </itemfeedback>
+            </item>
+        </section>
+    </assessment>
+</questestinterop>"""
+
 
 class MultipleChoiceQTIAssessment(QTIAssessment):
-    """
-    Class for holding the data we need to translate a KinesinLMS
-    multiple choice assessment to a QTI multiple choice assessment
-    for export in CC.
-    """
-
     def __init__(
         self,
         identifier: str,
@@ -63,7 +134,7 @@ class MultipleChoiceQTIAssessment(QTIAssessment):
         choices_xml = ""
         for choice in self.choices:
             choices_xml += f"""
-                <response_label ident="{choice.identifier}">
+                <response_label ident="{choice.identifier}" rshuffle="No">
                     <material>
                         <mattext texttype="text/plain">{choice.text}</mattext>
                     </material>
@@ -72,7 +143,7 @@ class MultipleChoiceQTIAssessment(QTIAssessment):
         conditions_xml = ""
         for choice_key in self.correct_choice_keys:
             conditions_xml += f"""
-            <respcondition continue="No">
+            <respcondition continue="Yes">
                 <conditionvar>
                     <varequal respident="response1">{choice_key}</varequal>
                 </conditionvar>
@@ -81,13 +152,10 @@ class MultipleChoiceQTIAssessment(QTIAssessment):
             </respcondition>"""
 
         return f"""<?xml version="1.0" encoding="UTF-8"?>
-<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2">
+<questestinterop {self.get_xml_namespaces()}>
     <assessment ident="{self.identifier}" title="{self.title}">
         <qtimetadata>
-            <qtimetadatafield>
-                <fieldlabel>qmd_assessmenttype</fieldlabel>
-                <fieldentry>Assessment</fieldentry>
-            </qtimetadatafield>
+            {self.get_base_metadata()}
         </qtimetadata>
         <section ident="root_section">
             <item ident="{self.identifier}_item1" title="{self.title}">
@@ -115,62 +183,17 @@ class MultipleChoiceQTIAssessment(QTIAssessment):
                 </presentation>
                 <resprocessing>
                     <outcomes>
-                        <decvar maxvalue="100" minvalue="0" varname="SCORE" vartype="Decimal"/>
+                        <decvar maxvalue="{self.max_score}" minvalue="0" varname="SCORE" vartype="Decimal"/>
                     </outcomes>
                     {conditions_xml}
                 </resprocessing>
-            </item>
-        </section>
-    </assessment>
-</questestinterop>"""
-
-
-class TextEntryQTIAssessment(QTIAssessment):
-    def to_qti_xml(self) -> str:
-        return f"""<?xml version="1.0" encoding="UTF-8"?>
-<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2">
-    <assessment ident="{self.identifier}" title="{self.title}">
-        <qtimetadata>
-            <qtimetadatafield>
-                <fieldlabel>qmd_assessmenttype</fieldlabel>
-                <fieldentry>Assessment</fieldentry>
-            </qtimetadatafield>
-        </qtimetadata>
-        <section ident="root_section">
-            <item ident="{self.identifier}_item1" title="{self.title}">
-                <itemmetadata>
-                    <qtimetadata>
-                        <qtimetadatafield>
-                            <fieldlabel>question_type</fieldlabel>
-                            <fieldentry>text_entry_question</fieldentry>
-                        </qtimetadatafield>
-                        <qtimetadatafield>
-                            <fieldlabel>points_possible</fieldlabel>
-                            <fieldentry>{self.max_score}</fieldentry>
-                        </qtimetadatafield>
-                    </qtimetadata>
-                </itemmetadata>
-                <presentation>
-                    <material>
-                        <mattext texttype="text/html">{self.question_text}</mattext>
-                    </material>
-                    <response_str ident="response1" rcardinality="Single">
-                        <render_fib>
-                            <response_label ident="answer1"/>
-                        </render_fib>
-                    </response_str>
-                </presentation>
-                <resprocessing>
-                    <outcomes>
-                        <decvar maxvalue="100" minvalue="0" varname="SCORE" vartype="Decimal"/>
-                    </outcomes>
-                    <respcondition>
-                        <conditionvar>
-                            <other/>
-                        </conditionvar>
-                        <setvar varname="SCORE" action="Set">0</setvar>
-                    </respcondition>
-                </resprocessing>
+                <itemfeedback ident="correct">
+                    <flow_mat>
+                        <material>
+                            <mattext texttype="text/plain">Correct!</mattext>
+                        </material>
+                    </flow_mat>
+                </itemfeedback>
             </item>
         </section>
     </assessment>
@@ -178,22 +201,12 @@ class TextEntryQTIAssessment(QTIAssessment):
 
 
 class DoneIndicatorQTIAssessment(QTIAssessment):
-    """
-    Class for representing a done/completion indicator as a QTI assessment.
-    This represents a simple checkbox that students can check to indicate completion.
-    The assessment just has a label (from definition_json.done_indicator_label) and
-    a single checkbox that awards points when checked.
-    """
-
     def to_qti_xml(self) -> str:
         return f"""<?xml version="1.0" encoding="UTF-8"?>
-<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2">
+<questestinterop {self.get_xml_namespaces()}>
     <assessment ident="{self.identifier}" title="{self.title}">
         <qtimetadata>
-            <qtimetadatafield>
-                <fieldlabel>qmd_assessmenttype</fieldlabel>
-                <fieldentry>Assessment</fieldentry>
-            </qtimetadatafield>
+            {self.get_base_metadata()}
         </qtimetadata>
         <section ident="root_section">
             <item ident="{self.identifier}_item1" title="{self.title}">
@@ -215,7 +228,7 @@ class DoneIndicatorQTIAssessment(QTIAssessment):
                     </material>
                     <response_lid ident="response1" rcardinality="Single">
                         <render_choice>
-                            <response_label ident="true">
+                            <response_label ident="true" rshuffle="No">
                                 <material>
                                     <mattext texttype="text/plain">Complete</mattext>
                                 </material>
@@ -225,9 +238,9 @@ class DoneIndicatorQTIAssessment(QTIAssessment):
                 </presentation>
                 <resprocessing>
                     <outcomes>
-                        <decvar maxvalue="100" minvalue="0" varname="SCORE" vartype="Decimal"/>
+                        <decvar maxvalue="{self.max_score}" minvalue="0" varname="SCORE" vartype="Decimal"/>
                     </outcomes>
-                    <respcondition continue="No">
+                    <respcondition continue="Yes">
                         <conditionvar>
                             <varequal respident="response1">true</varequal>
                         </conditionvar>
@@ -235,6 +248,13 @@ class DoneIndicatorQTIAssessment(QTIAssessment):
                         <displayfeedback feedbacktype="Response" linkrefid="correct"/>
                     </respcondition>
                 </resprocessing>
+                <itemfeedback ident="correct">
+                    <flow_mat>
+                        <material>
+                            <mattext texttype="text/plain">Marked as complete</mattext>
+                        </material>
+                    </flow_mat>
+                </itemfeedback>
             </item>
         </section>
     </assessment>
@@ -242,23 +262,14 @@ class DoneIndicatorQTIAssessment(QTIAssessment):
 
 
 class GenericQTIAssessment(QTIAssessment):
-    """
-    A fallback QTI assessment class that creates a text-only placeholder
-    for assessment types that don't yet have specific QTI implementations.
-    This prevents export failures while clearly indicating the limitation.
-    """
-
     def to_qti_xml(self) -> str:
         message = f"This {self.title} assessment (type: {self.question_text}) cannot be exported to QTI format yet."
 
         return f"""<?xml version="1.0" encoding="UTF-8"?>
-<questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2">
+<questestinterop {self.get_xml_namespaces()}>
     <assessment ident="{self.identifier}" title="{self.title}">
         <qtimetadata>
-            <qtimetadatafield>
-                <fieldlabel>qmd_assessmenttype</fieldlabel>
-                <fieldentry>Assessment</fieldentry>
-            </qtimetadatafield>
+            {self.get_base_metadata()}
         </qtimetadata>
         <section ident="root_section">
             <item ident="{self.identifier}_item1" title="{self.title}">
@@ -281,8 +292,14 @@ class GenericQTIAssessment(QTIAssessment):
                 </presentation>
                 <resprocessing>
                     <outcomes>
-                        <decvar maxvalue="100" minvalue="0" varname="SCORE" vartype="Decimal"/>
+                        <decvar maxvalue="{self.max_score}" minvalue="0" varname="SCORE" vartype="Decimal"/>
                     </outcomes>
+                    <respcondition continue="Yes">
+                        <conditionvar>
+                            <other/>
+                        </conditionvar>
+                        <setvar varname="SCORE" action="Set">0</setvar>
+                    </respcondition>
                 </resprocessing>
             </item>
         </section>
