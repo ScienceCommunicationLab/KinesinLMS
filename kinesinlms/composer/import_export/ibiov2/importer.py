@@ -174,7 +174,10 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
         course.save()
 
         # Try to set the thumbnail, since we know where the images are stored
-        self._set_course_thumbnail(course=course)
+        try:
+            self._set_course_thumbnail()
+        except Exception as e:
+            logger.exception(f"Could not set course thumbnail: {e}")
 
         return course
 
@@ -670,7 +673,7 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
 
         """
 
-        thumbnail_image_filename = f"{self.course_slug}-{self.course_run}-thumbnail.png"
+        thumbnail_image_filename = f"{self.course_slug.lower()}_thumbnail.png"
         thumbnail_url = f"https://ibio-v2.s3.amazonaws.com/static/catalog/images/{thumbnail_image_filename}"
 
         # Try to download the thumbnail image

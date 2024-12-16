@@ -1,0 +1,32 @@
+{% extends "composer/composer_base.html" %}
+
+{% load tz %}
+
+{% load crispy_forms_tags %}
+
+{% load static i18n %}
+
+{% block main_content %}
+
+    <div class="container-fluid composer-content">
+
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <h1>
+                    {% blocktrans %}Course Import Status{% endblocktrans %}
+                </h1>
+            </div>
+        </div>
+
+        <!-- upload course table -->
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+
+                {% include "composer/course/hx/course_import_task_result_card.html" %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock main_content %}

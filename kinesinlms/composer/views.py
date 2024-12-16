@@ -59,7 +59,8 @@ from kinesinlms.composer.import_export.kinesinlms.exporter import (
     KinesinLMSCourseExporter,
 )
 from kinesinlms.composer.import_export.kinesinlms.importer import KinesinLMSCourseImporter
-from kinesinlms.composer.models import ComposerSettings
+from kinesinlms.composer.models import ComposerSettings, CourseImportTaskResult, CourseImportTaskStatus
+from kinesinlms.composer.tasks import generate_course_import_task
 from kinesinlms.composer.view_helpers import get_course_edit_tabs
 from kinesinlms.core.decorators import composer_author_required
 from kinesinlms.course.constants import CourseUnitType, NodeType
@@ -565,6 +566,35 @@ def course_export_view(request):
 
 
 @composer_author_required
+def course_import_status_view(request, course_import_task_result_id):
+    """
+    Displays the status of a course import task.
+    """
+    task_result = get_object_or_404(CourseImportTaskResult, id=course_import_task_result_id)
+    context = {
+        "section": "composer",
+        "title": "Course Import Status",
+        "description": "Status of course import task.",
+        "course_import_task_result": task_result,
+        "breadcrumbs": [
+            {"label": "Course Import", "url": reverse("composer:course_import_view")},
+        ],
+    }
+    return render(request, "composer/course/course_import_status.html", context)
+
+
+@composer_author_required
+def course_import_cancel(request, course_import_task_result_id):
+    """
+    Cancel a course import task.
+    """
+    task_result = get_object_or_404(CourseImportTaskResult, id=course_import_task_result_id)
+    task_result.cancel()
+    messages.add_message(request, messages.INFO, "Course import task cancelled.")
+    return HttpResponseRedirect(reverse("composer:course_import_view"))
+
+
+@composer_author_required
 def course_download_export(request, course_slug=None, course_run=None):
     """
     Export a course as a .zip file.
@@ -640,38 +670,63 @@ def course_import_view(request):
                 create_forum_items = form.cleaned_data.get("create_forum_items", False)
                 import_file = request.FILES["file"]
 
-                # Check extension to decide which importer class to use
-                if import_file.name.endswith(".ibioarchive"):
-                    importer: CourseImporterBase = IBiologyCoursesCourseImporter()
-                else:
-                    # Assume KinesinLMS format
-                    importer: CourseImporterBase = KinesinLMSCourseImporter()
+                if Course.objects.filter(slug=course_slug, run=course_run).exists():
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        "Course already exists with that slug and run. Please choose a different slug or run.",
+                    )
+                    context["form"] = form
+                    return render(request, "composer/course/course_import.html", context)
 
-                options = CourseImportOptions(create_forum_items=create_forum_items)
-                course = importer.import_course_from_archive(
-                    file=import_file,
-                    display_name=display_name,
+                task_result, created = CourseImportTaskResult.objects.get_or_create(
                     course_slug=course_slug,
                     course_run=course_run,
-                    options=options,
                 )
-                success_msg = (
-                    f"Successfully created course {course}. "
-                    f"Be sure to update any missing course "
-                    f"information and the course catalog description"
+
+                redirect_url = reverse(
+                    "composer:course_import_status_view",
+                    kwargs={
+                        "course_import_task_result_id": task_result.id,
+                    },
                 )
+
+                if not created and task_result.generation_status in [
+                    CourseImportTaskStatus.PENDING.name,
+                    CourseImportTaskStatus.IN_PROGRESS.name,
+                ]:
+                    messages.add_message(
+                        request,
+                        messages.INFO,
+                        _("Course import already underway. You will be notified when it is complete."),
+                    )
+                    return redirect(redirect_url)
+
+                # Update task result with new data
+                task_result.import_file = import_file
+                task_result.display_name = display_name
+                task_result.create_forum_items = create_forum_items
+                task_result.generation_status = CourseImportTaskStatus.PENDING.name
+                task_result.save()
+
+                generate_course_import_task.apply_async(
+                    kwargs={
+                        "course_import_task_result_id": task_result.id,
+                    },
+                    countdown=3,
+                )
+
+                success_msg = _("Successfully started course import.")
                 messages.add_message(request, messages.INFO, success_msg)
-                return redirect("composer:course_list")
+                return redirect(redirect_url)
+
             except Exception as e:
-                logger.error("Couldn't parse course upload: {}".format(e))
+                logger.error("Couldn't start course import process: {}".format(e))
                 # temp
                 raise e
                 context["form"] = ImportCourseFromArchiveForm()
-                messages.add_message(
-                    request,
-                    messages.ERROR,
-                    "Couldn't parse course description in archive: {}".format(e),
-                )
+                msg = _("Couldn't parse course description in archive")
+                messages.add_message(request, messages.ERROR, msg)
                 context["form"] = form
         else:
             context["form"] = form
@@ -683,6 +738,21 @@ def course_import_view(request):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # HTMX METHODS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+@composer_author_required
+def course_import_task_result_status_hx(
+    request,
+    course_import_task_result_id: int,
+):
+    """
+    Get status of a CourseImportTaskResult
+    """
+    task_result = get_object_or_404(CourseImportTaskResult, id=course_import_task_result_id)
+    context = {
+        "course_import_task_result": task_result,
+    }
+    return render(request, "composer/course/hx/course_import_task_result_card.html", context)
 
 
 @composer_author_required

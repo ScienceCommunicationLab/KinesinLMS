@@ -192,9 +192,7 @@ urlpatterns = [
         name="delete_module_node_hx",
     ),
     path(
-        "course/<int:course_id>"
-        "/module/<int:module_node_id>"
-        "/section/<int:pk>/delete",
+        "course/<int:course_id>" "/module/<int:module_node_id>" "/section/<int:pk>/delete",
         views.delete_section_node_hx,
         name="delete_section_node_hx",
     ),
@@ -217,10 +215,7 @@ urlpatterns = [
         name="add_section_node_to_module_hx",
     ),
     path(
-        "course/<int:course_id>"
-        "/module/<int:module_node_id>"
-        "/section/<int:section_node_id>"
-        "/unit/add",
+        "course/<int:course_id>" "/module/<int:module_node_id>" "/section/<int:section_node_id>" "/unit/add",
         views.add_unit_to_section_hx,
         name="add_unit_node_to_section_hx",
     ),
@@ -304,8 +299,31 @@ urlpatterns = [
         views.course_download_export,
         name="course_download_export",
     ),
-    path("course/import/", views.course_import_view, name="course_import_view"),
-    path("course/export/", views.course_export_view, name="course_export_view"),
+    path(
+        "course/import/",
+        views.course_import_view,
+        name="course_import_view",
+    ),
+    path(
+        "course/export/",
+        views.course_export_view,
+        name="course_export_view",
+    ),
+    path(
+        "course/import/<int:course_import_task_result_id>/",
+        views.course_import_status_view,
+        name="course_import_status_view",
+    ),
+    path(
+        "course/import/<int:course_import_task_result_id>/cancel",
+        views.course_import_cancel,
+        name="course_import_cancel",
+    ),
+    path(
+        "course/import/<int:course_import_task_result_id>/hx",
+        views.course_import_task_result_status_hx,
+        name="course_import_task_result_status_hx",
+    ),
     # SIT URLs
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     path(

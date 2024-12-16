@@ -1,0 +1,84 @@
+{% load static i18n %}
+
+<div id="course_import_{{ course_import_task_result.id }}"
+    style="max-width:800px; width:100%;"
+    class="card"
+    {# djlint:off #}
+ {% if course_import_task_result.generation_status == "PENDING" or course_import_task_result.generation_status == "IN_PROGRESS"  %} 
+    hx-get="{% url 'composer:course_import_task_result_status_hx' course_import_task_result_id=course_import_task_result.id %}" 
+    hx-trigger="every 2s" 
+    hx-target="#course_import_{{course_import_task_result.id}}" 
+    hx-swap="outerHTML" 
+ {% endif %}>
+    {# djlint:on #}
+    <div class="card-header">
+        {% blocktrans %}Importing Course Archive{% endblocktrans %}
+    </div>
+    <div class="card-body d-flex flex-column justify-content-center"
+         style="min-height: 60vh">
+        <div class="d-flex flex-column justify-content-center"
+             style="width:80%;
+                    margin:auto">
+
+            {% if course_import_task_result.generation_status == "IN_PROGRESS" %}
+
+                <p class="mb-4 text-center">
+                    {% blocktrans %}The course archive is being imported. This may take a few minutes.{% endblocktrans %}
+                </p>
+                <div class="progress"
+                     role="progressbar"
+                     aria-label="Animated striped example"
+                     aria-valuenow="100"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                         style="width: 75%"></div>
+                </div>
+            {% elif course_import_task_result.generation_status == "PENDING" %}
+                <p class="mb-4 text-center">
+                    {% blocktrans %}The course archive is being queued for import.{% endblocktrans %}
+                </p>
+
+            {% elif course_import_task_result.generation_status == "COMPLETED" %}
+                <p class="mb-4 text-center">
+                    {% blocktrans %}The course archive has been imported.{% endblocktrans %}
+                </p>
+            {% else %}
+                {# assume FAILED #}
+                {% if course_import_task_result.error_message %}
+                    <div class="alert alert-danger" role="alert">
+                        <div>
+                            <i class="bi bi-exclamation-triangle"></i>&nbsp;<strong>{% blocktrans %}The course archive import failed.{% endblocktrans %}</strong>
+                        </div>
+                        <div>{{ course_import_task_result.error_message }}</div>
+                    </div>
+                {% endif %}
+                <p class="text-center"></p>
+            {% endif %}
+
+        </div>
+        {% if request.user.is_superuser %}
+            <div class="alert alert-info" role="alert">
+                Course import task: {{ course_import_task_result }}
+                <br />
+                Status: {{ course_import_task_result.generation_status }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="card-footer d-flex flex-row justify-content-end">
+        {% if course_import_task_result.generation_status == "PENDING" or course_import_task_result.generation_status == "IN_PROGRESS" %}
+            <a href="{% url 'composer:course_import_cancel' course_import_task_result_id=course_import_task_result.id %}"
+               class="btn btn-danger action-button">{% blocktrans %}Cancel Import{% endblocktrans %}</a>
+        {% elif course_import_task_result.generation_status == "FAILED" %}
+            <a href="{% url 'composer:course_import_view' %}"
+               class="btn btn-primary action-button">{% blocktrans %}Import Another{% endblocktrans %}</a>
+        {% elif course_import_task_result.generation_status == "COMPLETED" %}
+            <a href="{% url 'composer:course_import_view' %}"
+               class="btn btn-primary action-button">{% blocktrans %}Import Another{% endblocktrans %}</a>
+            <a href="{% url 'composer:course_edit' course_import_task_result.course.id %}"
+               class="btn btn-success action-button ms-2">{% blocktrans %}Edit Course{% endblocktrans %}</a>
+        {% endif %}
+    </div>
+
+
+</div>

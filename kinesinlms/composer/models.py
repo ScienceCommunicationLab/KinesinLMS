@@ -69,16 +69,15 @@ class CourseMetaConfig:
 
 
 class EditStatus(Trackable):
-    course = models.OneToOneField(Course,
-                                  null=True,
-                                  related_name="edit_status",
-                                  on_delete=models.CASCADE)
+    course = models.OneToOneField(Course, null=True, related_name="edit_status", on_delete=models.CASCADE)
 
-    mode = models.CharField(null=False,
-                            max_length=30,
-                            blank=False,
-                            default=EditMode.LOCKED,
-                            choices=[(item.name, item.value) for item in EditMode])
+    mode = models.CharField(
+        null=False,
+        max_length=30,
+        blank=False,
+        default=EditMode.LOCKED,
+        choices=[(item.name, item.value) for item in EditMode],
+    )
 
 
 class ComposerSettings(models.Model):
@@ -86,22 +85,89 @@ class ComposerSettings(models.Model):
     Hold user's settings for the composer.
     """
 
-    user = models.OneToOneField(User,
-                                on_delete=models.CASCADE,
-                                related_name="composer_settings")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="composer_settings")
 
-    html_edit_mode = models.CharField(null=False,
-                                      max_length=30,
-                                      blank=False,
-                                      default=HTMLEditMode.TINY_MCE.name,
-                                      choices=[(item.name, item.value) for item in HTMLEditMode],
-                                      help_text="Author edit mode for text fields.")
+    html_edit_mode = models.CharField(
+        null=False,
+        max_length=30,
+        blank=False,
+        default=HTMLEditMode.TINY_MCE.name,
+        choices=[(item.name, item.value) for item in HTMLEditMode],
+        help_text="Author edit mode for text fields.",
+    )
 
     @property
     def wysiwyg_active(self) -> bool:
         return self.html_edit_mode == HTMLEditMode.TINY_MCE.name
-    
+
     @wysiwyg_active.setter
     def wysiwyg_active(self, value: bool):
-        self.html_edit_mode = HTMLEditMode.TINY_MCE.name if value else HTMLEditMode.RAW.name 
+        self.html_edit_mode = HTMLEditMode.TINY_MCE.name if value else HTMLEditMode.RAW.name
         self.save()
+
+
+class CourseImportTaskStatus(Enum):
+    PENDING = "Pending"
+    IN_PROGRESS = "In progress"
+    COMPLETED = "Completed"
+    FAILED = "Failed"
+
+
+class CourseImportTaskResult(Trackable):
+    """
+    Model that stores the status and result of a course import task.
+    """
+
+    class Meta:
+        unique_together = (
+            "course_slug",
+            "course_run",
+        )
+
+    generation_status = models.CharField(
+        choices=[(tag.name, tag.value) for tag in CourseImportTaskStatus],
+        max_length=50,
+        default=CourseImportTaskStatus.PENDING.name,
+    )
+
+    import_file = models.FileField(
+        upload_to="course_imports",
+        null=True,
+        blank=True,
+    )
+
+    # Extra data sumbmitter might have provided in upload form
+
+    display_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+
+    course_slug = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+
+    course_run = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+
+    create_forum_items = models.BooleanField(
+        default=False,
+    )
+
+    error_message = models.TextField(
+        null=True,
+        blank=True,
+    )
+
+    course = models.ForeignKey(
+        Course,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="import_tasks",
+    )
