@@ -43,7 +43,7 @@ class QTIAssessment:
             'xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" '
             'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
             'xsi:schemaLocation="http://www.imsglobal.org/xsd/ims_qtiasiv1p2 '
-            'http://www.imsglobal.org/xsd/ims_qtiasiv1p2.xsd"'
+            'http://www.imsglobal.org/profile/cc/ccv1p1/ccv1p1_qtiasiv1p2p1_v1p0.xsd"'
         )
 
     def get_base_metadata(self) -> str:

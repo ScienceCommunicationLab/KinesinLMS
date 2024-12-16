@@ -28,7 +28,7 @@ class CourseCatalogDescription(models.Model):
 
     # Blurb is the one or two sentences of text that shows up in a card.
     blurb = models.CharField(
-        max_length=250,
+        max_length=500,
         null=True,
         blank=True,
         help_text=_(

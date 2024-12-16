@@ -5,10 +5,12 @@ import re
 import zipfile
 from typing import Dict, List, Optional
 
+import requests
 from django.core.files.base import ContentFile
 from django.db import transaction
 from rest_framework.exceptions import ValidationError
 
+from kinesinlms.catalog.models import CourseCatalogDescription
 from kinesinlms.composer.import_export.importer import CourseImporterBase
 from kinesinlms.composer.import_export.kinesinlms.constants import (
     KinesinLMSCourseExportFormatID,
@@ -25,7 +27,7 @@ from kinesinlms.course.serializers import (
 from kinesinlms.forum.utils import get_forum_service
 from kinesinlms.learning_library.constants import BlockType, ResourceType
 from kinesinlms.learning_library.models import Resource
-from kinesinlms.survey.models import Survey
+from kinesinlms.survey.models import Survey, SurveyType
 
 logger = logging.getLogger(__name__)
 
@@ -102,6 +104,9 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
         if display_name is not None:
             course_json["display_name"] = display_name
 
+        self.course_slug = course_slug
+        self.course_run = course_run
+
         try:
             Course.objects.get(slug=course_slug, run=course_run)
             raise Exception(f"Course with slug {course_slug} and run {course_run} already exists")
@@ -167,6 +172,9 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
         )
         course.course_root_node = course_root_node
         course.save()
+
+        # Try to set the thumbnail, since we know where the images are stored
+        self._set_course_thumbnail(course=course)
 
         return course
 
@@ -589,10 +597,36 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
             # Change survey information to match KinesinLMS format
             # In SCL it's stored as json_content, in KinesinLMS it's stored as a SurveyBlock.
             json_content = block.pop("json_content", {})
+            survey_type = json_content.get("survey_type", None)
             survey_id = json_content.get("survey_id", None)
-            if not survey_id:
+            if survey_id:
+                try:
+                    survey = Survey.objects.get(survey_id=survey_id)
+                except Survey.DoesNotExist as dne:
+                    logger.exception(f"Survey not found for survey_id {survey_id}")
+                    raise dne
+            elif survey_type in [
+                SurveyType.PRE_COURSE.name,
+                SurveyType.POST_COURSE.name,
+            ]:
+                try:
+                    # In iBioV2, early on I wasn't saving the survey_id if the type
+                    # was PRE_COURSE or POST_COURSE (thinking there'd be only one of each).
+                    # But now that's a pain because I don't have the survey_id to look up the Survey.
+                    # So I'll just look up the survey by type and course and assume there's only one.
+                    # If there's not this should rightly raise an exception.
+                    survey = Survey.objects.get(
+                        type=survey_type,
+                        course__run=self.course_run,
+                        course__slug=self.course_slug,
+                    )
+                except Survey.DoesNotExist:
+                    raise Exception(
+                        f"Survey not found for type {survey_type} in course {self.course_slug}-{self.course_run}"
+                    )
+            else:
                 raise Exception("Survey block missing survey_id")
-            survey = Survey.objects.get(survey_id=survey_id)
+
             survey_block = {"survey": survey.slug}
             block["survey_block"] = survey_block
 
@@ -625,3 +659,35 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
             html_content = re.sub(pattern, lambda match: replacement.format(*match.groups()), html_content)
 
         return html_content
+
+    def _set_course_thumbnail(self) -> bool:
+        """
+        Try to set the course thumbnail by looking for it in the
+        iBiov2 public s3 bucket.
+
+        Returns:
+            True if the thumbnail was set, False otherwise.
+
+        """
+
+        thumbnail_image_filename = f"{self.course_slug}-{self.course_run}-thumbnail.png"
+        thumbnail_url = f"https://ibio-v2.s3.amazonaws.com/static/catalog/images/{thumbnail_image_filename}"
+
+        # Try to download the thumbnail image
+        # and save as the course thumbnail in CourseCatalogDescription.
+
+        try:
+            response = requests.get(thumbnail_url)
+            response.raise_for_status()
+            ccd = CourseCatalogDescription.objects.get(
+                course__slug=self.course_slug,
+                course__run=self.course_run,  # Fixed typo in 'course'
+            )
+            content_file = ContentFile(response.content)  # Using .content instead of .read()
+            ccd.thumbnail.save(thumbnail_image_filename, content_file, save=True)
+            logger.info(f"Saved course thumbnail: {thumbnail_image_filename}")
+        except Exception as e:
+            logger.exception(f"Could not set course thumbnail: {e}")
+            return False
+
+        return True
