@@ -91,18 +91,25 @@ def generate_course_import_task(
         # Assume KinesinLMS format
         importer: CourseImporterBase = KinesinLMSCourseImporter()
 
-    # Temp
-    sleep(10)
-
+    course = None
     try:
         options = CourseImportOptions(create_forum_items=course_import_task.create_forum_items)
-        course = importer.import_course_from_archive(
+        import_generator = importer.import_course_from_archive(
             file=course_import_task.import_file,
             display_name=course_import_task.display_name,
             course_slug=course_import_task.course_slug,
             course_run=course_import_task.course_run,
             options=options,
         )
+        for status in import_generator:
+            course_import_task.percent_complete = status.percent_complete
+            course_import_task.status_message = status.message
+            course_import_task.save()
+
+        if not status.course:
+            raise Exception("Course import failed")
+        course = status.course
+
     except Exception as e:
         logger.error(f"Course import failed: {e}")
         course_import_task.generation_status = CourseImportTaskStatus.FAILED.name

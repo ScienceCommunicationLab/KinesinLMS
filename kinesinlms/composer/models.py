@@ -160,6 +160,16 @@ class CourseImportTaskResult(Trackable):
         default=False,
     )
 
+    percent_complete = models.IntegerField(
+        null=False,
+        default=0,
+    )
+
+    status_message = models.TextField(
+        null=True,
+        blank=True,
+    )
+
     error_message = models.TextField(
         null=True,
         blank=True,
