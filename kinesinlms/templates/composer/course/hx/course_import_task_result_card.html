@@ -25,8 +25,7 @@
                 <p class="mb-4 text-center">
                     {% blocktrans %}The course archive is being imported. This may take a few minutes.{% endblocktrans %}
                 </p>
-                {% if progress_message %}
-                <div class="text-muted text-center mb-4">Step: {{ progress_message }}</div>{% endif %}
+                {% if progress_message %}<div class="text-muted text-center mb-4">Step: {{ progress_message }}</div>{% endif %}
                 <div class="progress"
                      role="progressbar"
                      aria-label="Animated striped example"
@@ -59,13 +58,6 @@
             {% endif %}
 
         </div>
-        {% if request.user.is_superuser %}
-            <div class="alert alert-info" role="alert">
-                Course import task: {{ course_import_task_result }}
-                <br />
-                Status: {{ course_import_task_result.generation_status }}
-            </div>
-        {% endif %}
     </div>
     <div class="card-footer d-flex flex-row justify-content-end">
         {% if course_import_task_result.generation_status == "PENDING" or course_import_task_result.generation_status == "IN_PROGRESS" %}
