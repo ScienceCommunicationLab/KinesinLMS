@@ -2,15 +2,13 @@ import json
 import logging
 import os
 import zipfile
-from dataclasses import dataclass
-from enum import Enum
-from typing import Dict, Iterator, List, Optional
+from typing import Dict, List, Optional
 
 from django.core.files.base import ContentFile
-from django.db import transaction
+from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
 
-from kinesinlms.composer.import_export.importer import CourseImporterBase
+from kinesinlms.composer.import_export.importer import CourseImporterBase, ImportStatus
 from kinesinlms.composer.import_export.kinesinlms.constants import (
     KinesinLMSCourseExportFormatID,
 )
@@ -30,25 +28,11 @@ from kinesinlms.learning_library.models import Resource
 logger = logging.getLogger(__name__)
 
 
-class ImportStatusState(Enum):
-    IN_PROGRESS = "IN_PROGRESS"
-    COMPLETE = "COMPLETE"
-
-
-@dataclass
-class ImportStatus:
-    status: str = ImportStatusState.IN_PROGRESS.name
-    percent_complete: int = 0
-    message: str = ""
-    course: Optional[Course] = None
-
-
 class KinesinLMSCourseImporter(CourseImporterBase):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # PUBLIC METHODS
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    @transaction.atomic
     def import_course_from_json(
         self,
         course_json: Dict,
@@ -168,7 +152,6 @@ class KinesinLMSCourseImporter(CourseImporterBase):
 
         return course
 
-    @transaction.atomic
     def import_course_from_archive(
         self,
         file,
@@ -176,7 +159,7 @@ class KinesinLMSCourseImporter(CourseImporterBase):
         course_slug: str,
         course_run: str,
         options: CourseImportOptions = None,
-    ) -> Iterator[ImportStatus]:
+    ) -> Course:
         """
         Load a course and related resources from a course archive (.zip) file.
 
@@ -194,20 +177,22 @@ class KinesinLMSCourseImporter(CourseImporterBase):
         if file is None:
             raise ValueError("file cannot be None")
 
-        yield ImportStatus(
-            status="IN_PROGRESS",
-            percent_complete=10,
-            message="Loading course archive",
+        self.update_cache(
+            ImportStatus(
+                percent_complete=10,
+                progress_message=_("Loading course archive"),
+            )
         )
 
         zp = zipfile.ZipFile(file)
         info_list: List[zipfile.ZipInfo] = zp.infolist()
         course_file_zipinfo = None
 
-        yield ImportStatus(
-            status="IN_PROGRESS",
-            percent_complete=20,
-            message="Reading course archive",
+        self.update_cache(
+            ImportStatus(
+                percent_complete=20,
+                progress_message=_("Reading course archive"),
+            )
         )
 
         for zipinfo in info_list:
@@ -216,10 +201,11 @@ class KinesinLMSCourseImporter(CourseImporterBase):
         if not course_file_zipinfo:
             raise Exception("Archive is missing a course.json file at the top level.")
 
-        yield ImportStatus(
-            status="IN_PROGRESS",
-            percent_complete=50,
-            message="Deserialzing course archive",
+        self.update_cache(
+            ImportStatus(
+                percent_complete=50,
+                progress_message=_("Deserialzing course archive"),
+            )
         )
 
         # Load the course.json file
@@ -251,10 +237,11 @@ class KinesinLMSCourseImporter(CourseImporterBase):
         )
 
         if options.create_forum_items:
-            yield ImportStatus(
-                status="IN_PROGRESS",
-                percent_complete=60,
-                message="Creating forum items",
+            self.update_cache(
+                ImportStatus(
+                    percent_complete=60,
+                    progress_message=_("Creating forum items"),
+                )
             )
 
             # Set up required forum topics after course import
@@ -271,10 +258,11 @@ class KinesinLMSCourseImporter(CourseImporterBase):
         # ...so now the only task is to load in actual
         # resources files that were created (linked will already be there).
         logger.info("Loading course and block resources: ")
-        yield ImportStatus(
-            status="IN_PROGRESS",
-            percent_complete=70,
-            message="Loading course and block resources",
+        self.update_cache(
+            ImportStatus(
+                percent_complete=70,
+                progress_message=_("Loading course and block resources"),
+            )
         )
 
         for file_info in info_list:
@@ -333,10 +321,11 @@ class KinesinLMSCourseImporter(CourseImporterBase):
             except Exception as e:
                 logger.exception(f"Could not save file {file_info}")
                 raise e
-        yield ImportStatus(
-            status="IN_PROGRESS",
-            percent_complete=70,
-            message="Validating course import",
+        self.update_cache(
+            ImportStatus(
+                percent_complete=90,
+                progress_message=_("Validating course import"),
+            )
         )
 
         # Now make sure all Resources were created and have their files defined.
@@ -346,12 +335,14 @@ class KinesinLMSCourseImporter(CourseImporterBase):
                     if not resource.resource_file:
                         logger.error(f"Resource file not found for resource: {resource}")
 
-        yield ImportStatus(
-            status="COMPLETE",
-            percent_complete=100,
-            message="Course import complete",
-            course=course,
+        self.update_cache(
+            ImportStatus(
+                percent_complete=100,
+                progress_message=_("Course import complete"),
+                course_token=course.token,
+            )
         )
+        return course
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # PRIVATE METHODS

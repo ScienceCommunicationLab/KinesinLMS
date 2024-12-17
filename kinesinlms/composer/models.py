@@ -116,6 +116,11 @@ class CourseImportTaskStatus(Enum):
 class CourseImportTaskResult(Trackable):
     """
     Model that stores the status and result of a course import task.
+
+    NOTE:
+    More ephemeral data like 'percent_complete' and 'progress_message'
+    is stored in the cache and keyed by the 'progress_cache_key' property.
+
     """
 
     class Meta:
@@ -160,16 +165,6 @@ class CourseImportTaskResult(Trackable):
         default=False,
     )
 
-    percent_complete = models.IntegerField(
-        null=False,
-        default=0,
-    )
-
-    status_message = models.TextField(
-        null=True,
-        blank=True,
-    )
-
     error_message = models.TextField(
         null=True,
         blank=True,
@@ -181,3 +176,7 @@ class CourseImportTaskResult(Trackable):
         on_delete=models.SET_NULL,
         related_name="import_tasks",
     )
+
+    @property
+    def progress_cache_key(self) -> str:
+        return f"course_import_task_result_{self.id}"

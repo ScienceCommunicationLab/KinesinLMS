@@ -6,6 +6,7 @@ from typing import Any, Optional
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.db import transaction
 from django.http import (
     Http404,
@@ -748,9 +749,25 @@ def course_import_task_result_status_hx(
     """
     Get status of a CourseImportTaskResult
     """
+
     task_result = get_object_or_404(CourseImportTaskResult, id=course_import_task_result_id)
+    # Check cache for intermediate progress
+    percent_complete = 0
+    progress_message = ""
+    try:
+        cache_key = task_result.progress_cache_key
+        status_dict = cache.get(cache_key)
+        if status_dict and "percent_complete" in status_dict:
+            percent_complete = status_dict["percent_complete"]
+            progress_message = status_dict["status_message"]
+    except Exception:
+        cache_key = None
+        logger.exception("course_import_task_result_status_hx() Could not load status from cache ")
+
     context = {
         "course_import_task_result": task_result,
+        "percent_complete": percent_complete,
+        "progress_message": progress_message,
     }
     return render(request, "composer/course/hx/course_import_task_result_card.html", context)
 
@@ -1324,7 +1341,8 @@ def load_course_from_form(form) -> Course:
 
     try:
         importer = KinesinLMSCourseImporter()
-        course = importer.import_course_from_json(course_json)
+        with transaction.atomic():
+            course = importer.import_course_from_json(course_json)
     except Exception as e:
         error_message = f"Could not load course from JSON: {e}"
         logger.exception(error_message)

@@ -1,7 +1,7 @@
-from time import sleep
 from typing import Tuple
 
 from celery.utils.log import get_task_logger
+from django.db import transaction
 
 from config import celery_app
 from kinesinlms.composer.import_export.ibiov2.importer import IBiologyCoursesCourseImporter
@@ -37,16 +37,17 @@ def handle_course_import_failure(self, exc: Exception, task_id: str, args: Tuple
         f"Error Info: {einfo}"
     )
 
-    course_token = kwargs.get("course_token")
-    report_type = kwargs.get("report_type")
+    course_import_task_result_id = kwargs.get("course_import_task_result_id")
+    logger.exception(f"Course import task failed: {course_import_task_result_id}")
 
-    if course_token and report_type:
-        course_report, _ = CourseImportTaskResult.objects.get_or_create(
-            course_token=course_token, report_type=report_type
-        )
-        course_report.generation_status = CourseImportTaskStatus.FAILED.name
-        course_report.error_message = str(exc)
-        course_report.save()
+    if course_import_task_result_id:
+        try:
+            course_report, _ = CourseImportTaskResult.objects.get_or_create(id=course_import_task_result_id)
+            course_report.generation_status = CourseImportTaskStatus.FAILED.name
+            course_report.error_message = str(exc)
+            course_report.save()
+        except Exception as e:
+            logger.error(f"Double dang. Couldn't even update course import task status to FAILED: {e}")
 
 
 @celery_app.task(
@@ -58,9 +59,10 @@ def handle_course_import_failure(self, exc: Exception, task_id: str, args: Tuple
     retry_kwargs={"max_retries": 3},
     on_failure=handle_course_import_failure,
 )
+@transaction.atomic
 def generate_course_import_task(
     self,
-    course_import_task_result_id: int,
+    course_import_task_result_id: int = None,
     ignore_staff_data: bool = False,
 ) -> bool:
     """
@@ -80,46 +82,41 @@ def generate_course_import_task(
     logger.info("Generating course report:\n" f"CourseImportTaskResult ID: {course_import_task_result_id}")
 
     # Parse course token
-    course_import_task = CourseImportTaskResult.objects.get(id=course_import_task_result_id)
-    course_import_task.generation_status = CourseImportTaskStatus.IN_PROGRESS.name
-    course_import_task.save()
+    course_import_task_result = CourseImportTaskResult.objects.get(id=course_import_task_result_id)
+    course_import_task_result.generation_status = CourseImportTaskStatus.IN_PROGRESS.name
+    course_import_task_result.save()
 
     # Check extension to decide which importer class to use
-    if course_import_task.import_file.name.endswith(".ibioarchive"):
-        importer: CourseImporterBase = IBiologyCoursesCourseImporter()
+    if course_import_task_result.import_file.name.endswith(".ibioarchive"):
+        importer: CourseImporterBase = IBiologyCoursesCourseImporter(
+            cache_key=course_import_task_result.progress_cache_key
+        )
     else:
         # Assume KinesinLMS format
-        importer: CourseImporterBase = KinesinLMSCourseImporter()
+        importer: CourseImporterBase = KinesinLMSCourseImporter(cache_key=course_import_task_result.progress_cache_key)
 
     course = None
+
     try:
-        options = CourseImportOptions(create_forum_items=course_import_task.create_forum_items)
-        import_generator = importer.import_course_from_archive(
-            file=course_import_task.import_file,
-            display_name=course_import_task.display_name,
-            course_slug=course_import_task.course_slug,
-            course_run=course_import_task.course_run,
+        options = CourseImportOptions(create_forum_items=course_import_task_result.create_forum_items)
+        course = importer.import_course_from_archive(
+            file=course_import_task_result.import_file,
+            display_name=course_import_task_result.display_name,
+            course_slug=course_import_task_result.course_slug,
+            course_run=course_import_task_result.course_run,
             options=options,
         )
-        for status in import_generator:
-            course_import_task.percent_complete = status.percent_complete
-            course_import_task.status_message = status.message
-            course_import_task.save()
 
-        if not status.course:
+        if not course:
             raise Exception("Course import failed")
-        course = status.course
 
     except Exception as e:
         logger.error(f"Course import failed: {e}")
-        course_import_task.generation_status = CourseImportTaskStatus.FAILED.name
-        course_import_task.error_message = str(e)
-        course_import_task.save()
-        return False
+        raise Exception(f"Course import failed: {e}") from e
 
     logger.info(f"Course import successful: {course}")
-    course_import_task.course = course
-    course_import_task.generation_status = CourseImportTaskStatus.COMPLETED.name
-    course_import_task.save()
+    course_import_task_result.course = course
+    course_import_task_result.generation_status = CourseImportTaskStatus.COMPLETED.name
+    course_import_task_result.save()
 
     return True

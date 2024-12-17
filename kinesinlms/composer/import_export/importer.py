@@ -1,12 +1,28 @@
 import logging
+from dataclasses import asdict, dataclass
+from enum import Enum
+from time import sleep
 from typing import Dict, Optional
 
-from django.db import transaction
+from django.core.cache import cache
 
 from kinesinlms.composer.import_export.model import CourseImportOptions
 from kinesinlms.course.models import Course
 
 logger = logging.getLogger(__name__)
+
+
+class ImportStatusState(Enum):
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETE = "COMPLETE"
+
+
+@dataclass
+class ImportStatus:
+    percent_complete: int = 0
+    progress_message: str = ""
+    # course_token only set when status is COMPLETE
+    course_token: str = None
 
 
 class CourseImporterBase:
@@ -15,11 +31,14 @@ class CourseImporterBase:
 
     """
 
+    def __init__(self, cache_key: str = None):
+        # Cache key for course import status
+        self.cache_key = cache_key
+
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # PUBLIC METHODS
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    @transaction.atomic
     def import_course_from_json(
         self,
         course_json: Dict,
@@ -43,7 +62,6 @@ class CourseImporterBase:
         """
         raise NotImplementedError("Subclasses must implement this method.")
 
-    @transaction.atomic
     def import_course_from_archive(
         self,
         file,
@@ -67,3 +85,14 @@ class CourseImporterBase:
         """
 
         raise NotImplementedError("Subclasses must implement this method.")
+
+    def update_cache(self, status: ImportStatus):
+        sleep(10)
+        if self.cache_key:
+            status_dict = asdict(status)
+            logger.debug(f"Updating cache {self.cache_key} with status: {status_dict}")
+            cache.set(
+                self.cache_key,
+                status_dict,
+                timeout=60 * 60 * 24,
+            )
