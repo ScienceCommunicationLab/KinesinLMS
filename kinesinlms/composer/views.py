@@ -759,7 +759,9 @@ def course_import_task_result_status_hx(
         status_dict = cache.get(cache_key)
         if status_dict and "percent_complete" in status_dict:
             percent_complete = status_dict["percent_complete"]
-            progress_message = status_dict["status_message"]
+            progress_message = status_dict["progress_message"]
+        else:
+            logger.debug(f"No status in cache with key: {cache_key}")
     except Exception:
         cache_key = None
         logger.exception("course_import_task_result_status_hx() Could not load status from cache ")

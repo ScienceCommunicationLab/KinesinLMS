@@ -166,9 +166,7 @@ PASSWORD_HASHERS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -277,9 +275,7 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
-)
+EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
 ADMIN_EMAIL = env("DJANGO_ADMIN_EMAIL", default="kinesinlms-admin@example.com")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
@@ -307,12 +303,7 @@ DJANGO_ADMIN_FORCE_ALLAUTH = env.bool("DJANGO_ADMIN_FORCE_ALLAUTH", default=Fals
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
-        }
-    },
+    "formatters": {"verbose": {"format": "%(levelname)s %(asctime)s %(module)s " "%(process)d %(thread)d %(message)s"}},
     "handlers": {
         "console": {
             "level": "DEBUG",
@@ -329,13 +320,9 @@ LOGGING = {
 # CACHES
 # ------------------------------------------------------------------------------
 
-REDIS_URL = env("REDIS_TLS_URL", default=None)
+REDIS_URL = env("REDIS_URL", default=None)
 if not REDIS_URL:
-    REDIS_URL = env("REDIS_URL", default=None)
-if not REDIS_URL:
-    raise Exception(
-        "Cannot find REDIS url in environment. Please set REDIS_TLS_URL or REDIS_URL."
-    )
+    raise Exception("Cannot find REDIS url in environment. Please set REDIS_TLS_URL or REDIS_URL.")
 
 # Celery
 # ------------------------------------------------------------------------------
@@ -348,6 +335,19 @@ CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
 # If we don't have a CELERY_BROKER_URL, use REDIS_URL.
 if not CELERY_BROKER_URL:
     CELERY_BROKER_URL = REDIS_URL
+
+# CACHES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#caches
+# Make sure to use redis because we have some processes where
+# both celery and django need to have access to same cache values.
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+    }
+}
+
 
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
@@ -412,9 +412,7 @@ REST_FRAMEWORK = {
 # Max bytes size of json data incoming into our serializers.
 # Size is determined using sys.getsizeof()
 # Default to approx 100KB.
-MAX_JSON_CONTENT_BYTES_ALLOWED = env(
-    "DJANGO_MAX_JSON_CONTENT_BYTES_ALLOWED", default=100000
-)
+MAX_JSON_CONTENT_BYTES_ALLOWED = env("DJANGO_MAX_JSON_CONTENT_BYTES_ALLOWED", default=100000)
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
@@ -559,18 +557,12 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 # Javascript version flag used to bust client browser cache when required. Ugly but works.
-KINESINLMS_JAVASCRIPT_VERSION = env(
-    "DJANGO_KINESINLMS_JAVASCRIPT_VERSION", default="2023.1.1"
-)
+KINESINLMS_JAVASCRIPT_VERSION = env("DJANGO_KINESINLMS_JAVASCRIPT_VERSION", default="2023.1.1")
 
 # Cookie for remembering if user has accepted or rejected analytics cookies.
-ACCEPT_ANALYTICS_COOKIE_NAME = env(
-    "DJANGO_ACCEPT_ANALYTICS_COOKIE_NAME", default="kinesinlms_accept_analytics_cookie"
-)
+ACCEPT_ANALYTICS_COOKIE_NAME = env("DJANGO_ACCEPT_ANALYTICS_COOKIE_NAME", default="kinesinlms_accept_analytics_cookie")
 
-EDUCATORS_NEWSLETTER_SIGNUP_URL = env(
-    "DJANGO_EDUCATORS_NEWSLETTER_SIGNUP_URL", default=None
-)
+EDUCATORS_NEWSLETTER_SIGNUP_URL = env("DJANGO_EDUCATORS_NEWSLETTER_SIGNUP_URL", default=None)
 NEWSLETTER_SIGNUP_URL = env("DJANGO_NEWSLETTER_SIGNUP_URL", default=None)
 
 # Contact email should be defined in SiteProfile, but
@@ -587,9 +579,7 @@ if LTI_PLATFORM_PUBLIC_KEY:
 LTI_PLATFORM_PRIVATE_KEY = env("LTI_PLATFORM_PRIVATE_KEY", default=None)
 if LTI_PLATFORM_PRIVATE_KEY:
     LTI_PLATFORM_PRIVATE_KEY = LTI_PLATFORM_PRIVATE_KEY.replace("\\n", "\n")
-LTI_PLATFORM_JWKS_MAX_AGE_SECONDS = env(
-    "LTI_PLATFORM_JWKS_MAX_AGE_SECONDS", default=604800
-)
+LTI_PLATFORM_JWKS_MAX_AGE_SECONDS = env("LTI_PLATFORM_JWKS_MAX_AGE_SECONDS", default=604800)
 # This is the Key "ID" used in the LTI1.3 platform's JWKS. It has to match
 # the "kid" value set in the header of the OpenID Connect token sent during an LTI connection.
 LTI_PLATFORM_KID = env("LTI_PLATFORM_KID", default="lti1.3-key")
@@ -602,9 +592,7 @@ LTI_PLATFORM_KID = env("LTI_PLATFORM_KID", default="lti1.3-key")
 
 # Email automation provider
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-EMAIL_AUTOMATION_PROVIDER_API_KEY = env(
-    "EMAIL_AUTOMATION_PROVIDER_API_KEY", default=None
-)
+EMAIL_AUTOMATION_PROVIDER_API_KEY = env("EMAIL_AUTOMATION_PROVIDER_API_KEY", default=None)
 
 # Survey provider
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -633,9 +621,7 @@ WAFFLE_CREATE_MISSING_SWITCHES = True
 # Otherwise, they are not used in the application (the values are assigned by the site admin in
 # the management panel )
 BADGE_PROVIDER_ISSUER_ID = env("BADGE_PROVIDER_ISSUER_ID", default=None)
-BADGE_PROVIDER_COURSE_BADGE_CLASS_ID = env(
-    "BADGE_PROVIDER_COURSE_BADGE_CLASS_ID", default=None
-)
+BADGE_PROVIDER_COURSE_BADGE_CLASS_ID = env("BADGE_PROVIDER_COURSE_BADGE_CLASS_ID", default=None)
 
 
 MODAL_TOKEN_ID = env("MODAL_TOKEN_ID", default=None)

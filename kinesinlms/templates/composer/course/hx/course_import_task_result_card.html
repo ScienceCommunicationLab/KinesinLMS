@@ -25,7 +25,8 @@
                 <p class="mb-4 text-center">
                     {% blocktrans %}The course archive is being imported. This may take a few minutes.{% endblocktrans %}
                 </p>
-                {% if progress_message %}<p class="mb-4 text-center">{{ progress_message }}</p>{% endif %}
+                {% if progress_message %}
+                <div class="text-muted text-center mb-4">Step: {{ progress_message }}</div>{% endif %}
                 <div class="progress"
                      role="progressbar"
                      aria-label="Animated striped example"
@@ -33,7 +34,7 @@
                      aria-valuemin="0"
                      aria-valuemax="100">
                     <div class="progress-bar progress-bar-striped progress-bar-animated"
-                         style="width: 75%"></div>
+                         style="width: {{ percent_complete }}%"></div>
                 </div>
             {% elif course_import_task_result.generation_status == "PENDING" %}
                 <p class="mb-4 text-center">

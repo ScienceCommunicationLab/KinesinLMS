@@ -87,9 +87,9 @@ class CourseImporterBase:
         raise NotImplementedError("Subclasses must implement this method.")
 
     def update_cache(self, status: ImportStatus):
-        sleep(10)
+        status_dict = asdict(status)
+        logger.debug(f"Cache key is: {self.cache_key}. Updating cache with status: {status}")
         if self.cache_key:
-            status_dict = asdict(status)
             logger.debug(f"Updating cache {self.cache_key} with status: {status_dict}")
             cache.set(
                 self.cache_key,

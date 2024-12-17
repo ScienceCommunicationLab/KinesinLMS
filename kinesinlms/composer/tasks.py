@@ -59,7 +59,6 @@ def handle_course_import_failure(self, exc: Exception, task_id: str, args: Tuple
     retry_kwargs={"max_retries": 3},
     on_failure=handle_course_import_failure,
 )
-@transaction.atomic
 def generate_course_import_task(
     self,
     course_import_task_result_id: int = None,
@@ -98,17 +97,18 @@ def generate_course_import_task(
     course = None
 
     try:
-        options = CourseImportOptions(create_forum_items=course_import_task_result.create_forum_items)
-        course = importer.import_course_from_archive(
-            file=course_import_task_result.import_file,
-            display_name=course_import_task_result.display_name,
-            course_slug=course_import_task_result.course_slug,
-            course_run=course_import_task_result.course_run,
-            options=options,
-        )
+        with transaction.atomic():
+            options = CourseImportOptions(create_forum_items=course_import_task_result.create_forum_items)
+            course = importer.import_course_from_archive(
+                file=course_import_task_result.import_file,
+                display_name=course_import_task_result.display_name,
+                course_slug=course_import_task_result.course_slug,
+                course_run=course_import_task_result.course_run,
+                options=options,
+            )
 
-        if not course:
-            raise Exception("Course import failed")
+            if not course:
+                raise Exception("Course import failed")
 
     except Exception as e:
         logger.error(f"Course import failed: {e}")
