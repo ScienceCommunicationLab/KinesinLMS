@@ -628,12 +628,29 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
 
     def _pre_process_unit_block(self, unit_block: Dict):
         """
-        Process a block in the course nav tree.
+        Preprocess a block in the course nav tree to make sure
+        we transform any older conventions to the new KinesinLMS format.
         """
         block = unit_block.get("block", {})
         block_type = block.get("type")
         if block_type == "DISCOURSE_TOPIC":
             block["type"] = BlockType.FORUM_TOPIC.name
+        elif block_type == "ASSESSMENT":
+            assessment = block.get("assessment", {})
+            assessment_type = assessment.get("type", None)
+            if assessment_type == "MULTIPLE_CHOICE":
+                try:
+                    if "definition_json" in assessment:
+                        definition_json = assessment.pop("definition_json")
+                        if "choices" in definition_json:
+                            choices = definition_json.get("choices", [])
+                            for choice in choices:
+                                # change 'choiceKey' key to 'choice_key'
+                                if "choiceKey" in choice:
+                                    choice["choice_key"] = choice.pop("choiceKey")
+                except Exception as e:
+                    logger.exception(f"Could not pre-process assessment {assessment} : {e}")
+                    raise e
         elif block_type == "SURVEY":
             # Change survey information to match KinesinLMS format
             # In SCL it's stored as json_content, in KinesinLMS it's stored as a SurveyBlock.
