@@ -31,34 +31,25 @@ class CourseCatalogDescription(models.Model):
         max_length=500,
         null=True,
         blank=True,
-        help_text=_(
-            "A short, marketing-oriented description of the course. Only one or two sentences long."
-        ),
+        help_text=_("A short, marketing-oriented description of the course. Only one or two sentences long."),
     )
 
     overview = models.TextField(
         null=True,
         blank=True,
-        help_text=_(
-            "A short description of the course, usually just a paragraph long."
-        ),
+        help_text=_("A short description of the course, usually just a paragraph long."),
     )
 
     about_content = models.TextField(
         null=True,
         blank=True,
-        help_text=_(
-            "The long, detailed content shown on the "
-            "course about page. HTML is okay."
-        ),
+        help_text=_("The long, detailed content shown on the " "course about page. HTML is okay."),
     )
 
     sidebar_content = models.TextField(
         null=True,
         blank=True,
-        help_text=_(
-            "Other information to show in the sidebar, if present. HTML is okay."
-        ),
+        help_text=_("Other information to show in the sidebar, if present. HTML is okay."),
     )
 
     thumbnail = models.FileField(
@@ -66,13 +57,12 @@ class CourseCatalogDescription(models.Model):
         blank=True,
         upload_to="catalog/images/",
         help_text=_(
-            "The image to be used in the catalog card. If empty, KinesinLMS will show the 'catalog/static/catalog/default_course_thumbnail.jpg' image."
+            "The image to be used in the catalog card. If empty, KinesinLMS will show "
+            "the 'catalog/static/catalog/default_course_thumbnail.jpg' image."
         ),
     )
 
-    visible = models.BooleanField(
-        default=True, help_text=_("Show this course in the course catalog")
-    )
+    visible = models.BooleanField(default=True, help_text=_("Show this course in the course catalog"))
 
     hex_theme_color = models.CharField(
         max_length=6,
@@ -91,9 +81,7 @@ class CourseCatalogDescription(models.Model):
         default="ffffff",
         null=False,
         blank=False,
-        help_text=_(
-            "The hex value for the color of the title text on the about page"
-        ),
+        help_text=_("The hex value for the color of the title text on the about page"),
     )
 
     custom_stylesheet = models.CharField(
@@ -101,24 +89,17 @@ class CourseCatalogDescription(models.Model):
         default=None,
         null=True,
         blank=True,
-        help_text=_(
-            "The filename of the custom css stylesheet to "
-            "use when showing course content."
-        ),
+        help_text=_("The filename of the custom css stylesheet to " "use when showing course content."),
     )  # type: str
 
     # If there's a trailer...
-    trailer_video_url = models.URLField(
-        max_length=250, null=True, blank=True, help_text=_("URL for the trailer video")
-    )
+    trailer_video_url = models.URLField(max_length=250, null=True, blank=True, help_text=_("URL for the trailer video"))
 
     syllabus = models.FileField(
         null=True,
         blank=True,
         upload_to="catalog/syllabi/",
-        help_text=_(
-            "The public syllabus for the course, shown to users who are considering enrolling."
-        ),
+        help_text=_("The public syllabus for the course, shown to users who are considering enrolling."),
     )
 
     effort = models.CharField(
@@ -143,9 +124,7 @@ class CourseCatalogDescription(models.Model):
         help_text=_("An array of strings describing each feature of the course."),
     )
 
-    order = models.IntegerField(
-        default=0, help_text=_("Used for ordering cards in the course catalog")
-    )
+    order = models.IntegerField(default=0, help_text=_("Used for ordering cards in the course catalog"))
 
     @property
     def testimonials(self) -> List["marketing.Testimonial"]:  # noqa: F821
@@ -163,7 +142,7 @@ class CourseCatalogDescription(models.Model):
         # Use 'default' thumbnail
         if DEFAULT_THUMBNAIL:
             return f"{settings.STATIC_URL}catalog/images/{DEFAULT_THUMBNAIL}"
-        
+
         return None
 
     @property
