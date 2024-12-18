@@ -7,6 +7,7 @@ $composer-main-background: #f9f9f9;
 
 #composer-base {
 
+
   .composer-page-header {
     margin: 0;
     padding: 1rem 0 0.5rem;
@@ -117,7 +118,19 @@ $composer-main-background: #f9f9f9;
   represent the course simply...e.g. in a list
   of courses for editing.
    */
+
+
+  .courses-list {
+    margin: 0.35rem;
+
+
+
+  }
+
   .course-card {
+    .card-img-top {
+      max-height: 180px !important
+    }
 
     .card-title {
       min-height: 3rem;
@@ -208,9 +221,6 @@ $composer-main-background: #f9f9f9;
 
     }
 
-    .courses-list {
-      margin: 0.35rem;
-    }
 
 
   }
