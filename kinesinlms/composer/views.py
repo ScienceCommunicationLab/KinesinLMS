@@ -717,8 +717,6 @@ def course_import_view(request):
                     countdown=3,
                 )
 
-                success_msg = _("Successfully started course import.")
-                messages.add_message(request, messages.INFO, success_msg)
                 return redirect(redirect_url)
 
             except Exception as e:
