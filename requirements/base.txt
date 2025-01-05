@@ -1,5 +1,5 @@
 # Python package manager
-pip>=24.2
+pip>=24.3.1
 
 # World timezone definitions, modern and historical
 pytz==2024.2 # https://github.com/stub42/pytz
@@ -8,20 +8,20 @@ pytz==2024.2 # https://github.com/stub42/pytz
 python-slugify==8.0.4  # https://github.com/un33k/python-slugify
 
 # A fork of PIL, the Python Imaging Library
-Pillow==10.4.0 # https://github.com/python-pillow/Pillow
+Pillow==11.1.0 # https://github.com/python-pillow/Pillow
 
 # Password hashing library
 argon2-cffi==23.1.0 # https://github.com/hynek/argon2_cffi
 
 # Whitenoise for static assets
-whitenoise==6.7.0  # https://github.com/evansd/whitenoise
+whitenoise==6.8.2  # https://github.com/evansd/whitenoise
 
 # Libraries for async tasks
 # Celery for running async tasks
 celery==5.4.0  # pyup: < 5.0,!=4.4.7  # https://github.com/celery/celery
 # Redis as database for celery tasks
-redis==5.1.1 # https://github.com/antirez/redis
-hiredis==3.0.0  # https://github.com/redis/hiredis-py
+redis==5.2.1 # https://github.com/antirez/redis
+hiredis==3.1.0  # https://github.com/redis/hiredis-py
 
 # for periodic tasks
 # We're not using this, but maybe should. Right now we have Heroku-based cron-tab
@@ -31,10 +31,10 @@ django-celery-beat==2.7.0  # https://github.com/celery/django-celery-beat
 # Django
 # ------------------------------------------------------------------------------
 
-django==5.0.9 # pyup: < 3.0  # https://www.djangoproject.com/
+django==5.1.4 # pyup: < 3.0  # https://www.djangoproject.com/
 django-environ==0.11.2  # https://github.com/joke2k/django-environ
 django-model-utils==5.0.0  # https://github.com/jazzband/django-model-utils
-django-allauth[mfa]==65.0.2  # https://github.com/pennersr/django-allauth
+django-allauth[mfa]==65.3.1  # https://github.com/pennersr/django-allauth
 django-crispy-forms==2.3  # https://github.com/django-crispy-forms/django-crispy-forms
 crispy-bootstrap5==2024.10  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==5.4.0  # https://github.com/niwinz/django-redis
@@ -42,14 +42,14 @@ django-redis==5.4.0  # https://github.com/niwinz/django-redis
 # Django REST Framework
 djangorestframework==3.15.2  # https://github.com/encode/django-rest-framework
 # The only reason we need cors headers is when Angular client tests from diff URL
-django-cors-headers==4.4.0
+django-cors-headers==4.6.0
 
 # React FTW! Just components, mind you, not a complete SPA.
 # This library helps position React component in rendered template.
 django-react-templatetags==8.0.0
 
 # For JSON logging...mostly for Tracker
-python-json-logger==2.0.7
+python-json-logger==3.2.1
 
 # For JSON field validation
 jsonschema==4.23.0
@@ -70,14 +70,14 @@ requests==2.32.3
 beautifulsoup4==4.12.3
 
 # Need boto3 for sending events to Lambda.
-boto3==1.35.34
+boto3==1.35.92
 
 # My fork of pydiscourse. It didn't have the
 # correct method for removing a user from a group
 -e git+https://github.com/danielmcquillen/pydiscourse.git@master#egg=pydiscourse
 
 # DMcQ : For slack messenging
-slack_sdk==3.33.1
+slack_sdk==3.34.0
 
 # Dang bots!
 django-recaptcha==4.0.0
@@ -111,7 +111,7 @@ dataclasses-json==0.6.7
 django-tinymce==4.1.0
 
 # PDF certificates
-reportlab==4.2.2
+reportlab==4.2.5
 
 # For various analytics reporting
 pandas==2.2.3
@@ -120,18 +120,18 @@ pandas==2.2.3
 django-pandas==0.6.7
 
 # For Open API docs generation
-drf-spectacular==0.27.2
+drf-spectacular==0.28.0
 
 # For LTI...
-pyjwt==2.9.0
-cryptography==43.0.1
+pyjwt==2.10.1
+cryptography==44.0.0
 
 # For turning features on and off easily
-django-waffle==4.1.0
+django-waffle==4.2.0
 
 # Support markdown in composer and rendering content
 markdown==3.7
 django-markdownify==0.9.5
 
 # Serverless integration with modal.com
-modal==0.64.211
+modal==0.71.0
