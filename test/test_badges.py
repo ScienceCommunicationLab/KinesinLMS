@@ -1,4 +1,5 @@
 import logging
+from unittest import skipUnless
 
 from allauth.account.models import EmailAddress
 from django.conf import settings
@@ -7,10 +8,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 from selenium.webdriver.firefox.webdriver import WebDriver
-from unittest import skipUnless
 
 from kinesinlms.badges.models import BadgeAssertion, BadgeClass
-from kinesinlms.course.models import Enrollment, CourseUnit, Milestone
+from kinesinlms.course.models import CourseUnit, Enrollment, Milestone
 from kinesinlms.course.tests.factories import CourseFactory
 from kinesinlms.learning_library.constants import BlockType
 from kinesinlms.users.tests.factories import UserFactory
@@ -26,7 +26,7 @@ class TestBadges(StaticLiveServerTestCase):
     """
 
     This integration test is designed to make sure KinesinLMS is successfully connecting
-    to the Badgr API and getting Badgr to award a badge assertion when a student 
+    to the Badgr API and getting Badgr to award a badge assertion when a student
     completes a course.
 
     IMPORTANT: In order to run this test, you must have the following environment
@@ -63,16 +63,13 @@ class TestBadges(StaticLiveServerTestCase):
 
         # Setting up the Course via the CourseFactory should have created a badge.
 
-        email_address, created = EmailAddress.objects.get_or_create(user=user,
-                                                                    email=user.email)
+        email_address, created = EmailAddress.objects.get_or_create(user=user, email=user.email)
         email_address.primary = True
         email_address.verified = True
         email_address.save()
 
         # Make sure student is enrolled
-        enrollment = Enrollment.objects.create(course=course,
-                                               student=user,
-                                               active=True)
+        enrollment = Enrollment.objects.create(course=course, student=user, active=True)
         cls.enrollment = enrollment
         cls.enrolled_user = user
 
@@ -114,11 +111,9 @@ class TestBadges(StaticLiveServerTestCase):
             "assessment": assessment.id,
             "course": self.course.id,
             "course_unit": course_unit.id,
-            "json_content": {
-                "answer": "My answer to the long form question."
-            }
+            "json_content": {"answer": "My answer to the long form question."},
         }
-        response = self.api_client.post(url, data=data, format='json')
+        response = self.api_client.post(url, data=data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Now make sure badge assertion has valid information with urls that
