@@ -9,7 +9,7 @@ class ExternalToolProviderFactory(factory.django.DjangoModelFactory):
 
     name = "Test provider"
     description = "This is a test provider"
-    type = ExternalToolProviderType.BASIC.name
+    type = ExternalToolProviderType.BASIC_LTI13.name
     slug = "test-provider"
     login_url = "https://example.com/oidc/login"
     launch_uri = "https://example.com/launch"
