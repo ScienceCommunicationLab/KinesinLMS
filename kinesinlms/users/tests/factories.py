@@ -72,7 +72,7 @@ class UserFactory(DjangoModelFactory):
 
     class Meta:
         model = User
-        django_get_or_create = ["{{cookiecutter.username_type}}"]
+        django_get_or_create = ["username"]
 
 
 class EducatorFactory(UserFactory):
