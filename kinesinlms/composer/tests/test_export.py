@@ -62,11 +62,15 @@ class TestComposerCourseExport(TestCase):
         with open(str(expected_course_path)) as data_file:
             expected_course_dict = json.load(data_file)['course']
 
+        # pretty print course_dict
+        logger.debug(f"course_dict: {json.dumps(course_dict, indent=4)}")
+
         diff = deepdiff.DeepDiff(expected_course_dict, course_dict)
         type_changes = diff.get('type_changes', [])
         self.assertTrue(len(type_changes) == 0)
 
         dictionary_item_added = diff.get('dictionary_item_added', [])
+        logger.debug(f"dictionary_item_added: {dictionary_item_added}")
         self.assertTrue(len(dictionary_item_added) == 0)
 
         dictionary_item_removed = diff.get('dictionary_item_removed', [])

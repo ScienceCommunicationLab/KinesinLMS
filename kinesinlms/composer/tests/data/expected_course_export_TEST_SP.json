@@ -109,6 +109,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": {
                             "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
                             "video_id": "wf9QrrRzJys"
@@ -144,6 +145,7 @@
                           "enable_template_tags": true,
                           "html_content": "<h1>Test Unit 1</h1><p>This is a simple HTML block for unit 1.</p>",
                           "json_content": null,
+                          "survey_block": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
                           "speakers": [],
@@ -167,6 +169,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": {
                             "type": "LONG_FORM_TEXT",
@@ -205,6 +208,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": {
@@ -262,6 +266,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": {
                             "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
                             "video_id": "wf9QrrRzJys"
@@ -297,6 +302,7 @@
                           "enable_template_tags": true,
                           "html_content": "<h1>Test Unit 2</h1><p>This is a simple HTML block for unit 2.</p>",
                           "json_content": null,
+                          "survey_block": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
                           "speakers": [],
@@ -320,6 +326,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": {
                             "type": "LONG_FORM_TEXT",
@@ -358,6 +365,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": {
@@ -428,6 +436,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": {
                             "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
                             "video_id": "wf9QrrRzJys"
@@ -462,6 +471,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": "<h1>Test Unit 3</h1><p>This is a simple HTML block for unit 3.</p>",
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -486,6 +496,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": {
                             "type": "LONG_FORM_TEXT",
@@ -524,6 +535,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": {
@@ -581,6 +593,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": {
                             "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
                             "video_id": "wf9QrrRzJys"
@@ -615,6 +628,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": "<h1>Test Unit 4</h1><p>This is a simple HTML block for unit 4.</p>",
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -639,6 +653,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": {
                             "type": "LONG_FORM_TEXT",
@@ -677,6 +692,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": {
@@ -760,6 +776,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": {
                             "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
                             "video_id": "wf9QrrRzJys"
@@ -794,6 +811,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": "<h1>Test Unit 5</h1><p>This is a simple HTML block for unit 5.</p>",
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -818,6 +836,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": {
                             "type": "LONG_FORM_TEXT",
@@ -856,6 +875,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": {
@@ -913,6 +933,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": {
                             "header": "Some video header for course_unit_1 (Using How to Use This Website and placeholder video).",
                             "video_id": "wf9QrrRzJys"
@@ -947,6 +968,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": "<h1>Test Unit 6</h1><p>This is a simple HTML block for unit 6.</p>",
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": null,
@@ -971,6 +993,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": {
                             "type": "LONG_FORM_TEXT",
@@ -1009,6 +1032,7 @@
                           "course_only": false,
                           "enable_template_tags": true,
                           "html_content": null,
+                          "survey_block": null,
                           "json_content": null,
                           "assessment": null,
                           "simple_interactive_tool": {
