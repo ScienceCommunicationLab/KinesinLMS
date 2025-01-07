@@ -70,7 +70,7 @@ requests==2.32.3
 beautifulsoup4==4.12.3
 
 # Need boto3 for sending events to Lambda.
-boto3==1.35.92
+boto3==1.35.93
 
 # My fork of pydiscourse. It didn't have the
 # correct method for removing a user from a group
@@ -134,4 +134,4 @@ markdown==3.7
 django-markdownify==0.9.5
 
 # Serverless integration with modal.com
-modal==0.71.0
+modal==0.71.3
