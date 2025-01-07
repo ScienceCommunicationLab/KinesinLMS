@@ -1,10 +1,9 @@
 from django.test import TestCase
 
-from kinesinlms.course.serializers import IBiologyCoursesCourseSerializer
+from kinesinlms.composer.import_export.ibiov2.importer import IBiologyCoursesCourseImporter
 
 
-class TestIBiologyCoursesCourseSerializer(TestCase):
-
+class TestIBiologyCoursesCourseImporter(TestCase):
     @classmethod
     def setUpTestData(cls):
         pass
@@ -15,7 +14,7 @@ class TestIBiologyCoursesCourseSerializer(TestCase):
         with new KinesinLMS template tags.
         """
 
-        s = IBiologyCoursesCourseSerializer()
+        s = IBiologyCoursesCourseImporter()
 
         input_html = """<p>Some html text with link ##MODULE_LINK[12]## </p>"""
         output_html = s._update_template_keywords(input_html)
