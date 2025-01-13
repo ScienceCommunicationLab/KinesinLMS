@@ -77,9 +77,10 @@ class IBiologyCoursesCourseImporter(CourseImporterBase):
         # course_json could either be the full export format,
         # which includes 'metadata' and 'course' dictionaries,
         # or just the 'course' dictionary.
-        document_type = course_json.get("document_type", None)
-        if document_type != KinesinLMSCourseExportFormatID.IBIO_COURSES_FORMAT.value:
-            raise Exception(f"Invalid document type: {document_type}")
+        if "document_type" in course_json:
+            document_type = course_json.get("document_type", None)
+            if document_type != KinesinLMSCourseExportFormatID.IBIO_COURSES_FORMAT.value:
+                raise Exception(f"Invalid document type: {document_type}")
 
         metadata = {}
         if "metadata" in course_json:

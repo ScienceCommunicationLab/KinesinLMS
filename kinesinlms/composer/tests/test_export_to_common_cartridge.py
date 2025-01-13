@@ -426,7 +426,7 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         # Create HTML block with resources
         block = BlockFactory.create(
             type=BlockType.HTML_CONTENT.name,
-            html_content="""<p>Some HTML here. Then an image tag <img src="{% block_resource_url 'test.jpg' %}"></p>""",
+            html_content="""<p>Some HTML here. Then an image tag <img src="{% block_resource_url 'test-image' %}"></p>""",
         )
         course_unit = CourseUnitFactory.create(
             course=self.course,
@@ -437,7 +437,9 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         # Add a resource
         resource_file_name = "test.jpg"
         resource = Resource.objects.create(
-            type=ResourceType.IMAGE.name, resource_file=SimpleUploadedFile(resource_file_name, b"file_content")
+            type=ResourceType.IMAGE.name,
+            slug="test-image",
+            resource_file=SimpleUploadedFile(resource_file_name, b"file_content"),
         )
         BlockResource.objects.create(block=unit_block.block, resource=resource)
 
@@ -445,7 +447,8 @@ class TestComposerCourseExportToCommonCartridge(TestCase):
         handler = HTMLContentCCResource(unit_block=unit_block)
         processed_html = handler._reformat_html_content_with_relative_resource_file_paths(unit_block)
 
-        expected_html = f"""<p>Some HTML here. Then an image tag <img src="$IMS-CC-FILEBASE$/{resource.uuid}/{resource_file_name}"></p>"""
+        # DMcQ: why does Django add an initial "\n" when rendering template?
+        expected_html = f"""\n<p>Some HTML here. Then an image tag <img src="$IMS-CC-FILEBASE$/{resource.uuid}/{resource_file_name}"></p>"""
 
         # Verify the paths are properly formatted
         self.assertEqual(

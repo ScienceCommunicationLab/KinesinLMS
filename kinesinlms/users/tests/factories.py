@@ -1,15 +1,15 @@
 from collections.abc import Sequence
-from django.contrib.auth.models import Group
 from typing import Any
 
-from django.contrib.auth import get_user_model
-from factory import Faker, post_generation, SelfAttribute
+from django.contrib.auth.models import Group
+from factory import Faker, SelfAttribute, post_generation
 from factory.django import DjangoModelFactory
 
 from kinesinlms.users.models import (
     CareerStageType,
     GenderType,
     GroupTypes,
+    User,
     UserSettings,
 )
 
@@ -71,7 +71,7 @@ class UserFactory(DjangoModelFactory):
             instance.save()
 
     class Meta:
-        model = get_user_model()
+        model = User
         django_get_or_create = ["username"]
 
 

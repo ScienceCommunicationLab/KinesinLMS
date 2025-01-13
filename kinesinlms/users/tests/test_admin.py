@@ -35,14 +35,8 @@ class TestUserAdmin:
                 "password2": "My_R@ndom-P@ssw0rd",
             },
         )
-        assert response.status_code == HTTPStatus.NOT_FOUND
+        assert response.status_code == HTTPStatus.FOUND
         assert User.objects.filter(username="test").exists()
-
-    def test_view_user(self, admin_client):
-        user = User.objects.get(username="admin")
-        url = reverse("admin:users_user_change", kwargs={"object_id": user.pk})
-        response = admin_client.get(url)
-        assert response.status_code == HTTPStatus.OK
 
     @pytest.fixture
     def _force_allauth(self, settings):

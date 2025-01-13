@@ -234,6 +234,9 @@ class Survey(Trackable):
     def clean(self):
         super().clean()
         if not self.slug:
+            if not self.survey_id:
+                # get unique id from model id
+                self.survey_id = f"survey-{self.id}"
             self.slug = slugify(self.survey_id)
             self.save()
 

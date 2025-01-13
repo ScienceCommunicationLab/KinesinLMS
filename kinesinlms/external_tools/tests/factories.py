@@ -14,6 +14,7 @@ class ExternalToolProviderFactory(factory.django.DjangoModelFactory):
     login_url = "https://example.com/oidc/login"
     launch_uri = "https://example.com/launch"
     active = True
+    client_id = "client-id-1"
 
 
 class ExternalToolViewFactory(factory.django.DjangoModelFactory):

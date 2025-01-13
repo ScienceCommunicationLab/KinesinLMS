@@ -255,7 +255,7 @@ class CCHandler(ABC):
 
             # First, render the html_content so the path is updated from the template tag
             # to the full URL that would have been rendered.
-            context = {"request": None}
+            context = {"request": None, "block": unit_block.block,}
             html_content = render_html_content(context, item=unit_block.block)
 
             # Get the full URL that would have been rendered

@@ -1054,11 +1054,15 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
         """
         surveys: List[Survey] = []
         for survey_validated_data in surveys_validated_data:
-            survey = Survey.objects.create(**survey_validated_data, course=course)
-            survey.clean()
-            survey.save()
-            logger.info(f" - created survey {survey}")
-            surveys.append(survey)
+            try:
+                survey = Survey.objects.create(**survey_validated_data, course=course)
+                survey.clean()
+                survey.save()
+                logger.info(f" - created survey {survey}")
+                surveys.append(survey)
+            except Exception as e:
+                logger.exception(f"Could not create survey: {e}")
+                raise e
         return surveys
 
 
