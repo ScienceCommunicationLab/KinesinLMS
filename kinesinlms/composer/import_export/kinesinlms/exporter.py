@@ -75,10 +75,10 @@ class KinesinLMSCourseExporter(BaseExporter):
         if bool(course.catalog_description.thumbnail):
             try:
                 base_filename = course.catalog_description.thumbnail.name.split("/")[-1]
-                full_internal_path = course.catalog_description.thumbnail.path
                 export_file_path = f"catalog_resources/thumbnail/{base_filename}"
-                zf.write(full_internal_path, export_file_path)
-                logger.info(f"  - exported catalog thumbnail to {export_file_path}")
+                with course.catalog_description.thumbnail.open("rb") as source_file:
+                    zf.writestr(export_file_path, source_file.read())
+                logger.info(f" - exported catalog thumbnail to {export_file_path}")
             except Exception as e:
                 logger.error(f"Error writing catalog thumbnail to zip file: {e}")
                 raise e
@@ -86,9 +86,9 @@ class KinesinLMSCourseExporter(BaseExporter):
         if bool(course.catalog_description.syllabus):
             try:
                 base_filename = course.catalog_description.syllabus.name.split("/")[-1]
-                full_internal_path = course.catalog_description.syllabus.path
                 export_file_path = f"catalog_resources/syllabus/{base_filename}"
-                zf.write(full_internal_path, export_file_path)
+                with course.catalog_description.syllabus.open("rb") as source_file:
+                    zf.writestr(export_file_path, source_file.read())
                 logger.info(f"  - exported catalog syllabus to {export_file_path}")
             except Exception as e:
                 logger.error(f"Error writing catalog syllabus to zip file: {e}")
@@ -98,9 +98,7 @@ class KinesinLMSCourseExporter(BaseExporter):
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         # Gather all Resources for this course via BlockResource
         resources: Dict[str, Resource] = {}
-        course_units = CourseUnit.objects.filter(course=course).prefetch_related(
-            "contents"
-        )
+        course_units = CourseUnit.objects.filter(course=course).prefetch_related("contents")
         for course_unit in course_units:
             for block in course_unit.contents.all():
                 for resource in block.resources.all():
@@ -110,9 +108,9 @@ class KinesinLMSCourseExporter(BaseExporter):
         for uuid, resource in resources.items():
             try:
                 base_filename = resource.resource_file.name.split("/")[-1]
-                full_internal_path = resource.resource_file.path
                 export_file_path = f"block_resources/{resource.type.upper()}/{resource.uuid}/{base_filename}"
-                zf.write(full_internal_path, export_file_path)
+                with resource.resource_file.open("rb") as source_file:
+                    zf.writestr(export_file_path, source_file.read())
             except Exception as e:
                 logger.error(f"Error writing resource {resource.uuid} to zip file: {e}")
                 raise e
@@ -122,15 +120,11 @@ class KinesinLMSCourseExporter(BaseExporter):
             for course_resource in course.course_resources.all():
                 try:
                     base_filename = course_resource.resource_file.name.split("/")[-1]
-                    full_internal_path = course_resource.resource_file.path
-                    export_file_path = (
-                        f"course_resources/{course_resource.uuid}/{base_filename}"
-                    )
-                    zf.write(full_internal_path, export_file_path)
+                    export_file_path = f"course_resources/{course_resource.uuid}/{base_filename}"
+                    with course_resource.resource_file.open("rb") as source_file:
+                        zf.writestr(export_file_path, source_file.read())
                 except Exception as e:
-                    logger.error(
-                        f"Error writing course resource {course_resource.uuid} to zip file: {e}"
-                    )
+                    logger.error(f"Error writing course resource {course_resource.uuid} to zip file: {e}")
                     raise e
 
         # Finish writing the zip file.
@@ -167,7 +161,5 @@ class KinesinLMSCourseExporter(BaseExporter):
             "course": course_data,
         }
 
-        course_json = JSONRenderer().render(
-            course_serialized, renderer_context={"indent": 4}
-        )
+        course_json = JSONRenderer().render(course_serialized, renderer_context={"indent": 4})
         return course_json

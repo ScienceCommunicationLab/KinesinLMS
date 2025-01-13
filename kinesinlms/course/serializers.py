@@ -400,7 +400,7 @@ class CourseUnitSerializer(serializers.ModelSerializer):
                 except Exception as e:
                     logger.exception(f"Could not deserializer unit_block: {unit_block_raw_data}")
                     raise e
-                
+
                 try:
                     unit_block: UnitBlock = unit_block_serializer.save(course_unit=course_unit)
                     logger.info(f"Created unit_block: {unit_block.id}")
@@ -660,7 +660,13 @@ class CourseSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     badge_classes = BadgeClassSerializer(many=True, required=False)
 
-    speakers = SlugRelatedField(slug_field="slug", many=True, allow_null=True, queryset=Speaker.objects.all())
+    speakers = SlugRelatedField(
+        slug_field="slug",
+        many=True,
+        allow_null=True,
+        required=False,
+        queryset=Speaker.objects.all(),
+    )
 
     learning_objectives = LearningObjectiveSerializerField(required=False, default=[])
 

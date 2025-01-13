@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from rest_framework import routers
 
 from kinesinlms.analytics.views import EngagementDataViewSet
@@ -69,15 +70,11 @@ router.register(
 
 # Engagement data
 analytics_router = routers.DefaultRouter()
-analytics_router.register(
-    "engagement", EngagementDataViewSet, basename="analytics_course_engagement"
-)
+analytics_router.register("engagement", EngagementDataViewSet, basename="analytics_course_engagement")
 
 # User profile data
 users_router = routers.DefaultRouter()
-users_router.register(
-    "user_profiles", UserProfilesViewSet, basename="users_user_profiles"
-)
+users_router.register("user_profiles", UserProfilesViewSet, basename="users_user_profiles")
 
 
 # noinspection PyUnresolvedReferences
@@ -126,7 +123,12 @@ urlpatterns = [
     # LTI and external tools
     path("lti/", include("kinesinlms.lti.urls", namespace="lti")),
     path("api/lti/", include("kinesinlms.lti.urls-api", namespace="lti-api")),
-    # DRF stuff:
+    # KinesinLMS API Schema...
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    # Optional UI:
+    path("api/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    # KinesinLMS API
     path("api/analytics/", include(analytics_router.urls)),
     path("api/users/", include(users_router.urls)),
     path("api/", include(router.urls)),

@@ -316,7 +316,7 @@ class UnitBlockSerializer(serializers.ModelSerializer):
         course_import_config = self.context.get("course_import_config", None)
         request = self.context.get("request", None)
 
-        read_only = validated_data["read_only"]
+        read_only = validated_data.get("read_only", False)
 
         # Pop off block json
         # Pop the raw data so that we can send it through child serializers

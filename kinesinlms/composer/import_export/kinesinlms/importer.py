@@ -512,8 +512,8 @@ class KinesinLMSCourseImporter(CourseImporterBase):
 
         try:
             node_serializer.is_valid(raise_exception=True)
-        except Exception:
-            error_msg = f"Could not serialize node {course_node_json}"
+        except Exception as e:
+            error_msg = f"Could not deserialize node {course_node_json} : {e}"
             logger.exception(error_msg)
             raise ValidationError(detail=error_msg)
         node = node_serializer.save(parent=parent_node)

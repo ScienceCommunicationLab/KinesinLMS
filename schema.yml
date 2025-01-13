@@ -1,0 +1,2854 @@
+openapi: 3.0.3
+info:
+  title: KinesinLMS API
+  version: 1.0.0
+  description: Documentation of API endpoints of KinesinLMS
+paths:
+  /api/analytics/engagement/{id}/:
+    get:
+      operationId: analytics_engagement_retrieve
+      description: Return engagement data for a course
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - analytics
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/answers/:
+    get:
+      operationId: answers_list
+      tags:
+      - answers
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubmittedAnswer'
+          description: ''
+    post:
+      operationId: answers_create
+      tags:
+      - answers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmittedAnswer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubmittedAnswer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubmittedAnswer'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmittedAnswer'
+          description: ''
+  /api/answers/{id}/:
+    get:
+      operationId: answers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - answers
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmittedAnswer'
+          description: ''
+    put:
+      operationId: answers_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - answers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmittedAnswer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubmittedAnswer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubmittedAnswer'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmittedAnswer'
+          description: ''
+    patch:
+      operationId: answers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - answers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubmittedAnswer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubmittedAnswer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubmittedAnswer'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmittedAnswer'
+          description: ''
+    delete:
+      operationId: answers_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - answers
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/assessments/:
+    get:
+      operationId: assessments_list
+      tags:
+      - assessments
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assessment'
+          description: ''
+    post:
+      operationId: assessments_create
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+          description: ''
+  /api/assessments/{id}/:
+    get:
+      operationId: assessments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - assessments
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+          description: ''
+    put:
+      operationId: assessments_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+          description: ''
+    patch:
+      operationId: assessments_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssessment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssessment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssessment'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+          description: ''
+    delete:
+      operationId: assessments_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - assessments
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/badge_assertions/:
+    get:
+      operationId: badge_assertions_retrieve
+      tags:
+      - badge_assertions
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: badge_assertions_create
+      description: |-
+        The main purpose of exposing CREATE (post) behavior is
+        to allow the user to generate a badge assertion for a course that
+        offers badges and which they've already completed, but they
+        don't have a badge for.
+      tags:
+      - badge_assertions
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          description: No response body
+  /api/badge_assertions/{id}/:
+    get:
+      operationId: badge_assertions_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - badge_assertions
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: badge_assertions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - badge_assertions
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: badge_assertions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - badge_assertions
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: badge_assertions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - badge_assertions
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/blocks/:
+    get:
+      operationId: blocks_list
+      tags:
+      - blocks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Block'
+          description: ''
+    post:
+      operationId: blocks_create
+      tags:
+      - blocks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Block'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Block'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Block'
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Block'
+          description: ''
+  /api/blocks/{id}/:
+    get:
+      operationId: blocks_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this block.
+        required: true
+      tags:
+      - blocks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Block'
+          description: ''
+    put:
+      operationId: blocks_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this block.
+        required: true
+      tags:
+      - blocks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Block'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Block'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Block'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Block'
+          description: ''
+    patch:
+      operationId: blocks_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this block.
+        required: true
+      tags:
+      - blocks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBlock'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBlock'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBlock'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Block'
+          description: ''
+    delete:
+      operationId: blocks_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this block.
+        required: true
+      tags:
+      - blocks
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/bookmarks/:
+    get:
+      operationId: bookmarks_list
+      description: Generates the JSON describing a student's bookmarks in the course.
+      tags:
+      - bookmarks
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bookmark'
+          description: ''
+    post:
+      operationId: bookmarks_create
+      description: Generates the JSON describing a student's bookmarks in the course.
+      tags:
+      - bookmarks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bookmark'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Bookmark'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Bookmark'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookmark'
+          description: ''
+  /api/bookmarks/{id}/:
+    get:
+      operationId: bookmarks_retrieve
+      description: Generates the JSON describing a student's bookmarks in the course.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - bookmarks
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookmark'
+          description: ''
+    put:
+      operationId: bookmarks_update
+      description: Generates the JSON describing a student's bookmarks in the course.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - bookmarks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bookmark'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Bookmark'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Bookmark'
+        required: true
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookmark'
+          description: ''
+    patch:
+      operationId: bookmarks_partial_update
+      description: Generates the JSON describing a student's bookmarks in the course.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - bookmarks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBookmark'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBookmark'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBookmark'
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookmark'
+          description: ''
+    delete:
+      operationId: bookmarks_destroy
+      description: Generates the JSON describing a student's bookmarks in the course.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - bookmarks
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/course_nav/:
+    get:
+      operationId: course_nav_retrieve
+      description: |-
+        Generates the JSON that describes the course navigation.
+        This isn't current used at the moment, but could be used
+        by the client if we move to having React-style components
+        build the nav after an API call.
+      tags:
+      - course_nav
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: course_nav_create
+      description: |-
+        Generates the JSON that describes the course navigation.
+        This isn't current used at the moment, but could be used
+        by the client if we move to having React-style components
+        build the nav after an API call.
+      tags:
+      - course_nav
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          description: No response body
+  /api/course_nav/{id}/:
+    get:
+      operationId: course_nav_retrieve_2
+      description: |-
+        Gets a json representation of the course nav. Important to cache since
+        this is a bit intensive to produce.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - course_nav
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: course_nav_update
+      description: |-
+        Generates the JSON that describes the course navigation.
+        This isn't current used at the moment, but could be used
+        by the client if we move to having React-style components
+        build the nav after an API call.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - course_nav
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: course_nav_partial_update
+      description: |-
+        Generates the JSON that describes the course navigation.
+        This isn't current used at the moment, but could be used
+        by the client if we move to having React-style components
+        build the nav after an API call.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - course_nav
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: course_nav_destroy
+      description: |-
+        Generates the JSON that describes the course navigation.
+        This isn't current used at the moment, but could be used
+        by the client if we move to having React-style components
+        build the nav after an API call.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - course_nav
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/course_units/:
+    get:
+      operationId: course_units_list
+      tags:
+      - course_units
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseUnit'
+          description: ''
+    post:
+      operationId: course_units_create
+      tags:
+      - course_units
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseUnit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseUnit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseUnit'
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseUnit'
+          description: ''
+  /api/course_units/{id}/:
+    get:
+      operationId: course_units_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course unit.
+        required: true
+      tags:
+      - course_units
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseUnit'
+          description: ''
+    put:
+      operationId: course_units_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course unit.
+        required: true
+      tags:
+      - course_units
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseUnit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseUnit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseUnit'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseUnit'
+          description: ''
+    patch:
+      operationId: course_units_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course unit.
+        required: true
+      tags:
+      - course_units
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseUnit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseUnit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseUnit'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseUnit'
+          description: ''
+    delete:
+      operationId: course_units_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course unit.
+        required: true
+      tags:
+      - course_units
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/courses/:
+    get:
+      operationId: courses_retrieve
+      description: |-
+        A simple ViewSet for listing or retrieving basic course data.
+        Course 'meta' is really just Course model data.
+
+        This API is meant only for admins or applications like dashboard
+        that should have admin status.
+      tags:
+      - courses
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/courses/{id}/:
+    get:
+      operationId: courses_retrieve_2
+      description: |-
+        A simple ViewSet for listing or retrieving basic course data.
+        Course 'meta' is really just Course model data.
+
+        This API is meant only for admins or applications like dashboard
+        that should have admin status.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - courses
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/courses/{id}/interactive_elements/:
+    get:
+      operationId: courses_interactive_elements_retrieve
+      description: |-
+        Lists interactive elements within navigational context.
+        This is important for things like analytics that needs to
+        know where Assessments and SITs appear in a course.
+
+        Blocks are only written once, regardless of how many times they
+        appear in the course.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - courses
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/forum/:
+    get:
+      operationId: forum_retrieve
+      description: Return a list of all discussion topics available
+      tags:
+      - forum
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: forum_create
+      description: |-
+        View to list all posts in a topic
+
+        * Requires token authentication.
+        * Only admin users are able to access this view.
+      tags:
+      - forum
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          description: No response body
+  /api/forum/{id}/:
+    get:
+      operationId: forum_retrieve_2
+      description: |-
+        Return a list of all posts in a topic
+        Args:
+            request:
+            pk:
+
+        Returns:
+            HTTP Response
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - forum
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: forum_update
+      description: |-
+        View to list all posts in a topic
+
+        * Requires token authentication.
+        * Only admin users are able to access this view.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - forum
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: forum_partial_update
+      description: |-
+        View to list all posts in a topic
+
+        * Requires token authentication.
+        * Only admin users are able to access this view.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - forum
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: forum_destroy
+      description: |-
+        View to list all posts in a topic
+
+        * Requires token authentication.
+        * Only admin users are able to access this view.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - forum
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/pathways/:
+    get:
+      operationId: pathways_list
+      tags:
+      - pathways
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PathwayList'
+          description: ''
+    post:
+      operationId: pathways_create
+      tags:
+      - pathways
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pathway'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pathway'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pathway'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pathway'
+          description: ''
+  /api/pathways/{id}/:
+    get:
+      operationId: pathways_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pathway.
+        required: true
+      tags:
+      - pathways
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pathway'
+          description: ''
+    put:
+      operationId: pathways_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pathway.
+        required: true
+      tags:
+      - pathways
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pathway'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pathway'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pathway'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pathway'
+          description: ''
+    patch:
+      operationId: pathways_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pathway.
+        required: true
+      tags:
+      - pathways
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPathway'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPathway'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPathway'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pathway'
+          description: ''
+    delete:
+      operationId: pathways_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pathway.
+        required: true
+      tags:
+      - pathways
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/simple_interactive_tool_submissions/:
+    get:
+      operationId: simple_interactive_tool_submissions_list
+      tags:
+      - simple_interactive_tool_submissions
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          description: ''
+    post:
+      operationId: simple_interactive_tool_submissions_create
+      tags:
+      - simple_interactive_tool_submissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          description: ''
+  /api/simple_interactive_tool_submissions/{id}/:
+    get:
+      operationId: simple_interactive_tool_submissions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - simple_interactive_tool_submissions
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          description: ''
+    put:
+      operationId: simple_interactive_tool_submissions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - simple_interactive_tool_submissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          description: ''
+    patch:
+      operationId: simple_interactive_tool_submissions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - simple_interactive_tool_submissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSimpleInteractiveToolSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSimpleInteractiveToolSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSimpleInteractiveToolSubmission'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          description: ''
+    delete:
+      operationId: simple_interactive_tool_submissions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - simple_interactive_tool_submissions
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/simple_interactive_tool_submissions/{id}/template/:
+    get:
+      operationId: simple_interactive_tool_submissions_template_retrieve
+      description: |-
+        Return the json for the SimpleInteractiveToolTemplate for this
+        SimpleInteractiveTool, if one is defined.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - simple_interactive_tool_submissions
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveToolSubmission'
+          description: ''
+  /api/simple_interactive_tool_templates/:
+    get:
+      operationId: simple_interactive_tool_templates_list
+      tags:
+      - simple_interactive_tool_templates
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+          description: ''
+    post:
+      operationId: simple_interactive_tool_templates_create
+      tags:
+      - simple_interactive_tool_templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+          description: ''
+  /api/simple_interactive_tool_templates/{id}/:
+    get:
+      operationId: simple_interactive_tool_templates_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this simple interactive tool
+          template.
+        required: true
+      tags:
+      - simple_interactive_tool_templates
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+          description: ''
+    put:
+      operationId: simple_interactive_tool_templates_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this simple interactive tool
+          template.
+        required: true
+      tags:
+      - simple_interactive_tool_templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+          description: ''
+    patch:
+      operationId: simple_interactive_tool_templates_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this simple interactive tool
+          template.
+        required: true
+      tags:
+      - simple_interactive_tool_templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSimpleInteractiveToolTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSimpleInteractiveToolTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSimpleInteractiveToolTemplate'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveToolTemplate'
+          description: ''
+    delete:
+      operationId: simple_interactive_tool_templates_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this simple interactive tool
+          template.
+        required: true
+      tags:
+      - simple_interactive_tool_templates
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/simple_interactive_tools/:
+    get:
+      operationId: simple_interactive_tools_list
+      tags:
+      - simple_interactive_tools
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SimpleInteractiveTool'
+          description: ''
+    post:
+      operationId: simple_interactive_tools_create
+      tags:
+      - simple_interactive_tools
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveTool'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveTool'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveTool'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveTool'
+          description: ''
+  /api/simple_interactive_tools/{id}/:
+    get:
+      operationId: simple_interactive_tools_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this simple interactive tool.
+        required: true
+      tags:
+      - simple_interactive_tools
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveTool'
+          description: ''
+    put:
+      operationId: simple_interactive_tools_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this simple interactive tool.
+        required: true
+      tags:
+      - simple_interactive_tools
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveTool'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveTool'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SimpleInteractiveTool'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveTool'
+          description: ''
+    patch:
+      operationId: simple_interactive_tools_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this simple interactive tool.
+        required: true
+      tags:
+      - simple_interactive_tools
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSimpleInteractiveTool'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSimpleInteractiveTool'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSimpleInteractiveTool'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleInteractiveTool'
+          description: ''
+    delete:
+      operationId: simple_interactive_tools_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this simple interactive tool.
+        required: true
+      tags:
+      - simple_interactive_tools
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/tracking/:
+    post:
+      operationId: tracking_create
+      description: |-
+        We override the create() method b/c after
+        validation and saving TrackingEvent we want to send
+        it on via the Tracker to things like AWS logs
+        and Slack.
+
+        Args:
+            request:
+            args:
+            kwargs:
+
+        Return:
+            HTTP response
+      tags:
+      - tracking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APITrackingEvent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/APITrackingEvent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/APITrackingEvent'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APITrackingEvent'
+          description: ''
+  /api/users/:
+    get:
+      operationId: users_list
+      description: Only the users with Admin privs can get user data via the API.
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/{id}/:
+    get:
+      operationId: users_retrieve
+      description: Only the users with Admin privs can get user data via the API.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      description: Only the users with Admin privs can get user data via the API.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: Only the users with Admin privs can get user data via the API.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/me/:
+    get:
+      operationId: users_me_retrieve
+      description: Only the users with Admin privs can get user data via the API.
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/user_profiles/:
+    get:
+      operationId: users_user_profiles_retrieve
+      description: Return engagement data for a course
+      tags:
+      - users
+      security:
+      - tokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    APITrackingEvent:
+      type: object
+      description: |-
+        Serializes a 'tracking' event received via the API.
+        Right now that just means events sent from our video component.
+        Because this event is arriving via API, we have to be a bit
+        stricter when validating.
+
+        Because events are coming from API, we place additional
+        restrictions on the data than what a more generic
+        tracking event needs.
+
+        Most importantly, the extra restrictions include:
+        - the user and course are required.
+        - the user cannot be anonymous or null and must be enrolled
+          in the course defined in the event.
+      properties:
+        event_type:
+          type: string
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+        anon_username:
+          type: string
+          format: uuid
+          nullable: true
+        course_slug:
+          type: string
+          nullable: true
+          pattern: ^[-\w]+$
+          maxLength: 200
+        course_run:
+          type: string
+          nullable: true
+          maxLength: 200
+        unit_node_slug:
+          type: string
+          nullable: true
+          pattern: ^[-\w]+$
+          maxLength: 200
+        course_unit_id:
+          type: integer
+        course_unit_slug:
+          type: string
+          nullable: true
+          pattern: ^[-\w]+$
+          maxLength: 200
+        block_uuid:
+          type: string
+          format: uuid
+          nullable: true
+        event_data:
+          nullable: true
+      required:
+      - course_unit_id
+      - event_type
+      - time
+    Assessment:
+      type: object
+      description: |-
+        Serializes an Assessment, but only the information needed for the client to render it.
+        Does not include details like solution_json, which shouldn't be sent to client.
+        Important to have the 'id' field in this serializer, since the client will need that
+        to send student answers back to the server.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        question:
+          type: string
+          nullable: true
+        answers:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+      required:
+      - answers
+      - id
+    AssessmentAllData:
+      type: object
+      description: Serializes *all* data in an Assessment, including the solution_json.
+      properties:
+        type:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AssessmentAllDataTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        slug:
+          type: string
+          nullable: true
+          pattern: ^[-\w]+$
+          maxLength: 50
+        question:
+          type: string
+          nullable: true
+        question_as_statement:
+          type: string
+          nullable: true
+        definition_json:
+          nullable: true
+        solution_json:
+          nullable: true
+        explanation:
+          type: string
+          nullable: true
+        show_answer:
+          type: boolean
+        show_slug:
+          type: boolean
+        attempts_allowed:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        has_correct_answer:
+          type: boolean
+          nullable: true
+        complete_mode:
+          allOf:
+          - $ref: '#/components/schemas/CompleteModeEnum'
+          description: |-
+            Describes how an Assessment behaves when a student completes it.
+
+            * `ALWAYS_ENABLED` - Always enabled
+            * `DISABLED_ON_COMPLETE` - Disabled on complete
+        graded:
+          type: boolean
+    AssessmentAllDataTypeEnum:
+      enum:
+      - LONG_FORM_TEXT
+      - MULTIPLE_CHOICE
+      - POLL
+      - DONE_INDICATOR
+      type: string
+      description: |-
+        * `LONG_FORM_TEXT` - Long-form text
+        * `MULTIPLE_CHOICE` - Multiple choice
+        * `POLL` - Poll
+        * `DONE_INDICATOR` - Done indicator
+    BlankEnum:
+      enum:
+      - ''
+    Block:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        slug:
+          type: string
+          nullable: true
+        uuid:
+          type: string
+          nullable: true
+        display_name:
+          type: string
+          nullable: true
+        short_description:
+          type: string
+          nullable: true
+        course_only:
+          type: boolean
+          description: Set this flag to tru to prevent this block from appearing anywhere
+            outside of the courses it appears in. (i.e. don't allow to appear as item
+            in learning library)
+        enable_template_tags:
+          type: boolean
+          default: true
+        html_content:
+          type: string
+          nullable: true
+        survey_block:
+          allOf:
+          - $ref: '#/components/schemas/SurveyBlock'
+          nullable: true
+        json_content:
+          nullable: true
+        assessment:
+          allOf:
+          - $ref: '#/components/schemas/AssessmentAllData'
+          nullable: true
+        simple_interactive_tool:
+          allOf:
+          - $ref: '#/components/schemas/SimpleInteractiveToolImport'
+          nullable: true
+        speakers:
+          type: array
+          items:
+            type: string
+            nullable: true
+        learning_objectives:
+          type: array
+          items:
+            type: string
+            nullable: true
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+          nullable: true
+    Bookmark:
+      type: object
+      properties:
+        student:
+          type: integer
+          readOnly: true
+        course:
+          type: integer
+        unit_node:
+          type: integer
+          nullable: true
+        id:
+          type: integer
+          readOnly: true
+      required:
+      - course
+      - id
+      - student
+    CompleteModeEnum:
+      enum:
+      - ALWAYS_ENABLED
+      - DISABLED_ON_COMPLETE
+      type: string
+      description: |-
+        * `ALWAYS_ENABLED` - Always enabled
+        * `DISABLED_ON_COMPLETE` - Disabled on complete
+    CourseUnit:
+      type: object
+      description: |-
+        Serializes and deserializes the CourseUnit model instance,
+        and its child Blocks and related model instances
+        (e.g. Assessment instances).
+
+        Only CourseNodes of type 'UNIT' should have its 'unit'
+        property set to a UnitBlock instance.
+      properties:
+        type:
+          type: string
+          default: STANDARD
+        uuid:
+          type: string
+          format: uuid
+          nullable: true
+        slug:
+          type: string
+          nullable: true
+        display_name:
+          type: string
+          nullable: true
+        short_description:
+          type: string
+          nullable: true
+        course_only:
+          type: boolean
+        enable_template_tags:
+          type: boolean
+          description: Enables a limited number of template tags in this model's html_content
+            field.
+        html_content:
+          type: string
+          nullable: true
+        json_content:
+          nullable: true
+        status:
+          type: string
+          default: PUBLISHED
+        unit_blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitBlock'
+          nullable: true
+        copy_type:
+          type: string
+          writeOnly: true
+    NullEnum:
+      enum:
+      - null
+    PatchedAssessment:
+      type: object
+      description: |-
+        Serializes an Assessment, but only the information needed for the client to render it.
+        Does not include details like solution_json, which shouldn't be sent to client.
+        Important to have the 'id' field in this serializer, since the client will need that
+        to send student answers back to the server.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        question:
+          type: string
+          nullable: true
+        answers:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+    PatchedBlock:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        slug:
+          type: string
+          nullable: true
+        uuid:
+          type: string
+          nullable: true
+        display_name:
+          type: string
+          nullable: true
+        short_description:
+          type: string
+          nullable: true
+        course_only:
+          type: boolean
+          description: Set this flag to tru to prevent this block from appearing anywhere
+            outside of the courses it appears in. (i.e. don't allow to appear as item
+            in learning library)
+        enable_template_tags:
+          type: boolean
+          default: true
+        html_content:
+          type: string
+          nullable: true
+        survey_block:
+          allOf:
+          - $ref: '#/components/schemas/SurveyBlock'
+          nullable: true
+        json_content:
+          nullable: true
+        assessment:
+          allOf:
+          - $ref: '#/components/schemas/AssessmentAllData'
+          nullable: true
+        simple_interactive_tool:
+          allOf:
+          - $ref: '#/components/schemas/SimpleInteractiveToolImport'
+          nullable: true
+        speakers:
+          type: array
+          items:
+            type: string
+            nullable: true
+        learning_objectives:
+          type: array
+          items:
+            type: string
+            nullable: true
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+          nullable: true
+    PatchedBookmark:
+      type: object
+      properties:
+        student:
+          type: integer
+          readOnly: true
+        course:
+          type: integer
+        unit_node:
+          type: integer
+          nullable: true
+        id:
+          type: integer
+          readOnly: true
+    PatchedCourseUnit:
+      type: object
+      description: |-
+        Serializes and deserializes the CourseUnit model instance,
+        and its child Blocks and related model instances
+        (e.g. Assessment instances).
+
+        Only CourseNodes of type 'UNIT' should have its 'unit'
+        property set to a UnitBlock instance.
+      properties:
+        type:
+          type: string
+          default: STANDARD
+        uuid:
+          type: string
+          format: uuid
+          nullable: true
+        slug:
+          type: string
+          nullable: true
+        display_name:
+          type: string
+          nullable: true
+        short_description:
+          type: string
+          nullable: true
+        course_only:
+          type: boolean
+        enable_template_tags:
+          type: boolean
+          description: Enables a limited number of template tags in this model's html_content
+            field.
+        html_content:
+          type: string
+          nullable: true
+        json_content:
+          nullable: true
+        status:
+          type: string
+          default: PUBLISHED
+        unit_blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnitBlock'
+          nullable: true
+        copy_type:
+          type: string
+          writeOnly: true
+    PatchedPathway:
+      type: object
+      properties:
+        display_name:
+          type: string
+          nullable: true
+          maxLength: 250
+        author:
+          type: integer
+        description:
+          type: string
+          nullable: true
+        tags:
+          type: string
+          readOnly: true
+        learning_objects:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+    PatchedSimpleInteractiveTool:
+      type: object
+      description: |-
+        This serializer is used for admin views in the API. This API endpoint
+        might be used by KinesinLMS analytics.
+        The endpoint requirements might be a little different from the import
+        requirements, which is why we have this serializer and
+        SimpleInteractiveToolImportSerializer.
+
+        This serializer is not meant for student use.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        slug:
+          type: string
+          pattern: ^[-\w]+$
+          maxLength: 50
+        block:
+          type: integer
+        name:
+          type: string
+          nullable: true
+          maxLength: 400
+        tool_type:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ToolTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        definition:
+          nullable: true
+          default: {}
+        graded:
+          type: boolean
+          default: false
+        template:
+          type: string
+          nullable: true
+          description: Unique slug for template
+        max_score:
+          type: integer
+          readOnly: true
+    PatchedSimpleInteractiveToolSubmission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        course:
+          type: integer
+          nullable: true
+        simple_interactive_tool:
+          type: integer
+        student:
+          type: integer
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/SimpleInteractiveToolSubmissionStatusEnum'
+          readOnly: true
+        max_score:
+          type: string
+          readOnly: true
+        score:
+          type: integer
+          readOnly: true
+        json_content:
+          nullable: true
+    PatchedSimpleInteractiveToolTemplate:
+      type: object
+      description: |-
+        This serializer is meant for importing / exporting courses that contain
+        either links to existing SIT templates or need to create new SIT templates
+        (that are then used by SITs in the course).
+      properties:
+        author:
+          type: integer
+          readOnly: true
+          nullable: true
+          description: The author of this template
+        tool_type:
+          nullable: true
+          description: |-
+            The type of SimpleInteractiveTool this template is for.
+
+            * `DIAGRAM` - Diagram
+            * `TABLETOOL` - TableTool
+          oneOf:
+          - $ref: '#/components/schemas/ToolTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        slug:
+          type: string
+          nullable: true
+          description: Unique slug for template
+          maxLength: 40
+          pattern: ^[-a-zA-Z0-9_]+$
+        name:
+          type: string
+          nullable: true
+          description: The name of this SimpleInteractiveTool template (not shown
+            to student).
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+          title: Description of this SimpleInteractiveTool template and its purpose
+            (not shown to student).
+        instructions:
+          type: string
+          nullable: true
+          title: Instructions for student on how to work with  this particular SimpleInteractiveTool
+            template.
+        definition:
+          nullable: true
+        template_json:
+          nullable: true
+          description: A complete JSON definition of the SimpleInteractiveTool template
+    PatchedSubmittedAnswer:
+      type: object
+      description: |-
+        This serializer handles incoming 'answers' submitted by students via a React-based
+        assessment component from library.js.
+
+        Note that we override the 'create' and 'update' methods here rather than in the SubmittedAnswerViewSet.
+        I think there's some back and forth about which place is better. We're going with here in the
+        serializer for the time being.
+
+        We sometimes pass back some Assessment information to the API client, such as
+        the assessment explanation if the answer is correct.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        assessment:
+          type: integer
+        course:
+          type: integer
+          nullable: true
+        student:
+          type: integer
+          readOnly: true
+        json_content:
+          nullable: true
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/SubmittedAnswerStatusEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        explanation:
+          type: string
+          readOnly: true
+        course_unit:
+          type: string
+          writeOnly: true
+    PatchedUser:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          title: Name of user
+          maxLength: 500
+        url:
+          type: string
+          format: uri
+          readOnly: true
+    Pathway:
+      type: object
+      properties:
+        display_name:
+          type: string
+          nullable: true
+          maxLength: 250
+        author:
+          type: integer
+        description:
+          type: string
+          nullable: true
+        tags:
+          type: string
+          readOnly: true
+        learning_objects:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+      required:
+      - author
+      - learning_objects
+      - tags
+    PathwayList:
+      type: object
+      properties:
+        display_name:
+          type: string
+          nullable: true
+          maxLength: 250
+        description:
+          type: string
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+        author:
+          type: integer
+      required:
+      - author
+      - tags
+    Resource:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ResourceTypeEnum'
+        slug:
+          type: string
+          nullable: true
+          description: A slug for this resource. The main use of a slug here is simple
+            indication of purpose of resource, both for students (when seen in a URL
+            for this resource if its available in the learning library) and for admins
+            (when viewing event data in event objects).
+          pattern: ^[-\w]+$
+          maxLength: 300
+        uuid:
+          type: string
+        file_name:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - file_name
+      - uuid
+    ResourceTypeEnum:
+      enum:
+      - GENERIC
+      - IMAGE
+      - VIDEO_TRANSCRIPT
+      - JUPYTER_NOTEBOOK
+      - SQLITE
+      - CSV
+      type: string
+      description: |-
+        * `GENERIC` - Generic
+        * `IMAGE` - Image
+        * `VIDEO_TRANSCRIPT` - Video transcript
+        * `JUPYTER_NOTEBOOK` - Jupyter Notebook
+        * `SQLITE` - SQLITE file
+        * `CSV` - CSV file
+    SimpleInteractiveTool:
+      type: object
+      description: |-
+        This serializer is used for admin views in the API. This API endpoint
+        might be used by KinesinLMS analytics.
+        The endpoint requirements might be a little different from the import
+        requirements, which is why we have this serializer and
+        SimpleInteractiveToolImportSerializer.
+
+        This serializer is not meant for student use.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        slug:
+          type: string
+          pattern: ^[-\w]+$
+          maxLength: 50
+        block:
+          type: integer
+        name:
+          type: string
+          nullable: true
+          maxLength: 400
+        tool_type:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ToolTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        definition:
+          nullable: true
+          default: {}
+        graded:
+          type: boolean
+          default: false
+        template:
+          type: string
+          nullable: true
+          description: Unique slug for template
+        max_score:
+          type: integer
+          readOnly: true
+      required:
+      - block
+      - id
+      - max_score
+      - slug
+      - template
+    SimpleInteractiveToolImport:
+      type: object
+      description: |-
+        This serializer meant to be used during course imports.
+        It's not meant for student use.
+      properties:
+        slug:
+          type: string
+          pattern: ^[-\w]+$
+          maxLength: 50
+        name:
+          type: string
+          nullable: true
+          maxLength: 400
+        tool_type:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ToolTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        instructions:
+          type: string
+          nullable: true
+          title: Instructions and/or extra information about this SimpleInteractiveTool
+            to display to the student.
+        graded:
+          type: boolean
+          default: false
+        definition:
+          nullable: true
+        template:
+          type: string
+          nullable: true
+          description: Unique slug for template
+      required:
+      - slug
+    SimpleInteractiveToolSubmission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        course:
+          type: integer
+          nullable: true
+        simple_interactive_tool:
+          type: integer
+        student:
+          type: integer
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/SimpleInteractiveToolSubmissionStatusEnum'
+          readOnly: true
+        max_score:
+          type: string
+          readOnly: true
+        score:
+          type: integer
+          readOnly: true
+        json_content:
+          nullable: true
+      required:
+      - course
+      - id
+      - json_content
+      - max_score
+      - score
+      - simple_interactive_tool
+      - status
+      - student
+    SimpleInteractiveToolSubmissionStatusEnum:
+      enum:
+      - UNANSWERED
+      - INCOMPLETE
+      - COMPLETE
+      type: string
+      description: |-
+        * `UNANSWERED` - Unanswered
+        * `INCOMPLETE` - Incomplete
+        * `COMPLETE` - Complete
+    SimpleInteractiveToolTemplate:
+      type: object
+      description: |-
+        This serializer is meant for importing / exporting courses that contain
+        either links to existing SIT templates or need to create new SIT templates
+        (that are then used by SITs in the course).
+      properties:
+        author:
+          type: integer
+          readOnly: true
+          nullable: true
+          description: The author of this template
+        tool_type:
+          nullable: true
+          description: |-
+            The type of SimpleInteractiveTool this template is for.
+
+            * `DIAGRAM` - Diagram
+            * `TABLETOOL` - TableTool
+          oneOf:
+          - $ref: '#/components/schemas/ToolTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        slug:
+          type: string
+          nullable: true
+          description: Unique slug for template
+          maxLength: 40
+          pattern: ^[-a-zA-Z0-9_]+$
+        name:
+          type: string
+          nullable: true
+          description: The name of this SimpleInteractiveTool template (not shown
+            to student).
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+          title: Description of this SimpleInteractiveTool template and its purpose
+            (not shown to student).
+        instructions:
+          type: string
+          nullable: true
+          title: Instructions for student on how to work with  this particular SimpleInteractiveTool
+            template.
+        definition:
+          nullable: true
+        template_json:
+          nullable: true
+          description: A complete JSON definition of the SimpleInteractiveTool template
+      required:
+      - author
+    SubmittedAnswer:
+      type: object
+      description: |-
+        This serializer handles incoming 'answers' submitted by students via a React-based
+        assessment component from library.js.
+
+        Note that we override the 'create' and 'update' methods here rather than in the SubmittedAnswerViewSet.
+        I think there's some back and forth about which place is better. We're going with here in the
+        serializer for the time being.
+
+        We sometimes pass back some Assessment information to the API client, such as
+        the assessment explanation if the answer is correct.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        assessment:
+          type: integer
+        course:
+          type: integer
+          nullable: true
+        student:
+          type: integer
+          readOnly: true
+        json_content:
+          nullable: true
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/SubmittedAnswerStatusEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        explanation:
+          type: string
+          readOnly: true
+        course_unit:
+          type: string
+          writeOnly: true
+      required:
+      - assessment
+      - course
+      - course_unit
+      - explanation
+      - id
+      - student
+    SubmittedAnswerStatusEnum:
+      enum:
+      - UNANSWERED
+      - INCOMPLETE
+      - COMPLETE
+      - CORRECT
+      - INCORRECT
+      type: string
+      description: |-
+        * `UNANSWERED` - Unanswered
+        * `INCOMPLETE` - Incomplete
+        * `COMPLETE` - Complete
+        * `CORRECT` - Correct
+        * `INCORRECT` - Incorrect
+    SurveyBlock:
+      type: object
+      properties:
+        survey:
+          type: string
+          nullable: true
+          description: Slug identifier for survey (used in e.g. course json imports).
+      required:
+      - survey
+    ToolTypeEnum:
+      enum:
+      - DIAGRAM
+      - TABLETOOL
+      type: string
+      description: |-
+        * `DIAGRAM` - Diagram
+        * `TABLETOOL` - TableTool
+    UnitBlock:
+      type: object
+      properties:
+        label:
+          type: string
+          nullable: true
+          description: A label that should appear next to this block when rendered
+            in this particular unit.
+          maxLength: 200
+        index_label:
+          type: string
+          nullable: true
+          description: An index number that should appear next to this block when
+            rendered in this particular unit.
+          maxLength: 200
+        block_order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        hide:
+          type: boolean
+          description: Hide this block in in this particular unit.
+        read_only:
+          type: boolean
+          description: This block is read only in this particular unit.
+        include_in_summary:
+          type: boolean
+          description: This block is included in any course summary pages (like 'My
+            Responses' or 'Printable Review'.
+        block:
+          $ref: '#/components/schemas/Block'
+      required:
+      - block
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          title: Name of user
+          maxLength: 500
+        url:
+          type: string
+          format: uri
+          readOnly: true
+      required:
+      - url
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
