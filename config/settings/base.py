@@ -2,6 +2,7 @@
 Base settings to build other settings files upon.
 """
 
+import ssl
 from pathlib import Path
 
 import environ
@@ -43,7 +44,10 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres:///kinesinlms"),
+    "default": env.db(
+        "DATABASE_URL",
+        default="postgres:///kinesinlms",
+    ),
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -184,10 +188,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "waffle.middleware.WaffleMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 # STATIC
@@ -232,9 +236,10 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
+                "django_react_templatetags.context_processors.react_context_processor",
                 "kinesinlms.utils.context_processors.settings_context",
                 "kinesinlms.core.context_processors.site_context",
-                "django_react_templatetags.context_processors.react_context_processor",
+                "kinesinlms.users.context_processors.allauth_settings",
             ],
         },
     },
@@ -257,7 +262,7 @@ FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
 SESSION_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
-# KinesinLMS: Setting to false so React/Axios calls work
+# KinesinLMS: Setting to False so React/Axios calls work
 # KinesinLMS: Per Django docs, no reason to set this to True:
 # https://docs.djangoproject.com/en/4.2/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = False
@@ -275,8 +280,14 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
-ADMIN_EMAIL = env("DJANGO_ADMIN_EMAIL", default="kinesinlms-admin@example.com")
+EMAIL_BACKEND = env(
+    "DJANGO_EMAIL_BACKEND",
+    default="django.core.mail.backends.smtp.EmailBackend",
+)
+ADMIN_EMAIL = env(
+    "DJANGO_ADMIN_EMAIL",
+    default="kinesinlms-admin@example.com",
+)
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
@@ -319,10 +330,20 @@ LOGGING = {
 
 # CACHES
 # ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#caches
+# Make sure to use redis because we have some processes where
+# both celery and django need to have access to same cache values.
 
 REDIS_URL = env("REDIS_URL", default=None)
 if not REDIS_URL:
-    raise Exception("Cannot find REDIS url in environment. Please set REDIS_TLS_URL or REDIS_URL.")
+    raise Exception("Cannot find REDIS url in environment. Please set REDIS_URL.")
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+    }
+}
+REDIS_SSL = REDIS_URL.startswith("rediss://")
 
 # Celery
 # ------------------------------------------------------------------------------
@@ -331,26 +352,19 @@ if USE_TZ:
     CELERY_TIMEZONE = TIME_ZONE
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=None)
+# https://cheat.readthedocs.io/en/latest/django/celery.html
+CELERYD_HIJACK_ROOT_LOGGER = False
 
 # If we don't have a CELERY_BROKER_URL, use REDIS_URL.
 if not CELERY_BROKER_URL:
     CELERY_BROKER_URL = REDIS_URL
 
-# CACHES
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#caches
-# Make sure to use redis because we have some processes where
-# both celery and django need to have access to same cache values.
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
-    }
-}
-
-
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#redis-backend-use-ssl
+CELERY_BROKER_USE_SSL = {"ssl_cert_reqs": ssl.CERT_NONE} if REDIS_SSL else None
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#redis-backend-use-ssl
+CELERY_REDIS_BACKEND_USE_SSL = CELERY_BROKER_USE_SSL
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#result-extended
 CELERY_RESULT_EXTENDED = True
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#result-backend-always-retry
@@ -374,6 +388,8 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_WORKER_SEND_TASK_EVENTS = True
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#std-setting-task_send_sent_event
 CELERY_TASK_SEND_SENT_EVENT = True
+# https://cheat.readthedocs.io/en/latest/django/celery.html
+CELERYD_HIJACK_ROOT_LOGGER = False
 
 # django-allauth
 # ------------------------------------------------------------------------------
@@ -388,6 +404,8 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_ADAPTER = "kinesinlms.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "kinesinlms.users.adapters.SocialAccountAdapter"
+# https://docs.allauth.org/en/latest/socialaccount/configuration.html
+SOCIALACCOUNT_FORMS = {"signup": "kinesinlms.users.forms.UserSocialSignupForm"}
 
 # DJANGO REST FRAMEWORK
 # ------------------------------------------------------------------------------
@@ -424,10 +442,13 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Documentation of API endpoints of KinesinLMS",
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
+    "SCHEMA_PATH_PREFIX": "/api/",
 }
 
 #  OTHER...
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Most of the above settings are derived from the Django Cookiecutter template.
+# Below are settings more specific to KinesinLMS....
 
 # For react-django-templates
 REACT_COMPONENT_PREFIX = "kinesinlmsComponents."

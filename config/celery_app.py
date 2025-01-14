@@ -1,8 +1,7 @@
 import os
-from celery import Celery
 
-# set the default Django settings module for the 'celery' program.
-from django.conf import settings
+from celery import Celery
+from celery.signals import setup_logging
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.production")
 
@@ -14,12 +13,16 @@ app = Celery("kinesinlms")
 #   should have a `CELERY_` prefix.
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
-if settings.DJANGO_PIPELINE != "LOCAL":
-    # We're running on Heroku, so set the redis_backend_use_ssl config var
-    # From https://github.com/celery/celery/issues/5371#issuecomment-839075587
-    # Event though we did similar updates in production.py, that's for the Cache,
-    # whereas this is for celery...
-    app.conf.redis_backend_use_ssl = {"ssl_cert_reqs": "none"}
+
+@setup_logging.connect
+def config_loggers(*args, **kwargs):
+    from logging.config import dictConfig
+
+    from django.conf import settings
+
+    dictConfig(settings.LOGGING)
+
+
 
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
@@ -27,4 +30,4 @@ app.autodiscover_tasks()
 
 @app.task(bind=True)
 def debug_task(self):
-    print('Request: {0!r}'.format(self.request))
+    print("Request: {0!r}".format(self.request))

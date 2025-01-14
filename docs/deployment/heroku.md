@@ -7,10 +7,10 @@ so make sure you look around at pricing and developer tools before selecting a s
 so do your homework.
 
 !!! note
-    Heroku isn't free. Not even close. They used to have a free tier, but even that is gone. Nothing gold can stay.
-    So make sure you investigate Heroku charges (of which there are many) before attempting to deploy to Heroku.
-    This project certainly does not recommend Heroku as an affordable option, but it is (still) relatively easy to get
-    started. So please do your research on other providers. We hope to include directions for setting up some others (Fly.io, Render.com, etc.) soon.
+Heroku isn't free. Not even close. They used to have a free tier, but even that is gone. Nothing gold can stay.
+So make sure you investigate Heroku charges (of which there are many) before attempting to deploy to Heroku.
+This project certainly does not recommend Heroku as an affordable option, but it is (still) relatively easy to get
+started. So please do your research on other providers. We hope to include directions for setting up some others (Fly.io, Render.com, etc.) soon.
 
 These instructions describe the basic steps for hosting your site on Heroku, but the steps should be similar
 for other services.
@@ -33,9 +33,9 @@ modify code accordingly. (E.g. when not running onthe `PRODUCTION` pipeline, per
 want to emails if they're going to you or some test accounts you've configured.)
 
 !!! note
-    You don't have to set up three servers to get going. You could set up only one to limit cost.
-    Using 'development', 'staging' and 'production' is a common pattern to help manage new features,
-    product testing and production updates.
+You don't have to set up three servers to get going. You could set up only one to limit cost.
+Using 'development', 'staging' and 'production' is a common pattern to help manage new features,
+product testing and production updates.
 
 ## Creating Heroku Apps
 
@@ -104,9 +104,16 @@ Let's add the Heroku Redis add-on:
 
     heroku addons:create heroku-redis:mini --remote development
 
-KinesinLMS needs to know that Celery is to use this Redis service, so copy the Redis URL into the appropriate env variable:
+Then configure the environment variables that tell Heroku to use SSL with Redis:
 
-    heroku config:set CELERY_BROKER_URL=$(heroku config:get REDIS_TLS_URL) --remote development
+    heroku config:set REDIS_SSL=True
+    heroku config:set CELERY_BROKER_USE_SSL=True
+    heroku config:set CELERY_REDIS_BACKEND_USE_SSL=True
+
+KinesinLMS needs to know that Celery is to use this Redis service, so copy the REDIS_URL (automatically
+set by Heroku when you added Redis) into the appropriate env variable for Celery:
+
+    heroku config:set CELERY_BROKER_URL=$(heroku config:get REDIS_URL) --remote development
 
 ## Environment Veriables Setup
 
@@ -150,7 +157,7 @@ access to that bucket. Describing how to create these in AWS is outside the scop
 <https://testdriven.io/blog/storing-django-static-and-media-files-on-amazon-s3/>
 
 !!! note
-    If you use AWS S3, be really careful with your configuration. This is one of those places you can't avoid complexity and reading the docs.
+If you use AWS S3, be really careful with your configuration. This is one of those places you can't avoid complexity and reading the docs.
 
 Once you've created an S3 bucket for the KinesinLMS app and an IAM user with access to that bucket,
 create an access key and secret for that IAM user.
