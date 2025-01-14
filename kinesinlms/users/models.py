@@ -228,7 +228,7 @@ class User(AbstractUser):
             return settings
 
     def get_absolute_url(self) -> str:
-        return reverse("users:detail", kwargs={"pk": self.id})
+        return reverse("users:detail", kwargs={"username": self.username})
 
     @property
     def is_educator(self) -> bool:

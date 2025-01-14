@@ -1,11 +1,9 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from kinesinlms.users.models import GroupTypes
-from django.http import HttpRequest
 
 
 class ComposerAuthorRequiredMixin(UserPassesTestMixin):
-
     def test_func(self):
         if not self.request.user.is_authenticated:
             return False
@@ -19,14 +17,10 @@ class ComposerAuthorRequiredMixin(UserPassesTestMixin):
 
 
 class SuperuserRequiredMixin(UserPassesTestMixin):
-
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.is_superuser
 
 
 class StaffOrSuperuserRequiredMixin(UserPassesTestMixin):
-    
     def test_func(self):  # noqa
-        return self.request.user.is_authenticated and (
-            self.request.user.is_superuser or self.request.user.is_staff
-        )
+        return self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user.is_staff)

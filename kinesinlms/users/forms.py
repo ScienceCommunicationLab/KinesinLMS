@@ -1,21 +1,18 @@
 import datetime
 
-from django_recaptcha.fields import ReCaptchaField
-from django_recaptcha.widgets import ReCaptchaV2Checkbox
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 from django.conf import settings
 from django.contrib.auth import forms as admin_forms
-from django.contrib.auth import get_user_model, forms as user_forms
+from django.contrib.auth import forms as user_forms
 from django.core.exceptions import ValidationError
-from django.forms import EmailField
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Checkbox
 
-from kinesinlms.users.models import UserSettings
-
-User = get_user_model()
+from kinesinlms.users.models import User, UserSettings
 
 
 def current_year():
@@ -71,10 +68,7 @@ class UserCreationForm(user_forms.UserCreationForm):
 class UserSettingsForm(forms.ModelForm):
     enable_badges = forms.BooleanField(
         required=False,
-        help_text=_(
-            "Check this option if you want to receive badges "
-            "in courses that award them."
-        ),
+        help_text=_("Check this option if you want to receive badges " "in courses that award them."),
     )
 
     class Meta:
@@ -140,14 +134,11 @@ class UserSignupForm(UserCreationForm):
 
     gender_description = forms.CharField(
         max_length=100,
-        label="If none of the gender options above apply to "
-        "you, please describe your gender:",
+        label="If none of the gender options above apply to " "you, please describe your gender:",
         required=False,
     )
 
-    year_of_birth = forms.TypedChoiceField(
-        coerce=int, choices=year_choices, initial=current_year, required=False
-    )
+    year_of_birth = forms.TypedChoiceField(coerce=int, choices=year_choices, initial=current_year, required=False)
 
     # Make sure box is ticked for signup...
     agree_to_honor_code = forms.BooleanField(
@@ -166,10 +157,7 @@ class UserSignupForm(UserCreationForm):
         required=True,
         initial=True,
         label=mark_safe(
-            _(
-                "Enable course badges <a href='/help/badges/' target='_blank'>"
-                "What are course badges?</a>"
-            )
+            _("Enable course badges <a href='/help/badges/' target='_blank'>" "What are course badges?</a>")
         ),
     )
 

@@ -197,7 +197,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self) -> str:
         msg = "User profile updated!"
         messages.add_message(self.request, messages.INFO, msg)
-        return reverse("users:detail", kwargs={"pk": self.request.user.id})
+        return reverse("users:detail", kwargs={"username": self.request.user.username})
 
     def get_object(self, queryset=None):
         return User.objects.get(username=self.request.user.username)
@@ -219,7 +219,7 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
     def get_redirect_url(self) -> str:
-        return reverse("users:detail", kwargs={"pk": self.request.user.id})
+        return reverse("users:detail", kwargs={"username": self.request.user.username})
 
 
 user_redirect_view = UserRedirectView.as_view()
