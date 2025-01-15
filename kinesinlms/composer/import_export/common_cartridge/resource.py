@@ -255,7 +255,10 @@ class CCHandler(ABC):
 
             # First, render the html_content so the path is updated from the template tag
             # to the full URL that would have been rendered.
-            context = {"request": None, "block": unit_block.block,}
+            context = {
+                "request": None,
+                "block": unit_block.block,
+            }
             html_content = render_html_content(context, item=unit_block.block)
 
             # Get the full URL that would have been rendered
@@ -538,18 +541,70 @@ class AssessmentCCResource(CCHandler):
 
 class ForumTopicCCResource(CCHandler):
     def get_cc_resource_type(self) -> str:
+        # The IMS standard resource type for discussion topics is "imsdt_xmlv1p3".
         return CommonCartridgeResourceType.DISCUSSION_TOPIC.value
 
-    def create_cc_file_for_unit_block(
-        self,
-        zip_file: ZipFile,
-    ) -> bool:
-        """
-        Creates a Common Cartridge resource file for an FORUM_TOPIC type block.
-        Adds the file to the zip file.
-        """
+    def create_cc_file_for_unit_block(self, zip_file: ZipFile) -> bool:
+        forum_title = self.block.display_name or "Untitled Forum"
+        forum_text = (self.block.html_content or "").strip()
 
-        logger.warning(f"Forum topic block export not yet implemented: {self.block}")
+        NS = "http://www.imsglobal.org/xsd/imsccv1p3/discussion_topic"
+        NS_XSI = "http://www.w3.org/2001/XMLSchema-instance"
+        SCHEMA_URL = "http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_discussion_topic_v1p0.xsd"
+
+        # Create <topics> element in the discussion_topic namespace
+        topics_el = etree.Element(
+            "{%s}topics" % NS,
+            nsmap={
+                None: NS,  # default namespace
+                "xsi": NS_XSI,
+            },
+        )
+        # Set schemaLocation (so the LMS sees we are referencing the official discussion topic XSD)
+        topics_el.set(etree.QName(NS_XSI, "schemaLocation"), f"{NS} {SCHEMA_URL}")
+
+        # Now create <topic> child
+        topic_el = etree.SubElement(topics_el, "{%s}topic" % NS, identifier=str(self.block.uuid))
+
+        title_el = etree.SubElement(topic_el, "{%s}title" % NS)
+        title_el.text = forum_title
+
+        text_el = etree.SubElement(topic_el, "{%s}text" % NS)
+        text_el.text = forum_text
+
+        # Serialize
+        forum_xml_bytes = etree.tostring(
+            topics_el,
+            encoding="utf-8",
+            xml_declaration=True,
+            pretty_print=True,
+        )
+
+        # Write to the ZIP
+        block_filename = self._block_resource_file_path()  # e.g., "folder/filename.xml"
+        zip_file.writestr(block_filename, forum_xml_bytes)
+        return True
+
+    def _block_resource_file_path(self) -> str:
+        """
+        Override to produce a .xml filename for Forum topics
+        instead of the default .html from the base class.
+        """
+        if not self.unit_block:
+            raise ValueError("unit_block must be provided")
+
+        block = self.unit_block.block
+        folder_name = str(block.uuid)
+        if block.display_name:
+            filename = slugify(block.display_name) + ".xml"
+        else:
+            filename = f"{block.type}.xml"
+
+        path = folder_name + "/" + filename
+        if not validate_resource_path(path):
+            raise ValueError(f"Invalid resource path generated: {path}")
+
+        return path
 
 
 class SimpleInteractiveToolCCResource(CCHandler):
