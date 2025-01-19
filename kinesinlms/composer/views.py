@@ -638,7 +638,7 @@ def course_download_export(request, course_slug=None, course_run=None):
         export_filename = "{}_{}_export.imscc".format(course_slug, course_run)
     else:
         course_exporter: BaseExporter = KinesinLMSCourseExporter()
-        export_filename = "{}_{}_export.zip".format(course_slug, course_run)
+        export_filename = "{}_{}_export.klms".format(course_slug, course_run)
 
     try:
         zip_bytes: BytesIO = course_exporter.export_course(course=course, export_format=export_format)

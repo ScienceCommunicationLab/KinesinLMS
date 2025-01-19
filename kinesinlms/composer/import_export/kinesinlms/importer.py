@@ -162,7 +162,7 @@ class KinesinLMSCourseImporter(CourseImporterBase):
         options: CourseImportOptions = None,
     ) -> Course:
         """
-        Load a course and related resources from a course archive (.zip) file.
+        Load a course and related resources from a course archive (.klms) file.
 
         Args:
             file:

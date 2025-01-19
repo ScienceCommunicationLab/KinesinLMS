@@ -42,9 +42,9 @@ class DeleteCourseForm(forms.Form):
 
 class ImportCourseFromArchiveForm(forms.Form):
     file = forms.FileField(
-        label="Select course archive .zip file",
+        label="Select course archive .klms file",
         required=True,
-        widget=forms.ClearableFileInput(attrs={"accept": [".zip", ".ibioarchive"], "multiple": False}),
+        widget=forms.ClearableFileInput(attrs={"accept": [".klms", ".ibioarchive"], "multiple": False}),
     )
 
     create_forum_items = forms.BooleanField(
