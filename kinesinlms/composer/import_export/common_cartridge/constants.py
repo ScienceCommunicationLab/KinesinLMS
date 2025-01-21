@@ -7,12 +7,6 @@ class CommonCartridgeExportDir(Enum):
     IMS_CC_ROOT_DIR = "$IMS-CC-FILEBASE$"
 
 
-class CommonCartridgeExportFormat(Enum):
-    CC_FULL = "Full Common Cartridge Format"
-    CC_SLIM = "Slim Common Cartridge Format"
-    # Others?
-
-
 class CommonCartridgeResourceType(Enum):
     # Basic Content Types
     WEB_CONTENT = "webcontent"

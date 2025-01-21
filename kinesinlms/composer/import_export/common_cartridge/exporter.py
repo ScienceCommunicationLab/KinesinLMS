@@ -10,12 +10,12 @@ from lxml.etree import register_namespace
 from kinesinlms.composer.import_export.common_cartridge.constants import (
     NAMESPACES,
     SCHEMA_LOCATIONS,
-    CommonCartridgeExportFormat,
 )
 from kinesinlms.composer.import_export.common_cartridge.factory import (
     CCHandlerFactory,
 )
 from kinesinlms.composer.import_export.common_cartridge.resource import CCHandler
+from kinesinlms.composer.import_export.constants import CourseExportFormat
 from kinesinlms.composer.import_export.exporter import BaseExporter
 from kinesinlms.core.utils import get_current_site_profile
 from kinesinlms.course.models import Course
@@ -49,7 +49,7 @@ class CommonCartridgeExporter(BaseExporter):
 
         Args:
             course (Course): The course to export
-            export_format (string): The CommonCartridgeExportFormat to use
+            export_format (string): The CourseExportFormat to use
 
         Raises:
             ValueError: if arguments are invalid
@@ -63,7 +63,10 @@ class CommonCartridgeExporter(BaseExporter):
 
         if not course:
             raise ValueError("Course must be specified for export.")
-        if export_format not in [item.name for item in CommonCartridgeExportFormat]:
+        if export_format not in [
+            CourseExportFormat.COMMON_CARTRIDGE_SLIM.name,
+            CourseExportFormat.COMMON_CARTRIDGE_FULL.name,
+        ]:
             raise ValueError(f"Export format {export_format} not supported.")
 
         # XML STUFF
@@ -109,6 +112,11 @@ class CommonCartridgeExporter(BaseExporter):
         # Return the zip file
         zf.close()
         return bytes_io
+
+
+    def get_export_filename(self, course: Course) -> str:
+        export_filename = "{}_{}_export.imscc".format(course.slug, course.run)
+        return export_filename
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # PRIVATE METHODS

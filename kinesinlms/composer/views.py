@@ -29,6 +29,7 @@ from kinesinlms.composer.factory import (
     create_module_node,
     create_section_node,
     create_unit_node,
+    get_course_exporter,
 )
 from kinesinlms.composer.forms.catalog import CourseCatalogDescriptionForm
 from kinesinlms.composer.forms.course import (
@@ -38,26 +39,12 @@ from kinesinlms.composer.forms.course import (
     ImportCourseFromArchiveForm,
 )
 from kinesinlms.composer.forms.settings import ComposerSettingsForm
-from kinesinlms.composer.import_export.common_cartridge.constants import (
-    CommonCartridgeExportFormat,
-)
-from kinesinlms.composer.import_export.common_cartridge.exporter import (
-    CommonCartridgeExporter,
-)
 from kinesinlms.composer.import_export.constants import (
     CourseExportFormat,
 )
 from kinesinlms.composer.import_export.exporter import BaseExporter
-from kinesinlms.composer.import_export.ibiov2.importer import IBiologyCoursesCourseImporter
-from kinesinlms.composer.import_export.importer import (
-    CourseImporterBase,
-    CourseImportOptions,
-)
 from kinesinlms.composer.import_export.kinesinlms.constants import (
     VALID_COURSE_EXPORT_FORMAT_IDS,
-)
-from kinesinlms.composer.import_export.kinesinlms.exporter import (
-    KinesinLMSCourseExporter,
 )
 from kinesinlms.composer.import_export.kinesinlms.importer import KinesinLMSCourseImporter
 from kinesinlms.composer.models import ComposerSettings, CourseImportTaskResult, CourseImportTaskStatus
@@ -621,8 +608,9 @@ def course_download_export(request, course_slug=None, course_run=None):
 
     if export_format not in [
         CourseExportFormat.KINESIN_LMS_ZIP.name,
-        CommonCartridgeExportFormat.CC_FULL.name,
-        CommonCartridgeExportFormat.CC_SLIM.name,
+        CourseExportFormat.OPEN_EDX.name,
+        CourseExportFormat.COMMON_CARTRIDGE_FULL.name,
+        CourseExportFormat.COMMON_CARTRIDGE_SLIM.name,
     ]:
         return HttpResponseBadRequest(f"Export format {export_format} not supported.")
 
@@ -630,15 +618,8 @@ def course_download_export(request, course_slug=None, course_run=None):
     delete_course_nav_cache(course_slug, course_run)
 
     course = get_object_or_404(Course, slug=course_slug, run=course_run)
-    if export_format in [
-        CommonCartridgeExportFormat.CC_FULL.name,
-        CommonCartridgeExportFormat.CC_SLIM.name,
-    ]:
-        course_exporter: BaseExporter = CommonCartridgeExporter()
-        export_filename = "{}_{}_export.imscc".format(course_slug, course_run)
-    else:
-        course_exporter: BaseExporter = KinesinLMSCourseExporter()
-        export_filename = "{}_{}_export.klms".format(course_slug, course_run)
+    course_exporter: BaseExporter = get_course_exporter(export_format)
+    export_filename = course_exporter.get_export_filename(course)
 
     try:
         zip_bytes: BytesIO = course_exporter.export_course(course=course, export_format=export_format)

@@ -1,14 +1,13 @@
 from typing import List
 
 from django.conf import settings
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from kinesinlms.core.constants import TaskResult
 from kinesinlms.core.models import Trackable
 from kinesinlms.course.models import Course
 from kinesinlms.course_analytics.utils import ModuleInfo, StudentModulesProgress
-
 
 # Create your models here.
 
@@ -30,41 +29,37 @@ class StudentProgressReport(Trackable):
     # existing reports for a user when they run a new one
     # (to avoid taking up DB space)
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             blank=False,
-                             null=False,
-                             related_name='student_progress_reports',
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        blank=False,
+        null=False,
+        related_name="student_progress_reports",
+        on_delete=models.CASCADE,
+    )
 
     # We need direct reference to course when cohort is None
-    course = models.ForeignKey(Course,
-                               null=True,
-                               related_name="student_progress_reports",
-                               on_delete=models.CASCADE
-                               )
+    course = models.ForeignKey(Course, null=True, related_name="student_progress_reports", on_delete=models.CASCADE)
 
     # When this is blank, it means all cohorts user has access to in this course.
-    cohort = models.ForeignKey("course.Cohort",
-                               null=True,
-                               blank=True,
-                               on_delete=models.CASCADE,
-                               related_name="student_progress_reports")
+    cohort = models.ForeignKey(
+        "course.Cohort", null=True, blank=True, on_delete=models.CASCADE, related_name="student_progress_reports"
+    )
 
     celery_task_id = models.CharField(max_length=50, null=True, blank=True)
 
-    task_result = models.CharField(max_length=50,
-                                   choices=[(tag.name, tag.value) for tag in TaskResult],
-                                   default=TaskResult.UNGENERATED.name,
-                                   null=False,
-                                   blank=False)
+    task_result = models.CharField(
+        max_length=50,
+        choices=[(tag.name, tag.value) for tag in TaskResult],
+        default=TaskResult.UNGENERATED.name,
+        null=False,
+        blank=False,
+    )
 
     generation_date = models.DateTimeField(null=True, blank=True)
 
-    percent_complete = models.IntegerField(default=0,
-                                           null=False,
-                                           blank=False,
-                                           validators=[MinValueValidator(1), MaxValueValidator(100)]
-                                           )
+    percent_complete = models.IntegerField(
+        default=0, null=False, blank=False, validators=[MinValueValidator(1), MaxValueValidator(100)]
+    )
 
     # Generation message can be either informative
     # or some error information (depending on generation_result state)

@@ -12,7 +12,9 @@
 
         <div class="row">
             <div class="col-12 col-lg-8">
-                <h1>{% blocktrans %}Export a Course{% endblocktrans %}</h1>
+                <h1>
+                    {% blocktrans %}Export a Course{% endblocktrans %}
+                </h1>
             </div>
         </div>
 
@@ -41,12 +43,20 @@
                                             <i class="bi bi-download"></i>&nbsp;KinesinLMS
                                         </button>
                                     </a>
-                                    <a href="{% url 'composer:course_download_export' course_slug=course.slug course_run=course.run %}?export_format=CC_FULL">
+                                    <a href="{% url 'composer:course_download_export' course_slug=course.slug course_run=course.run %}?export_format=COMMON_CARTRIDGE_FULL">
                                         <button type="button"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
-                                                class="btn btn-secondary ms-3">
+                                                class="btn btn-secondary ms-5">
                                             <i class="bi bi-download"></i>&nbsp;CommonCatridge
+                                        </button>
+                                    </a>
+                                    <a href="{% url 'composer:course_download_export' course_slug=course.slug course_run=course.run %}?export_format=OPEN_EDX">
+                                        <button type="button"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                class="btn btn-secondary ms-2">
+                                            <i class="bi bi-download"></i>&nbsp;Open edX
                                         </button>
                                     </a>
 
@@ -57,7 +67,9 @@
                 </table>
             </div>
             <div class="col-12 col-lg-3">
-                <p>{% blocktrans %}Select a course to export. Two export formats are current supported.{% endblocktrans %}</p>
+                <p>
+                    {% blocktrans %}Select a course to export. Two export formats are current supported.{% endblocktrans %}
+                </p>
             </div>
         </div>
     </div>

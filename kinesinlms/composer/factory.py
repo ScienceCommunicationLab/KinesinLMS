@@ -2,11 +2,31 @@ import abc
 import logging
 
 from kinesinlms.catalog.models import CourseCatalogDescription
-from kinesinlms.course.constants import NodeType, NodePurpose
-from kinesinlms.course.models import CourseNode, CourseUnit, Course
-from kinesinlms.course.tests.factories import CourseUnitFactory, CourseNodeFactory
+from kinesinlms.composer.import_export.common_cartridge.exporter import CommonCartridgeExporter
+from kinesinlms.composer.import_export.constants import CourseExportFormat
+from kinesinlms.composer.import_export.exporter import BaseExporter
+from kinesinlms.composer.import_export.kinesinlms.exporter import KinesinLMSCourseExporter
+from kinesinlms.composer.import_export.open_edx.exporter import OpenEdXExporter
+from kinesinlms.course.constants import NodePurpose, NodeType
+from kinesinlms.course.models import Course, CourseNode, CourseUnit
+from kinesinlms.course.tests.factories import CourseNodeFactory, CourseUnitFactory
 
 logger = logging.getLogger(__name__)
+
+
+def get_course_exporter(export_format: str) -> BaseExporter:
+    if export_format in [
+        CourseExportFormat.COMMON_CARTRIDGE_FULL.name,
+        CourseExportFormat.COMMON_CARTRIDGE_SLIM.name,
+    ]:
+        course_exporter: BaseExporter = CommonCartridgeExporter()
+    elif export_format == CourseExportFormat.OPEN_EDX.name:
+        course_exporter: BaseExporter = OpenEdXExporter()
+    elif export_format == CourseExportFormat.OPEN_EDX.name:
+        course_exporter: BaseExporter = KinesinLMSCourseExporter()
+    else:
+        raise ValueError(f"Export format {export_format} not supported.")
+    return course_exporter
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -62,17 +82,20 @@ class SimpleCourseBuilder(BaseCourseBuilder):
         # Add a default Module, section, and unit node
         module_node = create_module_node(root_node=self.course.course_root_node)
         section_node = create_section_node(module_node=module_node)
-        create_unit_node(course=self.course,
-                         section_node=section_node,
-                         slug="new-unit",
-                         display_name="New Unit",
-                         node_purpose=NodePurpose.DEFAULT.name,
-                         autocreate_course_unit=True)
+        create_unit_node(
+            course=self.course,
+            section_node=section_node,
+            slug="new-unit",
+            display_name="New Unit",
+            node_purpose=NodePurpose.DEFAULT.name,
+            autocreate_course_unit=True,
+        )
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Course Builder Directory
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 class CourseBuilderDirector(object):
     """
@@ -93,6 +116,7 @@ class CourseBuilderDirector(object):
 # Utility methods
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
 def create_module_node(root_node: CourseNode, content_index=1) -> CourseNode:
     """
     Create a new MODULE node and add to end of MODULE node's SECTION list.
@@ -104,12 +128,14 @@ def create_module_node(root_node: CourseNode, content_index=1) -> CourseNode:
     else:
         display_sequence = 0
 
-    module_node = CourseNodeFactory.create(parent=root_node,
-                                           slug="new-module",
-                                           display_name="New Module",
-                                           type=NodeType.MODULE.name,
-                                           display_sequence=display_sequence,
-                                           content_index=content_index)
+    module_node = CourseNodeFactory.create(
+        parent=root_node,
+        slug="new-module",
+        display_name="New Module",
+        type=NodeType.MODULE.name,
+        display_sequence=display_sequence,
+        content_index=content_index,
+    )
     return module_node
 
 
@@ -124,24 +150,28 @@ def create_section_node(module_node: CourseNode, content_index=1) -> CourseNode:
     else:
         display_sequence = 0
 
-    section_node = CourseNodeFactory.create(parent=module_node,
-                                            slug="new-section",
-                                            display_name="New Section",
-                                            type=NodeType.SECTION.name,
-                                            display_sequence=display_sequence,
-                                            content_index=content_index)
+    section_node = CourseNodeFactory.create(
+        parent=module_node,
+        slug="new-section",
+        display_name="New Section",
+        type=NodeType.SECTION.name,
+        display_sequence=display_sequence,
+        content_index=content_index,
+    )
 
     return section_node
 
 
-def create_unit_node(course: Course,
-                     section_node: CourseNode,
-                     slug: str = None,
-                     display_name: str = None,
-                     node_purpose: str = NodePurpose.DEFAULT.name,
-                     course_unit: CourseUnit = None,
-                     autocreate_course_unit: bool = True,
-                     content_index=1) -> CourseNode:
+def create_unit_node(
+    course: Course,
+    section_node: CourseNode,
+    slug: str = None,
+    display_name: str = None,
+    node_purpose: str = NodePurpose.DEFAULT.name,
+    course_unit: CourseUnit = None,
+    autocreate_course_unit: bool = True,
+    content_index=1,
+) -> CourseNode:
     """
     Creates a new "UNIT" CourseNode as a child of the section_node
     argument. The new node is added to the end of the child node list.
@@ -177,8 +207,7 @@ def create_unit_node(course: Course,
 
     # Create CourseUnit if necessary...
     if not course_unit and autocreate_course_unit:
-        course_unit = CourseUnitFactory.create(course=course,
-                                               slug='new-course-unit')
+        course_unit = CourseUnitFactory.create(course=course, slug="new-course-unit")
 
     # Set up any initial defaults
     if section_node.children:
@@ -187,13 +216,15 @@ def create_unit_node(course: Course,
         display_sequence = 0
 
     # Create ...
-    unit_node = CourseNodeFactory.create(parent=section_node,
-                                         slug=slug,
-                                         purpose=node_purpose,
-                                         display_name=display_name,
-                                         type=NodeType.UNIT.name,
-                                         display_sequence=display_sequence,
-                                         content_index=content_index,
-                                         unit=course_unit)
+    unit_node = CourseNodeFactory.create(
+        parent=section_node,
+        slug=slug,
+        purpose=node_purpose,
+        display_name=display_name,
+        type=NodeType.UNIT.name,
+        display_sequence=display_sequence,
+        content_index=content_index,
+        unit=course_unit,
+    )
 
     return unit_node

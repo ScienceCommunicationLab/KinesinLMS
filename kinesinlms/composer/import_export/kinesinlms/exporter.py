@@ -133,6 +133,11 @@ class KinesinLMSCourseExporter(BaseExporter):
 
         return bytes_io
 
+
+    def get_export_filename(self, course: Course) -> str:
+        export_filename = "{}_{}_export.klms".format(course.slug, course.run)
+        return export_filename
+
     # PRIVATE METHODS
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     def _serialize_course(self, course: Course) -> str:
@@ -163,3 +168,4 @@ class KinesinLMSCourseExporter(BaseExporter):
 
         course_json = JSONRenderer().render(course_serialized, renderer_context={"indent": 4})
         return course_json
+
