@@ -10,7 +10,7 @@ from lxml import etree
 
 from kinesinlms.composer.import_export.exporter import BaseExporter
 from kinesinlms.course.models import Course
-from kinesinlms.learning_library.models import Block
+from kinesinlms.learning_library.models import Block, Resource
 
 logger = logging.getLogger(__name__)
 
@@ -101,11 +101,26 @@ class OpenEdXExporter(BaseExporter):
             logger.debug(f"Deleted temporary directory at {temp_dir}")
 
     def get_export_filename(self, course: Course) -> str:
+        """
+        Generate the filename for the Open edX export.
+
+        Args:
+            course (Course): The course to export
+
+        Returns:
+            str: The filename for the exported course
+        """
         export_filename = "{}_{}_export.tar.gz".format(course.slug, course.run)
+        logger.debug(f"Generated export filename: {export_filename}")
         return export_filename
 
     def get_content_type(self) -> str:
-        # Open EdX exports as tar.gz
+        """
+        Get the MIME content type for Open edX exports.
+
+        Returns:
+            str: The MIME type for Open edX tar.gz files
+        """
         return "application/gzip"
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -209,7 +224,7 @@ class OpenEdXExporter(BaseExporter):
             video_el.set("caption", block.content_video_caption or "")
         elif block.type == "problem":
             problem_el = etree.SubElement(component_el, "problem")
-            problem_el.set("source", block.content_problem_json or "")
+            problem_el.set("source", block.json_content.get("problem_json", "") or "")
         else:
             # Default to HTML content if type is unknown
             content_el = etree.SubElement(component_el, "content")
@@ -254,40 +269,34 @@ class OpenEdXExporter(BaseExporter):
                 for unit_node in section_node.get_children():
                     for unit_block in unit_node.unit.unit_blocks.all():
                         block = unit_block.block
-                        resource_files = self._get_block_resources(block)
-                        for resource in resource_files:
+                        for block_resource in block.block_resources.all():
+                            resource: Resource = block_resource.resource
                             self._copy_resource_file(resource, resources_dir)
 
-    def _get_block_resources(self, block: Block) -> list:
-        """
-        Retrieve a list of resource file paths associated with a block.
-
-        Args:
-            block (Block): The block instance
-
-        Returns:
-            list: List of file paths
-        """
-        resources = []
-        for block_resource in block.block_resources.all():
-            resource_path = block_resource.resource.file.path  # Adjust based on your model
-            resources.append(resource_path)
-        return resources
-
-    def _copy_resource_file(self, source_path: str, dest_dir: str):
+    def _copy_resource_file(self, resource: Resource, dest_dir: str):
         """
         Copy a resource file from source to destination directory.
 
         Args:
-            source_path (str): Path to the source file
+            resource (Resource): The Resource instance
             dest_dir (str): Destination directory path
         """
         try:
-            if os.path.exists(source_path):
-                shutil.copy(source_path, dest_dir)
-                logger.debug(f"Copied resource '{source_path}' to '{dest_dir}'")
-            else:
-                logger.warning(f"Resource file '{source_path}' does not exist and will be skipped.")
+            if not resource.resource_file:
+                logger.warning(f"Resource '{resource}' has no file associated.")
+                return
+
+            # Open the resource file. This works with all storage backends.
+            with resource.resource_file.open("rb") as f:
+                # Determine the destination file path
+                filename = os.path.basename(resource.resource_file.name)
+                dest_path = os.path.join(dest_dir, filename)
+
+                # Write the file content to the destination
+                with open(dest_path, "wb") as dest_f:
+                    shutil.copyfileobj(f, dest_f)
+                logger.debug(f"Copied resource '{resource.resource_file.name}' to '{dest_path}'")
+
         except Exception as e:
-            logger.error(f"Error copying resource '{source_path}': {e}")
+            logger.error(f"Error copying resource '{resource.resource_file.name}': {e}")
             raise e
