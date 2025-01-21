@@ -31,7 +31,7 @@ django-celery-beat==2.7.0  # https://github.com/celery/django-celery-beat
 # Django
 # ------------------------------------------------------------------------------
 
-django==5.1.4 # pyup: < 3.0  # https://www.djangoproject.com/
+django==5.1.5 # pyup: < 3.0  # https://www.djangoproject.com/
 django-environ==0.12.0  # https://github.com/joke2k/django-environ
 django-model-utils==5.0.0  # https://github.com/jazzband/django-model-utils
 django-allauth[mfa]==65.3.1  # https://github.com/pennersr/django-allauth
@@ -70,7 +70,7 @@ requests==2.32.3
 beautifulsoup4==4.12.3
 
 # Need boto3 for sending events to Lambda.
-boto3==1.35.93
+boto3==1.36.2
 
 # My fork of pydiscourse. It didn't have the
 # correct method for removing a user from a group
@@ -83,7 +83,7 @@ slack_sdk==3.34.0
 django-recaptcha==4.0.0
 
 # Secure admin and staff logins
-django-allauth-2fa==0.11.1
+django-allauth-2fa==0.20.0
 
 # DMcQ : Using django-bleach to filter incoming assessments in DRF
 django-bleach==3.1.0
@@ -134,4 +134,4 @@ markdown==3.7
 django-markdownify==0.9.5
 
 # Serverless integration with modal.com
-modal==0.71.3
+modal==0.72.33
