@@ -15,3 +15,6 @@ class BaseExporter(ABC):
     @abstractmethod
     def get_export_filename(self, course: Course) -> str:
         raise NotImplementedError("Subclasses must implement this method.")
+
+    def get_content_type(self) -> str:
+        return "application/zip"

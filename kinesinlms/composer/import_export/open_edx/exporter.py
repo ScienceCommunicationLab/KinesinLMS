@@ -1,12 +1,12 @@
-import json
 import logging
 import os
 import shutil
+import tarfile
 import tempfile
 from io import BytesIO
-from zipfile import ZipFile
 
 from django.conf import settings
+from lxml import etree
 
 from kinesinlms.composer.import_export.exporter import BaseExporter
 from kinesinlms.course.models import Course
@@ -17,11 +17,12 @@ logger = logging.getLogger(__name__)
 
 class OpenEdXExporter(BaseExporter):
     """
-    Exports a course to Open edX format.
-    The export includes JSON descriptors and content resources, packaged as a zip file.
+    Exports a course to Open edX Open Learning XML format.
+    The export includes XML descriptor files and content resources, packaged as a tar.gz file.
     """
 
     def __init__(self):
+        # Initialize any required attributes
         pass
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -30,14 +31,15 @@ class OpenEdXExporter(BaseExporter):
 
     def export_course(self, course: Course, export_format: str) -> BytesIO:
         """
-        Build and return an Open edX export of the given course.
-        An Open edX export is a zip file containing:
-            -   course directory structure with JSON descriptor files
-            -   content resources (HTML, images, etc.)
+        Build and return an Open edX Open Learning XML export of the given course.
+        An Open edX export is a tar.gz file containing:
+            -   course.xml file
+            -   Components directory with content XML files
+            -   Resources directory with media files
 
         Args:
             course (Course): The course to export
-            export_format (str): The export format, e.g., 'open_edx'
+            export_format (str): The export format, should be 'open_edx'
 
         Raises:
             ValueError: if arguments are invalid
@@ -45,7 +47,7 @@ class OpenEdXExporter(BaseExporter):
 
         Returns:
             BytesIO: A BytesIO object containing the Open edX export.
-                     This is effectively a zip file.
+                     This is effectively a tar.gz file.
         """
 
         if not course:
@@ -60,31 +62,31 @@ class OpenEdXExporter(BaseExporter):
         logger.debug(f"Created temporary directory at {temp_dir}")
 
         try:
-            # Step 1: Create course directory structure
-            course_dir = os.path.join(temp_dir, course.token)
-            os.makedirs(course_dir, exist_ok=True)
-            logger.debug(f"Created course directory at {course_dir}")
+            # Step 1: Create course.xml
+            course_xml_path = os.path.join(temp_dir, "course.xml")
+            self._create_course_xml(course, course_xml_path)
 
-            # Step 2: Generate course.json
-            self._create_course_json(course, course_dir)
+            # Step 2: Create Components directory and component XML files
+            components_dir = os.path.join(temp_dir, "components")
+            os.makedirs(components_dir, exist_ok=True)
+            logger.debug(f"Created components directory at {components_dir}")
+            self._create_components_xml(course, components_dir)
 
-            # Step 3: Generate sections.json, units.json, components.json
-            self._create_course_structure_json(course, course_dir)
+            # Step 3: Collect and copy content resources
+            resources_dir = os.path.join(temp_dir, "resources")
+            os.makedirs(resources_dir, exist_ok=True)
+            logger.debug(f"Created resources directory at {resources_dir}")
+            self._collect_content_resources(course, resources_dir)
 
-            # Step 4: Collect and copy content resources
-            self._collect_content_resources(course, course_dir)
-
-            # Step 5: Package the course directory into a zip file
+            # Step 4: Package the course directory into a tar.gz file
             bytes_io = BytesIO()
-            with ZipFile(bytes_io, "w") as zf:
-                for root, dirs, files in os.walk(course_dir):
-                    for file in files:
-                        file_path = os.path.join(root, file)
-                        # Compute the archive name by removing the temp_dir prefix
-                        archive_name = os.path.relpath(file_path, temp_dir)
-                        zf.write(file_path, arcname=archive_name)
-                        logger.debug(f"Added '{file_path}' as '{archive_name}' to zip.")
+            with tarfile.open(fileobj=bytes_io, mode="w:gz") as tar:
+                tar.add(course_xml_path, arcname="course.xml")
+                tar.add(components_dir, arcname="components")
+                tar.add(resources_dir, arcname="resources")
+                logger.debug("Added course.xml, components/, and resources/ to tar.gz")
 
+            bytes_io.seek(0)
             logger.info(f"Successfully created Open edX export for course: {course.display_name}")
 
             return bytes_io
@@ -99,191 +101,152 @@ class OpenEdXExporter(BaseExporter):
             logger.debug(f"Deleted temporary directory at {temp_dir}")
 
     def get_export_filename(self, course: Course) -> str:
-        export_filename = "{}_{}_export.zip".format(course.slug, course.run)
+        export_filename = "{}_{}_export.tar.gz".format(course.slug, course.run)
         return export_filename
+
+    def get_content_type(self) -> str:
+        # Open EdX exports as tar.gz
+        return "application/gzip"
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # PRIVATE METHODS
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    def _create_course_json(self, course: Course, course_dir: str):
+    def _create_course_xml(self, course: Course, course_xml_path: str):
         """
-        Create the course.json descriptor file for Open edX.
+        Create the course.xml descriptor file for Open edX.
 
         Args:
             course (Course): The course to export
-            course_dir (str): Path to the course directory
+            course_xml_path (str): Path to save course.xml
         """
-        course_json_path = os.path.join(course_dir, "course.json")
-        course_data = {
-            "course": {
-                "display_name": course.display_name or "Untitled Course",
-                "overview": course.overview or "",
-                "language": settings.LANGUAGE_CODE,
-                "start": course.start_date.isoformat() if course.start_date else "",
-                "end": course.end_date.isoformat() if course.end_date else "",
-                "metadata": {
-                    "tags": [tag.name for tag in course.tags.all()],
-                    "license": course.content_license or "No license defined",
-                },
-                "structure": {
-                    "sections": [],  # To be filled in by _create_course_structure_json
-                },
-            }
+        logger.debug(f"Creating course.xml at {course_xml_path}")
+
+        # Define namespaces if any, for Open edX XML schema
+        NSMAP = {
+            None: "http://www.edx.org/open-learning-xml",  # Default namespace
+            "xsi": "http://www.w3.org/2001/XMLSchema-instance",
         }
 
-        with open(course_json_path, "w", encoding="utf-8") as f:
-            json.dump(course_data, f, indent=4)
-            logger.debug(f"Created course.json at {course_json_path}")
+        # Create root element
+        course_el = etree.Element("course", nsmap=NSMAP)
+        course_el.set("title", course.display_name or "Untitled Course")
+        course_el.set("description", course.overview or "")
+        course_el.set("language", settings.LANGUAGE_CODE)
 
-    def _create_course_structure_json(self, course: Course, course_dir: str):
+        # Add metadata if necessary
+        metadata_el = etree.SubElement(course_el, "metadata")
+        metadata_el.set("license", course.content_license or "No license defined")
+        metadata_el.set("tags", ",".join([tag.name for tag in course.tags.all()]))
+
+        # Add course structure
+        structure_el = etree.SubElement(course_el, "structure")
+        for module_node in course.course_root_node.get_children():
+            section_el = etree.SubElement(structure_el, "section")
+            section_el.set("title", module_node.display_name or "Untitled Module")
+            for section_node in module_node.get_children():
+                unit_el = etree.SubElement(section_el, "unit")
+                unit_el.set("title", section_node.display_name or "Untitled Section")
+                for unit_node in section_node.get_children():
+                    component_ref = etree.SubElement(unit_el, "component_ref")
+                    component_ref.set("ref", f"components/component_{unit_node.id}.xml")
+
+        # Serialize XML to file
+        tree = etree.ElementTree(course_el)
+        tree.write(course_xml_path, pretty_print=True, xml_declaration=True, encoding="UTF-8")
+        logger.debug("course.xml created successfully.")
+
+    def _create_components_xml(self, course: Course, components_dir: str):
         """
-        Create the sections.json, units.json, and components.json descriptor files.
+        Create individual component XML files for each block in the course.
 
         Args:
             course (Course): The course to export
-            course_dir (str): Path to the course directory
+            components_dir (str): Directory to save component XML files
         """
-        sections = []
-        units = []
-        components = []
+        logger.debug(f"Creating component XML files in {components_dir}")
 
-        # Traverse the course hierarchy: Modules -> Sections -> Units -> Components
-        for m_idx, module_node in enumerate(course.course_root_node.get_children(), start=1):
-            section_id = f"section_{module_node.id}"
-            section = {
-                "id": section_id,
-                "display_name": module_node.display_name or f"Module {m_idx}",
-                "units": [],
-            }
-            logger.debug(f"Processing Module: {module_node.display_name or f'Module {m_idx}'}")
+        for module_node in course.course_root_node.get_children():
+            for section_node in module_node.get_children():
+                for unit_node in section_node.get_children():
+                    for unit_block in unit_node.unit.unit_blocks.all():
+                        block = unit_block.block
+                        component_id = f"component_{block.id}"
+                        component_xml_path = os.path.join(components_dir, f"{component_id}.xml")
+                        self._create_component_xml(block, component_xml_path)
+                        logger.debug(f"Created component XML for block ID {block.id} at {component_xml_path}")
 
-            for s_idx, section_node in enumerate(module_node.get_children(), start=1):
-                unit_id = f"unit_{section_node.id}"
-                unit = {
-                    "id": unit_id,
-                    "display_name": section_node.display_name or f"Section {s_idx}",
-                    "components": [],
-                }
-                logger.debug(f"  Processing Section: {section_node.display_name or f'Section {s_idx}'}")
-
-                for u_idx, unit_node in enumerate(section_node.get_children(), start=1):
-                    component_id = f"component_{unit_node.id}"
-                    component = {
-                        "id": component_id,
-                        "display_name": unit_node.display_name or f"Unit {u_idx}",
-                        "type": "html",  # Adjust based on block type
-                        "source": f"components/{component_id}.json",
-                    }
-                    unit["components"].append(component)
-                    components.append(self._create_component_json(unit_node, course_dir, component_id))
-                    logger.debug(f"    Added Component: {unit_node.display_name or f'Unit {u_idx}'}")
-
-                section["units"].append(unit)
-                units.append(unit)
-
-            sections.append(section)
-
-        # Write sections.json
-        sections_json_path = os.path.join(course_dir, "sections.json")
-        with open(sections_json_path, "w", encoding="utf-8") as f:
-            json.dump({"sections": sections}, f, indent=4)
-            logger.debug(f"Created sections.json at {sections_json_path}")
-
-        # Write units.json
-        units_json_path = os.path.join(course_dir, "units.json")
-        with open(units_json_path, "w", encoding="utf-8") as f:
-            json.dump({"units": units}, f, indent=4)
-            logger.debug(f"Created units.json at {units_json_path}")
-
-        # Write components.json
-        components_json_path = os.path.join(course_dir, "components.json")
-        with open(components_json_path, "w", encoding="utf-8") as f:
-            json.dump({"components": components}, f, indent=4)
-            logger.debug(f"Created components.json at {components_json_path}")
-
-    def _create_component_json(self, unit_node, course_dir: str, component_id: str) -> dict:
+    def _create_component_xml(self, block: Block, component_xml_path: str):
         """
-        Create the JSON descriptor for an individual component (XBlock).
+        Create an individual component XML file based on the block type.
 
         Args:
-            unit_node: The unit node containing the block
-            course_dir (str): Path to the course directory
-            component_id (str): Unique identifier for the component
-
-        Returns:
-            dict: The component's JSON descriptor
+            block (Block): The block instance
+            component_xml_path (str): Path to save the component XML
         """
-        block = unit_node.unit.unit_blocks.first().block  # Assuming one block per unit
+        logger.debug(f"Creating component XML for block ID {block.id} at {component_xml_path}")
+
+        # Define namespaces if any
+        NSMAP = {
+            None: "http://www.edx.org/open-learning-xml",  # Default namespace
+        }
+
+        # Create root element based on block type
         component_type = self._map_block_type_to_xblock(block.type)
-        component_source_path = os.path.join(course_dir, "components")
+        component_el = etree.Element(component_type, nsmap=NSMAP)
 
-        os.makedirs(component_source_path, exist_ok=True)
+        # Common fields
+        component_el.set("title", block.display_name or "Untitled Component")
+        component_el.set("id", f"component_{block.id}")
 
-        component_data = {
-            "id": component_id,
-            "type": component_type,
-            "fields": {
-                "display_name": block.display_name or "Untitled Component",
-                "html_content": self._get_block_content(block),
-            },
-        }
+        # Add content based on block type
+        if block.type == "html":
+            content_el = etree.SubElement(component_el, "content")
+            content_el.text = block.html_content or ""
+        elif block.type == "video":
+            video_el = etree.SubElement(component_el, "video")
+            video_el.set("url", block.content_video_url or "")
+            video_el.set("caption", block.content_video_caption or "")
+        elif block.type == "problem":
+            problem_el = etree.SubElement(component_el, "problem")
+            problem_el.set("source", block.content_problem_json or "")
+        else:
+            # Default to HTML content if type is unknown
+            content_el = etree.SubElement(component_el, "content")
+            content_el.text = block.html_content or ""
 
-        component_json_path = os.path.join(component_source_path, f"{component_id}.json")
-        with open(component_json_path, "w", encoding="utf-8") as f:
-            json.dump(component_data, f, indent=4)
-            logger.debug(f"Created component JSON at {component_json_path}")
-
-        return component_data
+        # Serialize XML to file
+        tree = etree.ElementTree(component_el)
+        tree.write(component_xml_path, pretty_print=True, xml_declaration=True, encoding="UTF-8")
+        logger.debug(f"Component XML for block ID {block.id} created successfully.")
 
     def _map_block_type_to_xblock(self, block_type: str) -> str:
         """
-        Map KinesinLMS block types to Open edX XBlock types.
+        Map KinesinLMS block types to Open edX component XML types.
 
         Args:
             block_type (str): The type of the block in KinesinLMS
 
         Returns:
-            str: Corresponding XBlock type for Open edX
+            str: Corresponding component XML type for Open edX
         """
         mapping = {
-            "html": "html",
-            "video": "video",
-            "problem": "problem",
+            "html": "html_component",
+            "video": "video_component",
+            "problem": "problem_component",
             # Add more mappings as needed
         }
-        return mapping.get(block_type, "html")  # Default to 'html' if unknown
+        return mapping.get(block_type, "html_component")  # Default to 'html_component' if unknown
 
-    def _get_block_content(self, block: Block) -> str:
+    def _collect_content_resources(self, course: Course, resources_dir: str):
         """
-        Retrieve the HTML or relevant content from a block.
-
-        Args:
-            block (Block): The block instance
-
-        Returns:
-            str: HTML content or other content as a string
-        """
-        if block.type == "html":
-            return block.content_html or ""
-        elif block.type == "video":
-            return block.content_video_url or ""
-        elif block.type == "problem":
-            return block.content_problem_json or ""
-        else:
-            return ""
-
-    def _collect_content_resources(self, course: Course, course_dir: str):
-        """
-        Collect and copy all necessary content resources into the course directory.
+        Collect and copy all necessary content resources into the resources directory.
 
         Args:
             course (Course): The course to export
-            course_dir (str): Path to the course directory
+            resources_dir (str): Path to the resources directory
         """
-        resources_dir = os.path.join(course_dir, "resources")
-        os.makedirs(resources_dir, exist_ok=True)
-        logger.debug(f"Created resources directory at {resources_dir}")
+        logger.debug(f"Collecting content resources into {resources_dir}")
 
         # Iterate through all blocks and copy their resources
         for module_node in course.course_root_node.get_children():

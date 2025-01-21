@@ -623,7 +623,8 @@ def course_download_export(request, course_slug=None, course_run=None):
 
     try:
         zip_bytes: BytesIO = course_exporter.export_course(course=course, export_format=export_format)
-        resp = HttpResponse(zip_bytes.getvalue(), content_type="application/x-zip-compressed")
+        content_type = course_exporter.get_content_type()
+        resp = HttpResponse(zip_bytes.getvalue(), content_type=content_type)
     except Exception as e:
         logger.exception(f"Could not export course: {e}")
         return HttpResponseServerError("Could not export course.")
