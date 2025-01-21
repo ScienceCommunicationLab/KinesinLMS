@@ -83,7 +83,7 @@ slack_sdk==3.34.0
 django-recaptcha==4.0.0
 
 # Secure admin and staff logins
-django-allauth-2fa==0.20.0
+django-allauth-2fa==0.12.0
 
 # DMcQ : Using django-bleach to filter incoming assessments in DRF
 django-bleach==3.1.0
